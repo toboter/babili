@@ -1,14 +1,14 @@
 class Api::UsersController < Api::BaseController
-  # load_and_authorize_resource except: %i[update create]
+  load_and_authorize_resource only: %i[index me]
   # load_and_authorize_resource param_method: :update_params, on: :update
   # load_and_authorize_resource param_method: :create_params, on: :create
 
-  # def index
-  #   users = User.accessible_by(current_ability).all
-  #   render json: { users: users }, each_serializer: UserSerializer
-  # end
+  def index
+    users = User.accessible_by(current_ability).all
+    render json: { users: users }, each_serializer: UserSerializer
+  end
 
-  def show
+  def me
     user = User.find(doorkeeper_token.resource_owner_id)
     render json: user, serialzier: UserSerializer
     # respond_with current_resource_owner

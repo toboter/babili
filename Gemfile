@@ -54,6 +54,7 @@ gem 'will_paginate-bootstrap'
 
 gem 'devise'
 gem 'doorkeeper'
+gem 'cancancan'
 gem 'active_model_serializers', '~> 0.10.0'
 
 ruby '2.3.1'
