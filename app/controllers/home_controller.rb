@@ -3,4 +3,13 @@ class HomeController < ApplicationController
   
   def index
   end
+  
+  def api
+  end
+  
+  def about
+  end
+  
+  def imprint
+  end
 end

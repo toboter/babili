@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Babili</title>
+    <title><%= content_for?(:title) ? yield(:title) : 'babylon-online.org' %></title>
     <%= csrf_meta_tags %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
@@ -9,7 +9,7 @@
   </head>
 
   <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -18,18 +18,16 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <%= link_to 'babili.babylon-online.org', root_url, class: "navbar-brand" %>
+          <%= link_to 'babylon-online.org', root_url, class: "navbar-brand" %>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-left">
+            <%= content_tag :p, fa_icon('user', text: "Signed in as #{current_user.try(:name)}"), class: 'navbar-text' if user_signed_in? %>
+          </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Help</a></li>
-            <% if user_signed_in? %>
-              <li><%= link_to 'Settings', edit_user_registration_path %></li>
-              <li><%= link_to "Logout", destroy_user_session_path, method: :delete %></li>
-            <% else %>
-              <li><%= link_to "Sign up", new_user_registration_path %></li>
-              <li><%= link_to "Login", new_user_session_path %></li>
-            <% end %>
+            <li><%= link_to 'Explore', about_path %></li>
+            <li><%= link_to 'About', about_path %></li>
+            <li><%= link_to 'News', about_path %></li>
           </ul>          
         </div>
       </div>
@@ -38,29 +36,59 @@
     <div class="container-fluid" style="margin-top: 60px;">
       <div class="row">
         <div class="col-md-12">
-          <%= content_tag :p do %>
-            Logged in as <strong><%= current_user.name %></strong>.
-          <% end if user_signed_in? %>
-          <div class="page-header">
-            <%= content_tag :div, class: "notice" do %>
+          
+          <%= content_tag :div, class: 'row' do %>
+            <div class="col-md-12">
+            <%= content_tag :div, class: "alert alert-info" do %>
               <%= notice %>
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
             <% end if notice %>
-            <%= content_tag :div, class: "alert" do %>
+            <%= content_tag :div, class: "alert alert-danger" do %>
               <%= alert %>
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
             <% end if alert %>
-          </div>
+            </div>
+          <% end if alert || notice %>
+          
           <%= yield %>
         </div>
       </div>
     </div>
     
-    <div class="container-fluid" style="margin-top: 60px;">  
-      <div class="row">
-        <div class="col-md-12">
-          <p>Footer</p>
-
+    <footer class="footer">
+      <nav class="navbar navbar-default navbar-static-bottom">
+        <div class="container-fluid">  
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-bottom" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <%= link_to 'babylon-online.org', root_url, class: "navbar-brand" %>
+          </div>
+          
+          <div id="navbar-bottom" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav"> 
+              <li><%= link_to "API", api_path %></li>
+              <li><%= link_to "Imprint", imprint_path %></li>
+              <li><%= link_to "Contact", imprint_path %></li>
+            </ul>
+            
+            <ul class="nav navbar-nav navbar-right">
+              <% if current_user %>        
+                <li><%= link_to fa_icon('signout', text: "Sign Out"), destroy_user_session_path, method: :delete %></li>
+              <% else %>
+                <li><%= link_to fa_icon('signin', text: "Sign in"), new_user_session_path %></li>
+              <% end %>
+            </ul>            
+          </div>        
         </div>
-      </div>
-    </div>
+      </nav>
+    </footer>
   </body>
 </html>

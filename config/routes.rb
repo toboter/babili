@@ -7,6 +7,10 @@ Rails.application.routes.draw do
     get 'users', to: 'users#index'
   end
 
+  get '/api', to: 'home#api'
+  get '/about', to: 'home#about'
+  get '/imprint', to: 'home#imprint'
+
   root to: "home#index"
 
 end

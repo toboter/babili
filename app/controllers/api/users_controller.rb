@@ -9,9 +9,7 @@ class Api::UsersController < Api::BaseController
   end
 
   def me
-    user = User.find(doorkeeper_token.resource_owner_id)
-    render json: user, serialzier: UserSerializer
-    # respond_with current_resource_owner
+    render json: current_resource_owner, serialzier: UserSerializer
   end
 
   # def update
@@ -24,7 +22,11 @@ class Api::UsersController < Api::BaseController
   # end
 
 private
-
+  # Find the user that owns the access token
+  def current_resource_owner
+    User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
+  end
+  
   # def update_params
   #   params.permit(:email, :password)
   # end
