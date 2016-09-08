@@ -1,3 +1,146 @@
+<%= content_tag :header do %>
+  <div class="header-content">
+    <div class="header-content-inner">
+      <h2>Wiedererstehendes</h2>
+      <h1 id="homeHeading">Babylon</h1>
+      <p>Explore the City of Babylon as it lays before us today.</p>
+      
+      <div class="row" style="margin-bottom:40px;">
+        <div class="col-md-6 col-centered">
+          <%= render 'shared/search' %>
+        </div>
+      </div>
+      
+      <%= content_tag :div, style: 'margin-top:20px;' do %>
+        <%= render "shared/notification" %>
+      <% end if alert || notice %>
+            
+      <div style="margin-top:100px;">
+        <%= link_to fa_icon('chevron-circle-down 4x'), '#about', class: 'page-scroll', style: '' %>            
+      </div>
+
+    </div>
+  </div>
+<% end %> 
+      
+  
+      <section class="bg-primary" id="about">
+          <div class="container">
+              <div class="row">
+                  <div class="col-lg-8 col-lg-offset-2 text-center">
+                  
+                      <h2 class="section-heading">Das antike Babylon</h2>
+                      <hr class="light">
+                      <p class="text-faded">Babylon war im Altertum eine der größten Städte der damals bekannten Welt. Es lag am Euphrat, heute ca. 90 km südlich von Bagdad, und wurde bereits im 3. Jahrtausend v. Chr. gegründet. Hauptstadt eines babylonischen Reiches wechselnder Größe und Geschichte wurde Babylon im 18. Jh. v. Chr. und behielt diese Stellung bis zur Eroberung durch die Perser 539 v. Chr. In den Jahrhunderten danach verlor es an Bedeutung, bis es letztlich wohl im 4. Jh. n. Chr. aufgegeben wurde und verfiel. Die Ruinen der Stadtanlage aus dem 6. Jh. v. Chr, der letzten Blütezeit Babylons - bis heute in einer Ausdehnung von etwa 1,5, km2 (Gesamtanlage) bzw. 2,7 km2 (Altstadt) erhalten -, beherrschen noch immer das Gelände nahe der irakischen Stadt Hillah.</p>
+                      <p><%= link_to 'Weiterlesen', '' %></p>
+
+                  </div>
+              </div>
+          </div>
+      </section>
+
+
+    <section class="no-padding" id="explore">
+        <div class="container-fluid">
+            <div class="row no-gutter popup-gallery">
+                <div class="col-lg-4 col-sm-6">
+                    <a href="img/portfolio/fullsize/1.jpg" class="portfolio-box">
+                        <div class="portfolio-box-caption">
+                            <div class="portfolio-box-caption-content">
+                                <div class="project-category text-faded">
+                                    Category
+                                </div>
+                                <div class="project-name">
+                                    Project Name
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <a href="img/portfolio/fullsize/2.jpg" class="portfolio-box">
+                        <div class="portfolio-box-caption">
+                            <div class="portfolio-box-caption-content">
+                                <div class="project-category text-faded">
+                                    Category
+                                </div>
+                                <div class="project-name">
+                                    Project Name
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <a href="img/portfolio/fullsize/3.jpg" class="portfolio-box">
+                        <div class="portfolio-box-caption">
+                            <div class="portfolio-box-caption-content">
+                                <div class="project-category text-faded">
+                                    Category
+                                </div>
+                                <div class="project-name">
+                                    Project Name
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <a href="img/portfolio/fullsize/4.jpg" class="portfolio-box">
+                        <div class="portfolio-box-caption">
+                            <div class="portfolio-box-caption-content">
+                                <div class="project-category text-faded">
+                                    Category
+                                </div>
+                                <div class="project-name">
+                                    Project Name
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <a href="img/portfolio/fullsize/5.jpg" class="portfolio-box">
+                        <div class="portfolio-box-caption">
+                            <div class="portfolio-box-caption-content">
+                                <div class="project-category text-faded">
+                                    Category
+                                </div>
+                                <div class="project-name">
+                                    Project Name
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <a href="img/portfolio/fullsize/6.jpg" class="portfolio-box">
+                        <div class="portfolio-box-caption">
+                            <div class="portfolio-box-caption-content">
+                                <div class="project-category text-faded">
+                                    Category
+                                </div>
+                                <div class="project-name">
+                                    Project Name
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <aside class="bg-dark">
+        <div class="container text-center">
+            <div class="call-to-action">
+                <h2>Free Download at Start Bootstrap!</h2>
+                <a href="http://startbootstrap.com/template-overviews/creative/" class="btn btn-default btn-xl sr-button">Download Now!</a>
+            </div>
+        </div>
+    </aside>
+
+
 
 <p>Startseite aufhübschen (wie ur-online)</p>
 Bab-ili / Babylon-Portal
@@ -7,8 +150,7 @@ Learn About (link auf about/xx inaktiv)
 Explore (apps und projekte)
 	=Datenpools
 	-> dort literatur anzeigen mit Foto (Koldewey beim lesen)
-	-> Institutionen
-	-> Personen
+	-> Personen und Institutionen
 	-> Archivalien
 	-> Objekte
 	-> Babylon Texte (Pedersen Archive)
@@ -25,3 +167,4 @@ Search all data (inaktiv)
 
 <p>API Dokumentation</p>
 <p>logout -> alle angeschlossenen apps auch</p>
+<p>contact form -> sendmail</p>

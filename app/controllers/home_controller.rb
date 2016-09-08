@@ -1,5 +1,4 @@
 class HomeController < ApplicationController
-  before_action :authenticate_user!
   
   def index
   end
@@ -7,9 +6,16 @@ class HomeController < ApplicationController
   def api
   end
   
-  def about
+  def help
   end
   
   def imprint
   end
+  
+  def contact
+  end
+  
+  def explore
+  end
+  
 end

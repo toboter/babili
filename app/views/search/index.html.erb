@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="col-md-12" style="margin:10px 0;">
+    <%= render "shared/search" %>
+  </div>
+  <div class="col-md-12">
+    
+  </div>
+</div>
+
+<table class="table table-bordered table-responsive">
+  <thead>
+    <tr>
+      <th>Result</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @results.each do |result| %>
+      <tr>
+        <td>
+          <%= result.inspect %>
+        </td>
+
+      </tr>
+    <% end if @results %>
+  </tbody>
+</table>

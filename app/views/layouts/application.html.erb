@@ -8,8 +8,8 @@
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+  <body id="page-top">
+    <nav id="mainNav" class="navbar navbar-<%= current_page?(root_url) ? 'custom' : 'default' %> navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -25,58 +25,58 @@
             <%= content_tag :p, fa_icon('user', text: "Signed in as #{current_user.try(:name)}"), class: 'navbar-text' if user_signed_in? %>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><%= link_to 'Explore', about_path %></li>
-            <li><%= link_to 'About', about_path %></li>
-            <li><%= link_to 'News', about_path %></li>
-          </ul>          
+            <li><%= link_to 'About', '' %></li>
+            <li><%= link_to 'Explore', explore_path %></li>
+            <li><%= link_to 'News', '' %></li>
+            <li><%= link_to fa_icon('search'), search_path %></li>
+          </ul>        
         </div>
       </div>
     </nav>
-
-    <div class="container-fluid" style="margin-top: 60px;">
-      <div class="row">
-        <div class="col-md-12">
+    
+    <% if current_page?(root_url) %>
+      <%= yield %>
+    <% else %>
+      <div class="container-fluid" style="margin-top: 60px;">
+        <div class="row">
+          <div class="col-sm-8 col-md-9 main">
+            <%= content_tag :div, class: "page-header" do %>
+              <h1 class="">
+                <%= yield(:title) if content_for?(:title) %>
+                <div class="pull-right">
+                  <%= yield(:buttons) if content_for?(:buttons) %>
+                </div>
+              </h1>
+            <% end if content_for?(:buttons) || content_for?(:title) %>
           
-          <%= content_tag :div, class: 'row' do %>
-            <div class="col-md-12">
-            <%= content_tag :div, class: "alert alert-info" do %>
-              <%= notice %>
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            <% end if notice %>
-            <%= content_tag :div, class: "alert alert-danger" do %>
-              <%= alert %>
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            <% end if alert %>
-            </div>
-          <% end if alert || notice %>
-          
-          <%= yield %>
+            <%= content_tag :div, class: 'row' do %>
+              <div class="col-md-12">
+                <%= render "shared/notification" %>
+              </div>
+            <% end if alert || notice %>
+            
+            <%= yield %>
+          </div>
+          <div class="col-sm-3 col-sm-offset-1 col-md-2 col-md-offset-1 sidebar">
+            <p>Sidebar - related & Filter?</p>
+          </div>
         </div>
       </div>
-    </div>
-    
-    <footer class="footer">
-      <nav class="navbar navbar-default navbar-static-bottom">
+      
+      
+    <% end %>
+
+
+    <footer class="footer" style="margin-top:60px;">
+      <nav class="navbar navbar-bottom">
         <div class="container-fluid">  
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-bottom" aria-expanded="false" aria-controls="navbar">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <%= link_to 'babylon-online.org', root_url, class: "navbar-brand" %>
-          </div>
           
-          <div id="navbar-bottom" class="navbar-collapse collapse">
+          <div>
             <ul class="nav navbar-nav"> 
-              <li><%= link_to "API", api_path %></li>
+              <li><%= link_to "Contact", contact_path %></li>
+              <li><%= link_to "Help", help_path %></li>
               <li><%= link_to "Imprint", imprint_path %></li>
-              <li><%= link_to "Contact", imprint_path %></li>
+              <li><%= link_to "API", api_path %></li>
             </ul>
             
             <ul class="nav navbar-nav navbar-right">
@@ -90,5 +90,6 @@
         </div>
       </nav>
     </footer>
+
   </body>
 </html>
