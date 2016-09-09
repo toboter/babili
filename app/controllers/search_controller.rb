@@ -2,12 +2,14 @@ class SearchController < ApplicationController
 
   def index
     if params[:q]
-      @creatorship_url = "http://localhost:3001/api/citations/search.json?q=#{params[:q]}"
-      @creatorship_resp = Net::HTTP.get_response(URI.parse(@creatorship_url))
-      @results = JSON.parse(@creatorship_resp.body)
-      @people_url = "http://localhost:3002/api/people/search.json?q=#{params[:q]}"
-      @people_resp = Net::HTTP.get_response(URI.parse(@people_url))
-      @results.concat(JSON.parse(@people_resp.body))
+      @apps = Search::Application.all
+      @results =[]
+      @apps.each do |app|
+        resp = nil
+        instance_variable_set("@#{app.name}_url", "#{app.search_url}?q=#{params[:q]}")
+        resp = Net::HTTP.get_response(URI.parse(instance_variable_get("@#{app.name}_url")))
+        @results.concat(JSON.parse(resp.body)) if resp
+      end
     end
   end
   

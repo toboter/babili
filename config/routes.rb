@@ -8,6 +8,10 @@ Rails.application.routes.draw do
     get 'me', to: 'users#me'
     get 'users', to: 'users#index'
   end
+  namespace :search do
+    resources :applications
+  end
+
 
   get '/api', to: 'home#api'
   get '/help', to: 'home#help'

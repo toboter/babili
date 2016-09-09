@@ -80,7 +80,8 @@
             </ul>
             
             <ul class="nav navbar-nav navbar-right">
-              <% if current_user %>        
+              <% if current_user %>
+                <li><%= link_to "Settings", edit_user_registration_path %></li>      
                 <li><%= link_to fa_icon('signout', text: "Sign Out"), destroy_user_session_path, method: :delete %></li>
               <% else %>
                 <li><%= link_to fa_icon('signin', text: "Sign in"), new_user_session_path %></li>

@@ -1,1 +1,14 @@
 <% title "API" %>
+
+<h2>Authentification & Authorization</h2>
+<p>
+  Register your app under <%= link_to '/oauth/applications', oauth_applications_path %>. There you will also be able to 
+  obtain a client_id and a client_secret.
+</p>
+
+
+<h2>Registry for searchable apis</h2>
+<p>
+  Register your API under <%= link_to '/search/applications', search_applications_path %> to let your data show up in search results. There you will be also able
+  to layout or assign the attributes which will be shown.
+</p>
