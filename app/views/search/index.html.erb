@@ -25,3 +25,11 @@
     <% end if @results %>
   </tbody>
 </table>
+
+<% content_for :sidebar do %>
+	<h4>Filter</h4>
+	<p>
+    List of active filters<br>
+    <strong><%= params[:q] %></strong>
+  </p>
+<% end %>

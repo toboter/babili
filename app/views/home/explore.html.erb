@@ -1,8 +1,110 @@
 <% title "Explore" %>
 
-<h2>Categories</h2>
-<p></p>
+<p class="text-muted">
+	'Babylon-Online is organized by a number of different interconnected data pools', from different materials 
+	and techniques to objects (like figurines) and culture. Items are also organized by the season—when the 
+	object was excavated—and the museum that houses the object today.
+</p>
+
+    <section class="no-padding" id="explore" style="margin-bottom: 80px;">
+        <div class="container-fluid">
+            <div class="row no-gutter popup-gallery">
+                <div class="col-lg-4 col-sm-6">
+                    <%= link_to "http://localhost:3001", class: "portfolio-box", target: :blank do %>
+					<%= image_tag "categories/literature.jpg", class: "img-responsive" %>
+                        <div class="portfolio-box-caption">
+                            <div class="portfolio-box-caption-content">
+                                <div class="project-category text-faded">
+                                    Category
+                                </div>
+                                <div class="project-name">
+                                    Bibliographie
+                                </div>
+                            </div>
+                        </div>
+                    <% end %>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <%= link_to "", class: "portfolio-box", target: :blank do %>
+					<%= image_tag "categories/pedersen.jpg", class: "img-responsive" %>
+                        <div class="portfolio-box-caption">
+                            <div class="portfolio-box-caption-content">
+                                <div class="project-category text-faded">
+                                    Category
+                                </div>
+                                <div class="project-name">
+                                    Babylon Texts // Olof Pedersén
+                                </div>
+                            </div>
+                        </div>
+                    <% end %>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <%= link_to "", class: "portfolio-box", target: :blank do %>
+					<%= image_tag "categories/material.jpg", class: "img-responsive" %>
+                        <div class="portfolio-box-caption">
+                            <div class="portfolio-box-caption-content">
+                                <div class="project-category text-faded">
+                                    Category
+                                </div>
+                                <div class="project-name">
+                                    Material
+                                </div>
+                            </div>
+                        </div>
+                    <% end %>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <%= link_to "", class: "portfolio-box", target: :blank do %>
+					<%= image_tag "categories/smb.jpg", class: "img-responsive" %>
+                        <div class="portfolio-box-caption">
+                            <div class="portfolio-box-caption-content">
+                                <div class="project-category text-faded">
+                                    Category
+                                </div>
+                                <div class="project-name">
+                                    VAM / SMB Digital
+                                </div>
+                            </div>
+                        </div>
+                    <% end %>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <%= link_to "", class: "portfolio-box", target: :blank do %>
+					<%= image_tag "categories/archivalien.jpg", class: "img-responsive" %>
+                        <div class="portfolio-box-caption">
+                            <div class="portfolio-box-caption-content">
+                                <div class="project-category text-faded">
+                                    Category
+                                </div>
+                                <div class="project-name">
+                                    Archivalien
+                                </div>
+                            </div>
+                        </div>
+                    <% end %>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <%= link_to "http://localhost:3002", class: "portfolio-box", target: :blank do %>
+					<%= image_tag "categories/people.jpg", class: "img-responsive" %>
+                        <div class="portfolio-box-caption">
+                            <div class="portfolio-box-caption-content">
+                                <div class="project-category text-faded">
+                                    Category
+                                </div>
+                                <div class="project-name">
+                                    Personen & Institutionen
+                                </div>
+                            </div>
+                        </div>
+                    <% end %>
+                </div>
+            </div>
+        </div>
+    </section>
 
 
-<h2>Projects</h2>
-<p></p>
+<% content_for :sidebar do %>
+	<h4>Projects</h4>
+	<p>List of projects</p>
+<% end %>
