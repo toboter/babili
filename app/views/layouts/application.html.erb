@@ -25,7 +25,19 @@
             <%= content_tag :p, fa_icon('user', text: "Signed in as #{current_user.try(:name)}"), class: 'navbar-text' if user_signed_in? %>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><%= link_to 'About', '' %></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <%= content_tag :li, link_to('The Babylon Project', '') %>
+                <%= content_tag :li, link_to('Ancient Babylon', '') %>
+                <%= content_tag :li, link_to('The Koldewey Excavations', '') %>
+                <%= content_tag :li, link_to('Babylon at the VAM', '') %>
+                <%= content_tag :li, link_to('Myth and Reality', '') %>
+                <li role="separator" class="divider"></li>
+                <%= content_tag :li, link_to('All postings in this section', '') %>
+              </ul>
+            </li>
+
             <li><%= link_to 'Explore', explore_path %></li>
             <li><%= link_to 'News', '' %></li>
             <li><%= link_to fa_icon('search'), search_path %></li>

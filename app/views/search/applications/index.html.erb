@@ -4,6 +4,7 @@
   <thead>
     <tr>
       <th>Name</th>
+      <th>Host</th>
       <th>Search url</th>
       <th colspan="3"></th>
     </tr>
@@ -13,6 +14,7 @@
     <% @applications.each do |application| %>
       <tr>
         <td><%= application.name %></td>
+        <td><%= application.host %></td>
         <td><%= application.search_url %></td>
         <td><%= link_to 'Show', search_application_path(application) %></td>
         <td><%= link_to 'Edit', edit_search_application_path(application) %></td>

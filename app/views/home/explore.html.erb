@@ -1,9 +1,9 @@
 <% title "Explore" %>
 
 <p class="text-muted">
-	'Babylon-Online is organized by a number of different interconnected data pools', from different materials 
-	and techniques to objects (like figurines) and culture. Items are also organized by the season—when the 
-	object was excavated—and the museum that houses the object today.
+  'Babylon-Online is organized by a number of different interconnected data pools', from different materials 
+  and techniques to objects (like figurines) and culture. Items are also organized by the season—when the 
+  object was excavated—and the museum that houses the object today.
 </p>
 
     <section class="no-padding" id="explore" style="margin-bottom: 80px;">
@@ -102,7 +102,13 @@
             </div>
         </div>
     </section>
-
+    
+  <h4>Searchable Categories / Applications</h4>
+  <div class="list-group">
+    <% for app in Search::Application.all do %>
+      <%= link_to app.name.humanize, app.host, class: 'list-group-item', target: :blank %>
+    <% end %>
+  </div>
 
 <% content_for :sidebar do %>
 	<h4>Projects</h4>

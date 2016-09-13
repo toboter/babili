@@ -10,19 +10,26 @@
 <table class="table table-bordered table-responsive">
   <thead>
     <tr>
-      <th>Result</th>
+      <th>Search Results</th>
     </tr>
   </thead>
 
   <tbody>
-    <% @results.each do |result| %>
+    <% if @results %>
+      <% @results.each do |result| %>
+        <tr>
+          <td>
+            <%= result.inspect %>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
       <tr>
         <td>
-          <%= result.inspect %>
+          Empty
         </td>
-
       </tr>
-    <% end if @results %>
+    <% end %>
   </tbody>
 </table>
 

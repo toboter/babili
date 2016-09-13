@@ -6,7 +6,7 @@ class SearchController < ApplicationController
       @results =[]
       @apps.each do |app|
         resp = nil
-        instance_variable_set("@#{app.name}_url", "#{app.search_url}?q=#{params[:q]}")
+        instance_variable_set("@#{app.name}_url", "#{app.host}#{app.search_url}?q=#{params[:q]}")
         resp = Net::HTTP.get_response(URI.parse(instance_variable_get("@#{app.name}_url")))
         @results.concat(JSON.parse(resp.body)) if resp
       end
