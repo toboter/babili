@@ -1,0 +1,45 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @blog.type %>
+</p>
+
+<p>
+  <strong>Author:</strong>
+  <%= @blog.author %>
+</p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @blog.title %>
+</p>
+
+<p>
+  <strong>Content:</strong>
+  <%= @blog.content %>
+</p>
+
+<p>
+  <strong>External link:</strong>
+  <%= @blog.external_link %>
+</p>
+
+<p>
+  <strong>Posted at:</strong>
+  <%= @blog.posted_at %>
+</p>
+
+<p>
+  <strong>Images:</strong>
+  <% @blog.images.each do |image| %>
+    <%= image_tag(image.url) %>
+  <% end %>
+</p>
+
+  <%= link_to sti_blog_path(@blog.type, @blog, :edit), class: 'btn btn-default' do %>
+    <%= fa_icon("edit") %>
+    <%= "Edit" %>
+  <% end %> | 
+  
+<%= link_to 'Back', sti_blog_path(@blog.type) %>

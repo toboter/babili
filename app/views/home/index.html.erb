@@ -23,21 +23,20 @@
   </div>
 <% end %> 
       
-  
-      <section class="bg-primary" id="about">
-          <div class="container">
-              <div class="row">
-                  <div class="col-lg-8 col-lg-offset-2">
-                  
-                      <h2 class="section-heading">Das antike Babylon</h2>
-                      <hr class="light">
-                      <p class="text-faded">Babylon war im Altertum eine der größten Städte der damals bekannten Welt. Es lag am Euphrat, heute ca. 90 km südlich von Bagdad, und wurde bereits im 3. Jahrtausend v. Chr. gegründet. Hauptstadt eines babylonischen Reiches wechselnder Größe und Geschichte wurde Babylon im 18. Jh. v. Chr. und behielt diese Stellung bis zur Eroberung durch die Perser 539 v. Chr. In den Jahrhunderten danach verlor es an Bedeutung, bis es letztlich wohl im 4. Jh. n. Chr. aufgegeben wurde und verfiel. Die Ruinen der Stadtanlage aus dem 6. Jh. v. Chr, der letzten Blütezeit Babylons - bis heute in einer Ausdehnung von etwa 1,5, km2 (Gesamtanlage) bzw. 2,7 km2 (Altstadt) erhalten -, beherrschen noch immer das Gelände nahe der irakischen Stadt Hillah.</p>
-                      <p><%= link_to 'Weiterlesen', '' %></p>
-
-                  </div>
-              </div>
-          </div>
-      </section>
+<section class="bg-primary" id="about">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2">
+        <% for entry in About.all do %>
+          <h2 class="section-heading"><%= entry.title %></h2>
+          <p class="text-faded"><%= truncate(entry.content, length: 500, separator: ' ') { link_to " continue reading", entry, style: 'color: white;' } %></p>
+          <p><%= link_to 'Weiterlesen', '' %></p>
+          <hr class="light">
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>
 
 
     <aside class="bg-dark">

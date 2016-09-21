@@ -1,15 +1,17 @@
-<p>
-  <strong>Name:</strong>
-  <%= @application.name %>
-</p>
-<p>
-  <strong>Host:</strong>
-  <%= @application.host %>
-</p>
-<p>
-  <strong>Search url:</strong>
-  <%= @application.search_url %>
-</p>
+<% title @application.name.humanize %>
 
-<%= link_to 'Edit', edit_search_application_path(@application) %> |
-<%= link_to 'Back', search_applications_path %>
+<% content_for :buttons do %>
+  <%= link_to fa_icon('edit', text: 'Edit'), edit_search_application_path(@application), class: 'btn btn-default' %>
+  <%= link_to fa_icon('remove', text: 'Delete'), @application, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default' %>
+<% end if current_user.is_admin? %>
+
+<div class="search-application" id="application-<%= @application.id %>">
+  <p><%= @application.url %></p>
+  <p>
+    <%= @application.description %><br>
+    <strong>Provider: </strong> 
+    <%= @application.provider %> 
+    <%= link_to @application.name, @application.host, target: :blank %>  
+  </p>
+  <%= link_to 'All searchable Applications', search_applications_path %>
+</div>

@@ -1,13 +1,27 @@
 <%= simple_form_for(@application) do |f| %>
-  <%= f.error_notification %>
-
-  <div class="form-inputs">
-    <%= f.input :name %>
-    <%= f.input :host %>
-    <%= f.input :search_url %>
-  </div>
-
-  <div class="form-actions">
-    <%= f.button :submit %>
+  
+  <div class="row">
+    <div class="col-md-12">
+      <%= f.error_notification %>
+  
+      <div class="row">
+        <%= content_tag :div, class: "col-md-12" do %>
+          <div class="form-inputs">
+            <%= f.input :name %>
+            <%= f.input :host %>
+            <%= f.input :search_url %>
+            <%= f.input :description %>
+            <%= f.input :provider %>
+            <%= f.input :image %>
+          </div>
+        <% end %>
+      </div>
+  
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.submit class: 'btn btn-default' %>
+        </div>
+      </div>
+    </div>
   </div>
 <% end %>

@@ -8,4 +8,13 @@ class User < ApplicationRecord
   def name
     email
   end
+  
+  def display_name
+    if given_name && family_name
+      [honorific_prefix, given_name, family_name, honorific_suffix].join(' ').strip
+    else
+      email
+    end
+  end
+  
 end

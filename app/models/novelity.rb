@@ -1,0 +1,3 @@
+class Novelity < Blog
+
+end

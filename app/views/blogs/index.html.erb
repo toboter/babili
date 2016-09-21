@@ -1,0 +1,43 @@
+<%= link_to sti_blog_path(@type, nil, :new), class: 'btn btn-default' do %>
+          <%= fa_icon("plus") %>
+          <%= "New #{@type}" %>
+        <% end if @type != 'Blog' %>
+
+<h1>Blogs</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Author</th>
+      <th>Title</th>
+      <th>Content</th>
+      <th>External link</th>
+      <th>Posted at</th>
+      <th>Images</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @blogs.each do |blog| %>
+      <tr>
+        <td><%= blog.type %></td>
+        <td><%= blog.author %></td>
+        <td><%= blog.title %></td>
+        <td><%= blog.content %></td>
+        <td><%= blog.external_link %></td>
+        <td><%= blog.posted_at %></td>
+        <td><%= blog.images %></td>
+        <td><%= link_to 'Show', blog %></td>
+        <td>  <%= link_to sti_blog_path(blog.type, blog, :edit) do %>
+    <%= fa_icon("edit") %>
+    <%= "Edit" %>
+  <% end %></td>
+        <td><%= link_to 'Destroy', blog, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>

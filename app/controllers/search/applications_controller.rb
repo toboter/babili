@@ -72,7 +72,7 @@ class Search::ApplicationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def application_params
-      params.require(:search_application).permit(:name, :host, :search_url)
+      params.require(:search_application).permit(:name, :host, :search_url, :description, :provider, :image)
     end
 end
 end

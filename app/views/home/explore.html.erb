@@ -6,49 +6,49 @@
   object was excavated—and the museum that houses the object today.
 </p>
 
-    <section class="no-padding" id="explore" style="margin-bottom: 80px;">
-        <div class="container-fluid">
-            <div class="row no-gutter popup-gallery">
+<section class="no-padding" id="explore" style="margin-bottom: 80px;">
+  <div class="container-fluid">
+    <div class="row no-gutter popup-gallery">
+      <div class="col-lg-4 col-sm-6">
+        <%= link_to "http://localhost:3001", class: "portfolio-box", target: :blank do %>
+		  <%= image_tag "categories/literature.jpg", class: "img-responsive" %>
+          <div class="portfolio-box-caption">
+            <div class="portfolio-box-caption-content">
+              <div class="project-category text-faded">
+                Category
+              </div>
+              <div class="project-name">
+                Bibliographie
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <div class="col-lg-4 col-sm-6">
+        <%= link_to "", class: "portfolio-box", target: :blank do %>
+		  <%= image_tag "categories/pedersen.jpg", class: "img-responsive" %>
+          <div class="portfolio-box-caption">
+            <div class="portfolio-box-caption-content">
+              <div class="project-category text-faded">
+                Category
+              </div>
+              <div class="project-name">
+                Babylon Texts // Olof Pedersén
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
                 <div class="col-lg-4 col-sm-6">
-                    <%= link_to "http://localhost:3001", class: "portfolio-box", target: :blank do %>
-					<%= image_tag "categories/literature.jpg", class: "img-responsive" %>
+                    <%= link_to "http://localhost:3003", class: "portfolio-box", target: :blank do %>
+					<%= image_tag "categories/media.jpg", class: "img-responsive" %>
                         <div class="portfolio-box-caption">
                             <div class="portfolio-box-caption-content">
                                 <div class="project-category text-faded">
                                     Category
                                 </div>
                                 <div class="project-name">
-                                    Bibliographie
-                                </div>
-                            </div>
-                        </div>
-                    <% end %>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <%= link_to "", class: "portfolio-box", target: :blank do %>
-					<%= image_tag "categories/pedersen.jpg", class: "img-responsive" %>
-                        <div class="portfolio-box-caption">
-                            <div class="portfolio-box-caption-content">
-                                <div class="project-category text-faded">
-                                    Category
-                                </div>
-                                <div class="project-name">
-                                    Babylon Texts // Olof Pedersén
-                                </div>
-                            </div>
-                        </div>
-                    <% end %>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <%= link_to "", class: "portfolio-box", target: :blank do %>
-					<%= image_tag "categories/material.jpg", class: "img-responsive" %>
-                        <div class="portfolio-box-caption">
-                            <div class="portfolio-box-caption-content">
-                                <div class="project-category text-faded">
-                                    Category
-                                </div>
-                                <div class="project-name">
-                                    Material
+                                    Media // Images & Docs
                                 </div>
                             </div>
                         </div>
@@ -109,6 +109,7 @@
       <%= link_to app.name.humanize, app.host, class: 'list-group-item', target: :blank %>
     <% end %>
   </div>
+  <%= link_to 'Available Apps to search in', search_applications_path %>
 
 <% content_for :sidebar do %>
 	<h4>Projects</h4>

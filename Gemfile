@@ -52,6 +52,8 @@ gem "font-awesome-rails"
 gem 'simple_form'
 gem "font-awesome-rails"
 gem 'will_paginate-bootstrap'
+gem "mini_magick"
+gem 'carrierwave', '>= 1.0.0.beta', '< 2.0'
 
 gem 'devise'
 gem 'doorkeeper'
