@@ -214,7 +214,21 @@ header .header-content .header-content-inner p {
     margin-left: auto;
     margin-right: auto;
   }
+  .footer {
+    li.resp-right {
+      float: right;
+    }
+  }
 }
+
+.footer {
+  border-top: 1px solid #ddd;
+  padding: 50px 0 40px 0;
+  background-color: #f8f8f8;
+  p { margin-left: 15px;
+  }
+}
+  
 .section-heading {
   margin-top: 0;
 }

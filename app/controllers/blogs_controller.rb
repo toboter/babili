@@ -1,11 +1,13 @@
 class BlogsController < ApplicationController
   before_action :set_blog, only: [:show, :edit, :update, :destroy]
   before_action :set_type
-
+  load_and_authorize_resource
+  
   # GET /blogs
   # GET /blogs.json
   def index
     @blogs = type_class.all
+    @blog_years = @blogs.order(posted_at: :desc).group_by { |t| t.posted_at.strftime('%Y') }
   end
 
   # GET /blogs/1
@@ -29,7 +31,7 @@ class BlogsController < ApplicationController
 
     respond_to do |format|
       if @blog.save
-        format.html { redirect_to @blog, notice: "#{@type} was successfully created." }
+        format.html { redirect_to (@type == 'Novelity' ? novelities_path : @blog), notice: "#{@type} was successfully created." }
         format.json { render :show, status: :created, location: @blog }
       else
         format.html { render :new }
@@ -82,6 +84,6 @@ class BlogsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def blog_params
-      params.require(type.underscore.to_sym).permit(:type, :author_id, :title, :content, :external_link, :posted_at, {images: []})
+      params.require(type.underscore.to_sym).permit(:type, :author_id, :title, :content, :external_link, :posted_at)
     end
 end

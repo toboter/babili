@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     resources :applications
   end
 
+  resources :blogs, only: :index
   resources :abouts, path: :about, controller: 'blogs', type: 'About'
   resources :posts, controller: 'blogs', type: 'Post'
   resources :novelities, path: :news, controller: 'blogs', type: 'Novelity'

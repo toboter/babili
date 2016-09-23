@@ -1,5 +1,3 @@
-<h1>New Blog</h1>
+<% title "New #{@type}" %>
 
 <%= render 'form', blog: @blog %>
-
-<%= link_to 'Back', sti_blog_path(@blog.type) %>

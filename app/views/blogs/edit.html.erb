@@ -1,6 +1,3 @@
-<h1>Editing Blog</h1>
+<% title "Edit '#{@blog.title}'" %>
 
 <%= render 'form', blog: @blog %>
-
-<%= link_to 'Show', @blog %> |
-<%= link_to 'Back', sti_blog_path(@blog.type) %>

@@ -27,10 +27,9 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-8 col-lg-offset-2">
-        <% for entry in About.all do %>
+        <% for entry in @nav_blogs.where(type: 'About') do %>
           <h2 class="section-heading"><%= entry.title %></h2>
           <p class="text-faded"><%= truncate(entry.content, length: 500, separator: ' ') { link_to " continue reading", entry, style: 'color: white;' } %></p>
-          <p><%= link_to 'Weiterlesen', '' %></p>
           <hr class="light">
         <% end %>
       </div>
@@ -39,39 +38,21 @@
 </section>
 
 
-    <aside class="bg-dark">
-        <div class="container">
-            <div class="call-to-action">
-            <ul>
-    <li>Startseite aufhübschen (wie ur-online)</li>
-    <li>Bab-ili / Babylon-Portal</li>
-    <li>Babylon-Online.org</li>
-    <li>Titel: The City of Babylon</li>
-    <li>Learn About (link auf about/xx inaktiv)</li>
-    <li>Explore (apps und projekte)</li>
-    <li>    =Datenpools</li>
-    <li>    -> dort literatur anzeigen mit Foto (Koldewey beim lesen)</li>
-    <li>    -> Personen und Institutionen</li>
-    <li>    -> Archivalien</li>
-    <li>    -> Objekte</li>
-    <li>    -> Babylon Texte (Pedersen Archive)</li>
-    <li>    -> Medien</li>
-    <li>    =Projekte</li>
-    <li>    </li>
-    <li>Search all data (inaktiv)</li>
-</ul>
-
-<p>zentrale API suche basteln</p>
-<p>about blog</p>
-<p>news links</p>
-<p>authorisierung</p>
-
-<p>API Dokumentation</p>
-<p>logout -> alle angeschlossenen apps auch</p>
-<p>contact form -> sendmail</p>
-            </div>
-        </div>
-    </aside>
+<aside class="bg-dark">
+  <div class="container">
+    <div class="row call-to-action">
+      <div class="col-md-5">
+        <%= link_to image_tag('fu-logo.svg', style: 'height: 100px; margin: 0 auto;'), 'http://www.fu-berlin.de', target: :_blank %>
+      </div>
+      <div class="col-md-3">
+        <%= link_to image_tag('dog-logo.png', style: 'height: 70px; margin: 20px auto;'), 'http://www.orient-gesellschaft.de', target: :_blank %>
+      </div>
+      <div class="col-md-4">
+        <%= link_to image_tag('smb-logo.svg', style: 'height: 70px; margin: 20px auto;'), 'http://smb.museum', target: :_blank %>
+      </div>
+    </div>
+  </div>
+</aside>
 
 
 

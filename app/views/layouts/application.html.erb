@@ -25,10 +25,11 @@
             <%= content_tag :p, fa_icon('user', text: "Signed in as #{current_user.try(:name)}"), class: 'navbar-text' if user_signed_in? %>
           </ul>
           <ul class="nav navbar-nav navbar-right">
+            <li><%= link_to 'Explore', explore_path %></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <% for entry in About.all do %>
+                <% for entry in @nav_blogs.where(type: 'About') do %>
                   <%= content_tag :li, link_to(entry.title, entry) %>
                 <% end %>
                 <li role="separator" class="divider"></li>
@@ -38,15 +39,13 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Blog posts <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <% for entry in Post.order(updated_at: :desc).limit(8) do %>
+                <% for entry in @nav_blogs.where(type: 'Post').order(updated_at: :desc).limit(8) do %>
                   <%= content_tag :li, link_to(entry.title, entry) %>
                 <% end %>
                 <li role="separator" class="divider"></li>
                 <%= content_tag :li, link_to('All postings in this section', posts_path) %>
               </ul>
             </li>
-            
-            <li><%= link_to 'Explore', explore_path %></li>
             <li><%= link_to 'News', novelities_path %></li>
             <li><%= link_to fa_icon('search'), search_path %></li>
           </ul>        
@@ -54,10 +53,10 @@
       </div>
     </nav>
     
-    <% if current_page?(root_url) %>
+    <% if current_page?(root_url) || current_page?('/about') || current_page?('/posts') || current_page?('/news') %>
       <%= yield %>
     <% else %>
-      <div class="container-fluid" style="margin-top: 60px;">
+      <div class="container-fluid" style="margin: 60px 0 100px 0;">
         <div class="row">
           <div class="col-sm-7 col-md-8 main">
             <%= content_tag :div, class: "page-header" do %>
@@ -67,6 +66,7 @@
                   <%= yield(:buttons) if content_for?(:buttons) %>
                 </div>
               </h1>
+              <%= content_tag :p, yield(:subline), class: 'text-muted' if content_for?(:subline) %>
             <% end if content_for?(:buttons) || content_for?(:title) %>
           
             <%= content_tag :div, class: 'row' do %>
@@ -91,30 +91,42 @@
     <% end %>
 
 
-    <footer class="footer" style="margin-top:60px;">
-      <nav class="navbar navbar-bottom">
-        <div class="container-fluid">  
-          
-          <div>
-            <ul class="nav navbar-nav"> 
+    <div class="footer" id="footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-10 col-lg-10 col-sm-12">
+            <p id="footer-info-copyright" class="text-muted">
+              Der Inhalt ist unter der Lizenz „Creative Commons Attribution/Share Alike“ verfügbar; 
+              Informationen zu den Urhebern und zum Lizenzstatus eingebundener Mediendateien (etwa 
+              Bilder oder andere Dokumente) können im Regelfall durch Anklicken dieser abgerufen werden. 
+              Möglicherweise unterliegen die Inhalte jeweils zusätzlichen Bedingungen. Durch die Nutzung 
+              dieser Website erklären Sie sich mit den Nutzungsbedingungen und der Datenschutzrichtlinie 
+              einverstanden.
+            </p>
+            <p class="text-muted">
+              &copy; <%= Time.now.strftime("%Y") %> <%= link_to 'babylon-online.org', root_path %>
+            </p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <ul id="footer-doc-links" class="nav nav-pills"> 
               <li><%= link_to "Contact", contact_path %></li>
               <li><%= link_to "Help", help_path %></li>
               <li><%= link_to "Imprint", imprint_path %></li>
               <li><%= link_to "Developers", api_path %></li>
-            </ul>
-            
-            <ul class="nav navbar-nav navbar-right">
+    
               <% if current_user %>
-                <li><%= link_to "Settings", edit_user_registration_path %></li>      
-                <li><%= link_to fa_icon('signout', text: "Sign Out"), destroy_user_session_path, method: :delete %></li>
+                <li class="resp-right"><%= link_to fa_icon('signout', text: "Sign Out"), destroy_user_session_path, method: :delete %></li>
+                <li class="resp-right"><%= link_to "Settings", edit_user_registration_path %></li>
               <% else %>
-                <li><%= link_to fa_icon('signin', text: "Sign in"), new_user_session_path %></li>
+                <li class="resp-right"><%= link_to fa_icon('signin', text: "Sign in"), new_user_session_path %></li>
               <% end %>
-            </ul>            
-          </div>        
+            </ul>
+          </div>
         </div>
-      </nav>
-    </footer>
+      </div>
+    </div>
 
   </body>
 </html>

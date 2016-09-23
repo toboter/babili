@@ -50,10 +50,9 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'bootstrap-sass', '~> 3.3.6'
 gem "font-awesome-rails"
 gem 'simple_form'
-gem "font-awesome-rails"
 gem 'will_paginate-bootstrap'
 gem "mini_magick"
-gem 'carrierwave', '>= 1.0.0.beta', '< 2.0'
+gem 'redcarpet'
 
 gem 'devise'
 gem 'doorkeeper'
