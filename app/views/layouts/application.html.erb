@@ -117,10 +117,10 @@
               <li><%= link_to "Developers", api_path %></li>
     
               <% if current_user %>
-                <li class="resp-right"><%= link_to fa_icon('signout', text: "Sign Out"), destroy_user_session_path, method: :delete %></li>
+                <li class="resp-right"><%= link_to "Sign Out", destroy_user_session_path, method: :delete %></li>
                 <li class="resp-right"><%= link_to "Settings", edit_user_registration_path %></li>
               <% else %>
-                <li class="resp-right"><%= link_to fa_icon('signin', text: "Sign in"), new_user_session_path %></li>
+                <li class="resp-right"><%= link_to "Sign in", new_user_session_path %></li>
               <% end %>
             </ul>
           </div>
