@@ -1,0 +1,34 @@
+<% title "Registered Users" %>
+<p class="text-muted">
+  Users listed here are registered and have the ability to read everything. Admins may assign other users a new role. You cannot change your own role, that is why you are missing in the table.
+<p>
+
+<table class="table table-bordered table-responsive">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+	  <th>Status/Role</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td>
+          <%= user.display_name %>
+		</td>
+		<td>
+		  <%= user.email %>
+        </td>
+		<td>
+		  <% if user.is_admin %>
+		  	<%= link_to fa_icon('edit', text: 'revoke admin status'), user_path(user), method: :put %>
+		  <% else %>
+		  	<%= link_to fa_icon('edit', text: 'set as admin'), user_path(user), method: :put %>
+		  <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

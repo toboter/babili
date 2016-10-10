@@ -22,6 +22,8 @@ Rails.application.routes.draw do
   get '/imprint', to: 'home#imprint'
   get '/contact', to: 'home#contact'
   get '/explore', to: 'home#explore'
+  
+  resources :users, only: [:index, :update]
 
   root to: "home#index"
 

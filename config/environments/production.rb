@@ -92,7 +92,7 @@ Rails.application.configure do
     domain: "babylon-online.org",
     authentication: "plain",
     enable_starttls_auto: true,
-    user_name: Rails.application.secrets.GMAIL_USERNAME,
-    password: Rails.application.secrets.GMAIL_PASSWORD
+    user_name: <%= ENV["GMailUser"] %>,
+    password: <%= ENV["GMailPasswd"] %>
   }
 end

@@ -9,6 +9,6 @@ class AddProfileColumnsToUser < ActiveRecord::Migration[5.0]
     add_column :users, :honorific_suffix, :string
     add_column :users, :middle_name, :string
     
-    add_column :users, :is_admin, :boolean
+    add_column :users, :is_admin, :boolean, null: false, default: false
   end
 end
