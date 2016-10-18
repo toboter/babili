@@ -9,99 +9,26 @@
 <section class="no-padding" id="explore" style="margin-bottom: 80px;">
   <div class="container-fluid">
     <div class="row no-gutter popup-gallery">
-      <div class="col-lg-4 col-sm-6">
-        <%= link_to "http://localhost:3001", class: "portfolio-box", target: :blank do %>
-		  <%= image_tag "categories/literature.jpg", class: "img-responsive" %>
-          <div class="portfolio-box-caption">
-            <div class="portfolio-box-caption-content">
-              <div class="project-category text-faded">
-                Category
-              </div>
-              <div class="project-name">
-                Bibliographie
-              </div>
-            </div>
-          </div>
-        <% end %>
-      </div>
-      <div class="col-lg-4 col-sm-6">
-        <%= link_to "", class: "portfolio-box", target: :blank do %>
-		  <%= image_tag "categories/pedersen.jpg", class: "img-responsive" %>
-          <div class="portfolio-box-caption">
-            <div class="portfolio-box-caption-content">
-              <div class="project-category text-faded">
-                Category
-              </div>
-              <div class="project-name">
-                Babylon Texts // Olof Pedersén
+      <% for app in @applications do %>
+        <div class="col-lg-4 col-sm-6">
+          <%= link_to app.url, class: "portfolio-box", target: :blank do %>
+            <%= image_tag app.image.present? ? app.image : "categories/media.jpg", class: "img-responsive" %>
+            <div class="portfolio-box-caption">
+              <div class="portfolio-box-caption-content">
+                <div class="project-category text-faded">
+                    Category
+                </div>
+                <div class="project-name">
+                  <%= app.name.humanize %>
+                </div>
               </div>
             </div>
-          </div>
-        <% end %>
-      </div>
-                <div class="col-lg-4 col-sm-6">
-                    <%= link_to "http://localhost:3003", class: "portfolio-box", target: :blank do %>
-					<%= image_tag "categories/media.jpg", class: "img-responsive" %>
-                        <div class="portfolio-box-caption">
-                            <div class="portfolio-box-caption-content">
-                                <div class="project-category text-faded">
-                                    Category
-                                </div>
-                                <div class="project-name">
-                                    Media // Images & Docs
-                                </div>
-                            </div>
-                        </div>
-                    <% end %>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <%= link_to "", class: "portfolio-box", target: :blank do %>
-					<%= image_tag "categories/smb.jpg", class: "img-responsive" %>
-                        <div class="portfolio-box-caption">
-                            <div class="portfolio-box-caption-content">
-                                <div class="project-category text-faded">
-                                    Category
-                                </div>
-                                <div class="project-name">
-                                    VAM / SMB Digital
-                                </div>
-                            </div>
-                        </div>
-                    <% end %>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <%= link_to "", class: "portfolio-box", target: :blank do %>
-					<%= image_tag "categories/archivalien.jpg", class: "img-responsive" %>
-                        <div class="portfolio-box-caption">
-                            <div class="portfolio-box-caption-content">
-                                <div class="project-category text-faded">
-                                    Category
-                                </div>
-                                <div class="project-name">
-                                    Archivalien
-                                </div>
-                            </div>
-                        </div>
-                    <% end %>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <%= link_to "http://localhost:3002", class: "portfolio-box", target: :blank do %>
-					<%= image_tag "categories/people.jpg", class: "img-responsive" %>
-                        <div class="portfolio-box-caption">
-                            <div class="portfolio-box-caption-content">
-                                <div class="project-category text-faded">
-                                    Category
-                                </div>
-                                <div class="project-name">
-                                    Personen & Institutionen
-                                </div>
-                            </div>
-                        </div>
-                    <% end %>
-                </div>
-            </div>
+          <% end %>
         </div>
-    </section>
+      <% end %>
+    </div>
+  </div>
+</section>
     
   <h4>Searchable Categories / Applications</h4>
   <div class="list-group">
@@ -109,7 +36,7 @@
       <%= link_to app.name.humanize, app.host, class: 'list-group-item', target: :blank %>
     <% end %>
   </div>
-  <%= link_to 'Available Apps to search in', search_applications_path %>
+  <%= link_to 'Available Apps to search in', search_applications_path if can? :read, Search::Application %>
 
 <% content_for :sidebar do %>
 	<h4>Projects</h4>

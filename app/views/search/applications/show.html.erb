@@ -1,9 +1,9 @@
 <% title @application.name.humanize %>
 
 <% content_for :buttons do %>
-  <%= link_to fa_icon('edit', text: 'Edit'), edit_search_application_path(@application), class: 'btn btn-default' %>
-  <%= link_to fa_icon('remove', text: 'Delete'), @application, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default' %>
-<% end if current_user.is_admin? %>
+  <%= link_to fa_icon('edit', text: 'Edit'), edit_search_application_path(@application), class: 'btn btn-default' if can? :update, @application %>
+  <%= link_to fa_icon('remove', text: 'Delete'), @application, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default' if can? :destroy, @application %>
+<% end %>
 
 <div class="search-application" id="application-<%= @application.id %>">
   <p><%= @application.url %></p>

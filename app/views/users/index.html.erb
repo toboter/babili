@@ -8,7 +8,8 @@
     <tr>
       <th>Name</th>
       <th>Email</th>
-	  <th>Status/Role</th>
+	    <th>Roles</th>
+      <th></th>
     </tr>
   </thead>
 
@@ -17,17 +18,20 @@
       <tr>
         <td>
           <%= user.display_name %>
-		</td>
-		<td>
-		  <%= user.email %>
         </td>
-		<td>
-		  <% if user.is_admin %>
-		  	<%= link_to fa_icon('edit', text: 'revoke admin status'), user_path(user), method: :put %>
-		  <% else %>
-		  	<%= link_to fa_icon('edit', text: 'set as admin'), user_path(user), method: :put %>
-		  <% end %>
+        <td>
+          <%= user.email %>
         </td>
+        <%= simple_form_for [user], remote: true do |f| %>
+          <td>
+            <%= f.error_notification %>
+            <%= f.check_box :is_active %> Is Active<br>
+            <%= f.check_box :is_admin %> Is Admin
+          </td>
+          <td id="user_<%= user.id %>_submit">
+            <%= f.submit 'Update', class: "btn btn-sm btn-default" %>
+          </td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

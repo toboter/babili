@@ -3,7 +3,8 @@ Rails.application.routes.draw do
 
   use_doorkeeper
   devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}
-
+  resources :users, only: [:index, :update]
+  
   namespace :api do
     get 'me', to: 'users#me'
     get 'users', to: 'users#index'
@@ -22,8 +23,6 @@ Rails.application.routes.draw do
   get '/imprint', to: 'home#imprint'
   get '/contact', to: 'home#contact'
   get '/explore', to: 'home#explore'
-  
-  resources :users, only: [:index, :update]
 
   root to: "home#index"
 

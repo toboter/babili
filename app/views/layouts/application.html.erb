@@ -22,7 +22,7 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-left">
-            <%= content_tag :p, fa_icon('user', text: "Signed in as #{current_user.try(:name)}"), class: 'navbar-text' if user_signed_in? %>
+            <%= content_tag :p, fa_icon('user', text: "Signed in as #{current_user.try(:display_name)}"), class: 'navbar-text' if user_signed_in? %>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li><%= link_to 'Explore', explore_path %></li>

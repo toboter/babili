@@ -4,11 +4,6 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :trackable, :validatable
          
-         
-  def name
-    email
-  end
-  
   def display_name
     if given_name && family_name
       [honorific_prefix, given_name, family_name, honorific_suffix].join(' ').strip

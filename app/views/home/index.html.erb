@@ -29,7 +29,7 @@
       <div class="col-lg-8 col-lg-offset-2">
         <% for entry in @nav_blogs.where(type: 'About') do %>
           <h2 class="section-heading"><%= entry.title %></h2>
-          <p class="text-faded"><%= truncate(entry.content, length: 500, separator: ' ') { link_to " continue reading", entry, style: 'color: white;' } %></p>
+          <p class="text-faded"><%= truncate(markdown(entry.content), length: 500, separator: ' ', escape: false) { link_to " continue reading", entry, style: 'color: #d8d8d8;' } %></p>
           <hr class="light">
         <% end %>
       </div>

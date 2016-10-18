@@ -16,6 +16,7 @@ class HomeController < ApplicationController
   end
   
   def explore
+    @applications = Search::Application.all
   end
   
 end

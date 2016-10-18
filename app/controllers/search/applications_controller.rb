@@ -1,7 +1,7 @@
 module Search
 class Search::ApplicationsController < ApplicationController
   before_action :set_application, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:index, :show]
   load_and_authorize_resource
   
   # GET /applications

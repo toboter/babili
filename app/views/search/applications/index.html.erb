@@ -3,7 +3,7 @@
 
 <% content_for :buttons do %>
   <%= link_to 'New Application', new_search_application_path, class: 'btn btn-default' %>
-<% end if current_user.is_admin? %>
+<% end if can? :create, Search::Application %>
 
 <table class="table table-bordered table-responsive">
   <thead>
@@ -18,7 +18,7 @@
       <tr>
         <td>
           <%= link_to application.name.humanize, application %>
-          <%= link_to fa_icon('edit'), edit_search_application_path(application) %>
+          <%= link_to fa_icon('edit'), edit_search_application_path(application) if can? :update, application %>
         </td>
         <td>
           <small>

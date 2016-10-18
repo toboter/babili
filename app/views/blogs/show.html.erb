@@ -1,5 +1,5 @@
 <% title @blog.title %>
-<% subline "written by #{@blog.author.try(:display_name)} on #{@blog.posted_at}" %>
+<% subline "written by #{@blog.author.try(:display_name)} on #{@blog.posted_at.to_formatted_s(:long)}" %>
 <% content_for(:buttons) do %>
   <%= link_to fa_icon('edit', text: 'Edit'), sti_blog_path(@blog.type, @blog, :edit), class: 'btn btn-default' if can? :update, @blog %>
   <%= link_to fa_icon("remove", text: 'Delete'), @blog, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default' if can? :destroy, @blog %>
