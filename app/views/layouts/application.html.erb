@@ -24,7 +24,7 @@
           <ul class="nav navbar-nav navbar-left">
             <%= content_tag :p, fa_icon('user', text: "Signed in as #{current_user.try(:display_name)}"), class: 'navbar-text' if user_signed_in? %>
           </ul>
-          <ul class="nav navbar-nav navbar-right">
+          <%= content_tag :ul, class: "nav navbar-nav navbar-right" do %>
             <li><%= link_to 'Explore', explore_path %></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
@@ -48,7 +48,7 @@
             </li>
             <li><%= link_to 'News', novelities_path %></li>
             <li><%= link_to fa_icon('search'), search_path %></li>
-          </ul>        
+          <% end if @nav_blogs %>        
         </div>
       </div>
     </nav>
