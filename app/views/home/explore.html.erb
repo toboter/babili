@@ -11,8 +11,8 @@
     <div class="row no-gutter popup-gallery">
       <% for app in @applications do %>
         <div class="col-lg-4 col-sm-6">
-          <%= link_to app.url, class: "portfolio-box", target: :blank do %>
-            <%= image_tag app.image.present? ? app.image : "categories/media.jpg", class: "img-responsive" %>
+          <%= link_to app.host, class: "portfolio-box", target: :blank do %>
+            <%= image_tag app.image.present? ? app.image : "categories/#{app.name}.jpg", class: "img-responsive" %>
             <div class="portfolio-box-caption">
               <div class="portfolio-box-caption-content">
                 <div class="project-category text-faded">

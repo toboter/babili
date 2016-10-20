@@ -48,6 +48,7 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'bootstrap-sass', '~> 3.3.6'
+gem 'jquery-turbolinks'
 gem "font-awesome-rails"
 gem 'simple_form'
 gem 'will_paginate-bootstrap'

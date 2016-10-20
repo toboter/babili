@@ -3,6 +3,7 @@
   <head>
     <title><%= content_for?(:title) ? yield(:title) : 'babylon-online.org' %></title>
     <%= csrf_meta_tags %>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
@@ -12,17 +13,15 @@
     <nav id="mainNav" class="navbar navbar-<%= current_page?(root_url) ? 'custom' : 'default' %> navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <button type="button" class="navbar-toggle collapsed" style="border: none; margin-top: 0; margin-bottom: 0;" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
+            <%= fa_icon('bars 2x') %>
           </button>
           <%= link_to 'babylon-online.org', root_url, class: "navbar-brand" %>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-left">
-            <%= content_tag :p, fa_icon('user', text: "Signed in as #{current_user.try(:display_name)}"), class: 'navbar-text' if user_signed_in? %>
+            <%= content_tag :p, fa_icon('user', text: "Signed in as #{current_user.try(:display_name)}"), class: 'navbar-text', style: 'margin-left: 15px;' if user_signed_in? %>
           </ul>
           <%= content_tag :ul, class: "nav navbar-nav navbar-right" do %>
             <li><%= link_to 'Explore', explore_path %></li>
