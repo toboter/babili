@@ -13,6 +13,7 @@ class SearchController < ApplicationController
         resp = Net::HTTP.get_response(uri)
         @results.concat(JSON.parse(resp.body)) if resp
       end
+      @grouped_results = @results.group_by { |r| r['type'] }
     end
   end
   

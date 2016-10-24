@@ -7,31 +7,43 @@
   </div>
 </div>
 
-<table class="table table-bordered table-responsive">
-  <thead>
-    <tr>
-      <th>Search Results</th>
-    </tr>
-  </thead>
 
-  <tbody>
-    <% if @results %>
-      <% @results.each do |result| %>
+<% if @grouped_results %>
+  <% @grouped_results.each do |group, results| %>
+    <table class="table table-bordered table-responsive">
+      <thead>
         <tr>
-          <td>
-            <%= result.inspect %>
-          </td>
+          <th><%= group.pluralize %></th>
         </tr>
-      <% end %>
-    <% else %>
+      </thead>
+      <tbody>
+        <% results.each do |result| %>
+          <tr>
+            <td>
+              <%= link_to result['full_entry'], result['links']['human'] %><br>
+              <small><%= result['links']['human'] %></small>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+<% else %>
+  <table class="table table-bordered table-responsive">
+    <thead>
+      <tr>
+        <th>Search Results</th>
+      </tr>
+    </thead>
+    <tbody>
       <tr>
         <td>
           Empty
         </td>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </tbody>
+  </table>
+<% end %>
 
 <% content_for :sidebar do %>
 	<h4>Filter</h4>
