@@ -1,5 +1,6 @@
 <% title @blog.title %>
 <% subline "written by #{@blog.author.try(:display_name)} on #{@blog.posted_at.to_formatted_s(:long_ordinal)}" %>
+
 <% content_for(:buttons) do %>
   <%= link_to fa_icon('edit', text: 'Edit'), sti_blog_path(@blog.type, @blog, :edit), class: 'btn btn-default' if can? :update, @blog %>
   <%= link_to fa_icon("remove", text: 'Delete'), @blog, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default' if can? :destroy, @blog %>
@@ -16,3 +17,14 @@
 
 
 <%= link_to "See all #{@type} pages", sti_blog_path(@type) %>
+
+<% content_for :sidebar do %>
+  <% if toc(@blog.content).present? %>
+    <div class="toc">
+      <h4>Table of contents</h4>
+      <%= toc(@blog.content) %>
+    </div>
+  <% elsif current_user && (current_user.is_active? || current_user.is_admin?) %>
+    <p>Add structuring elements to your entry. That will generate a table of contents here.</p>
+  <% end %>
+<% end %>

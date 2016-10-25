@@ -8,7 +8,7 @@ module ApplicationHelper
   end
   
   def markdown(text)
-    renderer = Redcarpet::Render::HTML.new(hard_wrap: true, filter_html: true)
+    renderer = Redcarpet::Render::HTML.new(hard_wrap: true, filter_html: true, with_toc_data: true)
     options = {
       autolink: true,
       no_intra_emphasis: true,
@@ -17,6 +17,15 @@ module ApplicationHelper
       strikethrough: true,
       superscript: true,
       footnotes: true
+    }
+    Redcarpet::Markdown.new(renderer, options).render(text).html_safe
+  end
+  
+  def toc(text)
+    Redcarpet::Render::HTML_TOC
+    renderer = Redcarpet::Render::HTML_TOC.new
+    options = {
+      escape_html: true
     }
     Redcarpet::Markdown.new(renderer, options).render(text).html_safe
   end

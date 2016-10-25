@@ -45,3 +45,10 @@
 .about-entry img, .post-entry img {
     display: none !important;
 }
+
+.toc {
+    @extend .well;
+    ul {
+        padding-left: 20px;
+    }
+}
