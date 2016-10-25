@@ -53,6 +53,7 @@ gem "font-awesome-rails"
 gem 'simple_form'
 gem 'will_paginate-bootstrap'
 gem 'redcarpet'
+gem 'acts_as_list'
 
 gem 'devise'
 gem 'doorkeeper'

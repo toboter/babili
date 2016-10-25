@@ -14,8 +14,16 @@ Rails.application.routes.draw do
   end
 
   resources :blogs, only: :index
-  resources :abouts, path: :about, controller: 'blogs', type: 'About'
-  resources :posts, controller: 'blogs', type: 'Post'
+  resources :abouts, path: :about, controller: 'blogs', type: 'About' do 
+    member do
+      put :move
+    end
+  end
+  resources :posts, controller: 'blogs', type: 'Post' do 
+    member do
+      put :move
+    end
+  end
   resources :novelities, path: :news, controller: 'blogs', type: 'Novelity'
 
   get '/api', to: 'home#api'

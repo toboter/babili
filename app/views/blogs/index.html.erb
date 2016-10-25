@@ -30,11 +30,21 @@
           </table>
         <% end %>
       <% else %>
-        <% @blogs.each do |blog| %>
+        <% @blogs.order(position: :asc).each do |blog| %>
           <div class="well <%= blog.type.downcase %>-entry" id="<%= blog.type.downcase %>-<%= blog.id %>">
             <h4>
-              <%= link_to blog.title, blog %> 
-              <%= link_to fa_icon("edit"), sti_blog_path(blog.type, blog, :edit), class: 'pull-right' if can? :update, blog %>
+              <%= link_to blog.title, blog %>
+              <%= content_tag :div, class: 'pull-right' do %>
+                <%= link_to fa_icon("edit"), sti_blog_path(blog.type, blog, :edit), data: {toggle: "tooltip", placement: "left"}, title: 'Edit' %>
+                <% if blog.in_list? %>
+                  <%= link_to fa_icon('angle-double-up'), sti_blog_path(blog.type, blog, :move, method: 'move_to_top'), method: :put, data: {toggle: "tooltip", placement: "bottom"}, title: 'Move to top' unless blog.first? %>
+                  <%= link_to fa_icon('angle-up'), sti_blog_path(blog.type, blog, :move, method: 'move_higher'), method: :put, data: {toggle: "tooltip", placement: "top"}, title: 'Move up' unless blog.first? %>
+                  <%= link_to fa_icon('angle-down'), sti_blog_path(blog.type, blog, :move, method: 'move_lower'), method: :put, data: {toggle: "tooltip", placement: "bottom"}, title: 'Move down' unless blog.last? %>
+                  <%= link_to fa_icon('angle-double-down'), sti_blog_path(blog.type, blog, :move, method: 'move_to_bottom'), method: :put, data: {toggle: "tooltip", placement: "right"}, title: 'Move to bottom' unless blog.last? %>
+                <% elsif blog.not_in_list? %>
+                  <%= link_to fa_icon('angle-right'), sti_blog_path(blog.type, blog, :move, method: 'insert'), method: :put, data: {toggle: "tooltip", placement: "right"}, title: 'Insert to list' %>
+                <% end %>
+              <% end if can? :update, blog %>
             </h4>
             <%= content_tag :p, "written by #{blog.author.try(:display_name)} on #{blog.posted_at}", class: 'text-muted' %>
             <%= content_tag :div, class: "#{blog.type.downcase}-content", id: "#{blog.type.downcase}-content-#{blog.id}" do %>

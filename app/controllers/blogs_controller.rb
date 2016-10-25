@@ -1,5 +1,5 @@
 class BlogsController < ApplicationController
-  before_action :set_blog, only: [:show, :edit, :update, :destroy]
+  before_action :set_blog, only: [:show, :edit, :update, :destroy, :move]
   before_action :set_type
   before_action :authenticate_user!, except: [:index, :show]
   load_and_authorize_resource
@@ -51,6 +51,27 @@ class BlogsController < ApplicationController
       else
         format.html { render :edit }
         format.json { render json: @blog.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+  
+  def move
+    if ["move_lower", "move_higher", "move_to_top", "move_to_bottom", "insert"].include?(params[:method])
+      respond_to do |format|
+        if params[:method] == 'insert' && @blog.position.nil?
+          pos = type_class.where.not(position: nil).order('position').last.try(:position) || 0
+          if @blog.insert_at(pos+1)
+            format.html { redirect_to type_class, notice: "#{@type} was successfully inserted to list." }
+          else
+            format.html { render :index }
+          end
+        else 
+          if @blog.send(params[:method])
+            format.html { redirect_to type_class, notice: "Position was successfully updated." }
+          else
+            format.html { render :index }
+          end
+        end
       end
     end
   end

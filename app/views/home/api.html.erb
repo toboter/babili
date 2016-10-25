@@ -1,4 +1,4 @@
-<% title "API" %>
+<% title "Developers guide" %>
 
 <h2>Authentification & Authorization</h2>
 <p>
@@ -13,7 +13,24 @@
   to layout or assign the attributes which will be shown.
 </p>
 
+<br>
+<h2>API design</h2>
+<p>
+  <strong>obligatory attributes:</strong><br>
+  <ul>
+    <li><code>['type']</code> <small>your app results scope(s)</small></li>
+    <li><code>['full_entry']</code> <small>what is displayed as result text</small></li>
+    <li><code>['links']['human']</code> <small>link to results origin url</small></li>
+  </ul>
+</p>
 
+<p>
+  <strong>searchable attributes recommendation:</strong><br>
+  <ul>
+    <li>name</li>
+
+  </ul>
+</p>
 
 
 <% content_for :sidebar do %>

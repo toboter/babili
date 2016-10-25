@@ -17,3 +17,7 @@
 //= require turbolinks
 //= require turbolinks-compatibility
 //= require_tree .
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
