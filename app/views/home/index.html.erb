@@ -27,7 +27,7 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-8 col-lg-offset-2">
-        <% for entry in @nav_blogs.where(type: 'About') do %>
+        <% for entry in @nav_blogs.where(type: 'About').order('position') do %>
           <h2 class="section-heading"><%= entry.title %></h2>
           <p class="text-faded"><%= truncate(markdown(entry.content), length: 500, separator: ' ', escape: false) { link_to " continue reading", entry } %></p>
           <hr class="light">
