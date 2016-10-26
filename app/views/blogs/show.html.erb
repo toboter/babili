@@ -1,5 +1,5 @@
 <% title @blog.title %>
-<% subline "written by #{@blog.author.try(:display_name)} on #{@blog.posted_at.to_formatted_s(:long_ordinal)}" %>
+<% subline "posted by #{@blog.author.try(:display_name)} on #{@blog.posted_at.to_formatted_s(:long_ordinal)}" %>
 
 <% content_for(:buttons) do %>
   <%= link_to fa_icon('edit', text: 'Edit'), sti_blog_path(@blog.type, @blog, :edit), class: 'btn btn-default' if can? :update, @blog %>
@@ -10,12 +10,12 @@
   <%= markdown @blog.content %>
 </div>
 
-<p>
+<%= content_tag :p do %>
   <strong>External link:</strong>
   <%= link_to @blog.external_link, @blog.external_link, target: :_blank %>
-</p>
+<% end if @blog.external_link.present? %>
 
-
+<hr>
 <%= link_to "See all #{@type} pages", sti_blog_path(@type) %>
 
 <% content_for :sidebar do %>

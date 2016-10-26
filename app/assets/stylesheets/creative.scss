@@ -11,12 +11,12 @@ body {
 body {
   font-family: 'Merriweather', 'Helvetica Neue', Arial, sans-serif;
 }
-hr {
+#about hr {
   border-color: #F05F40;
   border-width: 3px;
   max-width: 50px;
 }
-hr.light {
+#about hr.light {
   border-color: white;
 }
 a {

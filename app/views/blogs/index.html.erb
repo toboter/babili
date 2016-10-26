@@ -46,11 +46,11 @@
                 <% end %>
               <% end if can? :update, blog %>
             </h4>
-            <%= content_tag :p, "written by #{blog.author.try(:display_name)} on #{blog.posted_at}", class: 'text-muted' %>
+            <%= content_tag :p, "posted by #{blog.author.try(:display_name)} on #{blog.posted_at.to_formatted_s(:long_ordinal)}", class: 'text-muted' %>
             <%= content_tag :div, class: "#{blog.type.downcase}-content", id: "#{blog.type.downcase}-content-#{blog.id}" do %>
-              <%= truncate(markdown(blog.content), length: 500, separator: ' ', escape: false) { link_to " continue reading", blog } %>
+              <%= truncate(teaser(blog.content), length: 500, separator: ' ', escape: false) { link_to " continue reading", blog } %>
             <% end %>
-            <%= content_tag :p, link_to(blog.external_link, blog.external_link, target: :_blank), style: 'margin-top:20px;' if blog.external_link %>
+            <%= content_tag :p, link_to(blog.external_link, blog.external_link, target: :_blank), style: 'margin-top:20px;' if blog.external_link.present? %>
           </div>
         <% end %>
       <% end %>
