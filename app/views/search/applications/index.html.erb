@@ -8,6 +8,7 @@
 <table class="table table-bordered table-responsive">
   <thead>
     <tr>
+      <th></th>
       <th>Name</th>
       <th>Info</th>
     </tr>
@@ -16,6 +17,9 @@
   <tbody>
     <% @applications.each do |application| %>
       <tr>
+        <td>
+          <%= image_tag(application.image.thumb.url) if application.image? %>
+        </td>
         <td>
           <%= link_to application.name.humanize, application %>
           <%= link_to fa_icon('edit'), edit_search_application_path(application) if can? :update, application %>

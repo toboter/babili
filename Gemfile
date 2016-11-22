@@ -54,6 +54,8 @@ gem 'simple_form'
 gem 'will_paginate-bootstrap'
 gem 'redcarpet'
 gem 'acts_as_list'
+gem 'carrierwave', '>= 1.0.0.rc', '< 2.0'
+gem "mini_magick"
 
 gem 'devise'
 gem 'doorkeeper'

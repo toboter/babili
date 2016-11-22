@@ -6,12 +6,18 @@
 <% end %>
 
 <div class="search-application" id="application-<%= @application.id %>">
-  <p><%= @application.url %></p>
   <p>
+    <%= @application.url %>
+  </p>
+  <p>
+    <div class="pull-left" style="padding-right: 10px; padding-top: 5px;">
+      <%= image_tag @application.image.thumb.url if @application.image? %>
+    </div>
     <%= @application.description %><br>
     <strong>Provider: </strong> 
     <%= @application.provider %> 
     <%= link_to @application.name, @application.host, target: :blank %>  
   </p>
+  <br>
   <%= link_to 'All searchable Applications', search_applications_path %>
 </div>
