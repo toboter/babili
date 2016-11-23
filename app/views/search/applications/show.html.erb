@@ -1,4 +1,4 @@
-<% title @application.name.humanize %>
+<% title @application.name %>
 
 <% content_for :buttons do %>
   <%= link_to fa_icon('edit', text: 'Edit'), edit_search_application_path(@application), class: 'btn btn-default' if can? :update, @application %>

@@ -19,7 +19,7 @@
                     Category
                 </div>
                 <div class="project-name">
-                  <%= app.name.humanize %>
+                  <%= app.name %>
                 </div>
               </div>
             </div>
@@ -28,15 +28,10 @@
       <% end %>
     </div>
   </div>
+  <br>
+  <%= link_to 'List of available Apps to search in', search_applications_path if can? :read, Search::Application %>
 </section>
-    
-  <h4>Searchable Categories / Applications</h4>
-  <div class="list-group">
-    <% for app in Search::Application.all do %>
-      <%= link_to app.name.humanize, app.host, class: 'list-group-item', target: :blank %>
-    <% end %>
-  </div>
-  <%= link_to 'Available Apps to search in', search_applications_path if can? :read, Search::Application %>
+
 
 <% content_for :sidebar do %>
 	<h4>Projects</h4>

@@ -21,12 +21,12 @@
           <%= image_tag(application.image.thumb.url) if application.image? %>
         </td>
         <td>
-          <%= link_to application.name.humanize, application %>
-          <%= link_to fa_icon('edit'), edit_search_application_path(application) if can? :update, application %>
+          <%= link_to application.name, application %>
         </td>
         <td>
           <small>
             <%= application.url %>
+            <%= link_to fa_icon('edit'), edit_search_application_path(application), class: 'pull-right' if can? :update, application %>
           </small>
           <p><%= application.description %></p>
           <small>
