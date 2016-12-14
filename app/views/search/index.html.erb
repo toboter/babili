@@ -21,6 +21,7 @@
           <tr>
             <td>
               <%= link_to result['full_entry'], result['links']['human'] %><br>
+              <!-- <%= content_tag :span, "#{result['type']}<br>".html_safe if result['type'] %> -->
               <small><%= result['links']['human'] %></small>
             </td>
           </tr>
