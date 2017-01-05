@@ -17,6 +17,7 @@ class HomeController < ApplicationController
   
   def explore
     @applications = Search::Application.all
+    @projects = Project.order(created_at: :desc).limit(5)
   end
   
 end

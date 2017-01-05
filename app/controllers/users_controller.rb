@@ -3,6 +3,8 @@ class UsersController < ApplicationController
   load_resource
   
   def index
+    # @my_oauth_apps = current_user.oauth_applications
+    # @my_projects = current_user.projects
     @users = User.where.not(id: current_user.id)
   end
 

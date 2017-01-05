@@ -15,6 +15,10 @@ class UserSerializer < ActiveModel::Serializer
     [object.honorific_prefix, object.given_name, object.family_name, object.honorific_suffix].join(' ').strip
   end
   
+  def projects
+    {}
+  end
+  
   # def url
   #   profile_url(object)
   # end

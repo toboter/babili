@@ -1,0 +1,62 @@
+<% title @project.name %>
+
+<% content_for :buttons do %>
+  <%= link_to fa_icon('edit', text: 'Edit'), edit_project_path(@project), class: 'btn btn-default' if can? :update, @project %>
+  <%= link_to fa_icon('remove', text: 'Delete'), @project, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default' if can? :destroy, @project %>
+<% end if can? :create, Project %>
+
+<p>
+  <strong>Image data:</strong>
+  <%= @project.image_data %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @project.description %>
+</p>
+
+<hr>
+
+<%= content_tag :div, id: "project-#{@project.id}-accessibilities" do %>
+  <h3>Application access</h3>
+  <% for accessibility in @project.accessibilities do %>
+    <div class="media">
+      <div class="media-left">
+        <%= link_to accessibility.application do %>
+          <%= image_tag accessibility.application.image.thumb_medium.url if accessibility.application.image? %>
+        <% end %>
+      </div>
+      <div class="media-body">
+        <h4 class="media-heading">
+          <%= link_to accessibility.application.name, accessibility.application %>
+          <span class="badge pull-right"><%= accessibility.access %> access</span>
+        </h4>
+        <p><%= accessibility.application.description %></p>
+      </div>
+    </div>
+    <hr>
+  <% end %>
+<% end if @project.accessibilities.any? %>
+
+<p><%= link_to 'View all projects', projects_path %>
+
+<% content_for :sidebar do %>
+  <h4>
+    Members in this project
+    <%= link_to 'Add Member', new_project_membership_path(@project), class: 'btn btn-default btn-sm pull-right' %>
+  </h4>
+  <%= content_tag :div, style: 'margin-top:20px;' do %>
+    <ul>
+      <% for membership in @project.memberships do %>
+        <li>
+          <%= membership.user.display_name %> (<%= membership.role %>)
+          <%= content_tag :span do %> 
+            <%= link_to fa_icon('edit'), [:edit, @project, membership] %> | 
+            <%= link_to fa_icon('remove'), [@project, membership], method: :delete, confirm: 'Are you sure?' %>
+          <% end unless membership.is_owner? %>
+        </li>
+      <% end %>
+    </ul>
+  <% end if @project.memberships.any? %>
+
+<% end %>

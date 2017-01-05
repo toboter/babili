@@ -10,9 +10,14 @@ Rails.application.routes.draw do
     get 'users', to: 'users#index'
   end
   namespace :search do
-    resources :applications
+    resources :applications do
+      resources :accessibilities
+    end
   end
-
+  resources :projects do 
+    resources :memberships
+  end
+  
   resources :blogs, only: :index
   resources :abouts, path: :about, controller: 'blogs', type: 'About' do 
     member do

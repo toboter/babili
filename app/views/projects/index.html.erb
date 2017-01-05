@@ -1,0 +1,32 @@
+<% title 'Projects' %>
+
+<% content_for :buttons do %>
+  <%= link_to 'New Project', new_project_path, class: 'btn btn-default' %>
+<% end if can? :create, Project %>
+
+<table class="table table-bordered table-responsive">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @projects.each do |project| %>
+      <tr>
+        <td><%= link_to project.name, project %></td>
+        <td>
+          <%= link_to fa_icon('edit'), edit_project_path(project), class: 'pull-right' if can? :update, project %>
+          <%= project.description %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% content_for :sidebar do %>
+  <h4>Your projects</h4>
+  <%= render @personal_projects %>
+
+<% end %>

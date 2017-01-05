@@ -33,6 +33,9 @@ class SearchApplicationUploader < CarrierWave::Uploader::Base
   version :thumb do
     process resize_to_fill: [50, 50]
   end
+  version :thumb_medium do
+    process resize_to_fill: [100, 100]
+  end
   version :index_thumb do
     process resize_to_fill: [650, 350]
   end

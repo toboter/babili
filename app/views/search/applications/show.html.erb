@@ -11,7 +11,7 @@
   </p>
   <p>
     <div class="pull-left" style="padding-right: 10px; padding-top: 5px;">
-      <%= image_tag @application.image.thumb.url if @application.image? %>
+      <%= image_tag @application.image.thumb_medium.url if @application.image? %>
     </div>
     <%= @application.description %><br>
     <strong>Provider: </strong> 
@@ -19,5 +19,14 @@
     <%= link_to @application.name, @application.host, target: :blank %>  
   </p>
   <br>
-  <%= link_to 'All searchable Applications', search_applications_path %>
+  <%= link_to 'View all searchable applications', search_applications_path %>
 </div>
+
+<% content_for :sidebar do %>
+  <h4>
+    Projects with access
+    <%= link_to 'Add Project', new_search_application_accessibility_path(@application), class: 'btn btn-default btn-sm pull-right' %>
+  </h4>
+  <%= render partial: 'projects/project', collection: @application.projects %>
+
+<% end %>
