@@ -28,8 +28,6 @@ Doorkeeper.configure do
       current_user.is_admin == true || redirect_to(root_url, notice: 'Not allowed. You need to be admin.')
   end
 
-  grant_flows ['client_credentials']
-
   # Authorization Code expiration time (default 10 minutes).
   # authorization_code_expires_in 10.minutes
 
