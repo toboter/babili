@@ -17,8 +17,8 @@
     <%= @application.description %><br>
     <strong>Provider: </strong> 
     <%= @application.provider %> <br>
-    Connected oauth application: <%= link_to @application.oauth_application.try(:name), oauth_application_path(@application.oauth_application) %> (Owner: <%= @application.oauth_application.owner.display_name %>) <br>
-    Administration/Owner: <%= @application.owner.display_name %>
+    Connected oauth application: <%= link_to @application.oauth_application.try(:name), oauth_application_path(@application.oauth_application) %> (Owner: <%= @application.oauth_application.try(:owner).try(:display_name) %>) <br>
+    Administration/Owner: <%= @application.owner.try(:display_name) %>
   </p>
   <br>
   <%= link_to 'View all searchable applications', search_applications_path %>
