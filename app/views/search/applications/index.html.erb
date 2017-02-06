@@ -39,3 +39,12 @@
     <% end %>
   </tbody>
 </table>
+
+
+<% content_for :sidebar do %>
+	<h3>Authenticated apps</h3>
+  <% @oauth_applications.each do |oa| %>
+    <%= oa.name %>
+    <%= oa.owner.try(:display_name) %><br>
+  <% end %>
+<% end %>

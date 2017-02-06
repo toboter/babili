@@ -7,6 +7,7 @@ class Search::ApplicationsController < ApplicationController
   # GET /applications
   # GET /applications.json
   def index
+    @oauth_applications = Doorkeeper::Application.all
     @applications = Application.all
   end
 
@@ -28,6 +29,7 @@ class Search::ApplicationsController < ApplicationController
   # POST /applications.json
   def create
     @application = Application.new(application_params)
+    @application.owner = current_user
 
     respond_to do |format|
       if @application.save
@@ -72,7 +74,7 @@ class Search::ApplicationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def application_params
-      params.require(:search_application).permit(:name, :host, :search_url, :description, :provider, :image)
+      params.require(:search_application).permit(:name, :host, :search_url, :description, :provider, :image, :oauth_application_id)
     end
 end
 end

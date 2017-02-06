@@ -8,6 +8,9 @@ Rails.application.routes.draw do
   namespace :api do
     get 'me', to: 'users#me'
     get 'users', to: 'users#index'
+    get 'user', to: 'users#show'
+    get 'projects', to: 'projects#index'
+    get 'public_projects', to: 'public_projects#index'
   end
   namespace :search do
     resources :applications do

@@ -4,6 +4,7 @@ class Search::Application < ApplicationRecord
   validates :name, :search_url, :host, presence: true
   
   belongs_to :oauth_application, class_name: 'Doorkeeper::Application'
+  belongs_to :owner, class_name: 'User'
   has_many :accessibilities, dependent: :destroy, class_name: 'Search::Accessibility'
   has_many :projects, through: :accessibilities, class_name: 'Project'
   

@@ -7,7 +7,8 @@
 
 <div class="search-application" id="application-<%= @application.id %>">
   <p>
-    <%= @application.url %>
+    API: <%= link_to @application.url, @application.url, target: :blank %><br>
+    External link: <%= link_to @application.host, @application.host, target: :blank %>
   </p>
   <p>
     <div class="pull-left" style="padding-right: 10px; padding-top: 5px;">
@@ -15,8 +16,9 @@
     </div>
     <%= @application.description %><br>
     <strong>Provider: </strong> 
-    <%= @application.provider %> 
-    <%= link_to @application.name, @application.host, target: :blank %>  
+    <%= @application.provider %> <br>
+    Connected oauth application: <%= link_to @application.oauth_application.try(:name), oauth_application_path(@application.oauth_application) %> (Owner: <%= @application.oauth_application.owner.display_name %>) <br>
+    Administration/Owner: <%= @application.owner.display_name %>
   </p>
   <br>
   <%= link_to 'View all searchable applications', search_applications_path %>
@@ -25,8 +27,23 @@
 <% content_for :sidebar do %>
   <h4>
     Projects with access
-    <%= link_to 'Add Project', new_search_application_accessibility_path(@application), class: 'btn btn-default btn-sm pull-right' %>
+    <%= link_to 'Add Project', new_search_application_accessibility_path(@application), class: 'btn btn-default btn-sm pull-right' if can? :create, Search::Accessibility %>
   </h4>
-  <%= render partial: 'projects/project', collection: @application.projects %>
+  <% for accessibility in @application.accessibilities do %>
+    <div style="margin-bottom:15px;">
+      <h4>
+        <%= link_to accessibility.project.name, accessibility.project %>
+        <span class="pull-right badge"><%= accessibility.access %></span>
+      </h4>
+      <p class="small text-muted">
+        Created on <%= accessibility.project.created_at.to_formatted_s(:long_ordinal) %>. <%= pluralize( accessibility.project.memberships.count, 'member' ) %>
+        <%= link_to fa_icon('remove'), search_application_accessibility_path(@application, accessibility), method: :delete, class: 'pull-right' if can? :destroy, accessibility %>
+      </p>
+      <p class="">
+        <%= truncate(accessibility.project.description, length: 150, separator: ' ', escape: false) %><br>
+      </p>
+      <hr>
+    </div>
+  <% end %>
 
 <% end %>

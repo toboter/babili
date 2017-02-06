@@ -42,7 +42,7 @@ class Search::AccessibilitiesController < ApplicationController
   def destroy
     @accessibility.destroy
     respond_to do |format|
-      format.html { redirect_to @project, notice: 'Accessibility was successfully destroyed.' }
+      format.html { redirect_to @application, notice: 'Accessibility was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

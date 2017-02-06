@@ -15,6 +15,11 @@
   <%= @project.description %>
 </p>
 
+<p>
+  <strong>Published:</strong>
+  <%= @project.data_published %>
+</p>
+
 <hr>
 
 <%= content_tag :div, id: "project-#{@project.id}-accessibilities" do %>
@@ -29,6 +34,7 @@
       <div class="media-body">
         <h4 class="media-heading">
           <%= link_to accessibility.application.name, accessibility.application %>
+          <%= content_tag :small, fa_icon('sign-in') if accessibility.application.oauth_application %>
           <span class="badge pull-right"><%= accessibility.access %> access</span>
         </h4>
         <p><%= accessibility.application.description %></p>
@@ -39,6 +45,10 @@
 <% end if @project.accessibilities.any? %>
 
 <p><%= link_to 'View all projects', projects_path %>
+
+
+
+
 
 <% content_for :sidebar do %>
   <h4>

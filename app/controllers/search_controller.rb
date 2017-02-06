@@ -1,17 +1,26 @@
 class SearchController < ApplicationController
+  require 'rest-client'
+  require 'json'
   include ERB::Util
-  
+
   def index
     if params[:q].present?
       @apps = Search::Application.all
       @results =[]
+      @failed_connections = []
       @apps.each do |app|
-        resp = nil
+        response = nil
+        app_user_token = app.try(:oauth_application).try(:access_tokens).where(resource_owner_id: current_user.id).last.try(:token)
         instance_variable_set("@#{app.name.parameterize.underscore}_url", "#{app.url}?q=#{url_encode(params[:q])}")
-        uri = URI(instance_variable_get("@#{app.name.parameterize.underscore}_url"))
-        ## hier muss noch dazwischen geschaltet werden, falls der Server nicht erreichbar ist.
-        resp = Net::HTTP.get_response(uri)
-        @results.concat(JSON.parse(resp.body)) if resp
+        url = instance_variable_get("@#{app.name.parameterize.underscore}_url")
+        begin
+          response = RestClient.get(url, {:Authorization => "Token #{app_user_token}"})
+        rescue Errno::ECONNREFUSED
+          @failed_connections << url
+          puts "Server at #{url} is refusing connection. Err No #{@failed_connections.count}"
+          flash.now[:notice] = @failed_connections.count > 1 ? "Results from #{@failed_connections.first.to_s} missing. Can't connect to server." : "Multiple connections failing. Results from #{@failed_connections.join(', ')} missing"
+        end
+        @results.concat(JSON.parse(response)) if response
       end
       @grouped_results = @results.group_by { |r| r['type'] }
     end

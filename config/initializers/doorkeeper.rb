@@ -7,6 +7,7 @@ Doorkeeper.configure do
     # fail "Please configure doorkeeper resource_owner_authenticator block located in #{__FILE__}"
     # Put your resource owner authentication logic here.
     # Example implementation:
+    session[:user_return_to] = request.fullpath
     current_user || warden.authenticate!(:scope => :user)
     # User.find_by_id(session[:user_id]) || redirect_to(new_user_session_url)
   end
@@ -27,12 +28,14 @@ Doorkeeper.configure do
       current_user.is_admin == true || redirect_to(root_url, notice: 'Not allowed. You need to be admin.')
   end
 
+  grant_flows ['client_credentials']
+
   # Authorization Code expiration time (default 10 minutes).
   # authorization_code_expires_in 10.minutes
 
   # Access token expiration time (default 2 hours).
   # If you want to disable expiration, set this to nil.
-  # access_token_expires_in 2.hours
+  access_token_expires_in nil
 
   # Assign a custom TTL for implicit grants.
   # custom_access_token_expires_in do |oauth_client|
@@ -59,7 +62,7 @@ Doorkeeper.configure do
   # Optional parameter confirmation: true (default false) if you want to enforce ownership of
   # a registered application
   # Note: you must also run the rails g doorkeeper:application_owner generator to provide the necessary support
-  # enable_application_owner confirmation: false
+  enable_application_owner confirmation: false
 
   # Define access token scopes for your provider
   # For more information go to

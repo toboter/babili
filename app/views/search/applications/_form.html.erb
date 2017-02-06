@@ -12,6 +12,10 @@
             <%= f.input :search_url %>
             <%= f.input :description %>
             <%= f.input :provider %>
+            <%= f.input :oauth_application_id, 
+              collection: Doorkeeper::Application.where(owner: current_user), 
+              label_method: :name,
+              value_method: :id %>
 
             <div style="margin: 10px 0;">
               <%= image_tag(@application.image.thumb.url) if @application.image? %>

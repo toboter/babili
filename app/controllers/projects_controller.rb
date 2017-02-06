@@ -1,6 +1,9 @@
 class ProjectsController < ApplicationController
+  require 'rest-client'
+  
   before_action :set_project, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, except: [:index, :show]
+  after_action :send_update_ping_to_clients, only: [:create, :update]
   load_and_authorize_resource
   
   # GET /projects
@@ -73,6 +76,16 @@ class ProjectsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def project_params
-      params.require(:project).permit(:name, :image_data, :description)
+      params.require(:project).permit(:name, :image_data, :description, :data_published)
+    end
+    
+    def send_update_ping_to_clients
+      @project.applications.each do |app|
+        if app.oauth_application
+          app_url = app.host
+          app_token = app.oauth_application.access_tokens.where(resource_owner_id: current_user.id).first.token
+          RestClient.post("#{app_url}/api/projects", {}, {'Authorization' => "Token #{app_token}"})
+        end
+      end if @project.applications.any?
     end
 end

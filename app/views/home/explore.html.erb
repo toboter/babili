@@ -11,7 +11,7 @@
     <div class="row no-gutter popup-gallery">
       <% for app in @applications do %>
         <div class="col-lg-4 col-sm-6">
-          <%= link_to app.host, class: "portfolio-box", target: :blank do %>
+          <%= link_to app, class: "portfolio-box", target: :blank do %>
             <%= image_tag app.image.index_thumb.url, class: "img-responsive" if app.image? %>
             <div class="portfolio-box-caption">
               <div class="portfolio-box-caption-content">
@@ -31,7 +31,6 @@
   <br>
   <%= link_to 'List of available Apps to search in', search_applications_path if can? :read, Search::Application %>
 </section>
-
 
 <% content_for :sidebar do %>
 	<h3>Projects</h3>

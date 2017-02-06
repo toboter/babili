@@ -12,6 +12,12 @@
 
     <h4><%= t('.scopes') %>:</h4>
     <p><code id="scopes"><%= @application.scopes %></code></p>
+    
+    <h4>Current User token:</h4>
+    <p>
+      <%= @application.access_tokens.where(resource_owner_id: current_user.id).last.token %><br>
+      <small class="text-muted">Use to access api data.</small>
+    </p>
 
     <h4><%= t('.callback_urls') %>:</h4>
 

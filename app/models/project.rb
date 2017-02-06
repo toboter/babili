@@ -13,4 +13,8 @@ class Project < ApplicationRecord
     memberships.where(role: 'Owner').any?
   end
   
+  def owner
+    memberships.where(role: 'Owner').first.user
+  end
+  
 end
