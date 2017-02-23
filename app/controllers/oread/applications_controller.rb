@@ -46,6 +46,8 @@ module Oread
     # PATCH/PUT /applications/1
     # PATCH/PUT /applications/1.json
     def update
+      @application.owner = current_user if @application.owner.blank?
+
       respond_to do |format|
         if @application.update(application_params)
           format.html { redirect_to @application, notice: 'Application was successfully updated.' }
@@ -62,7 +64,7 @@ module Oread
     def destroy
       @application.destroy
       respond_to do |format|
-        format.html { redirect_to search_applications_url, notice: 'Application was successfully destroyed.' }
+        format.html { redirect_to url_for(Oread::Application), notice: 'Application was successfully destroyed.' }
         format.json { head :no_content }
       end
     end
@@ -70,12 +72,12 @@ module Oread
     private
       # Use callbacks to share common setup or constraints between actions.
       def set_application
-        @application = Application.find(params[:id])
+        @application = Oread::Application.find(params[:id])
       end
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def application_params
-        params.require(:oread_application).permit(:name, :host, :port, :search_path, :description, :image_data, :owner)
+        params.require(:oread_application).permit(:name, :host, :port, :search_path, :description, :image_data, :image_data_cache)
       end
   end
 end

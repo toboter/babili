@@ -16,7 +16,7 @@
         <%= image_tag @application.image_data.thumb_medium.url if @application.image_data? %>
       </div>
       <%= @application.description %><br>
-      Administration/Owner: <%= @application.owner %>
+      Administration/Owner: <%= @application.owner.try(:name) %>
     </p>
   </div>
 

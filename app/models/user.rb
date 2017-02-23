@@ -18,4 +18,9 @@ class User < ApplicationRecord
     end
   end
   
+  def name
+    display_name
+  end
+
+
 end
