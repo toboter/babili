@@ -2,19 +2,44 @@ Rails.application.routes.draw do
   get 'search', to: 'search#index'
 
   use_doorkeeper
+  scope :oauth do
+    resources :applications, as: :oauth_application do
+      resources :oauth_accessibilities, 
+        only: [:new, :create, :destroy], 
+        as: :accessibilities, 
+        path: 'accessibilities'
+    end
+  end
+      
+
   devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}
   resources :users, only: [:index, :update]
   
   namespace :api do
     get 'me', to: 'users#me'
-    get 'users', to: 'users#index'
-    get 'user', to: 'users#show'
-    get 'projects', to: 'projects#index'
-    get 'public_projects', to: 'public_projects#index'
+    scope :my do
+      get 'projects', to: 'projects#my_projects'
+      scope :authorizations do
+        get 'write', to: 'accessibilities#write_authorization'
+        get 'read', to: 'accessibilities#read_authorization'
+      end
+    end
+    resources :users, only: [:index, :show]
+    resources :projects, only: [:index, :show]
+    get 'search', to: 'search#index'
   end
-  namespace :search do
+
+  namespace :oread do
     resources :applications do
-      resources :accessibilities
+      resources :oread_accessibilities, 
+        only: [:new, :create, :destroy], 
+        as: :accessibilities, 
+        path: 'accessibilities',
+        controller: '/oread_accessibilities'
+      resources :access_tokens,
+        only: [:new, :create, :destroy], 
+        as: :tokens, 
+        path: 'tokens'
     end
   end
   resources :projects do 

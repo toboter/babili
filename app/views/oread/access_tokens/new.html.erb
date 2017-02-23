@@ -1,0 +1,17 @@
+<% title "New personal access token for #{@application.name}" %>
+
+<%= simple_form_for([@application, @access_token], url: oread_application_tokens_path) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :token %>
+    <%= f.input :refresh_token %>
+    <%= f.input :expires_in %>
+    <%= f.input :token_type, collection: ['Token', 'Bearer'], default: 'Token', blank: false %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, class: "btn btn-primary" %>
+    <%= link_to 'Cancel', :back, class: "btn btn-default" %>
+  </div>
+<% end %>

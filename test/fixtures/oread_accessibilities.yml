@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  oread_application: one
+  project: one
+  access: MyString
+
+two:
+  oread_application: two
+  project: two
+  access: MyString

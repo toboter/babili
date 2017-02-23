@@ -16,7 +16,8 @@ class HomeController < ApplicationController
   end
   
   def explore
-    @applications = Search::Application.all
+    @oread_applications = Oread::Application.all
+    @oauth_applications = Doorkeeper::Application.all
     @projects = Project.order(created_at: :desc).limit(5)
   end
   

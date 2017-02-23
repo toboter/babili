@@ -1,7 +1,8 @@
 class ProjectSerializer < ActiveModel::Serializer
-  attributes :id, :name, :data_published
+  attributes :id, :name, :members
 
-  has_many :memberships
-  has_many :accessibilities, serializer: AccessibilitySerializer
+  def members
+    object.members.order(id: :asc).map(&:id).join(', ') if object.members.any?
+  end
 
 end

@@ -5,8 +5,9 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
          
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
-  has_many :search_applications, class_name: 'Search::Application', foreign_key: :owner_id
-  has_many :memberships, dependent: :destroy
+  has_many :oread_applications, class_name: 'Oread::Application', as: :owner
+  has_many :oread_access_tokens, class_name: 'Oread::AccessToken', foreign_key: 'resource_owner_id'
+  has_many :memberships, dependent: :delete_all
   has_many :projects, through: :memberships
          
   def display_name

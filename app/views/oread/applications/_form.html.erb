@@ -1,0 +1,34 @@
+<%= simple_form_for(@application) do |f| %>
+  
+  <div class="row">
+    <div class="col-md-12">
+      <%= f.error_notification %>
+  
+      <div class="row">
+        <%= content_tag :div, class: "col-md-12" do %>
+          <div class="form-inputs">
+            <%= f.input :name %>
+            <%= f.input :host %>
+            <%= f.input :port %>
+            <%= f.input :search_path %>
+            <%= f.input :description %>
+            <%= f.input :owner %>
+
+            <div style="margin: 10px 0;">
+              <%= image_tag(@application.image_data.thumb.url) if @application.image_data? %>
+              <%= f.file_field :image_data %>
+              <%= f.hidden_field :image_data_cache %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+  
+      <div class="row">
+        <div class="col-md-6">
+          <hr>
+          <%= f.submit class: 'btn btn-default' %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

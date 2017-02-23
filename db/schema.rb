@@ -10,33 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170117100030) do
+ActiveRecord::Schema.define(version: 20170208144248) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "accessibilities", force: :cascade do |t|
-    t.integer  "application_id"
-    t.integer  "project_id"
-    t.string   "access"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-    t.index ["application_id"], name: "index_accessibilities_on_application_id", using: :btree
-    t.index ["project_id"], name: "index_accessibilities_on_project_id", using: :btree
-  end
-
-  create_table "applications", force: :cascade do |t|
-    t.string   "name"
-    t.string   "search_url"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
-    t.string   "host"
-    t.text     "description"
-    t.string   "provider"
-    t.string   "image"
-    t.integer  "oauth_application_id"
-    t.integer  "owner_id"
-  end
 
   create_table "blogs", force: :cascade do |t|
     t.string   "type"
@@ -99,6 +76,16 @@ ActiveRecord::Schema.define(version: 20170117100030) do
     t.index ["token"], name: "index_oauth_access_tokens_on_token", unique: true, using: :btree
   end
 
+  create_table "oauth_accessibilities", force: :cascade do |t|
+    t.integer  "oauth_application_id"
+    t.integer  "project_id"
+    t.integer  "creator_id"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.index ["oauth_application_id"], name: "index_oauth_accessibilities_on_oauth_application_id", using: :btree
+    t.index ["project_id"], name: "index_oauth_accessibilities_on_project_id", using: :btree
+  end
+
   create_table "oauth_applications", force: :cascade do |t|
     t.string   "name",                      null: false
     t.string   "uid",                       null: false
@@ -111,6 +98,44 @@ ActiveRecord::Schema.define(version: 20170117100030) do
     t.string   "owner_type"
     t.index ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type", using: :btree
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
+  end
+
+  create_table "oread_access_tokens", force: :cascade do |t|
+    t.integer  "resource_owner_id"
+    t.integer  "application_id"
+    t.string   "token"
+    t.string   "refresh_token"
+    t.integer  "expires_in"
+    t.string   "token_type"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.index ["refresh_token"], name: "index_oread_access_tokens_on_refresh_token", using: :btree
+    t.index ["resource_owner_id"], name: "index_oread_access_tokens_on_resource_owner_id", using: :btree
+    t.index ["token"], name: "index_oread_access_tokens_on_token", using: :btree
+  end
+
+  create_table "oread_accessibilities", force: :cascade do |t|
+    t.integer  "oread_application_id"
+    t.integer  "project_id"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.integer  "creator_id"
+    t.index ["oread_application_id"], name: "index_oread_accessibilities_on_oread_application_id", using: :btree
+    t.index ["project_id"], name: "index_oread_accessibilities_on_project_id", using: :btree
+  end
+
+  create_table "oread_applications", force: :cascade do |t|
+    t.string   "name"
+    t.string   "search_path"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.string   "host"
+    t.text     "description"
+    t.string   "image_data"
+    t.integer  "owner_id"
+    t.string   "owner_type"
+    t.integer  "port"
+    t.index ["owner_id", "owner_type"], name: "index_oread_applications_on_owner_id_and_owner_type", unique: true, using: :btree
   end
 
   create_table "projects", force: :cascade do |t|
@@ -157,10 +182,12 @@ ActiveRecord::Schema.define(version: 20170117100030) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
-  add_foreign_key "accessibilities", "applications"
-  add_foreign_key "accessibilities", "projects"
   add_foreign_key "memberships", "projects"
   add_foreign_key "memberships", "users"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
+  add_foreign_key "oauth_accessibilities", "oauth_applications"
+  add_foreign_key "oauth_accessibilities", "projects"
+  add_foreign_key "oread_accessibilities", "oread_applications"
+  add_foreign_key "oread_accessibilities", "projects"
 end

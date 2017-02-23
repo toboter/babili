@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  oauth_application: one
+  project: one
+  creator_id: 1
+
+two:
+  oauth_application: two
+  project: two
+  creator_id: 1

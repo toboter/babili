@@ -9,15 +9,16 @@ class Ability
     elsif user.is_active == true && user.is_admin == false
       can :manage, :all
       cannot :manage, User
-      cannot [:new, :edit, :create, :update, :destroy], Search::Application
-      cannot [:new, :edit, :create, :update, :destroy], Search::Accessibility
+      cannot [:new, :edit, :create, :update, :destroy], Oread::Application
+      cannot [:new, :edit, :create, :update, :destroy], OreadAccessibility
       # cannot :manage, Project, user != Project.memberships.where(role: 'Owner').first.user
       can :manage, User, id: user.id
       # hier passiert noch ein tiefgreifender Konflikt zwischen Devise update und user update.
+      can :read, User
     else
       can :read, :all
-      can :read, Search::Application
-      cannot :read, User    
+      can :read, Oread::Application
+      cannot :read, User
     end
   end
 end

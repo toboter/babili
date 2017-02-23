@@ -1,4 +1,6 @@
-class SearchController < ApplicationController
+class Api::SearchController < Api::BaseController
+  skip_authorization_check
+  
   require 'rest-client'
   require 'json'
   include ERB::Util
@@ -16,14 +18,12 @@ class SearchController < ApplicationController
         begin
           response = RestClient.get(url, {:Authorization => "#{app_user_token.try(:token_type)} #{app_user_token.try(:token)}"})
         rescue Errno::ECONNREFUSED
-          @failed_connections << url
-          puts "Server at #{url} is refusing connection. Err No #{@failed_connections.count}"
+          puts "Server at #{url} is refusing connection."
         end
-        flash.now[:notice] = @failed_connections.count == 1 ? "Results from #{@failed_connections.first.to_s} missing. Can't connect to server." : "Multiple connections failing. Results from #{@failed_connections.join(', ')} missing." if @failed_connections.count > 0
         @results.concat(JSON.parse(response)) if response
       end
       @grouped_results = @results.group_by { |r| r['type'] }
     end
+    render json: @grouped_results
   end
-  
 end

@@ -1,0 +1,69 @@
+<% title @application.name %>
+
+<% content_for :buttons do %>
+  <%= link_to fa_icon('edit', text: 'Edit'), edit_oread_application_path(@application), class: 'btn btn-default' if can? :update, @application %>
+  <%= link_to fa_icon('remove', text: 'Delete'), @application, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default' if can? :destroy, @application %>
+<% end %>
+
+<div class="search-application" id="application-<%= @application.id %>">
+  <div id="application-<%= @application.id %>-description">
+    <p>
+      API: <%= link_to @application.url, @application.url, target: :blank %><br>
+      External link: <%= link_to @application.host, @application.host, target: :blank %>
+    </p>
+    <p>
+      <div class="pull-left" style="padding-right: 10px; padding-top: 5px;">
+        <%= image_tag @application.image_data.thumb_medium.url if @application.image_data? %>
+      </div>
+      <%= @application.description %><br>
+      Administration/Owner: <%= @application.owner %>
+    </p>
+  </div>
+
+  <div id="user-application-token" class="" style="padding-top:30px;">
+    <strong>Personal Access Token</strong>
+    <% if current_user %>
+      <%= link_to 'Add personal access token', new_oread_application_token_path(@application), class: 'btn btn-default btn-sm pull-right' if can? :create, Oread::AccessToken %>
+
+      <% if @token %>
+        <table class="table table-bordered table-responsive">
+          <tr>
+            <td><strong><%= @token.token %></strong></td>
+            <td><%= @token.refresh_token %></td>
+            <td><%= @token.expires_in %></td>
+            <td><%= @token.token_type %></td>
+            <td><%= @token.created_at %></td>
+          </tr>
+        </table>
+      <% end %>
+    <% else %>
+      filtered
+    <% end %>
+  </div>
+
+  <br>
+  <%= link_to 'View all readable applications', oread_applications_path %>
+</div>
+
+<% content_for :sidebar do %>
+  <h4>
+    Projects with access
+    <%= link_to 'Add Project', new_oread_application_accessibility_path(@application), class: 'btn btn-default btn-sm pull-right' if can? :create, OreadAccessibility %>
+  </h4>
+  <% for accessibility in @application.accessibilities do %>
+    <div style="margin-bottom:15px;">
+      <h4>
+        <%= link_to accessibility.project.name, accessibility.project %>
+      </h4>
+      <p class="small text-muted">
+        Created on <%= accessibility.project.created_at.to_formatted_s(:long_ordinal) %>. <%= pluralize( accessibility.project.memberships.count, 'member' ) %>
+        <%= link_to fa_icon('remove'), oread_application_accessibility_path(@application, accessibility), method: :delete, class: 'pull-right' if can? :destroy, accessibility %>
+      </p>
+      <p class="">
+        <%= truncate(accessibility.project.description, length: 150, separator: ' ', escape: false) %><br>
+      </p>
+      <hr>
+    </div>
+  <% end %>
+
+<% end %>

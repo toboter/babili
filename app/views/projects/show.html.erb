@@ -15,34 +15,48 @@
   <%= @project.description %>
 </p>
 
-<p>
-  <strong>Published:</strong>
-  <%= @project.data_published %>
-</p>
 
 <hr>
 
-<%= content_tag :div, id: "project-#{@project.id}-accessibilities" do %>
-  <h3>Application access</h3>
-  <% for accessibility in @project.accessibilities do %>
+<%= content_tag :div, id: "project-#{@project.id}-oread_accessibilities" do %>
+  <h3>Read access</h3>
+  <% for accessibility in @project.oread_accessibilities do %>
     <div class="media">
       <div class="media-left">
-        <%= link_to accessibility.application do %>
-          <%= image_tag accessibility.application.image.thumb_medium.url if accessibility.application.image? %>
+        <%= link_to accessibility.oread_application do %>
+          <%= image_tag accessibility.oread_application.image_data.thumb_medium.url if accessibility.oread_application.image_data? %>
         <% end %>
       </div>
       <div class="media-body">
         <h4 class="media-heading">
-          <%= link_to accessibility.application.name, accessibility.application %>
-          <%= content_tag :small, fa_icon('sign-in') if accessibility.application.oauth_application %>
-          <span class="badge pull-right"><%= accessibility.access %> access</span>
+          <%= link_to accessibility.oread_application.name, accessibility.oread_application %>
         </h4>
-        <p><%= accessibility.application.description %></p>
+        <p><%= accessibility.oread_application.description %></p>
       </div>
     </div>
     <hr>
   <% end %>
-<% end if @project.accessibilities.any? %>
+<% end if @project.oread_accessibilities.any? %>
+
+<%= content_tag :div, id: "project-#{@project.id}-oauth_accessibilities" do %>
+  <h3>Oauth write access</h3>
+  <% for accessibility in @project.oauth_accessibilities do %>
+    <div class="media">
+      <div class="media-left">
+        <%= link_to oauth_application_path(accessibility.oauth_application) do %>
+        <% end %>
+      </div>
+      <div class="media-body">
+        <h4 class="media-heading">
+          <%= link_to accessibility.oauth_application.name, oauth_application_path(accessibility.oauth_application) %>
+        </h4>
+        <p><%= accessibility.oauth_application.inspect %></p>
+      </div>
+    </div>
+    <hr>
+  <% end %>
+<% end if @project.oauth_accessibilities.any? %>
+
 
 <p><%= link_to 'View all projects', projects_path %>
 

@@ -1,10 +1,11 @@
 <div class="page-header">
-  <h1><%= t('.title', name: @application.name) %></h1>
+  <h2><%= t('.title', name: @application.name) %></h2>
 </div>
 
 <div class="row">
   <div class="col-md-8">
     <h4><%= t('.application_id') %>:</h4>
+    
     <p><code id="application_id"><%= @application.uid %></code></p>
 
     <h4><%= t('.secret') %>:</h4>
@@ -13,12 +14,6 @@
     <h4><%= t('.scopes') %>:</h4>
     <p><code id="scopes"><%= @application.scopes %></code></p>
     
-    <h4>Current User token:</h4>
-    <p>
-      <%= @application.access_tokens.where(resource_owner_id: current_user.id).last.try(:token) %><br>
-      <small class="text-muted">Use to access api data.</small>
-    </p>
-
     <h4><%= t('.callback_urls') %>:</h4>
 
     <table>
@@ -43,3 +38,28 @@
     <p><%= render 'delete_form', application: @application, submit_btn_css: 'btn btn-danger' %></p>
   </div>
 </div>
+
+
+<% content_for :sidebar do %>
+  <h4>
+    Projects with write access
+    <%= link_to 'Add Project', new_oauth_application_accessibility_path(@application), class: 'btn btn-default btn-sm pull-right' if can? :create, OauthAccessibility %>
+  
+  </h4>
+  <% for accessibility in @application.accessibilities do %>
+    <div style="margin-bottom:15px;">
+      <h4>
+        <%= link_to accessibility.project.name, accessibility.project %>
+      </h4>
+      <p class="small text-muted">
+        Created on <%= accessibility.project.created_at.to_formatted_s(:long_ordinal) %>. <%= pluralize( accessibility.project.memberships.count, 'member' ) %>
+        <%= link_to fa_icon('remove'), oauth_application_accessibility_path(@application, accessibility), method: :delete, class: 'pull-right' if can? :destroy, accessibility %>
+      </p>
+      <p class="">
+        <%= truncate(accessibility.project.description, length: 150, separator: ' ', escape: false) %><br>
+      </p>
+      <hr>
+    </div>
+  <% end %>
+
+<% end %>

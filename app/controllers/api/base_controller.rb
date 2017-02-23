@@ -32,7 +32,12 @@ class Api::BaseController < ActionController::API
   end
   
 private
-
+  # Find the user that owns the access token
+  def current_resource_owner
+    @current_resource_owner = User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
+  end
+  helper_method :current_resource_owner
+  
   def authenticate_user!
     if doorkeeper_token
       Thread.current[:current_user] = User.find(doorkeeper_token.resource_owner_id)
