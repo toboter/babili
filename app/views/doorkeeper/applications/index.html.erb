@@ -24,3 +24,7 @@
   <% end %>
   </tbody>
 </table>
+
+<%= link_to 'View all projects', projects_path if can? :read, Project %>
+<%= ' | ' if can?(:read, Oread::Application) && can?(:read, Project) %>
+<%= link_to 'View all read access applications', oread_applications_path if can? :read, Oread::Application %>

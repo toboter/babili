@@ -1,8 +1,8 @@
 <% title "Readable Applications" %>
-<p class="text-muted">Applications listet here will offer their data for keywords serach.<p>
+<p class="text-muted">Applications listet here will offer their data for keywords search.<p>
 
 <% content_for :buttons do %>
-  <%= link_to 'New Application', new_oread_application_path, class: 'btn btn-default' %>
+  <%= link_to 'New Application', new_oread_application_path, class: 'btn btn-success' %>
 <% end if can? :create, Oread::Application %>
 
 <table class="table table-bordered table-responsive">
@@ -18,7 +18,7 @@
     <% @applications.each do |application| %>
       <tr>
         <td>
-          <%= image_tag(application.image_data.thumb.url) if application.image_data? %>
+          <%= image_tag application.image_url(:small_thumb), style: 'width:50px;' %>
         </td>
         <td>
           <%= link_to application.name, application %>
@@ -31,7 +31,7 @@
           <p><%= application.description %></p>
           <small>
             Owner: 
-            <%= application.owner %> 
+            <%= application.owner.try(:name) %> 
             <%= link_to application.name, application.host, target: :blank %>
           </small>
         </td>
@@ -39,3 +39,7 @@
     <% end %>
   </tbody>
 </table>
+
+<%= link_to 'View all projects', projects_path if can? :read, Project %>
+<%= ' | ' if can?(:read, Doorkeeper::Application) && can?(:read, Project) %>
+<%= link_to 'View all write access applications', oauth_applications_path if can? :read, Doorkeeper::Application %>

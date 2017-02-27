@@ -1,4 +1,5 @@
 class Project < ApplicationRecord
+  include ImageUploader[:image]
   extend FriendlyId
   friendly_id :name, use: :slugged
   

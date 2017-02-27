@@ -5,7 +5,7 @@
         <h1 class="">
           <%= @type != 'Novelity' ? @type.humanize : 'News' %>
           <%= content_tag :div, class: "pull-right" do %>
-            <%= link_to fa_icon("plus", text: @type != 'Novelity' ? "New #{@type.humanize}" : 'Add News'), sti_blog_path(@type, nil, :new), class: 'btn btn-default' if @type != 'Blog' %>
+            <%= link_to fa_icon("plus", text: @type != 'Novelity' ? "New #{@type.humanize}" : 'Add News'), sti_blog_path(@type, nil, :new), class: 'btn btn-success' if @type != 'Blog' %>
           <% end if can? :create, @type.constantize %>
         </h1>
       <% end %>

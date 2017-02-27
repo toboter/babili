@@ -2,8 +2,8 @@
 <% subline "posted by #{@blog.author.try(:display_name)} on #{@blog.posted_at.to_formatted_s(:long_ordinal)}" %>
 
 <% content_for(:buttons) do %>
-  <%= link_to fa_icon('edit', text: 'Edit'), sti_blog_path(@blog.type, @blog, :edit), class: 'btn btn-default' if can? :update, @blog %>
-  <%= link_to fa_icon("remove", text: 'Delete'), @blog, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default' if can? :destroy, @blog %>
+  <%= link_to fa_icon('edit', text: 'Edit'), sti_blog_path(@blog.type, @blog, :edit), class: 'btn btn-warning' if can? :edit, @blog %>
+  <%= link_to fa_icon("remove", text: 'Delete'), @blog, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' if can? :destroy, @blog %>
 <% end %>
 
 <div class="<%= @blog.type.downcase %>-content" id="<%= @blog.type.downcase %>-content-<%= @blog.id %>">

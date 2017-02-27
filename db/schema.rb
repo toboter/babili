@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170208144248) do
+ActiveRecord::Schema.define(version: 20170224113356) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -131,10 +131,10 @@ ActiveRecord::Schema.define(version: 20170208144248) do
     t.datetime "updated_at",  null: false
     t.string   "host"
     t.text     "description"
-    t.string   "image_data"
     t.integer  "owner_id"
     t.string   "owner_type"
     t.integer  "port"
+    t.text     "image_data"
     t.index ["owner_id", "owner_type"], name: "index_oread_applications_on_owner_id_and_owner_type", unique: true, using: :btree
   end
 
@@ -177,6 +177,7 @@ ActiveRecord::Schema.define(version: 20170208144248) do
     t.string   "middle_name"
     t.boolean  "is_admin",               default: false, null: false
     t.boolean  "is_active",              default: false, null: false
+    t.text     "image_data"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree

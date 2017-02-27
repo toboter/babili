@@ -16,6 +16,7 @@
   </div>
 
   <div class="form-actions">
-    <%= f.button :submit %>
+    <%= f.button :submit, class: "btn btn-primary" %>
+    <%= link_to 'Cancel', @blog.new_record? ? sti_blog_path(@type) : @blog, class: "btn btn-default" %>
   </div>
 <% end %>

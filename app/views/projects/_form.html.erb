@@ -1,13 +1,30 @@
 <%= simple_form_for(@project) do |f| %>
-  <%= f.error_notification %>
+  
+  <div class="row">
+    <div class="col-md-12">
+      <%= f.error_notification %>
+  
+      <div class="row">
+        <%= content_tag :div, class: "col-md-12" do %>
+          <div class="form-inputs">
+            <%= f.input :name %>
+            <%= f.input :description %>
 
-  <div class="form-inputs">
-    <%= f.input :name %>
-    <%= f.input :image_data %>
-    <%= f.input :description %>
-  </div>
-
-  <div class="form-actions">
-    <%= f.button :submit %>
+            <div style="margin: 10px 0;">
+              <%= f.hidden_field :image, value: @project.cached_image_data %>
+              <%= f.file_field :image %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+  
+      <div class="row">
+        <div class="col-md-6">
+          <hr>
+          <%= f.submit class: 'btn btn-primary' %>
+          <%= link_to 'Cancel', (@project.new_record? ? projects_path : @project), class: "btn btn-default" %>
+        </div>
+      </div>
+    </div>
   </div>
 <% end %>

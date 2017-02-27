@@ -11,8 +11,8 @@
     <div class="row no-gutter popup-gallery">
       <% for application in @oread_applications do %>
         <div class="col-lg-4 col-sm-6">
-          <%= link_to application, class: "portfolio-box", target: :blank do %>
-            <%= image_tag application.image_data.index_thumb.url, class: "img-responsive" if application.image_data? %>
+          <%= link_to application, class: "portfolio-box" do %>
+            <%= image_tag application.image[:small_banner].url, class: "img-responsive" if application.image %>
             <div class="portfolio-box-caption">
               <div class="portfolio-box-caption-content">
                 <div class="project-category text-faded">

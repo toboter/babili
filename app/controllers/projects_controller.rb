@@ -76,7 +76,7 @@ class ProjectsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def project_params
-      params.require(:project).permit(:name, :image_data, :description)
+      params.require(:project).permit(:name, :image, :cached_image_data, :description)
     end
     
     # Webhook für kompatible applikationen. 

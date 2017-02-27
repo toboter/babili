@@ -1,5 +1,4 @@
 <h1>New oauth Accessibility</h1>
-
 <%= simple_form_for([@application, @oauth_accessibility], url: oauth_application_accessibilities_path) do |f| %>
   <%= f.error_notification %>
 
@@ -16,6 +15,6 @@
 
   <div class="form-actions">
     <%= f.button :submit, class: "btn btn-primary" %>
-    <%= link_to 'Cancel', :back, class: "btn btn-default" %>
+    <%= link_to 'Cancel', oauth_application_path(@oauth_accessibility.oauth_application), class: "btn btn-default" %>
   </div>
 <% end %>

@@ -1,30 +1,27 @@
 <% title @project.name %>
 
 <% content_for :buttons do %>
-  <%= link_to fa_icon('edit', text: 'Edit'), edit_project_path(@project), class: 'btn btn-default' if can? :update, @project %>
-  <%= link_to fa_icon('remove', text: 'Delete'), @project, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default' if can? :destroy, @project %>
+  <%= link_to fa_icon('edit', text: 'Edit'), edit_project_path(@project), class: 'btn btn-warning' if can? :update, @project %>
+  <%= link_to fa_icon('remove', text: 'Delete'), @project, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' if can? :destroy, @project %>
 <% end if can? :create, Project %>
 
-<p>
-  <strong>Image data:</strong>
-  <%= @project.image_data %>
-</p>
+<div>
+  <%= image_tag @project.image_url(:banner), class: 'img-responsive', style: 'width: 100%' %>
+</div>
 
-<p>
-  <strong>Description:</strong>
-  <%= @project.description %>
-</p>
-
+<div style="margin-top:20px;">
+  <%= markdown(@project.description) %>
+</div>
 
 <hr>
 
 <%= content_tag :div, id: "project-#{@project.id}-oread_accessibilities" do %>
-  <h3>Read access</h3>
+  <h4>Read access through registered apis</h4>
   <% for accessibility in @project.oread_accessibilities do %>
     <div class="media">
       <div class="media-left">
         <%= link_to accessibility.oread_application do %>
-          <%= image_tag accessibility.oread_application.image_data.thumb_medium.url if accessibility.oread_application.image_data? %>
+          <%= image_tag accessibility.oread_application.image_url(:thumb), style: 'width:100px;' %>
         <% end %>
       </div>
       <div class="media-body">
@@ -39,7 +36,7 @@
 <% end if @project.oread_accessibilities.any? %>
 
 <%= content_tag :div, id: "project-#{@project.id}-oauth_accessibilities" do %>
-  <h3>Oauth write access</h3>
+  <h4>Write access through babili</h4>
   <% for accessibility in @project.oauth_accessibilities do %>
     <div class="media">
       <div class="media-left">
@@ -57,8 +54,12 @@
   <% end %>
 <% end if @project.oauth_accessibilities.any? %>
 
+<%= link_to 'View all projects', projects_path if can? :read, Project %>
+<%= ' | ' if can?(:read, Oread::Application) && can?(:read, Project) %>
+<%= link_to 'View all readable applications', oread_applications_path if can? :read, Oread::Application %>
+<%= ' | ' if can?(:read, Oread::Application) && can?(:read, Doorkeeper::Application) %>
+<%= link_to 'View all write access applications', oauth_applications_path if can? :read, Doorkeeper::Application %>
 
-<p><%= link_to 'View all projects', projects_path %>
 
 
 
@@ -67,20 +68,26 @@
 <% content_for :sidebar do %>
   <h4>
     Members in this project
-    <%= link_to 'Add Member', new_project_membership_path(@project), class: 'btn btn-default btn-sm pull-right' %>
+    <%= link_to 'Add Member', new_project_membership_path(@project), class: 'btn btn-success btn-sm pull-right' %>
   </h4>
   <%= content_tag :div, style: 'margin-top:20px;' do %>
-    <ul>
-      <% for membership in @project.memberships do %>
-        <li>
-          <%= membership.user.display_name %> (<%= membership.role %>)
-          <%= content_tag :span do %> 
+    <% for membership in @project.memberships do %>
+      <div class="media">
+        <div class="media-left">
+          <a href="#">
+            <%= image_tag membership.user.image_url(:small_thumb), class: "media-object", style: 'height:50px;' %>
+          </a>
+        </div>
+        <div class="media-body">
+          <h5 class="media-heading"><%= membership.user.display_name %></h5>
+          <span class="text-muted"><%= membership.role %></span>
+          <%= content_tag :span, class: 'pull-right' do %> 
             <%= link_to fa_icon('edit'), [:edit, @project, membership] %> | 
             <%= link_to fa_icon('remove'), [@project, membership], method: :delete, confirm: 'Are you sure?' %>
           <% end unless membership.is_owner? %>
-        </li>
-      <% end %>
-    </ul>
+        </div>
+      </div>      
+    <% end %>
   <% end if @project.memberships.any? %>
 
 <% end %>

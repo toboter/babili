@@ -43,7 +43,7 @@
 <% content_for :sidebar do %>
   <h4>
     Projects with write access
-    <%= link_to 'Add Project', new_oauth_application_accessibility_path(@application), class: 'btn btn-default btn-sm pull-right' if can? :create, OauthAccessibility %>
+    <%= link_to 'Add Project', new_oauth_application_accessibility_path(@application), class: 'btn btn-success btn-sm pull-right' if can? :create, OauthAccessibility %>
   
   </h4>
   <% for accessibility in @application.accessibilities do %>

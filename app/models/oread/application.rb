@@ -1,6 +1,6 @@
 class Oread::Application < ApplicationRecord
   self.table_name = :oread_applications
-  mount_uploader :image_data, OreadApplicationUploader
+  include ImageUploader[:image]
   
   validates :name, :search_path, :host, presence: true
   validates :name, uniqueness: true

@@ -15,10 +15,12 @@ class Ability
       can :manage, User, id: user.id
       # hier passiert noch ein tiefgreifender Konflikt zwischen Devise update und user update.
       can :read, User
+      cannot :read, Doorkeeper::Application
     else
       can :read, :all
       can :read, Oread::Application
       cannot :read, User
+      cannot :read, Doorkeeper::Application
     end
   end
 end
