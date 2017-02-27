@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170224113356) do
+ActiveRecord::Schema.define(version: 20170227174151) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -135,7 +135,7 @@ ActiveRecord::Schema.define(version: 20170224113356) do
     t.string   "owner_type"
     t.integer  "port"
     t.text     "image_data"
-    t.index ["owner_id", "owner_type"], name: "index_oread_applications_on_owner_id_and_owner_type", unique: true, using: :btree
+    t.index ["owner_id", "owner_type"], name: "index_oread_applications_on_owner_id_and_owner_type", using: :btree
   end
 
   create_table "projects", force: :cascade do |t|
