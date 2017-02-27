@@ -5,7 +5,7 @@ class SearchController < ApplicationController
 
   def index
     if params[:q].present?
-      @apps = Oread::Application.all
+      @apps = Oread::Application.joins(projects: :memberships).where('memberships.user_id = ?', current_user.id)
       @results =[]
       @failed_connections = []
       @apps.each do |app|
@@ -25,5 +25,4 @@ class SearchController < ApplicationController
       @grouped_results = @results.group_by { |r| r['type'] }
     end
   end
-  
 end

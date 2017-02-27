@@ -1,13 +1,14 @@
 class Api::SearchController < Api::BaseController
   skip_authorization_check
-  
+  # Mit allen verfügbaren Tokens, die von oauth/apps ausgestellt werden, kann auf /api/search zugegriffen werden.
+
   require 'rest-client'
   require 'json'
   include ERB::Util
 
   def index
     if params[:q].present?
-      @apps = Oread::Application.all
+      @apps = Oread::Application.joins(projects: :memberships).where('memberships.user_id = ?', current_user.id)
       @results =[]
       @failed_connections = []
       @apps.each do |app|
