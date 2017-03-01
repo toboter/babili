@@ -11,7 +11,7 @@ class Ability
       cannot :manage, User
       cannot [:new, :edit, :create, :update, :destroy], Oread::Application
       cannot [:new, :edit, :create, :update, :destroy], OreadAccessibility
-      # cannot :manage, Project, user != Project.memberships.where(role: 'Owner').first.user
+      cannot :manage, Project, memberships: { role: 'Member', user_id: user }
       can :manage, User, id: user.id
       # hier passiert noch ein tiefgreifender Konflikt zwischen Devise update und user update.
       can :read, User
