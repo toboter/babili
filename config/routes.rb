@@ -27,6 +27,7 @@ Rails.application.routes.draw do
     resources :users, only: [:index, :show]
     resources :projects, only: [:index, :show]
     get 'search', to: 'search#index'
+    post 'oread_application_access_token', to: 'oread_access_tokens#create'
   end
 
   namespace :oread do
