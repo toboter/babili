@@ -57,8 +57,8 @@
       <%= content_tag :h4, link_to(application.name.humanize, oauth_application_path(application)) %>
       <%= content_tag :p, application.redirect_uri %>
     </div>
-
   <% end %>
+  <div class="clearfix"></div>
   <br>
   <%= link_to 'List of all oauth Applications', oauth_applications_path if can? :read, Doorkeeper::Application %>
 </section>

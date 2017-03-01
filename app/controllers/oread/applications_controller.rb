@@ -8,6 +8,7 @@ module Oread
     # GET /applications.json
     def index
       @applications = Application.all
+      @personal_applications = Application.joins(projects: :memberships).where('memberships.user_id = ?', current_user).uniq
     end
 
     # GET /applications/1

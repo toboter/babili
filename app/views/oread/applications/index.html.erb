@@ -43,3 +43,10 @@
 <%= link_to 'View all projects', projects_path if can? :read, Project %>
 <%= ' | ' if can?(:read, Doorkeeper::Application) && can?(:read, Project) %>
 <%= link_to 'View all write access applications', oauth_applications_path if can? :read, Doorkeeper::Application %>
+
+
+<% content_for :sidebar do %>
+  <h4>Accessible by you</h4>
+  <%= render @personal_applications %>
+
+<% end %>
