@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
-  load_resource
+  load_and_authorize_resource
   
   def index
     @users = User.where.not(id: current_user.id)
@@ -17,6 +17,7 @@ class UsersController < ApplicationController
     end
   end
   
+  private
   def user_params
     params.require(:user).permit(:id, :is_active, :is_admin)
   end

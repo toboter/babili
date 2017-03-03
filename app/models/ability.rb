@@ -3,24 +3,49 @@ class Ability
 
   def initialize(user)
     user ||= User.new
-     
-    if user.is_admin == true
+
+    cannot :manage, :all
+    can :read, :all
+    cannot :read, Doorkeeper::Application
+
+    if user.is_active == true
       can :manage, :all
-    elsif user.is_active == true && user.is_admin == false
-      can :manage, :all
-      cannot :manage, User
-      cannot [:new, :edit, :create, :update, :destroy], Oread::Application
-      cannot [:new, :edit, :create, :update, :destroy], OreadAccessibility
-      cannot :manage, Project, memberships: { role: 'Member', user_id: user }
-      can :manage, User, id: user.id
-      # hier passiert noch ein tiefgreifender Konflikt zwischen Devise update und user update.
-      can :read, User
-      cannot :read, Doorkeeper::Application
+
+      cannot :manage, Project unless user.is_admin == true
+      cannot :manage, Membership unless user.is_admin == true
+      can [:update, :destroy], Project do |project|
+        user.in?(project.members) && project.memberships.where(user_id: user.id).first.role.in?(['Owner', 'Admin'])
+      end
+      can :manage, Membership do |membership|
+        membership.project.members.include?(user) && membership.project.memberships.where(user_id: user.id).first.role.in?(['Owner', 'Admin'])
+      end
+      can [:read, :create], Project
+      can :read, Membership
+
+
+      cannot :manage, Oread::Application unless user.is_admin == true
+      cannot :manage, OreadAccessibility unless user.is_admin == true
+      can [:update, :destroy], Oread::Application do |app|
+        app.owner == user
+      end
+      can :manage, OreadAccessibility, oread_application: { :owner_id => user.id }
+      can [:read, :create], Oread::Application
+      can :read, OreadAccessibility
+
+
+      cannot :manage, Doorkeeper::Application unless user.is_admin == true
+      
+
     else
-      can :read, :all
-      can :read, Oread::Application
-      cannot :read, User
-      cannot :read, Doorkeeper::Application
+      
+
     end
+
+    can :manage, User if user.is_admin == true
+    cannot :index, User unless user.is_admin == true
+    can [:show, :create, :update, :destroy], User do |u|
+      u == user
+    end
+
   end
 end

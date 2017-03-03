@@ -27,7 +27,7 @@
   </tbody>
 </table>
 
-<%= link_to 'View all readable applications', oread_applications_path if can? :read, Oread::Application %>
+<%= link_to 'View all read access applications', oread_applications_path if can? :read, Oread::Application %>
 <%= ' | ' if can?(:read, Oread::Application) && can?(:read, Doorkeeper::Application) %>
 <%= link_to 'View all write access applications', oauth_applications_path if can? :read, Doorkeeper::Application %>
 

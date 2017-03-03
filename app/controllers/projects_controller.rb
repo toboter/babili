@@ -1,9 +1,6 @@
 class ProjectsController < ApplicationController
-  require 'rest-client'
-  
   before_action :set_project, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, except: [:index, :show]
-  # after_action :send_update_ping_to_clients, only: [:create, :update]
   load_and_authorize_resource
   
   # GET /projects
@@ -79,15 +76,4 @@ class ProjectsController < ApplicationController
       params.require(:project).permit(:name, :image, :cached_image_data, :description)
     end
     
-    # Webhook für kompatible applikationen. 
-    # Wenn sich zum Beispiel an den memberships was ändert, wird der User gesendet und in APP::Accessibility hinzugefügt.
-    def send_update_ping_to_clients
-      @project.applications.each do |app|
-        if app.oauth_application
-          app_url = app.host
-          app_token = app.oauth_application.access_tokens.where(resource_owner_id: current_user.id).first.token
-          RestClient.post("#{app_url}/api/projects", {}, {'Authorization' => "Token #{app_token}"})
-        end
-      end if @project.applications.any?
-    end
 end

@@ -12,6 +12,10 @@
             <%= f.input :port %>
             <%= f.input :search_path %>
             <%= f.input :description %>
+            <%= f.association :owner, 
+              collection: User.all, 
+              include_blank: false, 
+              hint: "After changing this to someone else you won't be able to make changes anymore." unless @application.new_record? %>
 
             <div style="margin: 10px 0;">
               <%= f.hidden_field :image, value: @application.cached_image_data %>

@@ -1,5 +1,6 @@
 class Api::ProjectsController < Api::BaseController
-  load_and_authorize_resource only: %i[index my_projects show]
+  load_and_authorize_resource
+  # skip_authorization_check
 
   def index
     projects = Project.accessible_by(current_ability).all

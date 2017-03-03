@@ -77,11 +77,7 @@
             <%= yield %>
           </div>
           <div class="col-sm-4 col-sm-offset-1 col-md-3 col-md-offset-1 sidebar">
-            <% if content_for?(:sidebar) %>
-              <%= yield(:sidebar) %>
-            <% else %>
-              <p>Sidebar - related & Filter?</p>
-            <% end %>
+            <%= yield(:sidebar) if content_for?(:sidebar) %>
           </div>
         </div>
       </div>
@@ -118,8 +114,8 @@
     
               <% if current_user %>
                 <li class="resp-right"><%= link_to "Sign Out", destroy_user_session_path, method: :delete %></li>
-                <li class="resp-right"><%= link_to "Settings", edit_user_registration_path %></li>
-                <%= content_tag :li, link_to('Manage Users', users_path), class: 'resp-right' if can? :read, User %> 
+                <%= content_tag :li, link_to("Settings", edit_user_registration_path), class: "resp-right" if can?(:show, current_user) %>
+                <%= content_tag :li, link_to('Manage Users', users_path), class: 'resp-right' if can?(:index, User) %> 
               <% else %>
                 <li class="resp-right"><%= link_to "Sign in", new_user_session_path %></li>
               <% end %>

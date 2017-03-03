@@ -78,7 +78,7 @@ module Oread
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def application_params
-        params.require(:oread_application).permit(:name, :host, :port, :search_path, :description, :image, :cached_image_data)
+        params.require(:oread_application).permit(:name, :host, :port, :search_path, :description, :image, :cached_image_data, :owner_id, :owner_type)
       end
   end
 end

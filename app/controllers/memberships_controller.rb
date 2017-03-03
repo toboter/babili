@@ -2,6 +2,8 @@ class MembershipsController < ApplicationController
   before_action :set_project
   before_action :set_membership, only: [:edit, :update, :destroy]
   before_action :authenticate_user!
+  load_and_authorize_resource :project
+  load_and_authorize_resource :membership, through: :project
 
   def new
     @users = User.all-@project.members

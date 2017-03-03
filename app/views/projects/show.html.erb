@@ -68,7 +68,7 @@
 <% content_for :sidebar do %>
   <h4>
     Members in this project
-    <%= link_to 'Add Member', new_project_membership_path(@project), class: 'btn btn-success btn-sm pull-right' %>
+    <%= link_to 'Add Member', new_project_membership_path(@project), class: 'btn btn-success btn-sm pull-right' if can? :update, @project %>
   </h4>
   <%= content_tag :div, style: 'margin-top:20px;' do %>
     <% for membership in @project.memberships do %>
@@ -82,12 +82,13 @@
           <h5 class="media-heading"><%= membership.user.display_name %></h5>
           <span class="text-muted"><%= membership.role %></span>
           <%= content_tag :span, class: 'pull-right' do %> 
-            <%= link_to fa_icon('edit'), [:edit, @project, membership] %> | 
-            <%= link_to fa_icon('remove'), [@project, membership], method: :delete, confirm: 'Are you sure?' %>
+            <%= link_to fa_icon('edit'), [:edit, @project, membership] if can?(:update, membership) %>
+            <%= ' | ' if can?(:update, membership) && can?(:destroy, membership) %>
+            <%= link_to fa_icon('remove'), [@project, membership], method: :delete, confirm: 'Are you sure?' if can?(:destroy, membership) %>
           <% end unless membership.is_owner? %>
         </div>
       </div>      
     <% end %>
   <% end if @project.memberships.any? %>
 
-<% end %>
+<% end if can? :read, @project %>

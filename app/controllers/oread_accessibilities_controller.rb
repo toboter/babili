@@ -2,14 +2,16 @@ class OreadAccessibilitiesController < ApplicationController
   before_action :set_oread_application
   before_action :set_oread_accessibility, only: [:edit, :update, :destroy]
   before_action :authenticate_user!
+  load_and_authorize_resource :oread_application
+  load_and_authorize_resource :oread_accessibility, :through => :oread_application
 
   def new
     @projects = Project.where.not(id: @oread_application.project_ids)
-    @oread_accessibility = @oread_application.accessibilities.new
+    @oread_accessibility = @oread_application.oread_accessibilities.new
   end
   
   def create
-    @oread_accessibility = @oread_application.accessibilities.new(oread_accessibility_params)
+    @oread_accessibility = @oread_application.oread_accessibilities.new(oread_accessibility_params)
     @oread_accessibility.creator_id = current_user.id
 
     respond_to do |format|
@@ -38,7 +40,7 @@ class OreadAccessibilitiesController < ApplicationController
     end
     
     def set_oread_accessibility
-      @oread_accessibility = @oread_application.accessibilities.find(params[:id])
+      @oread_accessibility = @oread_application.oread_accessibilities.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

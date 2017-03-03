@@ -38,7 +38,10 @@
             <td><%= @token.refresh_token %></td>
             <td><%= @token.expires_in %></td>
             <td><%= @token.token_type %></td>
-            <td><%= @token.created_at %></td>
+            <td>
+              <%= @token.created_at %>
+              <%= link_to fa_icon('remove'), oread_application_token_path(@application, @token), method: :delete, class: 'pull-right' %>
+            </td>
           </tr>
         </table>
       <% end %>
@@ -55,19 +58,19 @@
 <% content_for :sidebar do %>
   <h4>
     Projects with access
-    <%= link_to 'Add Project', new_oread_application_accessibility_path(@application), class: 'btn btn-success btn-sm pull-right' if can? :create, OreadAccessibility %>
+    <%= link_to 'Add Project', new_oread_application_accessibility_path(@application), class: 'btn btn-success btn-sm pull-right' if can?(:update, @application) %>
   </h4>
-  <% for accessibility in @application.accessibilities do %>
+  <% for accessibility in @application.oread_accessibilities do %>
     <div class="media">
       <div class="media-left">
         <a href="#">
-          <%= image_tag accessibility.project.image_url(:small_thumb) %>
+          <%= image_tag accessibility.project.image_url(:small_thumb), style: 'width: 50px;' %>
         </a>
       </div>
       <div class="media-body">
         <h4 class="media-heading">
           <%= link_to accessibility.project.name, accessibility.project %>
-          <%= link_to fa_icon('remove'), oread_application_accessibility_path(@application, accessibility), method: :delete, class: 'pull-right' if can? :destroy, accessibility %>
+          <%= link_to fa_icon('remove'), oread_application_accessibility_path(@application, accessibility), method: :delete, class: 'pull-right' if can?(:destroy, accessibility) %>
         </h4>
         <p class="small text-muted">
           Created on <%= accessibility.project.created_at.to_formatted_s(:long_ordinal) %>. <%= pluralize( accessibility.project.memberships.count, 'member' ) %>
