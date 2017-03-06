@@ -53,14 +53,14 @@
 <section class="no-padding" id="explore-oauth-applications" style="margin-bottom: 80px;">
   <h4 class="text-muted">Applications authenticated by babylon-online</h4> 
   <% for application in @oauth_applications do %>
-    <div class="col-md-6">
+    <div class="col-md-12">
       <%= content_tag :h4, link_to(application.name.humanize, oauth_application_path(application)) %>
-      <%= content_tag :p, application.redirect_uri %>
+      <%= content_tag :p, application.uid %>
     </div>
   <% end %>
   <div class="clearfix"></div>
   <br>
-  <%= link_to 'List of all oauth Applications', oauth_applications_path if can? :read, Doorkeeper::Application %>
+  <%= link_to 'List all authenticated Applications', oauth_applications_path if can? :read, Doorkeeper::Application %>
 </section>
 
 

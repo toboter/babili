@@ -5,9 +5,9 @@
       <p class="small text-muted">
         Created on <%= application.created_at.to_formatted_s(:long_ordinal) %>. <%= pluralize(application.projects.count, 'project' )+' have access' %>.
       </p>
-      <p class="">
+      <p style="font-size:90%;">
         <%= truncate(application.description, length: 150, separator: ' ', escape: false) %><br>
       </p>
-      <%= content_tag :p do %><strong>Token present?</strong> <%= fa_icon('check') %><% end if user_signed_in? && application.access_tokens.where(resource_owner: current_user).exists? %>
+      <%= content_tag :p, style: 'font-size:90%;' do %><strong>Token present?</strong> <%= fa_icon('check') %><% end if user_signed_in? && application.access_tokens.where(resource_owner: current_user).exists? %>
       <hr>
     </div>

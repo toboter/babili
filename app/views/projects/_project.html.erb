@@ -5,7 +5,7 @@
       <p class="small text-muted">
         Created on <%= project.created_at.to_formatted_s(:long_ordinal) %>. <%= pluralize( project.memberships.count, 'member' ) %>.
       </p>
-      <p class="">
+      <p style="font-size:90%;">
         <%= truncate(project.description, length: 150, separator: ' ', escape: false) %><br>
       </p>
       <hr>
