@@ -33,6 +33,66 @@
 </p>
 
 
+
+
+
+
+<br><strong>Babili current user data</strong>
+<p>
+  Current User: "/api/me": 
+  @access_token.get("/api/me").parsed
+</p>
+<p>
+  Current User projects: "/api/my/projects": 
+  @access_token.get("/api/my/projects").parsed
+</p>
+
+<p>
+  Current User write auth: "/api/my/authorizations/write": 
+  @access_token.get("/api/my/authorizations/write").parsed
+</p>
+
+<p>
+  Current User read auth: "/api/my/authorizations/read": 
+  @access_token.get("/api/my/authorizations/read").parsed
+</p>
+
+
+
+<br><strong>Users</strong>
+<p>
+  All users: "/api/users": 
+  @access_token.get("/api/users").parsed
+</p>
+
+<p>
+  User with id 2: "/api/users/2": 
+  @access_token.get("/api/users/2").parsed
+</p>
+
+<br><strong>Projects</strong>
+<p>
+  All projects: "/api/projects": 
+  @access_token.get("/api/projects").parsed
+</p>
+
+<p>
+  Project with id 2: "/api/projects/2": 
+  @access_token.get("/api/projects/2").parsed
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
 <% content_for :sidebar do %>
 	<h4>Verzeichnis</h4>
 	<p></p>
