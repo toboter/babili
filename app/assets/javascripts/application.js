@@ -13,6 +13,7 @@
 //= require jquery
 //= require jquery.turbolinks
 //= require jquery_ujs
+//= require toastr
 //= require bootstrap
 //= require turbolinks
 //= require turbolinks-compatibility

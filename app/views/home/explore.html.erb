@@ -65,6 +65,9 @@
 
 
 <% content_for :sidebar do %>
+  <h4>Users signed up <span class="badge"><%= Profile.count %></span></h4>
+  <%= link_to 'all users', profiles_path %>
+
 	<h3>Projects</h3>
   <%= render @projects %>
 	<%= link_to 'View all projects', projects_path %>

@@ -20,7 +20,9 @@ class User < ApplicationRecord
   has_many :oread_access_tokens, class_name: 'Oread::AccessToken', foreign_key: 'resource_owner_id'
   has_many :memberships, dependent: :delete_all
   has_many :projects, through: :memberships
-  # has_one :profile
+  has_one :profile
+
+  before_create :build_profile
 
   def self.find_for_database_authentication(warden_conditions)
     conditions = warden_conditions.dup
@@ -31,18 +33,13 @@ class User < ApplicationRecord
     end
   end
 
-  include ImageUploader[:image]
-  def display_name
-    if given_name && family_name
-      [honorific_prefix, given_name, family_name, honorific_suffix].join(' ').strip
+  
+  def name
+    if profile && profile.display_name.present?
+      profile.display_name
     else
       username.presence || email
     end
   end
-  
-  def name
-    display_name
-  end
-
 
 end

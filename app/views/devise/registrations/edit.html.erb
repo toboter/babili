@@ -7,18 +7,6 @@
     <%= f.input :email, required: true, autofocus: true %>
     <%= f.input :username, required: true %>
 
-    <!-- 
-    <%= f.input :honorific_prefix %>
-    <%= f.input :given_name %>
-    <%= f.input :middle_name %>
-    <%= f.input :family_name %>
-    <%= f.input :honorific_suffix %>
-    <%= f.input :birthday, as: :date, start_year: Date.today.year - 90,
-                              end_year: Date.today.year - 12 %>
-    <%= f.input :gender, collection: ['m', 'f'] %>
-    <%= f.input :about_me %>
-    -->
-    
     <br><br>
     <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
       <p>Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>

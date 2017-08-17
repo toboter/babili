@@ -46,6 +46,9 @@ class Ability
     can [:show, :create, :update, :destroy], User do |u|
       u == user
     end
+    can [:create, :update, :edit, :new], Profile do |p|
+      p.user == user
+    end
 
   end
 end

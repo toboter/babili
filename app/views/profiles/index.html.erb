@@ -1,0 +1,25 @@
+<% title 'User profiles', false %>
+
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, link_to('home', root_url) %>
+  <%= content_tag :li, 'user profiles', class: 'active' %>
+<% end %>
+
+<div class="list-group">
+  <% @profiles.each do |profile| %>
+
+    <%= link_to profile, class: 'media list-group-item' do %>
+      <div class="media-left" style="max-width: 60px;">
+        <%= image_tag profile.image_url(:small_thumb), class: 'img-circle', style: 'width: 50px;' %>
+      </div>
+      <div class="media-body">
+        <h4 class="media-heading"><%= profile.user.name %></h4>
+        <%= profile.about_me %>
+      </div>
+      <div class="media-right">
+        <%= content_tag :span, fa_icon('universal-access'), data: {toggle: "tooltip", placement: "left"}, title: "Administrator" if profile.user.is_admin %>
+      </div>
+    <% end %>
+
+  <% end %>
+</div>

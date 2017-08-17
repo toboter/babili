@@ -21,7 +21,7 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-left">
-            <%= content_tag :p, fa_icon('user', text: "Signed in as #{current_user.try(:display_name)}"), class: 'navbar-text', style: 'margin-left: 15px;' if user_signed_in? %>
+            <%= content_tag :p, fa_icon('user', text: "Signed in as #{link_to current_user.name, (current_user.profile ? current_user.profile : new_profile_path)}".html_safe), class: 'navbar-text', style: 'margin-left: 15px;' if user_signed_in? %>
           </ul>
           <%= content_tag :ul, class: "nav navbar-nav navbar-right" do %>
             <li><%= link_to 'Explore', explore_path %></li>
@@ -56,6 +56,14 @@
       <%= yield %>
     <% else %>
       <div class="container-fluid" style="margin: 60px 0 100px 0;">
+        <%= content_tag :ol, class: 'breadcrumb' do %>
+          <%= yield(:breadcrumbs) %>
+        <% end if content_for?(:breadcrumbs) %>
+
+        <% flash.each do |message_type, message| %>
+          <%= javascript_tag "toastr['#{message_type == 'notice' ? 'info' : message_type}']('#{message}')" %>
+        <% end %>
+
         <div class="row">
           <div class="col-sm-7 col-md-8 main">
             <%= content_tag :div, class: "page-header" do %>
@@ -66,14 +74,7 @@
                 </div>
               </h1>
               <%= content_tag :p, yield(:subline), class: 'text-muted' if content_for?(:subline) %>
-            <% end if content_for?(:buttons) || content_for?(:title) %>
-          
-            <%= content_tag :div, class: 'row' do %>
-              <div class="col-md-12">
-                <%= render "shared/notification" %>
-              </div>
-            <% end if alert || notice %>
-            
+            <% end if content_for?(:buttons) || content_for?(:title) && @show_title %>
             <%= yield %>
           </div>
           <div class="col-sm-4 col-sm-offset-1 col-md-3 col-md-offset-1 sidebar">

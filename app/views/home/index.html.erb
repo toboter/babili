@@ -11,6 +11,7 @@
         </div>
       </div>
       
+      <!-- toasting doesn't work with background-image -->
       <%= content_tag :div, style: 'margin-top:20px;' do %>
         <%= render "shared/notification" %>
       <% end if alert || notice %>

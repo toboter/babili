@@ -14,6 +14,7 @@ Rails.application.routes.draw do
 
   devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}
   resources :users, only: [:index, :update]
+  resources :profiles, except: [:destroy]
   
   namespace :api do
     get 'me', to: 'users#me'

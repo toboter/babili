@@ -1,0 +1,55 @@
+<% title @profile.user.name, false %>
+
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, link_to('home', root_url) %>
+  <%= content_tag :li, link_to('user profiles', profiles_url) %>
+  <%= content_tag :li, link_to(@profile.display_name, @profile) %>
+  <%= content_tag :li, 'edit', class: 'active' %>
+<% end %>
+
+
+<%= simple_form_for @profile, method: :put, html: { class: 'form-horizontal' },
+  wrapper: :horizontal_form do |f| %>
+
+  <div class="row">
+    <div class="col-md-12">
+      <%= f.error_notification %>
+  
+      <div class="row">
+        <%= content_tag :div, class: "col-md-12" do %>
+          <div class="form-inputs">
+            <%= f.input :honorific_prefix %>
+            <%= f.input :given_name %>
+            <%= f.input :family_name %>
+            <%= f.input :honorific_suffix %>
+            <%= content_tag :div, class: "form-group" do %>
+              <%= f.label :birthday, class: 'col-sm-3 control-label' %>
+              <div class="col-sm-9">
+                <%= f.input :birthday, as: :date, html5: true, label: false, input_html: {style: 'margin-left: 15px; max-width:90%;'} %>
+              </div>
+            <% end %>
+            <%= f.input :gender, collection: ['m', 'f'] %>
+            <%= f.input :about_me, input_html: { rows: 3 }, hint: 'Should be between 70 and 150 characters.' %>
+
+            <%= content_tag :div, class: "form-group", style: 'margin-top: 20px;' do %>
+              <%= f.label :image, class: 'col-sm-3 control-label' %>
+              <div class="col-sm-9">
+                <%= f.hidden_field :image, value: @profile.cached_image_data %>
+                <%= f.file_field :image, as: :file %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+  
+      <div class="row">
+        <div class="col-md-6">
+          <hr>
+          <%= f.submit class: 'btn btn-primary' %>
+          <%= link_to 'Cancel', (@profile.new_record? ? profiles_path : @profile), class: "btn btn-default" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<% end %>

@@ -74,12 +74,12 @@
     <% for membership in @project.memberships do %>
       <div class="media">
         <div class="media-left">
-          <a href="#">
-            <%= image_tag membership.user.image_url(:small_thumb), class: "media-object", style: 'height:50px;' %>
-          </a>
+          <%= link_to membership.user.profile do %>
+            <%= image_tag membership.user.profile.image_url(:small_thumb), class: "media-object", style: 'height:50px;' %>
+          <% end %>
         </div>
         <div class="media-body">
-          <h5 class="media-heading"><%= membership.user.display_name %></h5>
+          <h5 class="media-heading"><%= membership.user.name %></h5>
           <span class="text-muted"><%= membership.role %></span>
           <%= content_tag :span, class: 'pull-right' do %> 
             <%= link_to fa_icon('edit'), [:edit, @project, membership] if can?(:update, membership) %>
