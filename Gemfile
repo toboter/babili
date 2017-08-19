@@ -62,6 +62,7 @@ gem 'image_processing'
 gem 'mini_magick'
 gem 'fastimage'
 gem 'down'
+gem 'rails-bootstrap-markdown'
 
 gem 'devise'
 gem 'doorkeeper'

@@ -14,6 +14,7 @@
 //= require jquery.turbolinks
 //= require jquery_ujs
 //= require toastr
+//= require bootstrap-markdown-bundle
 //= require bootstrap
 //= require turbolinks
 //= require turbolinks-compatibility
@@ -22,3 +23,18 @@
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })
+
+// fixing changing width of a panel while affix-scrolling
+$(document).on('affixed.bs.affix',function(e){
+    $('.affix').each(function(){
+        var elem = $(this);
+        var parentPanel = $(elem).parent();
+        var resizeFn = function () {
+            var parentAffixWidth = $(parentPanel).width();
+            elem.width(parentAffixWidth);
+        };      
+
+        resizeFn();
+        //$(window).resize(resizeFn);
+    });
+});

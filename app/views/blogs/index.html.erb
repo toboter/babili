@@ -9,7 +9,6 @@
           <% end if can? :create, @type.constantize %>
         </h1>
       <% end %>
-      <%= render "shared/notification" if alert || notice %>
       <% if @type == 'Novelity' %>
       
         <% @blog_years.each do |year, blogs| %>
@@ -21,7 +20,7 @@
                   <%= link_to blog.external_link, target: :_blank do %>
                     <small><%= blog.external_link %></small><br>
                     <%= blog.title %>
-                    <%= content_tag :small, markdown(blog.content) if blog.content %>
+                    <%= content_tag :small, markdown(blog.abstract) if blog.abstract %>
                     <%= link_to fa_icon("remove"), blog, method: :delete, data: { confirm: 'Remove this item. Are you sure?' }, class: 'pull-right' if can? :destroy, blog %>
                   <% end %>
                 </td>
@@ -31,7 +30,8 @@
         <% end %>
       <% else %>
         <% @blogs.order(position: :asc).each do |blog| %>
-          <div class="well <%= blog.type.downcase %>-entry" id="<%= blog.type.downcase %>-<%= blog.id %>">
+          <div class="panel panel-default <%= blog.type.downcase %>-entry" id="<%= blog.type.downcase %>-<%= blog.id %>">
+          <div class="panel-body">
             <h4>
               <%= link_to blog.title, blog %>
               <%= content_tag :div, class: 'pull-right' do %>
@@ -46,11 +46,16 @@
                 <% end %>
               <% end if can? :update, blog %>
             </h4>
-            <%= content_tag :p, "posted by #{blog.author.try(:display_name)} on #{blog.posted_at.to_formatted_s(:long_ordinal)}", class: 'text-muted' %>
+            <%= content_tag :p, class: 'text-muted' do %>
+              posted 
+              <%= "by #{blog.author.try(:name)}" if blog.type == 'Post' %> 
+              <%= "on #{blog.posted_at.to_date.to_formatted_s(:long_ordinal)}" %>
+            <% end %>
             <%= content_tag :div, class: "#{blog.type.downcase}-content", id: "#{blog.type.downcase}-content-#{blog.id}" do %>
-              <%= truncate(teaser(blog.content), length: 500, separator: ' ', escape: false) { link_to " continue reading", blog } %>
+              <%= truncate(teaser(blog.abstract ? blog.abstract : blog.content), length: 500, separator: ' ', escape: false) { link_to " continue reading", blog } %>
             <% end %>
             <%= content_tag :p, link_to(blog.external_link, blog.external_link, target: :_blank), style: 'margin-top:20px;' if blog.external_link.present? %>
+          </div>
           </div>
         <% end %>
       <% end %>

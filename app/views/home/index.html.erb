@@ -10,11 +10,6 @@
           <%= render 'shared/search' %>
         </div>
       </div>
-      
-      <!-- toasting doesn't work with background-image -->
-      <%= content_tag :div, style: 'margin-top:20px;' do %>
-        <%= render "shared/notification" %>
-      <% end if alert || notice %>
             
       <div style="margin-top:100px;">
         <%= link_to fa_icon('chevron-circle-down 4x'), '#about', class: 'page-scroll', style: '' %>            

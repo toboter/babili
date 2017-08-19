@@ -51,7 +51,11 @@
         </div>
       </div>
     </nav>
-    
+
+    <% flash.each do |message_type, message| %>
+      <%= javascript_tag "toastr['#{message_type == 'notice' ? 'info' : message_type}']('#{message}')" %>
+    <% end %>
+
     <% if current_page?(root_url) || current_page?('/about') || current_page?('/posts') || current_page?('/news') %>
       <%= yield %>
     <% else %>
@@ -59,10 +63,6 @@
         <%= content_tag :ol, class: 'breadcrumb' do %>
           <%= yield(:breadcrumbs) %>
         <% end if content_for?(:breadcrumbs) %>
-
-        <% flash.each do |message_type, message| %>
-          <%= javascript_tag "toastr['#{message_type == 'notice' ? 'info' : message_type}']('#{message}')" %>
-        <% end %>
 
         <div class="row">
           <div class="col-sm-7 col-md-8 main">

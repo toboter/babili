@@ -101,11 +101,11 @@ class BlogsController < ApplicationController
     
     # Use callbacks to share common setup or constraints between actions.
     def set_blog
-      @blog = type_class.find(params[:id])
+      @blog = type_class.friendly.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def blog_params
-      params.require(type.underscore.to_sym).permit(:type, :author_id, :title, :content, :external_link, :posted_at)
+      params.require(type.underscore.to_sym).permit(:type, :author_id, :title, :abstract, :content, :external_link, :posted_at)
     end
 end
