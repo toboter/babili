@@ -1,36 +1,46 @@
-<div class="container" style="margin-top: 60px;">
-  <div class="row">
-    <div class="col-sm-12 col-md-8 col-centered">
-      <%= content_tag :div, class: "page-header" do %>
-        <h1 class="">
-          <%= @type != 'Novelity' ? @type.humanize : 'News' %>
-          <%= content_tag :div, class: "pull-right" do %>
-            <%= link_to fa_icon("plus", text: @type != 'Novelity' ? "New #{@type.humanize}" : 'Add News'), sti_blog_path(@type, nil, :new), class: 'btn btn-success' if @type != 'Blog' %>
-          <% end if can? :create, @type.constantize %>
-        </h1>
+<% title "#{@type.pluralize.humanize}", false %>
+<% content_for(:breadcrumbs) do %>
+  <%= content_tag :li, link_to('home', root_url) %>
+  <%= content_tag :li, @type.pluralize.humanize, class: 'active' %>
+<% end %>
+
+<% content_for :sidebar do %>
+
+  <%= content_tag :div, class: '', style: 'margin-bottom: 20px;' do %>
+    <div class="">
+      <%= link_to fa_icon("plus", text: @type != 'Novelity' ? "New #{@type.humanize}" : 'Add News'), sti_blog_path(@type, nil, :new), class: 'btn btn-success' if @type != 'Blog' %>
+    </div>
+  <% end if can? :create, @type.constantize %>
+  
+<% end %>
+
+<%= content_tag :div, class: "page-header text-center" do %>
+  <h1 class=""><%= @type != 'Novelity' ? @type.pluralize.humanize : 'News' %></h1>
+<% end %>
+
+<div class="row">
+  <div class="col-sm-12 col-md-10 col-centered">
+    <% if @type == 'Novelity' %>
+      <% @blog_years.each do |year, blogs| %>
+        <h2><%= year %></h2>  
+        <table class="table table-bordered table-responsive">
+          <% blogs.each do |blog| %>
+            <tr>
+              <td>
+                <%= link_to blog.external_link, target: :_blank do %>
+                  <small><%= blog.external_link %></small><br>
+                  <%= blog.title %>
+                  <%= content_tag :small, markdown(blog.abstract) if blog.abstract %>
+                  <%= link_to fa_icon("remove"), blog, method: :delete, data: { confirm: 'Remove this item. Are you sure?' }, class: 'pull-right' if can? :destroy, blog %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </table>
       <% end %>
-      <% if @type == 'Novelity' %>
-      
-        <% @blog_years.each do |year, blogs| %>
-          <h2><%= year %></h2>  
-          <table class="table table-bordered table-responsive">
-            <% blogs.each do |blog| %>
-              <tr>
-                <td>
-                  <%= link_to blog.external_link, target: :_blank do %>
-                    <small><%= blog.external_link %></small><br>
-                    <%= blog.title %>
-                    <%= content_tag :small, markdown(blog.abstract) if blog.abstract %>
-                    <%= link_to fa_icon("remove"), blog, method: :delete, data: { confirm: 'Remove this item. Are you sure?' }, class: 'pull-right' if can? :destroy, blog %>
-                  <% end %>
-                </td>
-              </tr>
-            <% end %>
-          </table>
-        <% end %>
-      <% else %>
-        <% @blogs.order(position: :asc).each do |blog| %>
-          <div class="panel panel-default <%= blog.type.downcase %>-entry" id="<%= blog.type.downcase %>-<%= blog.id %>">
+    <% else %>
+      <% @blogs.order(position: :asc).each do |blog| %>
+        <div class="panel panel-default <%= blog.type.downcase %>-entry" id="<%= blog.type.downcase %>-<%= blog.id %>">
           <div class="panel-body">
             <h4>
               <%= link_to blog.title, blog %>
@@ -54,11 +64,9 @@
             <%= content_tag :div, class: "#{blog.type.downcase}-content", id: "#{blog.type.downcase}-content-#{blog.id}" do %>
               <%= truncate(teaser(blog.abstract ? blog.abstract : blog.content), length: 500, separator: ' ', escape: false) { link_to " continue reading", blog } %>
             <% end %>
-            <%= content_tag :p, link_to(blog.external_link, blog.external_link, target: :_blank), style: 'margin-top:20px;' if blog.external_link.present? %>
           </div>
-          </div>
-        <% end %>
+        </div>
       <% end %>
-    </div>
+    <% end %>
   </div>
 </div>
