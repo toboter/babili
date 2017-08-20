@@ -53,7 +53,7 @@
     </nav>
 
     <% flash.each do |message_type, message| %>
-      <%= javascript_tag "toastr['#{message_type == 'notice' ? 'info' : message_type}']('#{message}')" %>
+      <%= javascript_tag "toastr['#{ message_type == 'notice' ? 'info' : (message_type == 'alert' ? 'warning' : message_type) }']('#{message}')" %>
     <% end %>
 
     <% if current_page?(root_url) %>
