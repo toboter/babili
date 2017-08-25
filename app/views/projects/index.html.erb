@@ -1,38 +1,23 @@
-<% title 'Projects' %>
+<% title 'Projects', false %>
 
-<% content_for :buttons do %>
-  <%= link_to 'New Project', new_project_path, class: 'btn btn-success' %>
-<% end if can? :create, Project %>
-
-<table class="table table-bordered table-responsive">
-  <thead>
-    <tr>
-      <th></th>
-      <th>Name</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @projects.each do |project| %>
-      <tr>
-        <td><%= image_tag project.image_url(:small_thumb), style: 'width:50px;' %></td>
-        <td><%= link_to project.name, project %></td>
-        <td>
-          <%= link_to fa_icon('edit'), edit_project_path(project), class: 'pull-right' if can? :edit, project %>
-          <%= project.description %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<%= link_to 'View all read access applications', oread_applications_path if can? :read, Oread::Application %>
-<%= ' | ' if can?(:read, Oread::Application) && can?(:read, Doorkeeper::Application) %>
-<%= link_to 'View all write access applications', oauth_applications_path if can? :read, Doorkeeper::Application %>
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, link_to('home', root_url) %>
+  <%= content_tag :li, 'Projects', class: 'active' %>
+<% end %>
 
 <% content_for :sidebar do %>
-  <h4>Your projects</h4>
-  <%= render @personal_projects %>
+  <%= content_tag :div, class: '', style: 'margin-bottom: 20px;' do %>
+    <%= link_to 'New Project', new_project_path, class: 'btn btn-success' %>
+  <% end if can? :create, Project %>
+
+  <%= content_tag :div do %>
+    <%= link_to 'View all read access applications', oread_applications_path if can? :read, Oread::Application %>
+    <%= ' | ' if can?(:read, Oread::Application) && can?(:read, Doorkeeper::Application) %>
+    <%= link_to 'View all write access applications', oauth_applications_path if can? :read, Doorkeeper::Application %>
+  <% end if user_signed_in? %>
 
 <% end %>
+
+<div class="list-group">
+  <%= render @projects %>
+</div>

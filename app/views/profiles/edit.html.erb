@@ -2,7 +2,7 @@
 
 <% content_for :breadcrumbs do %>
   <%= content_tag :li, link_to('home', root_url) %>
-  <%= content_tag :li, link_to('user profiles', profiles_url) %>
+  <%= content_tag :li, link_to('User profiles', profiles_url) %>
   <%= content_tag :li, link_to(@profile.display_name, @profile) %>
   <%= content_tag :li, 'edit', class: 'active' %>
 <% end %>

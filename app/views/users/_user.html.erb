@@ -1,0 +1,11 @@
+<%= link_to user.profile, class: 'media list-group-item' do %>
+  <div class="media-left">
+    <%= image_tag user.profile.image_url(:small_thumb), class: "media-object img-circle", style: 'height:50px;' %>
+  </div>
+  <div class="media-body">
+    <h5 class="media-heading"><%= user.name %></h5>
+  </div>
+  <div class="media-right">
+    <%= content_tag :span, fa_icon('universal-access'), data: {toggle: "tooltip", placement: "left"}, title: "Administrator" if user.is_admin %>
+  </div>
+<% end %> 

@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   scope :oauth do
     resources :applications, as: :oauth_application do
       resources :oauth_accessibilities, 
-        only: [:new, :create, :destroy], 
+        only: [:new, :edit, :create, :update, :destroy], 
         as: :accessibilities, 
         path: 'accessibilities'
     end
@@ -33,20 +33,18 @@ Rails.application.routes.draw do
 
   namespace :oread do
     resources :applications do
-      resources :oread_accessibilities, 
-        only: [:new, :create, :destroy], 
-        as: :accessibilities, 
-        path: 'accessibilities',
-        controller: '/oread_accessibilities'
+      # resources :oread_accessibilities, 
+      #   only: [:new, :create, :destroy], 
+      #   as: :accessibilities, 
+      #   path: 'accessibilities',
+      #   controller: '/oread_accessibilities'
       resources :access_tokens,
         only: [:new, :create, :destroy], 
         as: :tokens, 
         path: 'tokens'
     end
   end
-  resources :projects do 
-    resources :memberships
-  end
+  resources :projects
   
   resources :blogs, only: :index
   resources :abouts, path: :about, controller: 'blogs', type: 'About' do 

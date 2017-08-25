@@ -15,6 +15,7 @@
 //= require jquery_ujs
 //= require toastr
 //= require bootstrap-markdown-bundle
+//= require cocoon
 //= require bootstrap
 //= require turbolinks
 //= require turbolinks-compatibility

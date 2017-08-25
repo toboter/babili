@@ -1,12 +1,13 @@
-    <div style="margin-bottom:15px;">
-      <h4>
-        <%= link_to project.name, project %>
-      </h4>
-      <p class="small text-muted">
-        Created on <%= project.created_at.to_formatted_s(:long_ordinal) %>. <%= pluralize( project.memberships.count, 'member' ) %>.
-      </p>
-      <p style="font-size:90%;">
-        <%= truncate(project.description, length: 150, separator: ' ', escape: false) %><br>
-      </p>
-      <hr>
-    </div>
+    <%= link_to project, class: 'media list-group-item' do %>
+      <div class="media-left" style="max-width: 80px;">
+        <%= image_tag project.image_url(:small_thumb), class: '', style: 'width: 70px;' %>
+      </div>
+      <div class="media-body">
+        <h4 class="media-heading"><%= project.name %></h4>
+        <p class="small text-muted">Created on <%= project.created_at.to_date.to_formatted_s(:long_ordinal) %>. <%= pluralize( project.memberships.count, 'member' ) %></p>
+        <%= truncate(project.description, length: 200, separator: ' ') %>
+      </div>
+      <div class="media-right">
+        <%= content_tag :span, fa_icon('group'), data: {toggle: "tooltip", placement: "left"}, title: "You are a member!" if user_signed_in? && project.members.include?(current_user) %>
+      </div>
+    <% end %>

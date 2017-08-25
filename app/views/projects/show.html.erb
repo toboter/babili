@@ -1,94 +1,90 @@
-<% title @project.name %>
+<% title @project.name, false %>
 
-<% content_for :buttons do %>
-  <%= link_to fa_icon('edit', text: 'Edit'), edit_project_path(@project), class: 'btn btn-warning' if can? :update, @project %>
-  <%= link_to fa_icon('remove', text: 'Delete'), @project, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' if can? :destroy, @project %>
-<% end if can? :create, Project %>
-
-<div>
-  <%= image_tag @project.image_url(:banner), class: 'img-responsive', style: 'width: 100%' %>
-</div>
-
-<div style="margin-top:20px;">
-  <%= markdown(@project.description) %>
-</div>
-
-<hr>
-
-<%= content_tag :div, id: "project-#{@project.id}-oread_accessibilities" do %>
-  <h4>Read access through registered apis</h4>
-  <% for accessibility in @project.oread_accessibilities do %>
-    <div class="media">
-      <div class="media-left">
-        <%= link_to accessibility.oread_application do %>
-          <%= image_tag accessibility.oread_application.image_url(:thumb), style: 'width:100px;' %>
-        <% end %>
-      </div>
-      <div class="media-body">
-        <h4 class="media-heading">
-          <%= link_to accessibility.oread_application.name, accessibility.oread_application %>
-        </h4>
-        <p><%= accessibility.oread_application.description %></p>
-      </div>
-    </div>
-    <hr>
-  <% end %>
-<% end if @project.oread_accessibilities.any? %>
-
-<%= content_tag :div, id: "project-#{@project.id}-oauth_accessibilities" do %>
-  <h4>Write access through babili</h4>
-  <% for accessibility in @project.oauth_accessibilities do %>
-    <div class="media">
-      <div class="media-left">
-        <%= link_to oauth_application_path(accessibility.oauth_application) do %>
-        <% end %>
-      </div>
-      <div class="media-body">
-        <h4 class="media-heading">
-          <%= link_to accessibility.oauth_application.name, oauth_application_path(accessibility.oauth_application) %>
-        </h4>
-        <p><%= accessibility.oauth_application.uid %></p>
-      </div>
-    </div>
-    <hr>
-  <% end %>
-<% end if @project.oauth_accessibilities.any? %>
-
-<%= link_to 'View all projects', projects_path if can? :read, Project %>
-<%= ' | ' if can?(:read, Oread::Application) && can?(:read, Project) %>
-<%= link_to 'View all readable applications', oread_applications_path if can? :read, Oread::Application %>
-<%= ' | ' if can?(:read, Oread::Application) && can?(:read, Doorkeeper::Application) %>
-<%= link_to 'View all write access applications', oauth_applications_path if can? :read, Doorkeeper::Application %>
-
-
-
-
-
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, link_to('home', root_url) %>
+  <%= content_tag :li, link_to('Projects', projects_url) %>
+  <%= content_tag :li, @project.name, class: 'active' %>
+<% end %>
 
 <% content_for :sidebar do %>
-  <h4>
-    Members in this project
-    <%= link_to 'Add Member', new_project_membership_path(@project), class: 'btn btn-success btn-sm pull-right' if can? :update, @project %>
-  </h4>
-  <%= content_tag :div, style: 'margin-top:20px;' do %>
-    <% for membership in @project.memberships do %>
-      <div class="media">
-        <div class="media-left">
-          <%= link_to membership.user.profile do %>
-            <%= image_tag membership.user.profile.image_url(:small_thumb), class: "media-object", style: 'height:50px;' %>
-          <% end %>
-        </div>
-        <div class="media-body">
-          <h5 class="media-heading"><%= membership.user.name %></h5>
-          <span class="text-muted"><%= membership.role %></span>
-          <%= content_tag :span, class: 'pull-right' do %> 
-            <%= link_to fa_icon('edit'), [:edit, @project, membership] if can?(:update, membership) %>
-            <%= ' | ' if can?(:update, membership) && can?(:destroy, membership) %>
-            <%= link_to fa_icon('remove'), [@project, membership], method: :delete, confirm: 'Are you sure?' if can?(:destroy, membership) %>
-          <% end unless membership.is_owner? %>
-        </div>
-      </div>      
-    <% end %>
-  <% end if @project.memberships.any? %>
+  <%= content_tag :div, class: 'panel panel-warning' do %>
+    <div class="panel-heading">
+      <strong>You have admin priviledges on this project!</strong>
+    </div>
+    <div class="panel-body">
+      <%= link_to fa_icon('edit', text: 'Administrate'), edit_project_path(@project), class: 'btn btn-warning' if can? :update, @project %>
+      <%= link_to fa_icon('remove', text: 'Delete'), @project, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' if can? :destroy, @project %>
+    </div>
+  <% end if can?(:edit, @project) || can?(:destroy, @project) %>
 
-<% end if can? :read, @project %>
+  <%= content_tag :div, class: 'panel panel-info' do %>
+    <div class="panel-heading">
+      <strong>What is a project?</strong>
+    </div>
+    <div class="panel-body">
+      <p>
+        Projekte sind Gruppen von Personen, die sich durch ein gemeinsames Interesse auszeichen. 
+      
+      </p>
+    </div>
+  <% end %>
+
+    <%= link_to 'View all projects', projects_path if can? :read, Project %>
+    <%= ' | ' if can?(:read, Oread::Application) && can?(:read, Project) %>
+    <%= link_to 'View all readable applications', oread_applications_path if can? :read, Oread::Application %>
+    <%= ' | ' if can?(:read, Oread::Application) && can?(:read, Doorkeeper::Application) %>
+    <%= link_to 'View all write access applications', oauth_applications_path if can? :read, Doorkeeper::Application %>
+
+<% end %>
+
+
+
+<div class="row">
+  <div class="col-md-5">
+    <div class='panel panel-default'>
+      <%= image_tag @project.image_url(:small_banner), class: 'img-responsive', style: 'width: 100%' %>
+      <div class="panel-body text-center">
+        <h4><%= @project.name %></h4>
+        <p class="small text-muted">Created on <%= @project.created_at.to_date.to_formatted_s(:long_ordinal) %>. <%= pluralize( @project.memberships.count, 'member' ) %></p>
+      </div>
+    </div>
+
+    <h4>Memberships</h4>
+    <%= content_tag :div, class: 'list-group' do %>
+      <% for membership in @project.memberships do %>
+        <%= link_to membership.user.profile, class: 'media list-group-item' do %>
+          <div class="media-left">
+            <%= image_tag membership.user.profile.image_url(:small_thumb), class: "media-object img-circle", style: 'height:50px;' %>
+          </div>
+          <div class="media-body">
+            <h5 class="media-heading"><%= membership.user.name %></h5>
+            <span class="text-muted"><%= membership.role %></span>
+          </div>
+          <div class="media-right">
+            <%= content_tag :span, fa_icon('universal-access'), data: {toggle: "tooltip", placement: "left"}, title: "Project administrator" if membership.role.in?(['Admin', 'Owner']) %>
+          </div>
+        <% end %>      
+      <% end %>
+    <% end if @project.memberships.any? %>
+
+  </div>
+
+  <div class="col-md-7">
+    <h4>What we do</h4>
+    <%= content_tag :div, markdown(@project.description), id: 'project-description' %>
+
+    <hr>
+
+    <%= content_tag :div, id: "project-#{@project.id}-oauth_accessibilities" do %>
+      <h4>Applications</small></h4>
+      <p class="text-muted">
+        The members of this project can <strong>read &amp; edit</strong> any data in the following babili-authenticated-applications marked with this project/group.
+      </p>
+      <% for accessibility in @project.oauth_accessibilities do %>
+        <%=  render accessibility.oauth_application %>
+
+      <% end %>
+    <% end if @project.oauth_accessibilities.any? %>
+
+  </div>
+</div>

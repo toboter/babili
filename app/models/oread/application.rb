@@ -6,11 +6,9 @@ class Oread::Application < ApplicationRecord
   validates :name, uniqueness: true
 
   belongs_to :owner, polymorphic: true
-  has_many :oread_accessibilities, dependent: :delete_all, class_name: 'OreadAccessibility', foreign_key: 'oread_application_id'
-
   
-  has_many :projects, through: :oread_accessibilities, class_name: 'Project'
   has_many :access_tokens, dependent: :delete_all, class_name: 'Oread::AccessToken'
+  has_many :users, through: :access_tokens, source: :resource_owner
   
   def url
     "#{host}#{':'+port.to_s if port}#{search_path}"

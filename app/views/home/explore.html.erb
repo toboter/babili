@@ -9,41 +9,9 @@
   <h4 class="text-muted">Read- and Search Applications</h4> 
   <div class="container-fluid">
     <div class="row no-gutter popup-gallery">
-      <% for application in @oread_applications do %>
-        <% if user_signed_in? && application.projects.joins(:memberships).where('memberships.user_id = ?', current_user.id).exists? %>
-          <div class="col-lg-4 col-sm-6">
-            <%= link_to application, class: "portfolio-box" do %>
-              <%= image_tag application.image_url(:small_banner), class: "img-responsive" %>
-              <div class="portfolio-box-caption">
-                <div class="portfolio-box-caption-content">
-                  <div class="project-category text-faded">
-                      Category
-                  </div>
-                  <div class="project-name">
-                    <%= application.name %>
-                  </div>
-                </div>
-              </div>
-            <% end %>
-          </div>
-        <% else %>
-          <div class="col-lg-4 col-sm-6">
-            <%= content_tag :span, class: "portfolio-box" do %>
-              <%= image_tag application.image_url(:small_banner), class: "img-responsive", style: 'opacity:0.4;filter:grayscale(100%) brightness(150%);-webkit-filter:grayscale(100%) brightness(150%);' %>
-              <div class="portfolio-box-caption">
-                <div class="portfolio-box-caption-content">
-                  <div class="project-category text-faded">
-                      Category
-                  </div>
-                  <div class="project-name">
-                    <%= application.name %>
-                  </div>
-                </div>
-              </div>
-            <% end %>
-          </div>
-        <% end %>
-      <% end %>
+      <% for application in @oread_applications.limit(3) do %>
+        <%= render application %>
+      <% end if can? :read, Oread::Application %>
     </div>
   </div>
   <br>
@@ -52,13 +20,9 @@
 
 <section class="no-padding" id="explore-oauth-applications" style="margin-bottom: 80px;">
   <h4 class="text-muted">Applications authenticated by babylon-online</h4> 
-  <% for application in @oauth_applications do %>
-    <div class="col-md-12">
-      <%= content_tag :h4, link_to(application.name.humanize, oauth_application_path(application)) %>
-      <%= content_tag :p, application.uid %>
-    </div>
+  <% for application in @oauth_applications.limit(3) do %>
+    <%= render application %>
   <% end %>
-  <div class="clearfix"></div>
   <br>
   <%= link_to 'List all authenticated Applications', oauth_applications_path if can? :read, Doorkeeper::Application %>
 </section>
@@ -69,6 +33,7 @@
   <%= link_to 'all users', profiles_path %>
 
 	<h3>Projects</h3>
-  <%= render @projects %>
+  <%= render @projects.limit(3) %>
+  <br>
 	<%= link_to 'View all projects', projects_path %>
 <% end %>

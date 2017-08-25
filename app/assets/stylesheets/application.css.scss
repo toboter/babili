@@ -61,3 +61,12 @@
         }
     }
 }
+
+td {
+    .form-group {
+        margin: 0;
+        div {
+            @extend .col-sm-12;
+        }
+    }
+}

@@ -6,7 +6,7 @@ class OreadAccessibilitiesController < ApplicationController
   load_and_authorize_resource :oread_accessibility, :through => :oread_application
 
   def new
-    @projects = Project.where.not(id: @oread_application.project_ids)
+    @accessors = Project.where.not(id: @oread_application.project_ids) + User.where.not(id: @oread_application.user_ids)
     @oread_accessibility = @oread_application.oread_accessibilities.new
   end
   
@@ -45,7 +45,7 @@ class OreadAccessibilitiesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def oread_accessibility_params
-      params.require(:oread_accessibility).permit(:project_id, :application_id, :creator_id)
+      params.require(:oread_accessibility).permit(:accessor, :application_id, :creator_id)
     end
     
 end

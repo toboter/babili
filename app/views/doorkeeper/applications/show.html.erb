@@ -42,24 +42,20 @@
 
 <% content_for :sidebar do %>
   <h4>
-    Projects with write access
-    <%= link_to 'Add Project', new_oauth_application_accessibility_path(@application), class: 'btn btn-success btn-sm pull-right' if can? :create, OauthAccessibility %>
+    Accessors
+    <%= link_to 'Add Accessor', new_oauth_application_accessibility_path(@application), class: 'btn btn-success btn-sm pull-right' if can? :create, OauthAccessibility %>
   
   </h4>
   <% for accessibility in @application.accessibilities do %>
-    <div style="margin-bottom:15px;">
-      <h4>
-        <%= link_to accessibility.project.name, accessibility.project %>
-      </h4>
-      <p class="small text-muted">
-        Created on <%= accessibility.project.created_at.to_formatted_s(:long_ordinal) %>. <%= pluralize( accessibility.project.memberships.count, 'member' ) %>
-        <%= link_to fa_icon('remove'), oauth_application_accessibility_path(@application, accessibility), method: :delete, class: 'pull-right' if can? :destroy, accessibility %>
-      </p>
-      <p class="">
-        <%= truncate(accessibility.project.description, length: 150, separator: ' ', escape: false) %><br>
-      </p>
-      <hr>
-    </div>
+    <%= render partial: accessibility.accessor.to_partial_path, object: accessibility.accessor if accessibility.accessor %>
+    <%= fa_icon('universal-access') if accessibility.can_manage %>
+    <%= fa_icon('plus') if accessibility.can_create %>
+    <%= fa_icon('info') if accessibility.can_read %>
+    <%= fa_icon('edit') if accessibility.can_update %>
+    <%= fa_icon('remove') if accessibility.can_destroy %>
+    <%= fa_icon('comment-o') if accessibility.can_comment %>
+    <%= fa_icon('eye') if accessibility.can_publish %>
+    <%= link_to 'edit', edit_oauth_application_accessibility_path(@application, accessibility) %>
   <% end %>
 
 <% end %>

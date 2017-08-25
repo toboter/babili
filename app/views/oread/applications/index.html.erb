@@ -1,52 +1,30 @@
-<% title "Readable Applications" %>
-<p class="text-muted">Applications listet here will offer their data for keywords search.<p>
+<% title "Readable Applications", false %>
 
-<% content_for :buttons do %>
-  <%= link_to 'New Application', new_oread_application_path, class: 'btn btn-success' %>
-<% end if can? :create, Oread::Application %>
-
-<table class="table table-bordered table-responsive">
-  <thead>
-    <tr>
-      <th></th>
-      <th>Name</th>
-      <th>Info</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @applications.each do |application| %>
-      <tr>
-        <td>
-          <%= image_tag application.image_url(:small_thumb), style: 'width:50px;' %>
-        </td>
-        <td>
-          <%= link_to application.name, application %>
-        </td>
-        <td>
-          <small>
-            <%= application.url %>
-            <%= link_to fa_icon('edit'), edit_oread_application_path(application), class: 'pull-right' if can? :update, application %>
-          </small>
-          <p><%= application.description %></p>
-          <small>
-            Owner: 
-            <%= application.owner.try(:name) %> 
-            <%= link_to application.name, application.host, target: :blank %>
-          </small>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<%= link_to 'View all projects', projects_path if can? :read, Project %>
-<%= ' | ' if can?(:read, Doorkeeper::Application) && can?(:read, Project) %>
-<%= link_to 'View all write access applications', oauth_applications_path if can?(:read, Doorkeeper::Application) %>
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, link_to('home', root_url) %>
+  <%= content_tag :li, 'Readable apps', class: 'active'  %>
+<% end %>
 
 
 <% content_for :sidebar do %>
-  <h4>Accessible by you</h4>
-  <%= render @personal_applications %>
+  <%= content_tag :div, class: '', style: 'margin-bottom: 20px;' do %>
+    <%= link_to 'New Application', new_oread_application_path, class: 'btn btn-success' %>
+  <% end if can? :create, Oread::Application%>
+
+  <%= content_tag :div do %>
+    <h4>Read accessible by you</h4>
+    <%= render current_user.oread_applications.uniq if user_signed_in? %>
+
+    <%= link_to 'View all projects', projects_path if can? :read, Project %>
+    <%= ' | ' if can?(:read, Doorkeeper::Application) && can?(:read, Project) %>
+    <%= link_to 'View all write access applications', oauth_applications_path if can?(:read, Doorkeeper::Application) %>
+  <% end if user_signed_in? %>
 
 <% end %>
+
+<div id="oread-applications-list">
+  <p class="text-muted">Applications listet here will offer their data for keywords search.<p>
+  <div class="list-group">
+    <%= render @applications %>
+  </div>
+</div>

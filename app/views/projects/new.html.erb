@@ -1,3 +1,9 @@
-<h1>New Project</h1>
+<% title "New Project", false %>
+
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, link_to('home', root_url) %>
+  <%= content_tag :li, link_to('Projects', projects_path) %>
+  <%= content_tag :li, 'new', class: 'active' %>
+<% end %>
 
 <%= render 'form', project: @project %>

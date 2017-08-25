@@ -77,7 +77,7 @@
             <% end if content_for?(:buttons) || content_for?(:title) && @show_title %>
             <%= yield %>
           </div>
-          <div class="col-sm-4 col-sm-offset-1 col-md-3 col-md-offset-1 sidebar">
+          <div class="col-sm-5 col-md-4 sidebar">
             <%= yield(:sidebar) if content_for?(:sidebar) %>
           </div>
         </div>

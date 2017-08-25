@@ -2,37 +2,34 @@
 
 <% content_for :breadcrumbs do %>
   <%= content_tag :li, link_to('home', root_url) %>
-  <%= content_tag :li, link_to('user profiles', profiles_url) %>
+  <%= content_tag :li, link_to('User profiles', profiles_url) %>
   <%= content_tag :li, @profile.user.name, class: 'active' %>
 <% end %>
 
 <% content_for :sidebar do %>
   <%= content_tag :div, class: 'panel panel-warning bg-warning' do %>
+    <div class="panel-heading">
+      <strong>This is you!</strong>
+    </div>
     <div class="panel-body">
-      <p>
-        <strong>This is you!</strong><br>
-        <%= link_to 'edit your profile', edit_profile_path %>
-      </p>
+      <%= link_to fa_icon('edit', text: 'Edit'), edit_profile_path, class: 'btn btn-warning' %>
     </div>
-  <% end if @profile == current_user.profile %>
+  <% end if user_signed_in? && @profile == current_user.profile %>
 
-  <div class="panel panel-default">
-    <div style="padding:10px;">
-      <h4>Reading <small>applications</small></h4>
-      <% if @profile.user.oread_applications.any? %>
-        <%= render @profile.user.oread_applications %>
-      <% else %>
-        <p class="text-muted">
-          none yet<br>
-          <%= link_to 'find or create applications', oread_applications_path if @profile == current_user.profile %>
-        </p>
-      <% end %>
-    </div>
-  </div>
+  <h4>Search-/Readable <small>applications</small></h4>
+  <% if @profile.user.oread_applications.any? %>
+    <%= render @profile.user.oread_applications.uniq %>
+  <% else %>
+    <p class="text-muted">
+      none yet<br>
+      <%= link_to 'find or create applications', oread_applications_path if user_signed_in? && @profile == current_user.profile %>
+    </p>
+  <% end %>
+
 <% end %>
 
 <div class="row">
-  <div class="col-md-4">
+  <div class="col-md-5">
     <div class='panel panel-default'>
       <%= image_tag 'categories/media.jpg', class: 'img-responsive' %>
       <%= image_tag @profile.image_url(:thumb), class: 'img-responsive img-circle', style: "border: solid white 2px; margin: -50px auto 0 auto;" %>
@@ -49,28 +46,25 @@
             <strong><%= @profile.user.projects.count %></strong>
           </li>
           <li class="pllve">
-            Reading<br>
+            Reading (owner)<br>
             <strong><%= @profile.user.oread_applications.count %></strong>
           </li>
         </ul>
       </div>
     </div>
-    <div class="panel panel-default">
-      <div style="padding:10px;">
-        <h4>Projects</h4>
-        <% if @profile.user.projects.any? %>
-          <%= render @profile.user.projects %>
-        <% else %>
-          <p class="text-muted">
-            none yet<br>
-            <%= link_to 'find or create projects', projects_path if @profile == current_user.profile %>
-          </p>
-        <% end %>
-      </div>
-    </div>
+
+    <h4>Projects</h4>
+    <% if @profile.user.projects.any? %>
+      <%= render @profile.user.projects %>
+    <% else %>
+      <p class="text-muted">
+        none yet<br>
+        <%= link_to 'find or create projects', projects_path if user_signed_in? && @profile == current_user.profile %>
+      </p>
+    <% end %>
     
   </div>
-  <div class="col-md-8">
+  <div class="col-md-7">
     no content yet
   </div>
 </div>

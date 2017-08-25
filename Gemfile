@@ -63,6 +63,7 @@ gem 'mini_magick'
 gem 'fastimage'
 gem 'down'
 gem 'rails-bootstrap-markdown'
+gem 'cocoon'
 
 gem 'devise'
 gem 'doorkeeper'

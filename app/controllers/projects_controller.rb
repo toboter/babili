@@ -7,7 +7,7 @@ class ProjectsController < ApplicationController
   # GET /projects.json
   def index
     @projects = Project.all
-    @personal_projects = @projects.joins(:memberships).where('memberships.user_id = ?', current_user.id)
+    @personal_projects = current_user.projects if user_signed_in?
   end
 
   # GET /projects/1
@@ -18,17 +18,21 @@ class ProjectsController < ApplicationController
   # GET /projects/new
   def new
     @project = Project.new
+    @users = User.all
+    @roles = ['Member', 'Admin', 'Owner']
+    @project.memberships.build(user: current_user, role: 'Owner')
   end
 
   # GET /projects/1/edit
   def edit
+    @users = User.all
+    @roles = ['Member', 'Admin', 'Owner']
   end
 
   # POST /projects
   # POST /projects.json
   def create
     @project = Project.new(project_params)
-    @project.memberships.build(user: current_user, role: 'Owner')
 
     respond_to do |format|
       if @project.save
@@ -73,7 +77,7 @@ class ProjectsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def project_params
-      params.require(:project).permit(:name, :image, :cached_image_data, :description)
+      params.require(:project).permit(:name, :image, :cached_image_data, :description, memberships_attributes: [:id, :user_id, :role, :_destroy])
     end
     
 end

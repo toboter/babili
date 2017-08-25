@@ -2,13 +2,18 @@ class OauthAccessibilitiesController < ApplicationController
   before_action :set_oauth_application
   before_action :set_oauth_accessibility, only: [:edit, :update, :destroy]
   before_action :authenticate_user!
+  load_and_authorize_resource :oauth_application
+  load_and_authorize_resource :oauth_accessibility, :through => :oauth_application
   require 'uri'
   require 'rest-client'
   require 'json'
 
   def new
-    @projects = Project.where.not(id: @oauth_application.project_ids)
+    @accessors = Project.where.not(id: @oauth_application.project_accessor_ids) + User.where.not(id: @oauth_application.user_accessor_ids)
     @oauth_accessibility = @oauth_application.accessibilities.new
+  end
+
+  def edit
   end
   
   def create
@@ -21,6 +26,18 @@ class OauthAccessibilitiesController < ApplicationController
         format.json { render :show, status: :created, location: @oauth_application }
       else
         format.html { render :new }
+        format.json { render json: @oauth_application.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def update
+    respond_to do |format|
+      if @oauth_accessibility.update(oauth_accessibility_params)
+        format.html { redirect_to oauth_application_path(@oauth_application), flash: { success: 'Accessibility was successfully updated.' } }
+        format.json { render :show, status: :ok, location: @oauth_application }
+      else
+        format.html { render :edit }
         format.json { render json: @oauth_application.errors, status: :unprocessable_entity }
       end
     end
@@ -46,7 +63,8 @@ class OauthAccessibilitiesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def oauth_accessibility_params
-      params.require(:oauth_accessibility).permit(:project_id, :application_id, :creator_id)
+      params.require(:oauth_accessibility).permit(:accessor, :application_id, :creator_id, 
+        :can_manage, :can_create, :can_read, :can_update, :can_destroy, :can_comment, :can_publish)
     end
 
     # def project_hook(oauth_accessibility)

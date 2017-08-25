@@ -9,32 +9,23 @@ class Ability
     cannot :read, Doorkeeper::Application
 
     if user.is_active == true
-      can :manage, :all
+      # can :manage, :all
 
       cannot :manage, Project unless user.is_admin == true
-      cannot :manage, Membership unless user.is_admin == true
-      can [:update, :destroy], Project do |project|
+      can [:edit, :update, :destroy], Project do |project|
         user.in?(project.members) && project.memberships.where(user_id: user.id).first.role.in?(['Owner', 'Admin'])
       end
-      can :manage, Membership do |membership|
-        membership.project.members.include?(user) && membership.project.memberships.where(user_id: user.id).first.role.in?(['Owner', 'Admin'])
-      end
-      can [:read, :create], Project
-      can :read, Membership
-
+      can [:read, :new, :create], Project
 
       cannot :manage, Oread::Application unless user.is_admin == true
-      cannot :manage, OreadAccessibility unless user.is_admin == true
       can [:update, :destroy], Oread::Application do |app|
         app.owner == user
       end
-      can :manage, OreadAccessibility, oread_application: { :owner_id => user.id }
       can [:read, :create], Oread::Application
-      can :read, OreadAccessibility
-
+  
 
       cannot :manage, Doorkeeper::Application unless user.is_admin == true
-      
+      can :manage, OauthAccessibility, oauth_application: { owner: user }
 
     else
       

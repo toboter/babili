@@ -1,16 +1,10 @@
-<h1>New oauth Accessibility</h1>
-<%= simple_form_for([@application, @oauth_accessibility], url: oauth_application_accessibilities_path) do |f| %>
+<h1>Edit oauth Accessibility</h1>
+<%= simple_form_for([@application, @oauth_accessibility], url: oauth_application_accessibility_path, method: :put) do |f| %>
   <%= f.error_notification %>
   <%= f.hidden_field :oauth_application_id %>
 
   <div class="form-inputs">
-    <%= f.input :accessor, 
-      collection: @accessors, 
-      selected: @oauth_accessibility.accessor, 
-      label_method: :name, 
-      value_method: :accessible, 
-      include_blank: false,
-      disabled: !@oauth_accessibility.new_record? %>
+    <%= @oauth_accessibility.accessor.inspect %>
     <%= f.input :can_manage %>
     <%= f.input :can_create %>
     <%= f.input :can_read %>

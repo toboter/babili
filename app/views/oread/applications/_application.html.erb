@@ -1,13 +1,17 @@
-    <div style="margin-bottom:15px;">
-      <h4>
-        <%= link_to application.name, application %>
-      </h4>
-      <p class="small text-muted">
-        Created on <%= application.created_at.to_formatted_s(:long_ordinal) %>. <%= pluralize(application.projects.count, 'project' )+' have access' %>.
-      </p>
-      <p style="font-size:90%;">
-        <%= truncate(application.description, length: 150, separator: ' ', escape: false) %><br>
-      </p>
-      <%= content_tag :p, style: 'font-size:90%;' do %><strong>Token present?</strong> <%= fa_icon('check') %><% end if user_signed_in? && application.access_tokens.where(resource_owner: current_user).exists? %>
-      <hr>
-    </div>
+<%= link_to application, class: 'media list-group-item' do %>
+  <div class="media-left" style="max-width: 80px;">
+    <%= image_tag application.image_url(:small_thumb), class: '', style: 'width: 70px;' %>
+  </div>
+  <div class="media-body">
+    <h4 class="media-heading"><%= application.name %></h4>
+    <p class="small text-muted">Created on <%= application.created_at.to_date.to_formatted_s(:long_ordinal) %>. <%= pluralize(application.users.uniq.count, 'user' )+' have access' %>.</p>
+    <%= truncate(application.description, length: 150, separator: ' ') %>
+  </div>
+  <div class="media-right">
+    <% if user_signed_in? && application.access_tokens.where(resource_owner: current_user).exists? %>
+      <%= content_tag :span, fa_icon('check'), data: {toggle: "tooltip", placement: "left"}, title: "Personal search-token exists.", class: 'text-success' %>
+    <% elsif user_signed_in? %>
+      <%= content_tag :span, fa_icon('ban'), data: {toggle: "tooltip", placement: "left"}, title: "You have to login once or have to add a search token or you will only be able to read published content.", class: 'text-warning' %>
+    <% end %>
+  </div>
+<% end %>

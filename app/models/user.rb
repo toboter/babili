@@ -15,9 +15,14 @@ class User < ApplicationRecord
     }
   validates_format_of :username, with: /^[a-zA-Z0-9_\.]*$/, multiline: true
 
-  has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
-  has_many :oread_applications, class_name: 'Oread::Application', as: :owner
+  has_many :oauth_accessibilities, as: :accessor, dependent: :delete_all
+  has_many :oauth_applications, through: :oauth_accessibilities
+  has_many :oauth_application_ownerships, class_name: 'Doorkeeper::Application', as: :owner
+
   has_many :oread_access_tokens, class_name: 'Oread::AccessToken', foreign_key: 'resource_owner_id'
+  has_many :oread_applications, through: :oread_access_tokens, source: :application
+  has_many :oread_application_ownerships, class_name: 'Oread::Application', as: :owner
+
   has_many :memberships, dependent: :delete_all
   has_many :projects, through: :memberships
   has_one :profile
@@ -40,6 +45,10 @@ class User < ApplicationRecord
     else
       username.presence || email
     end
+  end
+
+  def accessible
+    [id, self.class.name].join(",")
   end
 
 end

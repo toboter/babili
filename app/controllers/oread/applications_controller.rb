@@ -8,7 +8,6 @@ module Oread
     # GET /applications.json
     def index
       @applications = Application.all
-      @personal_applications = Application.joins(projects: :memberships).where('memberships.user_id = ?', current_user).uniq
     end
 
     # GET /applications/1
@@ -78,7 +77,8 @@ module Oread
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def application_params
-        params.require(:oread_application).permit(:name, :host, :port, :search_path, :description, :image, :cached_image_data, :owner_id, :owner_type)
+        params.require(:oread_application).permit(:name, :host, :port, :search_path, :description, :image, :cached_image_data, 
+          :owner_id, :owner_type, oread_accessibilities_attributes: [:id, :accessor, :access_granted, :access_expires_at, :_destroy])
       end
   end
 end

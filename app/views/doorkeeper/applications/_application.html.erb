@@ -1,0 +1,18 @@
+<%= link_to oauth_application_path(application), class: 'media list-group-item' do %>
+  <div class="media-left" style="max-width: 80px;">
+    <%= image_tag 'defaults/small_thumb.svg', class: '', style: 'width: 70px;' %>
+  </div>
+  <div class="media-body">
+    <h4 class="media-heading"><%= application.name %></h4>
+    <p class="small text-muted">Created on <%= application.created_at.to_date.to_formatted_s(:long_ordinal) %>. pluralize(application.projects.count, 'project' )+' have access' %>.</p>
+    <%= application.redirect_uri %>
+  </div>
+  <div class="media-right">
+    <%= content_tag :span, fa_icon('gear'), data: {toggle: "tooltip", placement: "left"}, title: "Access granted (project)!" if user_signed_in? && application.id.in?(current_user.projects.map{|p| p.oauth_applications.ids}.flatten.uniq) %>
+    <% if user_signed_in? && application.access_tokens.where(resource_owner_id: current_user.id).exists? %>
+      <%= content_tag :span, fa_icon('check'), data: {toggle: "tooltip", placement: "left"}, title: "Personal search-token exists.", class: 'text-success' %>
+    <% elsif user_signed_in? %>
+      <%= content_tag :span, fa_icon('ban'), data: {toggle: "tooltip", placement: "left"}, title: "You have to login once to authenticate.", class: 'text-warning' %>
+    <% end %>
+  </div>
+<% end %>

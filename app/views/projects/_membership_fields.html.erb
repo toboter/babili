@@ -1,0 +1,20 @@
+<tr class="nested-fields">
+  <td>
+    <%= f.input :user_id, 
+      collection: @users, 
+      label_method: :name, 
+      value_method: :id, 
+      include_blank: true,
+      label: false %>
+  </td>
+  <td>
+    <%= f.input :role, 
+      collection: @roles, 
+      include_blank: true,
+      label: false,
+      disabled: f.object.role == 'Owner' %>
+  </td>
+  <td>
+    <%= link_to_remove_association fa_icon('remove', text: 'remove'), f %>
+  </td>
+</tr>
