@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170825091635) do
+ActiveRecord::Schema.define(version: 20170829110151) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -125,16 +125,6 @@ ActiveRecord::Schema.define(version: 20170825091635) do
     t.index ["token"], name: "index_oread_access_tokens_on_token", using: :btree
   end
 
-  create_table "oread_accessibilities", force: :cascade do |t|
-    t.integer  "oread_application_id"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
-    t.integer  "creator_id"
-    t.integer  "project_id"
-    t.index ["oread_application_id"], name: "index_oread_accessibilities_on_oread_application_id", using: :btree
-    t.index ["project_id"], name: "index_oread_accessibilities_on_project_id", using: :btree
-  end
-
   create_table "oread_applications", force: :cascade do |t|
     t.string   "name"
     t.string   "search_path"
@@ -207,6 +197,5 @@ ActiveRecord::Schema.define(version: 20170825091635) do
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_accessibilities", "oauth_applications"
-  add_foreign_key "oread_accessibilities", "oread_applications"
   add_foreign_key "profiles", "users"
 end

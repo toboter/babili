@@ -25,9 +25,37 @@ class User < ApplicationRecord
 
   has_many :memberships, dependent: :delete_all
   has_many :projects, through: :memberships
+  has_many :project_oauth_applications, through: :projects, source: :oauth_applications
+  has_many :project_oauth_accessibilities, through: :projects, source: :oauth_accessibilities
   has_one :profile
 
   before_create :build_profile
+
+  def all_oauth_applications
+    Doorkeeper::Application.joins(:accessibilities).where('oauth_accessibilities.id IN (?)', all_oauth_accessibilities.ids)
+  end
+
+  def all_oauth_accessibilities
+    OauthAccessibility.where(accessor_id: self.id, accessor_type: self.class.name).or(OauthAccessibility.where(accessor_id: self.project_ids, accessor_type: 'Project')).distinct
+  end
+
+  def all_combined_oauth_accessibility_grants
+    acc=[]
+    for u_application in all_oauth_applications.distinct do
+      obj = OauthAccessibility.new(oauth_application_id: u_application.id)
+      u_application.accessibilities.where(id: all_oauth_accessibilities.ids).each do |a|
+        obj.can_manage = true if a.can_manage == true
+        obj.can_create = true if a.can_create == true
+        obj.can_read = true if a.can_read == true
+        obj.can_update = true if a.can_update == true
+        obj.can_destroy = true if a.can_destroy == true
+        obj.can_comment = true if a.can_comment == true
+        obj.can_publish = true if a.can_publish == true
+      end
+      acc << obj
+    end
+    acc
+  end
 
   def self.find_for_database_authentication(warden_conditions)
     conditions = warden_conditions.dup

@@ -4,14 +4,14 @@
   </div>
   <div class="media-body">
     <h4 class="media-heading"><%= application.name %></h4>
-    <p class="small text-muted">Created on <%= application.created_at.to_date.to_formatted_s(:long_ordinal) %>. <%= pluralize(application.users.uniq.count, 'user' )+' have access' %>.</p>
+    <p class="small text-muted">Created on <%= application.created_at.to_date.to_formatted_s(:long_ordinal) %>. <%= 'Used by ' + pluralize(application.users.uniq.count, 'user' ) %>.</p>
     <%= truncate(application.description, length: 150, separator: ' ') %>
   </div>
   <div class="media-right">
     <% if user_signed_in? && application.access_tokens.where(resource_owner: current_user).exists? %>
       <%= content_tag :span, fa_icon('check'), data: {toggle: "tooltip", placement: "left"}, title: "Personal search-token exists.", class: 'text-success' %>
     <% elsif user_signed_in? %>
-      <%= content_tag :span, fa_icon('ban'), data: {toggle: "tooltip", placement: "left"}, title: "You have to login once or have to add a search token or you will only be able to read published content.", class: 'text-warning' %>
+      <%= content_tag :span, fa_icon('ban'), data: {toggle: "tooltip", placement: "left"}, title: "You have to login once or add a search token or you will only be able to read published content.", class: 'text-warning' %>
     <% end %>
   </div>
 <% end %>

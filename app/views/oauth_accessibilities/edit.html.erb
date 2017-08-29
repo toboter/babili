@@ -1,10 +1,12 @@
-<h1>Edit oauth Accessibility</h1>
-<%= simple_form_for([@application, @oauth_accessibility], url: oauth_application_accessibility_path, method: :put) do |f| %>
+<% title "Edit Accessibility for #{@oauth_accessibility.accessor.name}", false %>
+
+<%= simple_form_for([@oauth_application, @oauth_accessibility], url: oauth_application_accessibility_path, method: :put) do |f| %>
   <%= f.error_notification %>
   <%= f.hidden_field :oauth_application_id %>
+  <h4>Abilities for <%= content_tag :strong, @oauth_accessibility.accessor.name %> on <%= content_tag :em, @oauth_application.name %>.</h4>
 
   <div class="form-inputs">
-    <%= @oauth_accessibility.accessor.inspect %>
+    
     <%= f.input :can_manage %>
     <%= f.input :can_create %>
     <%= f.input :can_read %>
@@ -18,6 +20,6 @@
 
   <div class="form-actions">
     <%= f.button :submit, class: "btn btn-primary" %>
-    <%= link_to 'Cancel', oauth_application_path(@oauth_accessibility.oauth_application), class: "btn btn-default" %>
+    <%= link_to 'Cancel', oauth_application_path(@oauth_application), class: "btn btn-default" %>
   </div>
 <% end %>

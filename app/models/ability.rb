@@ -9,7 +9,7 @@ class Ability
     cannot :read, Doorkeeper::Application
 
     if user.is_active == true
-      # can :manage, :all
+      can :manage, :all
 
       cannot :manage, Project unless user.is_admin == true
       can [:edit, :update, :destroy], Project do |project|
@@ -26,9 +26,6 @@ class Ability
 
       cannot :manage, Doorkeeper::Application unless user.is_admin == true
       can :manage, OauthAccessibility, oauth_application: { owner: user }
-
-    else
-      
 
     end
 

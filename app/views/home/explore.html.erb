@@ -1,39 +1,64 @@
-<% title "Explore" %>
+<% title "Explore", false %>
+<% content_for(:breadcrumbs) do %>
+  <%= content_tag :li, link_to('home', root_url) %>
+  <%= content_tag :li, 'Explore', class: 'active' %>
+<% end %>
+
+<% content_for :sidebar do %>
+	<h4>
+    Projects / Groups
+    <span class="badge"><%= @projects.count %></span>
+    <span class='pull-right small'><%= link_to 'view all', projects_path, class: '' %></span>
+  </h4>
+  <%= render @projects.limit(5) %>
+<% end %>
+
 <p class="text-muted" style="margin-bottom: 20px;">
-  Babylon-Online is organized by a number of different interconnected data pools', from different materials 
-  and techniques to objects (like figurines) and culture. Items are also organized by the season—when the 
+  Babylon-Online is organized by a number of different interconnected data pools (applications)', from different materials 
+  and techniques to objects (like figurines) and culture. Records are also organized by the season—when the 
   object was excavated—and the museum that houses the object today.
 </p>
 
-<section class="no-padding" id="explore-oread-applications" style="margin-bottom: 40px;">
-  <h4 class="text-muted">Read- and Search Applications</h4> 
-  <div class="container-fluid">
-    <div class="row no-gutter popup-gallery">
-      <% for application in @oread_applications.limit(3) do %>
+<div class="row">
+  <div class="col-md-6">
+    <div id="explore-oread-applications">
+      <h4 class="">
+        Searchable applications
+        <span class="badge"><%= @oread_applications.count %></span>
+        <span class='pull-right small'><%= link_to 'view all', oread_applications_path if can?(:read, Oread::Application) %></span>
+      </h4> 
+      <% for application in @oread_applications.limit(5) do %>
         <%= render application %>
       <% end if can? :read, Oread::Application %>
     </div>
   </div>
-  <br>
-  <%= link_to 'List of all read- and searchable Applications', oread_applications_path if can? :read, Oread::Application %>
-</section>
 
-<section class="no-padding" id="explore-oauth-applications" style="margin-bottom: 80px;">
-  <h4 class="text-muted">Applications authenticated by babylon-online</h4> 
-  <% for application in @oauth_applications.limit(3) do %>
-    <%= render application %>
+  <div class="col-md-6">
+    <div id="explore-oauth-applications">
+      <h4 class="">
+        Authorizing applications
+        <span class="badge"><%= @oauth_applications.count %></span>
+        <span class='pull-right small'><%= link_to 'view all', oauth_applications_path if can?(:read, Doorkeeper::Application) %></span>
+      </h4> 
+      <% for application in @oauth_applications.limit(5) do %>
+        <%= render application %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px"><hr></div>
+  <div class="col-md-12">
+    <h4>
+      Users
+      <span class="badge"><%= @users.count %></span>
+      <span class='pull-right small'><%= link_to 'view all', profiles_path, class: '' %></span>
+    </h4>
+  </div>
+  <% for user in @users do %>
+    <div class="col-md-4 col-sm-6" style="margin-bottom:20px;">
+      <%= render user %>
+    </div>
   <% end %>
-  <br>
-  <%= link_to 'List all authenticated Applications', oauth_applications_path if can? :read, Doorkeeper::Application %>
-</section>
-
-
-<% content_for :sidebar do %>
-  <h4>Users signed up <span class="badge"><%= Profile.count %></span></h4>
-  <%= link_to 'all users', profiles_path %>
-
-	<h3>Projects</h3>
-  <%= render @projects.limit(3) %>
-  <br>
-	<%= link_to 'View all projects', projects_path %>
-<% end %>
+</div>

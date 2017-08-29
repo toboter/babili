@@ -3,7 +3,7 @@ class OauthAccessibilitiesController < ApplicationController
   before_action :set_oauth_accessibility, only: [:edit, :update, :destroy]
   before_action :authenticate_user!
   load_and_authorize_resource :oauth_application
-  load_and_authorize_resource :oauth_accessibility, :through => :oauth_application
+  load_and_authorize_resource :accessibility, class: 'OauthAccessibility', :through => :oauth_application
   require 'uri'
   require 'rest-client'
   require 'json'

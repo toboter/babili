@@ -21,8 +21,8 @@ Rails.application.routes.draw do
     scope :my do
       get 'projects', to: 'projects#my_projects'
       scope :authorizations do
-        get 'write', to: 'accessibilities#write_authorization'
-        get 'read', to: 'accessibilities#read_authorization'
+        get 'write', to: 'accessibilities#crud_abilities'
+        get 'read', to: 'accessibilities#search_abilities'
       end
     end
     resources :users, only: [:index, :show]

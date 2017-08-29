@@ -1,2 +1,0 @@
-module Oread::AccessTokensHelper
-end

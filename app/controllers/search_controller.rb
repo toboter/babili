@@ -5,7 +5,7 @@ class SearchController < ApplicationController
 
   def index
     if params[:q].present?
-      @apps = Oread::Application.joins(projects: :memberships).where('memberships.user_id = ?', current_user.id)
+      @apps = Oread::Application.all
       @results =[]
       @failed_connections = []
       @apps.each do |app|

@@ -1,13 +1,13 @@
 class Api::AccessibilitiesController < Api::BaseController
-  load_and_authorize_resource :user, only: %i[write_authorization read_authorization]
+  load_and_authorize_resource :user, only: %i[crud_abilities search_abilities]
 
-  def write_authorization
-    oauth_applications = Doorkeeper::Application.where(id: current_resource_owner.projects.map{|p| p.oauth_applications.ids }.flatten.uniq)
-    render json: oauth_applications, each_serializer: OauthApplicationSerializer
+  def crud_abilities
+    oauth_accessibilities = current_resource_owner.all_combined_oauth_accessibility_grants
+    render json: oauth_accessibilities, each_serializer: OauthApplicationSerializer
   end
 
-  def read_authorization
-    oread_applications = Oread::Application.where(id: current_resource_owner.projects.map{|p| p.oread_applications.ids }.flatten.uniq)
+  def search_abilities
+    oread_applications = current_resource_owner.oread_applications
     render json: oread_applications, each_serializer: OreadApplicationSerializer
   end
 

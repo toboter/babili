@@ -70,3 +70,23 @@ td {
         }
     }
 }
+
+div.panel-attach {
+    border-radius: 0;
+    margin:0;
+    .panel-body {
+        margin:0;
+        padding:0;
+        li {
+            .fa {
+                padding: 10px 5px;
+            }
+            .btn {
+                margin: 7px 0;
+                .fa {
+                    padding: 0;
+                }
+            }
+        }
+    }
+}

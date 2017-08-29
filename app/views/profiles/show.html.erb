@@ -16,13 +16,42 @@
     </div>
   <% end if user_signed_in? && @profile == current_user.profile %>
 
-  <h4>Search-/Readable <small>applications</small></h4>
+  <h4>Search &amp; Read <small>applications</small></h4>
   <% if @profile.user.oread_applications.any? %>
     <%= render @profile.user.oread_applications.uniq %>
   <% else %>
     <p class="text-muted">
       none yet<br>
       <%= link_to 'find or create applications', oread_applications_path if user_signed_in? && @profile == current_user.profile %>
+    </p>
+  <% end %>
+
+  <hr>
+
+  <h4>Authorized <small>applications</small></h4>
+  <% if @profile.user.all_oauth_applications.any? %>
+    <% for accessibility in @profile.user.all_combined_oauth_accessibility_grants do %>
+      <%= render accessibility.oauth_application %>
+      <div class="panel panel-default panel-attach">
+        <%= content_tag :ul, class: "panel-body list-inline" do %>
+          <%= content_tag :li, fa_icon('universal-access'), data: {toggle: "tooltip", placement: "left"}, title: "Can manage everything." if accessibility.can_manage %>
+          <%= content_tag :li, fa_icon('plus'), data: {toggle: "tooltip", placement: "left"}, title: "Can create records." if accessibility.can_create %>
+          <%= content_tag :li, fa_icon('info'), data: {toggle: "tooltip", placement: "left"}, title: "Can read records." if accessibility.can_read %>
+          <%= content_tag :li, fa_icon('edit'), data: {toggle: "tooltip", placement: "left"}, title: "Can edit records." if accessibility.can_update %>
+          <%= content_tag :li, fa_icon('remove'), data: {toggle: "tooltip", placement: "left"}, title: "Can remove records." if accessibility.can_destroy %>
+          <%= content_tag :li, fa_icon('comment-o'), data: {toggle: "tooltip", placement: "left"}, title: "Can comment on records." if accessibility.can_comment %>
+          <%= content_tag :li, fa_icon('eye'), data: {toggle: "tooltip", placement: "left"}, title: "Can comment on records." if accessibility.can_publish %>
+        <% end %>
+        <div class="panel-footer small">
+          <strong>Grants through: </strong>
+          <%= accessibility.oauth_application.accessibilities.where(id: @profile.user.all_oauth_accessibilities.ids).map{ |acc| "#{fa_icon(acc.accessor.class.name == 'Project' ? 'group' : acc.accessor.class.name.downcase)} #{link_to(acc.accessor.name, acc.accessor)}" }.join(' ').html_safe %>
+        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <p class="text-muted">
+      none yet<br>
+      link_to 'find or create applications', oauth_applications_path if user_signed_in? && @profile == current_user.profile %>
     </p>
   <% end %>
 
@@ -46,8 +75,8 @@
             <strong><%= @profile.user.projects.count %></strong>
           </li>
           <li class="pllve">
-            Reading (owner)<br>
-            <strong><%= @profile.user.oread_applications.count %></strong>
+            Authorizations<br>
+            <strong><%= @profile.user.all_oauth_applications.count %></strong>
           </li>
         </ul>
       </div>
