@@ -15,9 +15,8 @@
     <h4>Read accessible by you</h4>
     <%= render current_user.oread_applications.uniq if user_signed_in? %>
 
-    <%= link_to 'View all projects', projects_path if can? :read, Project %>
-    <%= ' | ' if can?(:read, Doorkeeper::Application) && can?(:read, Project) %>
-    <%= link_to 'View all write access applications', oauth_applications_path if can?(:read, Doorkeeper::Application) %>
+    <%= render 'shared/links' %>
+    
   <% end if user_signed_in? %>
 
 <% end %>

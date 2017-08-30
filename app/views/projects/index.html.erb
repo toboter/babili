@@ -10,11 +10,7 @@
     <%= link_to 'New Project', new_project_path, class: 'btn btn-success' %>
   <% end if can? :create, Project %>
 
-  <%= content_tag :div do %>
-    <%= link_to 'View all read access applications', oread_applications_path if can? :read, Oread::Application %>
-    <%= ' | ' if can?(:read, Oread::Application) && can?(:read, Doorkeeper::Application) %>
-    <%= link_to 'View all write access applications', oauth_applications_path if can? :read, Doorkeeper::Application %>
-  <% end if user_signed_in? %>
+  <%= render 'shared/links' %>
 
 <% end %>
 

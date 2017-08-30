@@ -29,11 +29,7 @@
     </div>
   <% end %>
 
-    <%= link_to 'View all projects', projects_path if can? :read, Project %>
-    <%= ' | ' if can?(:read, Oread::Application) && can?(:read, Project) %>
-    <%= link_to 'View all readable applications', oread_applications_path if can? :read, Oread::Application %>
-    <%= ' | ' if can?(:read, Oread::Application) && can?(:read, Doorkeeper::Application) %>
-    <%= link_to 'View all write access applications', oauth_applications_path if can? :read, Doorkeeper::Application %>
+  <%= render 'shared/links' %>
 
 <% end %>
 

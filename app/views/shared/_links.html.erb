@@ -1,0 +1,5 @@
+<%= link_to 'View all projects', projects_path if can?(:read, Project) && !current_page?(projects_path) %>
+<%= ' | ' if can?(:read, Oread::Application) && can?(:read, Project) && !current_page?(projects_path) %>
+<%= link_to 'View searchable applications', oread_applications_path if can?(:read, Oread::Application) && !current_page?(oread_applications_path) %>
+<%= ' | ' if can?(:read, Oread::Application) && can?(:read, Doorkeeper::Application) && !current_page?(oread_applications_path) && !current_page?(oauth_applications_path) %>
+<%= link_to 'View babili-authorized applications', oauth_applications_path if can?(:read, Doorkeeper::Application) && !current_page?(oauth_applications_path) %>
