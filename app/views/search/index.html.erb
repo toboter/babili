@@ -52,4 +52,11 @@
     List of active filters<br>
     <strong><%= params[:q] %></strong>
   </p>
+
+  <br>
+  <p class="text-muted">
+    Searching all registered, searchable applications.
+    <%= content_tag :span, "<br>Looking for unpublished content in:".html_safe if user_signed_in? %>
+  </p>
+  <%= render current_user.oread_applications.uniq if user_signed_in? %>
 <% end %>

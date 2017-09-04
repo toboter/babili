@@ -1,6 +1,35 @@
-<div class="page-header">
-  <h2><%= t('.title', name: @application.name) %></h2>
-</div>
+<% title t('.title', name: @application.name), false %>
+
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, link_to('home', root_url) %>
+  <%= content_tag :li, link_to('Your applications', oauth_applications_path) %>
+  <%= content_tag :li, t('.title', name: @application.name), class: 'active'  %>
+<% end %>
+
+<% content_for :sidebar do %>
+  <h4>
+    Accessors
+    <%= link_to fa_icon('plus', text: 'Accessor'), new_oauth_application_accessibility_path(@application), class: 'btn btn-success btn-sm pull-right' if can?(:create_accessibility, @application) %>
+  
+  </h4>
+  <% for accessibility in @application.accessibilities do %>
+    <%= render partial: accessibility.accessor.to_partial_path, object: accessibility.accessor if accessibility.accessor %>
+    <div class="panel panel-default panel-attach">
+      <%= content_tag :ul, class: "panel-body list-inline" do %>
+        <%= content_tag :li, fa_icon('universal-access'), data: {toggle: "tooltip", placement: "left"}, title: "Can manage everything." if accessibility.can_manage %>
+        <%= content_tag :li, fa_icon('plus'), data: {toggle: "tooltip", placement: "left"}, title: "Can create records." if accessibility.can_create %>
+        <%= content_tag :li, fa_icon('info'), data: {toggle: "tooltip", placement: "left"}, title: "Can read records." if accessibility.can_read %>
+        <%= content_tag :li, fa_icon('edit'), data: {toggle: "tooltip", placement: "left"}, title: "Can edit records." if accessibility.can_update %>
+        <%= content_tag :li, fa_icon('remove'), data: {toggle: "tooltip", placement: "left"}, title: "Can remove records." if accessibility.can_destroy %>
+        <%= content_tag :li, fa_icon('comment-o'), data: {toggle: "tooltip", placement: "left"}, title: "Can comment on records." if accessibility.can_comment %>
+        <%= content_tag :li, fa_icon('eye'), data: {toggle: "tooltip", placement: "left"}, title: "Can comment on records." if accessibility.can_publish %>
+
+        <%= content_tag :li, link_to(fa_icon('pencil', text: 'Edit'), edit_oauth_application_accessibility_path(@application, accessibility), class: 'btn btn-default btn-xs'), class: 'pull-right' if can?(:update_accessibility, @application) %>
+        <%= content_tag :li, link_to(fa_icon('remove', text: 'Delete'), oauth_application_accessibility_path(@application, accessibility), method: :delete, class: 'btn btn-default btn-xs'), class: 'pull-right' if can?(:destroy_accessibility, @application) %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
 
 <div class="row">
   <div class="col-md-8">
@@ -8,8 +37,10 @@
     
     <p><code id="application_id"><%= @application.uid %></code></p>
 
-    <h4><%= t('.secret') %>:</h4>
-    <p><code id="secret"><%= @application.secret %></code></p>
+    <% if can?(:manage, @application) %>
+      <h4><%= t('.secret') %>:</h4>
+      <p><code id="secret"><%= @application.secret %></code></p>
+    <% end %>
 
     <h4><%= t('.scopes') %>:</h4>
     <p><code id="scopes"><%= @application.scopes %></code></p>
@@ -31,36 +62,12 @@
   </div>
 
   <div class="col-md-4">
-    <h3><%= t('.actions') %></h3>
+    <% if can?(:update, @application) || can?(:destroy, @application) %>
+      <h3><%= t('.actions') %></h3>
 
-    <p><%= link_to t('doorkeeper.applications.buttons.edit'), edit_oauth_application_path(@application), class: 'btn btn-primary' %></p>
+      <p><%= link_to t('doorkeeper.applications.buttons.edit'), edit_oauth_application_path(@application), class: 'btn btn-primary' if can?(:update, @application) %></p>
 
-    <p><%= render 'delete_form', application: @application, submit_btn_css: 'btn btn-danger' %></p>
+      <p><%= render 'delete_form', application: @application, submit_btn_css: 'btn btn-danger' if can?(:destroy, @application) %></p>
+    <% end %>
   </div>
 </div>
-
-
-<% content_for :sidebar do %>
-  <h4>
-    Accessors
-    <%= link_to fa_icon('plus', text: 'Accessor'), new_oauth_application_accessibility_path(@application), class: 'btn btn-success btn-sm pull-right' if can? :create, OauthAccessibility %>
-  
-  </h4>
-  <% for accessibility in @application.accessibilities do %>
-    <%= render partial: accessibility.accessor.to_partial_path, object: accessibility.accessor if accessibility.accessor %>
-    <div class="panel panel-default panel-attach">
-      <%= content_tag :ul, class: "panel-body list-inline" do %>
-        <%= content_tag :li, fa_icon('universal-access'), data: {toggle: "tooltip", placement: "left"}, title: "Can manage everything." if accessibility.can_manage %>
-        <%= content_tag :li, fa_icon('plus'), data: {toggle: "tooltip", placement: "left"}, title: "Can create records." if accessibility.can_create %>
-        <%= content_tag :li, fa_icon('info'), data: {toggle: "tooltip", placement: "left"}, title: "Can read records." if accessibility.can_read %>
-        <%= content_tag :li, fa_icon('edit'), data: {toggle: "tooltip", placement: "left"}, title: "Can edit records." if accessibility.can_update %>
-        <%= content_tag :li, fa_icon('remove'), data: {toggle: "tooltip", placement: "left"}, title: "Can remove records." if accessibility.can_destroy %>
-        <%= content_tag :li, fa_icon('comment-o'), data: {toggle: "tooltip", placement: "left"}, title: "Can comment on records." if accessibility.can_comment %>
-        <%= content_tag :li, fa_icon('eye'), data: {toggle: "tooltip", placement: "left"}, title: "Can comment on records." if accessibility.can_publish %>
-        <%= content_tag :li, link_to(fa_icon('pencil', text: 'Edit'), edit_oauth_application_accessibility_path(@application, accessibility), class: 'btn btn-default btn-xs'), class: 'pull-right' %>
-        <%= content_tag :li, link_to(fa_icon('remove', text: 'Delete'), oauth_application_accessibility_path(@application, accessibility), method: :delete, class: 'btn btn-default btn-xs'), class: 'pull-right' %>
-      <% end %>
-    </div>
-  <% end %>
-
-<% end %>

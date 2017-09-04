@@ -1,14 +1,14 @@
 class OauthAccessibilitiesController < ApplicationController
   before_action :set_oauth_application
-  before_action :set_oauth_accessibility, only: [:edit, :update, :destroy]
+  # before_action :set_oauth_accessibility, only: [:edit, :update, :destroy]
   before_action :authenticate_user!
-  load_and_authorize_resource :oauth_application
-  load_and_authorize_resource :accessibility, class: 'OauthAccessibility', :through => :oauth_application
+  load_and_authorize_resource :oauth_accessibility, except: :new
   require 'uri'
   require 'rest-client'
   require 'json'
 
   def new
+    authorize! :create_accessibility, @oauth_application
     @accessors = Project.where.not(id: @oauth_application.project_accessor_ids) + User.where.not(id: @oauth_application.user_accessor_ids)
     @oauth_accessibility = @oauth_application.accessibilities.new
   end

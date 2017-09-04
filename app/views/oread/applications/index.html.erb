@@ -12,8 +12,6 @@
   <% end if can? :create, Oread::Application%>
 
   <%= content_tag :div do %>
-    <h4>Read accessible by you</h4>
-    <%= render current_user.oread_applications.uniq if user_signed_in? %>
 
     <%= render 'shared/links' %>
     

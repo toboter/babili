@@ -1,28 +1,26 @@
-<div class="page-header">
-  <h1><%= t('.title') %></h1>
+<% title t('.title'), false %>
+
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, link_to('home', root_url) %>
+  <%= content_tag :li, t('.title'), class: 'active'  %>
+<% end %>
+
+<% content_for :sidebar do %>
+  <%= content_tag :div, class: '', style: 'margin-bottom: 20px;' do %>
+    <%= link_to t('.new'), new_oauth_application_path, class: 'btn btn-success' %>
+  <% end if can?(:create, Doorkeeper::Application) %>
+
+  <%= content_tag :div do %>
+
+    <%= render 'shared/links' %>
+    
+  <% end if user_signed_in? %>
+
+<% end %>
+
+<div id="oauth-applications-list">
+  <p class="text-muted">Applications listet are authenticated and authorized through babili.<p>
+  <div class="list-group">
+    <%= render @applications %>
+  </div>
 </div>
-
-<p><%= link_to t('.new'), new_oauth_application_path, class: 'btn btn-success' %></p>
-
-<table class="table table-striped">
-  <thead>
-  <tr>
-    <th><%= t('.name') %></th>
-    <th><%= t('.callback_url') %></th>
-    <th></th>
-    <th></th>
-  </tr>
-  </thead>
-  <tbody>
-  <% @applications.each do |application| %>
-    <tr id="application_<%= application.id %>">
-      <td><%= link_to application.name, oauth_application_path(application) %></td>
-      <td><%= application.redirect_uri %></td>
-      <td><%= link_to t('doorkeeper.applications.buttons.edit'), edit_oauth_application_path(application), class: 'btn btn-link' %></td>
-      <td><%= render 'delete_form', application: application %></td>
-    </tr>
-  <% end %>
-  </tbody>
-</table>
-
-<%= render 'shared/links'%>

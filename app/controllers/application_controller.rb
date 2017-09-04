@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
-  before_action :get_blogs
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   rescue_from CanCan::AccessDenied do |exception|
@@ -8,10 +7,6 @@ class ApplicationController < ActionController::Base
       format.json { head :forbidden }
       format.html { redirect_back(fallback_location: root_path, flash: { error: exception.message } ) }
     end
-  end
-  
-  def get_blogs
-    @nav_blogs = Blog.all
   end
   
   protected
