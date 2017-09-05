@@ -3,9 +3,9 @@ module Oread
     before_action :set_application, only: [:show, :edit, :update, :destroy]
     before_action :authenticate_user!, except: [:index, :show]
     load_and_authorize_resource
-      require 'rest-client'
-      require 'json'
-      include ERB::Util
+    require 'rest-client'
+    require 'json'
+    include ERB::Util
           
     # GET /applications
     # GET /applications.json

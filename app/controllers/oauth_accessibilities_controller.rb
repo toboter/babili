@@ -7,6 +7,8 @@ class OauthAccessibilitiesController < ApplicationController
   require 'rest-client'
   require 'json'
 
+  # after_action :send_client_hook
+
   def new
     authorize! :create_accessibility, @oauth_application
     @accessors = Project.where.not(id: @oauth_application.project_accessor_ids) + User.where.not(id: @oauth_application.user_accessor_ids)

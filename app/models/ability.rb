@@ -21,6 +21,8 @@ class Ability
         app.owner == user
       end
       can [:read, :create], Oread::Application
+
+      # can create oread_access_token?
   
       cannot :manage, Doorkeeper::Application unless user.is_admin == true
       can [:update, :destroy, :create_accessibility, :update_accessibility, :destroy_accessibility], Doorkeeper::Application do |app|

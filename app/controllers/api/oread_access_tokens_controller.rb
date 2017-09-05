@@ -4,7 +4,7 @@ class Api::OreadAccessTokensController < Api::BaseController
 
   def create
     # raise oread_access_token_params.inspect
-    if current_resource_owner.projects.map{ |p| p.oread_applications }.flatten.include?(@application)
+    if current_resource_owner && @application
       token_type = oread_access_token_params[:token_type] || 'Token'
       @token = @application.access_tokens.create(resource_owner: current_resource_owner, token: oread_access_token_params[:token], token_type: token_type)
       render status: 200, json: @token.to_json
