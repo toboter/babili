@@ -36,7 +36,7 @@
   <div class="col-md-6">
     <div id="explore-oauth-applications">
       <h4 class="">
-        Authorizing applications
+        babili-authenticated applications
         <span class="badge"><%= @oauth_applications.count %></span>
         <span class='pull-right small'><%= link_to 'view all', oauth_applications_path if can?(:read, Doorkeeper::Application) %></span>
       </h4> 

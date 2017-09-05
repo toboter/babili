@@ -10,7 +10,7 @@ class SearchController < ApplicationController
       @failed_connections = []
       @apps.each do |app|
         response = nil
-        app_user_token = app.try(:access_tokens).where(resource_owner_id: current_user.id).last
+        app_user_token = app.try(:access_tokens).where(resource_owner: current_user).last
         instance_variable_set("@#{app.name.parameterize.underscore}_url", "#{app.url}?q=#{url_encode(params[:q])}")
         url = instance_variable_get("@#{app.name.parameterize.underscore}_url")
         begin
