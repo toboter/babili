@@ -3,7 +3,10 @@ module Oread
     before_action :set_application, only: [:show, :edit, :update, :destroy]
     before_action :authenticate_user!, except: [:index, :show]
     load_and_authorize_resource
-    
+      require 'rest-client'
+      require 'json'
+      include ERB::Util
+          
     # GET /applications
     # GET /applications.json
     def index
@@ -15,6 +18,16 @@ module Oread
     def show
       @access_tokens = @application.access_tokens.where(resource_owner: current_user)
       @token = @access_tokens.last
+      if params[:q].present?
+        url = "#{@application.url}?q=#{url_encode(params[:q])}"
+        begin
+          response = RestClient.get(url, {:Authorization => "#{@token.try(:token_type)} #{@token.try(:token)}"})
+        rescue Errno::ECONNREFUSED
+          puts "Server at #{url} is refusing connection."
+          flash.now[:notice] = "Results from #{@application.name} missing. Can't connect to server."
+        end
+        @results = JSON.parse(response) if response
+      end
     end
 
     # GET /applications/new
