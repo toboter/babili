@@ -1,14 +1,8 @@
 class Api::ProjectsController < Api::BaseController
-  load_and_authorize_resource except: :my_projects
-  skip_authorization_check only: :my_projects
+  load_and_authorize_resource
 
   def index
     projects = Project.accessible_by(current_ability).all
-    render json: projects
-  end
-
-  def my_projects
-    projects = current_resource_owner.projects
     render json: projects
   end
 

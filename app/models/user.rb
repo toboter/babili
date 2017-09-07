@@ -32,7 +32,7 @@ class User < ApplicationRecord
   before_create :build_profile
 
   def all_oauth_applications
-    Doorkeeper::Application.joins(:accessibilities).where('oauth_accessibilities.id IN (?)', all_oauth_accessibilities.ids)
+    Doorkeeper::Application.joins(:accessibilities).where('oauth_accessibilities.id IN (?)', all_oauth_accessibilities.ids).order(id: :asc)
   end
 
   def all_oauth_accessibilities

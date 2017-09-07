@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
   get 'search', to: 'search#index'
+  get '/api', to: 'home#api'  
+  get '/help', to: 'home#help'
+  get '/imprint', to: 'home#imprint'
+  get '/contact', to: 'home#contact'
+  get '/explore', to: 'home#explore'
 
   use_doorkeeper
   scope :oauth do
@@ -10,20 +15,25 @@ Rails.application.routes.draw do
         path: 'accessibilities'
     end
   end
-      
-
+  
   devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}
   resources :users, only: [:index, :update]
   resources :profiles, except: [:destroy]
-  
+
   namespace :api do
     get 'me', to: 'users#me'
     scope :my do
-      get 'projects', to: 'projects#my_projects'
+      get 'projects', to: 'users#my_projects'         #old please delete
       scope :authorizations do
-        get 'write', to: 'accessibilities#crud_abilities'
-        get 'read', to: 'accessibilities#search_abilities'
+        get 'read', to: 'users#my_search_abilities'   #old please delete
       end
+      #new
+      scope :accessibilities do
+        get 'search', to: 'users#my_search_abilities'
+        get 'crud/:uid', to: 'users#my_crud_abilities'
+        get 'projects', to: 'users#my_projects'
+      end
+
     end
     resources :users, only: [:index, :show]
     resources :projects, only: [:index, :show]
@@ -58,12 +68,6 @@ Rails.application.routes.draw do
     end
   end
   resources :novelities, path: :news, controller: 'blogs', type: 'Novelity'
-
-  get '/api', to: 'home#api'
-  get '/help', to: 'home#help'
-  get '/imprint', to: 'home#imprint'
-  get '/contact', to: 'home#contact'
-  get '/explore', to: 'home#explore'
 
   root to: "home#index"
 

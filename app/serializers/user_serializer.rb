@@ -4,6 +4,5 @@ class UserSerializer < ActiveModel::Serializer
   def display_name
     object.name
   end
-
   
 end

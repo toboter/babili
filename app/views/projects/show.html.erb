@@ -48,18 +48,20 @@
     <h4>Memberships</h4>
     <%= content_tag :div, class: 'list-group' do %>
       <% for membership in @project.memberships do %>
-        <%= link_to membership.user.profile, class: 'media list-group-item' do %>
-          <div class="media-left">
-            <%= image_tag membership.user.profile.image_url(:small_thumb), class: "media-object img-circle", style: 'height:50px;' %>
-          </div>
-          <div class="media-body">
-            <h5 class="media-heading"><%= membership.user.name %></h5>
-            <span class="text-muted"><%= membership.role %></span>
-          </div>
-          <div class="media-right">
-            <%= content_tag :span, fa_icon('universal-access'), data: {toggle: "tooltip", placement: "left"}, title: "Project administrator" if membership.role.in?(['Admin', 'Owner']) %>
-          </div>
-        <% end %>      
+        <%= content_tag :div, id: "user-#{membership.user.id}", class: 'media' do %>
+          <%= link_to membership.user.profile, class: 'list-group-item' do %>
+            <div class="media-left">
+              <%= image_tag membership.user.profile.image_url(:small_thumb), class: "media-object img-circle", style: 'height:50px;' %>
+            </div>
+            <div class="media-body">
+              <h5 class="media-heading"><%= membership.user.name %></h5>
+              <span class="text-muted"><%= membership.role %></span>
+            </div>
+            <div class="media-right">
+              <%= content_tag :span, fa_icon('universal-access'), data: {toggle: "tooltip", placement: "left"}, title: "Project administrator" if membership.role.in?(['Admin', 'Owner']) %>
+            </div>
+          <% end %>      
+        <% end %>
       <% end %>
     <% end if @project.memberships.any? %>
 

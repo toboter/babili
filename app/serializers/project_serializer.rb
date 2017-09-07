@@ -1,8 +1,8 @@
 class ProjectSerializer < ActiveModel::Serializer
-  attributes :id, :name, :members
+  attributes :id, :name, :member_ids
 
-  def members
-    object.members.order(id: :asc).map(&:id).join(', ') if object.members.any?
+  def member_ids
+    object.members.order(id: :asc).map(&:id) if object.members.any?
   end
 
 end
