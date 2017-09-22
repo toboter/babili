@@ -70,5 +70,7 @@ gem 'doorkeeper'
 gem 'cancancan'
 gem 'active_model_serializers', '~> 0.10.0'
 gem 'rest-client'
+gem 'sidekiq'
+gem 'sinatra', github: 'sinatra'
 
 ruby '2.3.1'

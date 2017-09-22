@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+
+  require 'sidekiq/web'
+  mount Sidekiq::Web, at: '/sidekiq'
+
   get 'search', to: 'search#index'
   get '/api', to: 'home#api'  
   get '/help', to: 'home#help'
@@ -21,6 +25,7 @@ Rails.application.routes.draw do
   resources :profiles, except: [:destroy]
 
   namespace :api do
+
     get 'me', to: 'users#me'
     scope :my do
       get 'projects', to: 'users#my_projects'         #old please delete
@@ -29,16 +34,20 @@ Rails.application.routes.draw do
       end
       #new
       scope :accessibilities do
-        get 'search', to: 'users#my_search_abilities'
+        get 'searchable', to: 'users#my_search_abilities'
         get 'crud/:uid', to: 'users#my_crud_abilities'
-        get 'projects', to: 'users#my_projects'
+        get 'projects/:uid', to: 'users#my_app_projects'
       end
-
     end
+
     resources :users, only: [:index, :show]
     resources :projects, only: [:index, :show]
     get 'search', to: 'search#index'
-    post 'oread_application_access_token', to: 'oread_access_tokens#create'
+    post 'oread_application_access_token', to: 'oread_access_tokens#create'   #old please delete
+    resources :oread_applications, only: [] do
+      post 'set_access_token', to: 'oread_access_tokens#create', on: :collection
+    end
+
   end
 
   namespace :oread do

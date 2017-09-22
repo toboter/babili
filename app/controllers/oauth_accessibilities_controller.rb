@@ -21,9 +21,11 @@ class OauthAccessibilitiesController < ApplicationController
   def create
     @oauth_accessibility = @oauth_application.accessibilities.new(oauth_accessibility_params)
     @oauth_accessibility.creator_id = current_user.id
+    accessor_user_ids = @oauth_accessibility.accessor.class.name == 'Project' ? @oauth_accessibility.accessor.member_ids : [@oauth_accessibility.accessor_id]
     
     respond_to do |format|
       if @oauth_accessibility.save
+        UpdateClientAppUserAccessibilitiesJob.perform_later(@oauth_application.id, accessor_user_ids)
         format.html { redirect_to oauth_application_path(@oauth_application), notice: 'Accessibility was successfully created.' }
         format.json { render :show, status: :created, location: @oauth_application }
       else
@@ -34,9 +36,11 @@ class OauthAccessibilitiesController < ApplicationController
   end
 
   def update
+    accessor_user_ids = @oauth_accessibility.accessor.class.name == 'Project' ? @oauth_accessibility.accessor.member_ids : [@oauth_accessibility.accessor_id]
     respond_to do |format|
       if @oauth_accessibility.update(oauth_accessibility_params)
-        format.html { redirect_to oauth_application_path(@oauth_application), flash: { success: 'Accessibility was successfully updated.' } }
+        UpdateClientAppUserAccessibilitiesJob.perform_later(@oauth_application.id, accessor_user_ids)
+        format.html { redirect_to oauth_application_path(@oauth_application), flash: { success: "Accessibility was successfully updated." } }
         format.json { render :show, status: :ok, location: @oauth_application }
       else
         format.html { render :edit }
@@ -46,7 +50,9 @@ class OauthAccessibilitiesController < ApplicationController
   end
 
   def destroy
+    accessor_user_ids = @oauth_accessibility.accessor.class.name == 'Project' ? @oauth_accessibility.accessor.member_ids : [@oauth_accessibility.accessor_id]
     @oauth_accessibility.destroy
+    UpdateClientAppUserAccessibilitiesJob.perform_later(@oauth_application.id, accessor_user_ids)
     respond_to do |format|
       format.html { redirect_to oauth_application_path(@oauth_application), notice: 'Accessibility was successfully destroyed.' }
       format.json { head :no_content }

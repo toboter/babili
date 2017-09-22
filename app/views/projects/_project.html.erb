@@ -4,7 +4,13 @@
       </div>
       <div class="media-body">
         <h4 class="media-heading"><%= project.name %></h4>
-        <p class="small text-muted">Created on <%= project.created_at.to_date.to_formatted_s(:long_ordinal) %>. <%= pluralize( project.memberships.count, 'member' ) %></p>
+        <p class="small text-muted">
+          Created on <%= project.created_at.to_date.to_formatted_s(:long_ordinal) %>. 
+          <%= content_tag :span, 
+            pluralize( project.memberships.count, 'member' ), 
+            data: { toggle: "tooltip", placement: "left" }, 
+            title: project.members.map(&:name).join(', ') %>
+        </p>
         <%= truncate(project.description, length: 200, separator: ' ') %>
       </div>
       <div class="media-right">

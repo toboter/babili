@@ -2,7 +2,10 @@ class ProjectsController < ApplicationController
   before_action :set_project, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, except: [:index, :show]
   load_and_authorize_resource
-  
+  require 'uri'
+  require 'rest-client'
+  require 'json'
+
   # GET /projects
   # GET /projects.json
   def index
@@ -48,9 +51,15 @@ class ProjectsController < ApplicationController
   # PATCH/PUT /projects/1
   # PATCH/PUT /projects/1.json
   def update
+    old_ids = @project.member_ids.dup
     respond_to do |format|
       if @project.update(project_params)
-        format.html { redirect_to @project, notice: 'Project was successfully updated.' }
+        new_ids = Project.find(@project).member_ids
+        changed_ids = (old_ids-new_ids) + (new_ids-old_ids)
+        @project.oauth_applications.each do |app|
+          UpdateClientAppUserAccessibilitiesJob.perform_later(app.id, changed_ids)
+        end
+        format.html { redirect_to @project, notice: "Project was successfully updated." }
         format.json { render :show, status: :ok, location: @project }
       else
         format.html { render :edit }

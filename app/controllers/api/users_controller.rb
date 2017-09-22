@@ -38,9 +38,10 @@ class Api::UsersController < Api::BaseController
     render json: oread_applications, each_serializer: OreadApplicationSerializer
   end
 
-  # /api/my/accessibilities/projects
-  def my_projects
-    projects = current_resource_owner.projects
+  # /api/my/accessibilities/projects/:uid
+  def my_app_projects
+    application = Doorkeeper::Application.find_by_uid(params[:uid])
+    projects = current_resource_owner.projects.joins(:oauth_applications).where(oauth_applications: {id: application.id})
     render json: projects
   end
 
