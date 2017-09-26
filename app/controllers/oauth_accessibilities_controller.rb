@@ -49,6 +49,23 @@ class OauthAccessibilitiesController < ApplicationController
     end
   end
 
+  def send_all_accessibilities_to_clients
+    accessor_user_ids = []
+    @oauth_application.accessibilities.each do |acc|
+      accessor_user_ids << (acc.accessor.class.name == 'Project' ? acc.accessor.member_ids : [acc.accessor_id])
+    end
+    respond_to do |format|
+      if accessor_user_ids.flatten.uniq
+        UpdateClientAppUserAccessibilitiesJob.perform_later(@oauth_application.id, accessor_user_ids.flatten.uniq)
+        format.html { redirect_to oauth_application_path(@oauth_application), flash: { success: "Updating accessibilities." } }
+        format.js { render js: "toastr.info('Updating');", status: :ok }
+      else
+        format.html { redirect_to oauth_application_path(@oauth_application), flash: { error: "Nothing updated." } }
+        format.js { render js: "toastr.error('Error');", status: :error }
+      end
+    end
+  end
+
   def destroy
     accessor_user_ids = @oauth_accessibility.accessor.class.name == 'Project' ? @oauth_accessibility.accessor.member_ids : [@oauth_accessibility.accessor_id]
     @oauth_accessibility.destroy

@@ -10,7 +10,7 @@
   <h4>
     Accessors
     <%= link_to fa_icon('plus', text: 'Accessor'), new_oauth_application_accessibility_path(@application), class: 'btn btn-success btn-sm pull-right' if can?(:create_accessibility, @application) %>
-  
+    
   </h4>
   <% for accessibility in @application.accessibilities do %>
     <%= render partial: accessibility.accessor.to_partial_path, object: accessibility.accessor if accessibility.accessor %>
@@ -29,6 +29,7 @@
       <% end %>
     </div>
   <% end %>
+  <%= link_to 'Update Client', oauth_application_send_accessibilities_to_clients_path(@application), remote: true, class: 'btn btn-default btn-sm', style: 'margin-top:10px;' if can?(:update, @application) %>
 <% end %>
 
 <div class="row">

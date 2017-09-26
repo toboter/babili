@@ -17,6 +17,7 @@ Rails.application.routes.draw do
         only: [:new, :edit, :create, :update, :destroy], 
         as: :accessibilities, 
         path: 'accessibilities'
+      get 'send_accessibilities_to_clients', to: 'oauth_accessibilities#send_all_accessibilities_to_clients'
     end
   end
   
