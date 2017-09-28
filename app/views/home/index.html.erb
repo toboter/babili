@@ -29,7 +29,9 @@
       <div class="col-lg-8 col-lg-offset-2">
         <% for entry in Blog.where(type: 'About').order('position') do %>
           <h2 class="section-heading"><%= entry.title %></h2>
-          <p class="text-faded"><%= truncate(teaser(entry.content), length: 500, separator: ' ', escape: false) { link_to " continue reading", entry } %></p>
+          <p class="">
+            <%= entry.abstract ? "#{entry.abstract} ... #{link_to 'continue reading', entry}".html_safe : truncate(teaser(entry.content), length: 500, separator: ' ', escape: false) { link_to " continue reading", entry } %>
+          </p>
           <hr class="light">
         <% end %>
       </div>
