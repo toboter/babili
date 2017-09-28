@@ -22,7 +22,10 @@
 //= require_tree .
 
 $(function () {
-  $('[data-toggle="tooltip"]').tooltip()
+  $('[data-toggle="tooltip"]').tooltip();
+  $('.about-content img, .post-content img').tooltip({
+      placement: 'bottom'
+  });
 })
 
 // fixing changing width of a panel while affix-scrolling

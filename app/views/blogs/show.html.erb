@@ -6,27 +6,24 @@
 <% end %>
 
 <% content_for :sidebar do %>
-
-  <%= content_tag :div, class: '', style: 'margin-bottom: 20px;' do %>
-    <div class="">
-      <%= link_to fa_icon('edit', text: 'Edit'), sti_blog_path(@blog.type, @blog, :edit), class: 'btn btn-warning' if can? :edit, @blog %>
-      <%= link_to fa_icon("remove", text: 'Delete'), @blog, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' if can? :destroy, @blog %>
-    </div>
-  <% end if can?(:edit, @blog) || can?(:destroy, @blog) %>
-
-  <%= content_tag :p do %>
-    <strong>External link:</strong>
-    <%= link_to @blog.external_link, @blog.external_link, target: :_blank %>
-  <% end if @blog.external_link.present? %>
-
-  <%= content_tag :div, class: "toc panel panel-default", data: { spy: "affix", 'offset-top': "0", 'offset-bottom': "100" } do %>
-    <div class="panel-heading">
-      <h4>Content</h4>
-    </div>
-    <div class="panel-body">
-      <%= toc(@blog.content) %>
-    </div>
-  <% end if toc(@blog.content).present? %>
+  <%= content_tag :div, data: { spy: "affix", 'offset-top': "0", 'offset-bottom': "0" } do %>
+    <%= content_tag :div, class: "panel panel-default" do %>
+      <div class="panel-heading">
+        <h4>
+          Content
+          <%= content_tag :span, class: 'pull-right', style: 'margin-top: -7px;' do %>
+            <%= link_to fa_icon('edit', text: 'Edit'), sti_blog_path(@blog.type, @blog, :edit), class: 'btn btn-sm btn-warning' if can? :edit, @blog %>
+            <%= link_to fa_icon("remove", text: 'Delete'), @blog, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' if can? :destroy, @blog %>
+          <% end if can?(:edit, @blog) || can?(:destroy, @blog) %>        
+        </h4>
+      </div>
+      <%= content_tag :div, toc(@blog.content), class: "toc panel-body" if toc(@blog.content).present? %>
+      <%= content_tag :div, class: 'panel-footer' do %>
+        <strong>External link:</strong>
+        <%= link_to @blog.external_link, @blog.external_link, target: :_blank %>
+      <% end if @blog.external_link.present? %>
+    <% end %>
+  <% end %>
 <% end %>
 
 

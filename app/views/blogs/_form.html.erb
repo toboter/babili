@@ -15,7 +15,7 @@
               value_method: :id %>
             <%= f.input :title %>
             <%= f.input :abstract, input_html: { rows: 3 } %>
-            <%= f.input :content, input_html: {id: 'blog_content', class: '', rows: '14', data: {provide: "markdown"}} %>
+            <%= f.input :content, input_html: {id: 'blog_content', class: '', rows: '14', data: {provide: "markdown"}}, hint: "Check #{link_to('adam-p Markdown-Cheatsheet', 'https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet', target: :blank)} on github.".html_safe %>
             <%= f.input :external_link %>
             <%= content_tag :div, class: "form-group" do %>
               <%= f.label :posted_at, class: 'col-sm-3 control-label' %>

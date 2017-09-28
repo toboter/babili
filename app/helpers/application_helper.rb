@@ -8,7 +8,7 @@ module ApplicationHelper
   end
   
   def markdown(text)
-    renderer = Redcarpet::Render::HTML.new(hard_wrap: true, filter_html: true, with_toc_data: true)
+    renderer = Redcarpet::Render::HTML.new(hard_wrap: true, filter_html: false, with_toc_data: true)
     options = {
       autolink: true,
       no_intra_emphasis: true,
