@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
 
   require 'sidekiq/web'
-  mount Sidekiq::Web, at: '/sidekiq'
 
   get 'search', to: 'search#index'
   get '/api', to: 'home#api'  
@@ -78,6 +77,10 @@ Rails.application.routes.draw do
     end
   end
   resources :novelities, path: :news, controller: 'blogs', type: 'Novelity'
+
+  authenticate :user, lambda { |u| u.is_admin } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 
   root to: "home#index"
 
