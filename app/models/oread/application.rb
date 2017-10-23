@@ -2,7 +2,7 @@ class Oread::Application < ApplicationRecord
   self.table_name = :oread_applications
   include ImageUploader[:image]
   
-  validates :name, :search_path, :host, presence: true
+  validates :name, :search_path, :host, :port, presence: true
   validates :name, uniqueness: true
 
   belongs_to :owner, polymorphic: true
@@ -12,5 +12,9 @@ class Oread::Application < ApplicationRecord
   
   def url
     "#{host}#{':'+port.to_s if port}#{search_path}"
+  end
+
+  def app_url
+    "#{host}#{':'+port.to_s if (port && port != 80)}"
   end
 end

@@ -70,7 +70,7 @@
       <div class="panel-body">
         <p>
           API: <%= link_to @application.url, @application.url, target: '_blank' %><br>
-          External link: <%= link_to @application.host, @application.host, target: '_blank' %>
+          External link: <%= link_to @application.app_url, @application.app_url, target: '_blank' %>
         </p>
         <p>
           Administration/Owner: <%= @application.owner.try(:name) %>

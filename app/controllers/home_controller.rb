@@ -16,8 +16,8 @@ class HomeController < ApplicationController
   end
   
   def explore
-    @oread_applications = Oread::Application.all
-    @oauth_applications = Doorkeeper::Application.all
+    @oread_applications = Oread::Application.order(name: :asc).all
+    @oauth_applications = Doorkeeper::Application.order(name: :asc).all
     @projects = Project.order(created_at: :desc).all
     @users = User.all
   end

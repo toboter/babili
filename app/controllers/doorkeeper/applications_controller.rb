@@ -4,7 +4,7 @@ module Doorkeeper
     load_and_authorize_resource :application, class: 'Doorkeeper::Application'
     
     def index
-      @applications = Application.all
+      @applications = Application.order(name: :asc).all
     end
 
     def show; end

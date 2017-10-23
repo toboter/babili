@@ -10,7 +10,7 @@ module Oread
     # GET /applications
     # GET /applications.json
     def index
-      @applications = Application.all
+      @applications = Application.order(name: :asc).all
     end
 
     # GET /applications/1
