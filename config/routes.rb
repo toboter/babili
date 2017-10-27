@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   require 'sidekiq/web'
 
   get 'search', to: 'search#index'
@@ -8,6 +7,17 @@ Rails.application.routes.draw do
   get '/imprint', to: 'home#imprint'
   get '/contact', to: 'home#contact'
   get '/explore', to: 'home#explore'
+
+  scope path: 'settings' do
+    get 'profile', to: 'profiles#edit', as: 'edit_current_profile'
+    devise_scope :user do
+      get "/account" => "devise/registrations#edit"
+    end
+    scope path: 'admin' do
+      resources :users, only: [:index, :update]
+    end
+  end
+  devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}
 
   use_doorkeeper
   scope :oauth do
@@ -20,9 +30,7 @@ Rails.application.routes.draw do
     end
   end
   
-  devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}
-  resources :users, only: [:index, :update]
-  resources :profiles, except: [:destroy]
+  resources :profiles, except: [:destroy, :edit]
 
   namespace :api do
 

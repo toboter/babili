@@ -1,44 +1,39 @@
-<% title @profile.user.name, false %>
+<% title 'Public profile' %>
 
 <% content_for :breadcrumbs do %>
-  <%= content_tag :li, link_to('home', root_url) %>
-  <%= content_tag :li, link_to('User profiles', profiles_url) %>
-  <%= content_tag :li, link_to(@profile.display_name, @profile) %>
-  <%= content_tag :li, 'edit', class: 'active' %>
+  <%= content_tag :li, link_to('Settings', edit_current_profile_path) %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
 
-
-<%= simple_form_for @profile, method: :put, html: { class: 'form-horizontal' },
-  wrapper: :horizontal_form do |f| %>
+<%= simple_form_for @profile, method: :put do |f| %>
 
   <div class="row">
     <div class="col-md-12">
       <%= f.error_notification %>
   
       <div class="row">
-        <%= content_tag :div, class: "col-md-12" do %>
+        <%= content_tag :div, class: "col-sm-8 col-md-8" do %>
           <div class="form-inputs">
             <%= f.input :honorific_prefix %>
             <%= f.input :given_name %>
             <%= f.input :family_name %>
             <%= f.input :honorific_suffix %>
-            <%= content_tag :div, class: "form-group" do %>
-              <%= f.label :birthday, class: 'col-sm-3 control-label' %>
-              <div class="col-sm-9">
-                <%= f.input :birthday, as: :date, html5: true, label: false, input_html: {style: 'margin-left: 15px; max-width:90%;'} %>
-              </div>
-            <% end %>
-            <%= f.input :gender, collection: ['m', 'f'] %>
-            <%= f.input :about_me, input_html: { rows: 3 }, hint: 'Should be between 70 and 150 characters.' %>
+            <%= f.input :about_me, label: 'Bio', input_html: { rows: 3 }, hint: 'Should be between 70 and 150 characters.' %>
 
-            <%= content_tag :div, class: "form-group", style: 'margin-top: 20px;' do %>
-              <%= f.label :image, class: 'col-sm-3 control-label' %>
-              <div class="col-sm-9">
-                <%= f.hidden_field :image, value: @profile.cached_image_data %>
-                <%= f.file_field :image, as: :file %>
-              </div>
-            <% end %>
+            + <url, institution, location>
+            - <birthday, gender>
           </div>
+        <% end %>
+        <%= content_tag :div, class: "col-xs-4 col-sm-3 col-md-3 col-md-offset-1" do %>
+          <strong>Profile picture</strong>
+          <%= content_tag :div, image_tag(@profile.image_url(:thumb), style: 'width: 100%;border-radius: 5px;'), class: '', style: 'margin-top:3px; margin-bottom:10px;' %>
+          <%= f.hidden_field :image, value: @profile.cached_image_data %>
+          <label class="btn btn-default" style="width:100%;">
+            <span class="text-muted"><strong>Upload new picture</strong></span>
+            <span style="display:none;">
+              <%= f.file_field :image, as: :file, required: true %>
+            </span>
+          </label>
         <% end %>
       </div>
   

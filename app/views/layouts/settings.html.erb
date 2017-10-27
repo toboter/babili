@@ -1,0 +1,36 @@
+<% content_for :content do %>
+  <div class="container" style="margin: 60px auto 100px auto;">
+    <%= content_tag :ol, class: 'breadcrumb' do %>
+      <%= yield(:breadcrumbs) %>
+    <% end if content_for?(:breadcrumbs) %>
+    <div class="row">
+      <div class="col-md-2">
+        <div class="panel panel-default">
+          <div class="panel-heading">Personal Settings</div>
+          <div class="list-group">
+            <%= link_to 'Profile', edit_current_profile_path, class: "list-group-item #{'active' if current_page?(edit_current_profile_path)}" %>
+            <%= link_to 'Acccount', account_path, class: "list-group-item #{'active' if current_page?(account_path)}" %>
+            <%= link_to 'Notifications', account_path, class: "list-group-item disabled" %>
+            <%= link_to 'Searching', oread_applications_path, class: "list-group-item" %>
+            <%= link_to 'Projects', projects_path, class: "list-group-item" %>
+            <%= link_to 'Security', account_path, class: "list-group-item disabled" %>
+            <%= link_to 'Applications', oauth_authorized_applications_path, class: "list-group-item" %>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="list-group">
+            <%= link_to 'Admin', users_path, class: "list-group-item #{'active' if current_page?(users_path)}" %>
+            <%= link_to 'Developer', oauth_applications_path, class: "list-group-item" %>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-md-10">
+        <%= content_tag(:div, content_tag(:h4, yield(:title)), class: 'page-header', style: 'margin-top:10px;') if content_for?(:title) %>
+        <%= yield %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<%= render template: "layouts/application" %>

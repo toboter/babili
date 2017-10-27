@@ -1,4 +1,9 @@
-<h2>Edit <%= resource_name.to_s.humanize %></h2>
+<% title "Account" %>
+
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, link_to('Settings', edit_current_profile_path) %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
+<% end %>
 
 <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
   <%= f.error_notification %>

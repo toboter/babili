@@ -12,7 +12,7 @@
       <strong>This is you!</strong>
     </div>
     <div class="panel-body">
-      <%= link_to fa_icon('edit', text: 'Edit'), edit_profile_path, class: 'btn btn-warning' %>
+      <%= link_to fa_icon('edit', text: 'Edit'), edit_current_profile_path, class: 'btn btn-warning' %>
     </div>
   <% end if user_signed_in? && @profile == current_user.profile %>
 

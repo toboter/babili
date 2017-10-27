@@ -3,10 +3,7 @@ module ApplicationHelper
     content_for(:title) { h(page_title.to_s) }
     @show_title = show_title
   end
-  def subline(page_subline)
-    content_for(:subline) { h(page_subline.to_s) }
-  end
-  
+ 
   def markdown(text)
     renderer = Redcarpet::Render::HTML.new(hard_wrap: true, filter_html: false, with_toc_data: true)
     options = {

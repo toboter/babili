@@ -1,6 +1,7 @@
 class ProfilesController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   load_and_authorize_resource :find_by => :slug
+  layout "settings", except: [:index, :show]
 
   def index
     @profiles = Profile.order(family_name: :asc)
@@ -14,6 +15,7 @@ class ProfilesController < ApplicationController
   end
 
   def edit
+    @profile = current_user.profile
   end
 
   def create
@@ -33,7 +35,7 @@ class ProfilesController < ApplicationController
   def update
     respond_to do |format|
       if @profile.update(profile_params)
-        format.html { redirect_to @profile, flash: { success: 'Profile was successfully updated.' } }
+        format.html { redirect_to edit_current_profile_path, flash: { success: 'Profile was successfully updated.' } }
         format.json { render :show, status: :ok, location: @profile }
       else
         format.html { render :edit }
