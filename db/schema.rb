@@ -10,10 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170829110151) do
+ActiveRecord::Schema.define(version: 20171029170916) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "audits", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "actor_id"
+    t.string   "action"
+    t.text     "action_description"
+    t.string   "actor_ip"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.index ["actor_id"], name: "index_audits_on_actor_id", using: :btree
+    t.index ["user_id"], name: "index_audits_on_user_id", using: :btree
+  end
 
   create_table "blogs", force: :cascade do |t|
     t.string   "type"
@@ -107,6 +119,8 @@ ActiveRecord::Schema.define(version: 20170829110151) do
     t.datetime "updated_at",                null: false
     t.integer  "owner_id"
     t.string   "owner_type"
+    t.string   "homepage_url"
+    t.string   "description"
     t.index ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type", using: :btree
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
   end
@@ -142,8 +156,6 @@ ActiveRecord::Schema.define(version: 20170829110151) do
   create_table "profiles", force: :cascade do |t|
     t.integer  "user_id"
     t.text     "about_me"
-    t.datetime "birthday"
-    t.string   "gender"
     t.string   "family_name"
     t.string   "given_name"
     t.string   "honorific_prefix"
@@ -152,6 +164,9 @@ ActiveRecord::Schema.define(version: 20170829110151) do
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.string   "slug"
+    t.string   "url"
+    t.string   "institution"
+    t.string   "location"
     t.index ["slug"], name: "index_profiles_on_slug", unique: true, using: :btree
     t.index ["user_id"], name: "index_profiles_on_user_id", using: :btree
   end
@@ -192,6 +207,7 @@ ActiveRecord::Schema.define(version: 20170829110151) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
+  add_foreign_key "audits", "users"
   add_foreign_key "memberships", "projects"
   add_foreign_key "memberships", "users"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"

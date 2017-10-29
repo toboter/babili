@@ -1,7 +1,6 @@
-<% title "Account" %>
+<% title "Account settings", false %>
 
 <% content_for :breadcrumbs do %>
-  <%= content_tag :li, link_to('Settings', edit_current_profile_path) %>
   <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
 
@@ -9,7 +8,16 @@
   <%= f.error_notification %>
 
   <div class="form-inputs">
-    <%= f.input :email, required: true, autofocus: true %>
+    <div class="subhead">
+      <h4>Change password</h4>
+    </div>
+    <%= f.input :password, autocomplete: "off", hint: "leave it blank if you don't want to change it", required: false %>
+    <%= f.input :password_confirmation, required: false %>
+
+    <div class="subhead --spacious">
+      <h4>Change email or username</h4>
+    </div>
+    <%= f.input :email, required: true %>
     <%= f.input :username, required: true %>
 
     <br><br>
@@ -17,18 +25,17 @@
       <p>Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
     <% end %>
 
-    <%= f.input :password, autocomplete: "off", hint: "leave it blank if you don't want to change it", required: false %>
-    <%= f.input :password_confirmation, required: false %>
+
     <%= f.input :current_password, hint: "we need your current password to confirm your changes", required: true %>
   </div>
 
   <div class="form-actions">
-    <%= f.button :submit, "Update" %>
+    <%= f.button :submit, "Update", class: 'btn btn-primary text-strong' %>
   </div>
 <% end %>
 
-<h3>Cancel my account</h3>
-
-<p>Unhappy? <%= link_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %></p>
-
-<%= link_to "Back", :back %>
+<div class="subhead --spacious">
+  <h4>Delete account</h4>
+</div>
+<p>Once you delete your account, there is no going back. Please be certain.</p>
+<%= link_to "Delete your account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete, class: 'btn btn-danger text-strong' %>

@@ -20,6 +20,9 @@
 @import "profiles";
 @import "toastr";
 
+.text-strong {
+    font-weight: bold;
+}
 
 .col-centered{
     float: none;
@@ -109,4 +112,40 @@ div.panel-attach {
 .list-group-item:first-child {
     border-top-right-radius: 0px;
     border-top-left-radius: 0px;  
+}
+
+.subhead {
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+    border-bottom: 1px #e1e4e8 solid;
+}
+.--spacious {
+    margin-top: 40px;
+}
+
+div.list-group {
+    .list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {
+        z-index: 2;
+        color: #555;
+        background-color: #fff;
+        border-color: #ddd;
+        border-left: 2px solid #F05F40;
+    }
+}
+
+form {
+    span.help-block, p.help-block {
+        font-size: small;
+    }
+}
+
+.session-state-indicator {
+    width: 8px;
+    height: 8px;
+    margin-top: 10px;
+    border-radius: 5px;
+    .recent {
+        background-color: #28a745;
+        box-shadow: 0 0 10px rgba(108,198,68,0.5);
+    }
 }

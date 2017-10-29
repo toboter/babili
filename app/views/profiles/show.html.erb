@@ -3,7 +3,7 @@
 <% content_for :breadcrumbs do %>
   <%= content_tag :li, link_to('home', root_url) %>
   <%= content_tag :li, link_to('User profiles', profiles_url) %>
-  <%= content_tag :li, @profile.user.name, class: 'active' %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
 
 <% content_for :sidebar do %>
@@ -22,7 +22,6 @@
   <% else %>
     <p class="text-muted">
       none yet<br>
-      <%= link_to 'find or create applications', oread_applications_path if user_signed_in? && @profile == current_user.profile %>
     </p>
   <% end %>
 
@@ -67,8 +66,11 @@
           <%= "<strong>#{@profile.display_name}</strong>".html_safe %>
           <%= content_tag :span, fa_icon('universal-access'), data: {toggle: "tooltip", placement: "right"}, title: "Administrator" if @profile.user.is_admin %><br>
           <%= "(#{@profile.user.username})" %>
+          <%= content_tag :span, "<br>#{@profile.institution}".html_safe, class: '' if @profile.institution.present? %>
+          <%= content_tag :span, "<br>#{@profile.location}".html_safe, class: '' if @profile.location.present? %>
+          <%= content_tag :p, @profile.about_me, class: '' if @profile.about_me.present? %>
+          <%= content_tag :span, link_to(@profile.url, @profile.url), class: '' if @profile.url.present? %>
         <% end %>
-        <%= content_tag :p, @profile.about_me, class: '' %>
         <ul class="pllv">
           <li class="pllve">
             Projects<br>

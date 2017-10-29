@@ -35,7 +35,7 @@ class ProfilesController < ApplicationController
   def update
     respond_to do |format|
       if @profile.update(profile_params)
-        format.html { redirect_to edit_current_profile_path, flash: { success: 'Profile was successfully updated.' } }
+        format.html { redirect_to edit_current_profile_path, flash: { notice: 'Profile was updated successfully.' } }
         format.json { render :show, status: :ok, location: @profile }
       else
         format.html { render :edit }
@@ -47,6 +47,6 @@ class ProfilesController < ApplicationController
   private
     # Never trust parameters from the scary internet, only allow the white list through.
     def profile_params
-      params.require(:profile).permit(:about_me, :birthday, :gender, :family_name, :given_name, :honorific_prefix, :honorific_suffix, :image)
+      params.require(:profile).permit(:about_me, :family_name, :given_name, :honorific_prefix, :honorific_suffix, :image, :url, :institution, :location)
     end
 end

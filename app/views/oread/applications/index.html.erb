@@ -1,23 +1,12 @@
-<% title "Searchable applications", false %>
+<% title "Searchable applications" %>
 
 <% content_for :breadcrumbs do %>
-  <%= content_tag :li, link_to('home', root_url) %>
-  <%= content_tag :li, 'Searchable applications', class: 'active'  %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
+<% content_for :buttons do %>
+  <%= link_to 'New application', new_oread_application_path, class: 'btn btn-default text-strong' %>
+<% end if can? :create, Oread::Application %>
 
-
-<% content_for :sidebar do %>
-  <%= content_tag :div, class: '', style: 'margin-bottom: 20px;' do %>
-    <%= link_to 'New Application', new_oread_application_path, class: 'btn btn-success' %>
-  <% end if can? :create, Oread::Application%>
-
-  <%= content_tag :div do %>
-
-    <%= render 'shared/links' %>
-    
-  <% end if user_signed_in? %>
-
-<% end %>
 
 <div id="oread-applications-list">
   <p class="text-muted">Applications listet here will offer their data for keywords search.<p>
@@ -25,3 +14,4 @@
     <%= render @applications %>
   </div>
 </div>
+<%= render 'shared/links' %>

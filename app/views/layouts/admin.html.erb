@@ -1,0 +1,42 @@
+<% content_for :content do %>
+  <div class="container" style="margin: 60px auto 100px auto;">
+    <%= content_tag :ol, class: 'breadcrumb' do %>
+      <%= content_tag :li, link_to('Settings', settings_path) %>
+      <%= content_tag :li, link_to('Admin', admin_settings_path) %>
+      <%= yield(:breadcrumbs) %>
+    <% end if content_for?(:breadcrumbs) %>
+    <div class="row">
+      <div class="col-md-3">
+        <div class="panel panel-default">
+          <div class="panel-heading text-strong"><span class="text-muted">Developer Settings</span></div>
+          <div class="list-group">
+            <%= link_to 'Registrations', users_path, class: "list-group-item #{'active text-strong' if current_page?(users_path)}" %>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-md-9">
+        <%= content_tag :div, class: 'page-header', style: 'margin-top:0px;' do %>
+          <%= content_tag :h3, style: 'margin-top:0px;' do %>
+            <%= yield(:title) %>
+            <%= content_tag :span, yield(:buttons), class: 'pull-right', style: 'margin-top:-5px;' %>
+          <% end %>
+        <% end if content_for?(:title) && @show_title %>
+        <% if content_for?(:sidebar) %>
+          <div class="row">
+            <div class="col-md-9">
+              <%= yield %>
+            </div>
+            <div class="col-md-3">
+              <%= yield(:sidebar) %>
+            </div>
+          </div>
+        <% else %>
+          <%= yield %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<%= render template: "layouts/application" %>

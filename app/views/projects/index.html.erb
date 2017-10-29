@@ -1,19 +1,14 @@
-<% title 'Projects', false %>
+<% title 'Your Projects' %>
 
 <% content_for :breadcrumbs do %>
-  <%= content_tag :li, link_to('home', root_url) %>
-  <%= content_tag :li, 'Projects', class: 'active' %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
+<% content_for :buttons do %>
+  <%= link_to 'New project', new_project_path, class: 'btn btn-default text-strong' %>
+<% end if can?(:create, Project) %>
 
-<% content_for :sidebar do %>
-  <%= content_tag :div, class: '', style: 'margin-bottom: 20px;' do %>
-    <%= link_to 'New Project', new_project_path, class: 'btn btn-success' %>
-  <% end if can?(:create, Project) %>
-
-  <%= render 'shared/links' %>
-
-<% end %>
 
 <div class="list-group">
   <%= render @projects %>
 </div>
+<%= render 'shared/links' %>

@@ -1,6 +1,6 @@
 module Doorkeeper
   class ApplicationsController < ActionController::Base
-    before_action :authenticate_user!, except: [:index, :show]
+    before_action :authenticate_user!
     load_and_authorize_resource :application, class: 'Doorkeeper::Application'
     
     def index
@@ -15,7 +15,9 @@ module Doorkeeper
     
     def create
       @application = Application.new(application_params)
+      @application.owner = current_user
       if @application.save
+        Audit.create!(user: @application.owner, actor: current_user, action: "oauth_application.create", action_description: @application.name, actor_ip: current_user.last_sign_in_ip)
         flash[:notice] = I18n.t(:notice, scope: [:doorkeeper, :flash, :applications, :create])
         redirect_to oauth_application_url(@application)
       else
@@ -35,6 +37,7 @@ module Doorkeeper
     end
 
     def destroy
+      Audit.create!(user: @application.owner, actor: current_user, action: "oauth_application.destroy", action_description: @application.name, actor_ip: current_user.last_sign_in_ip)
       flash[:notice] = I18n.t(:notice, scope: [:doorkeeper, :flash, :applications, :destroy]) if @application.destroy
       redirect_to oauth_applications_url
     end
@@ -42,7 +45,7 @@ module Doorkeeper
     private
 
     def application_params
-      params.require(:doorkeeper_application).permit(:name, :redirect_uri, :scopes)
+      params.require(:doorkeeper_application).permit(:name, :redirect_uri, :scopes, :homepage_url, :description)
     end
     
   end

@@ -1,22 +1,12 @@
-<% title t('.title'), false %>
+<% title t('.title') %>
 
 <% content_for :breadcrumbs do %>
-  <%= content_tag :li, link_to('home', root_url) %>
-  <%= content_tag :li, t('.title'), class: 'active'  %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
+<% content_for :buttons do %>
+  <%= link_to t('.new'), new_oauth_application_path, class: 'btn btn-default text-strong' %>
+<% end if can?(:create, Doorkeeper::Application) %>
 
-<% content_for :sidebar do %>
-  <%= content_tag :div, class: '', style: 'margin-bottom: 20px;' do %>
-    <%= link_to t('.new'), new_oauth_application_path, class: 'btn btn-success' %>
-  <% end if can?(:create, Doorkeeper::Application) %>
-
-  <%= content_tag :div do %>
-
-    <%= render 'shared/links' %>
-    
-  <% end if user_signed_in? %>
-
-<% end %>
 
 <div id="oauth-applications-list">
   <p class="text-muted">Applications listet are authenticated and authorized through babili.<p>
@@ -24,3 +14,5 @@
     <%= render @applications %>
   </div>
 </div>
+
+<%= render 'shared/links' %>

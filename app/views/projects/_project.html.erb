@@ -1,4 +1,4 @@
-    <%= link_to project, class: 'media list-group-item' do %>
+    <%= link_to edit_project_path(project), class: 'media list-group-item' do %>
       <div class="media-left" style="max-width: 80px;">
         <%= image_tag project.image_url(:small_thumb), class: '', style: 'width: 70px;' %>
       </div>

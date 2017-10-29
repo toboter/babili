@@ -1,0 +1,53 @@
+<% title 'Security', false %>
+
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
+<% end %>
+
+<div class="subhead">
+  <h4>Sessions</h4>
+</div>
+<p>This is a list of devices that have logged into your account. Revoke any sessions that you do not recognize.</p>
+<table class="table table-bordered">
+  <tbody>
+    <% @sessions.each do |session| %>
+      <%= content_tag :tr do %>
+        <%= content_tag :td, style: 'width:5%;', class: 'session-state-indicator' do %>
+          <%= content_tag :span, '', class: 'recent' %>
+        <% end %>
+        <%= content_tag :td, style: 'width:5%;' do %>
+          <%= content_tag :span, fa_icon("#{session.device} 3x"), class: 'text-muted' %>
+        <% end %>
+        <%= content_tag :td do %>
+          <%= session.ip %><br>
+          <%= session.browser %>
+        <% end %>
+        <%= content_tag :td, style: 'width:20%;' do %>
+          revoke
+        <% end %>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="subhead --spacious">
+  <h4>Security history</h4>
+</div>
+<p>This is a security log of important events involving your account.</p>
+
+<table class="table table-bordered">
+  <tbody>
+    <% @audits.each do |event| %>
+      <%= content_tag :tr do %>
+        <%= content_tag :td do %>
+          <span class="text-strong"><%= event.action %></span>
+          <span class="text-muted">
+            &mdash; <%= event.action_description %>
+            <%= " manipulated by (#{event.actor.name})" if event.actor != event.user %>
+          </span>
+          <span class="pull-right"><%= time_ago_in_words(event.created_at) %> ago</span>
+        <% end %>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>

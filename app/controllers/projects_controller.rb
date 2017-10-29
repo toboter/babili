@@ -1,16 +1,16 @@
 class ProjectsController < ApplicationController
-  before_action :set_project, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, except: [:index, :show]
-  load_and_authorize_resource
   require 'uri'
   require 'rest-client'
   require 'json'
+  before_action :set_project, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, except: :show
+  load_and_authorize_resource
+  layout "settings", except: :show
 
   # GET /projects
   # GET /projects.json
   def index
-    @projects = Project.all
-    @personal_projects = current_user.projects if user_signed_in?
+    @projects = current_user.projects
   end
 
   # GET /projects/1

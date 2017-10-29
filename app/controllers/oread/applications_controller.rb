@@ -1,16 +1,18 @@
 module Oread
   class Oread::ApplicationsController < ApplicationController
-    before_action :set_application, only: [:show, :edit, :update, :destroy]
-    before_action :authenticate_user!, except: [:index, :show]
-    load_and_authorize_resource
     require 'rest-client'
     require 'json'
-    include ERB::Util
+    include ERB::Util    
+    before_action :set_application, only: [:show, :edit, :update, :destroy]
+    before_action :authenticate_user!, except: :show
+    load_and_authorize_resource
+    layout "settings", except: :show
           
     # GET /applications
     # GET /applications.json
     def index
-      @applications = Application.order(name: :asc).all
+      # oread_application_ownerships
+      @applications = current_user.oread_applications.order(name: :asc).all.uniq
     end
 
     # GET /applications/1

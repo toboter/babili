@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
   load_and_authorize_resource
-  layout "settings", only: [:index]
+  layout "admin", only: [:index]
   
   def index
     @users = User.all# .where.not(id: current_user.id)

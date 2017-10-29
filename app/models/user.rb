@@ -28,6 +28,7 @@ class User < ApplicationRecord
   has_many :project_oauth_applications, through: :projects, source: :oauth_applications
   has_many :project_oauth_accessibilities, through: :projects, source: :oauth_accessibilities
   has_one :profile
+  has_many :audits
 
   before_create :build_profile
 

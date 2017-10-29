@@ -1,5 +1,7 @@
-<div class="page-header">
-  <h1><%= t('.title') %></h1>
-</div>
+<% title t('.title') %>
+
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
+<% end %>
 
 <%= render 'form', application: @application %>

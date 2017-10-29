@@ -27,18 +27,21 @@ en:
       form:
         error: 'Whoops! Check your form for possible errors'
       help:
-        redirect_uri: 'Use one line per URI'
+        name: 'Something users will recognize and trust'
+        homepage_url: 'The full URL to your application homepage'
+        description: 'This is displayed to all users of your application'
+        redirect_uri: 'Your application’s callback URL. Read our OAuth documentation for more information.'
         native_redirect_uri: 'Use %{native_redirect_uri} for local tests'
-        scopes: 'Separate scopes with spaces. Leave blank to use the default scopes.'
+        scopes: 'Separate scopes with spaces. Leave blank to use the default scopes'
       edit:
-        title: 'Edit application'
+        title: 'Edit OAuth application'
       index:
-        title: 'Your applications'
-        new: 'New Application'
+        title: 'OAuth applications'
+        new: 'Register a new application'
         name: 'Name'
         callback_url: 'Callback URL'
       new:
-        title: 'New Application'
+        title: 'Register a new OAuth application'
       show:
         title: 'Application: %{name}'
         application_id: 'Application Id'
@@ -66,7 +69,7 @@ en:
       buttons:
         revoke: 'Revoke'
       index:
-        title: 'Your authorized applications'
+        title: 'Authorized OAuth Apps'
         application: 'Application'
         created_at: 'Created At'
         date_format: '%Y-%m-%d %H:%M:%S'
