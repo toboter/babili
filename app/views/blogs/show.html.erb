@@ -30,7 +30,7 @@
   <%= content_tag :div, class: "page-header text-center" do %>
     <h1 class=""><%= @blog.title %></h1>
     <%= content_tag :p, class: 'text-muted' do %>
-      posted on <%= "#{@blog.posted_at.to_date.to_formatted_s(:long_ordinal)}" %>
+      <%= "posted on  #{@blog.posted_at.to_date.to_formatted_s(:long_ordinal)}" if @blog.posted_at? %>
       <%= "<br>by #{link_to @blog.author.try(:name), @blog.author.profile}".html_safe if @blog.type == 'Post' %> 
     <% end %>
   <% end %>

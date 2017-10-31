@@ -44,7 +44,10 @@ Rails.application.routes.draw do
 
     get '/admin', to: redirect("/settings/admin/users"), as: 'admin_settings'
     scope path: 'admin' do
-      resources :users, only: [:index, :update]
+      resources :users, only: [:index, :update] do
+        patch :approve, on: :member
+        patch :make_admin, on: :member
+      end
     end
 
     get '/developer', to: redirect("/settings/developer/oauth/applications"), as: 'developer_settings'

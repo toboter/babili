@@ -15,7 +15,7 @@ module Doorkeeper
     
     def create
       @application = Application.new(application_params)
-      @application.owner = current_user
+      @application.owner = current_user if Doorkeeper.configuration.confirm_application_owner?
       if @application.save
         Audit.create!(user: @application.owner, actor: current_user, action: "oauth_application.create", action_description: @application.name, actor_ip: current_user.last_sign_in_ip)
         flash[:notice] = I18n.t(:notice, scope: [:doorkeeper, :flash, :applications, :create])

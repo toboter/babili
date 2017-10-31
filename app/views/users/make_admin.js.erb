@@ -1,0 +1,4 @@
+$('#edit_user_<%= @user.id %>').removeClass("bg-fadeOut").addClass('bg-success-fadeIn');
+setTimeout(function () {      
+  $("#edit_user_<%= @user.id %>").addClass("bg-fadeOut").removeClass('bg-success-fadeIn');         
+}, 800);

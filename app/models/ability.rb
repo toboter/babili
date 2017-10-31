@@ -7,16 +7,24 @@ class Ability
     cannot :manage, :all
     can :read, :all
 
-    if user.is_active == true
+    if user.approved?
       can :manage, :all
 
-      cannot :manage, Project unless user.is_admin == true
+      cannot :manage, [Novelity, About] unless user.is_admin?
+      can :read, [Novelity, About]
+      cannot :manage, Post unless user.is_admin?
+      can [:read, :create], Post
+      can [:update, :destroy], Post do |post|
+        user == post.author
+      end
+
+      cannot :manage, Project unless user.is_admin?
       can [:update, :destroy], Project do |project|
         user.in?(project.members) && project.memberships.where(user_id: user.id).first.role.in?(['Owner', 'Admin'])
       end
       can [:read, :create], Project
 
-      cannot :manage, Oread::Application unless user.is_admin == true
+      cannot :manage, Oread::Application unless user.is_admin?
       can [:update, :destroy], Oread::Application do |app|
         app.owner == user
       end
@@ -24,13 +32,13 @@ class Ability
 
       # can create oread_access_token?
   
-      cannot :manage, Doorkeeper::Application unless user.is_admin == true
+      cannot :manage, Doorkeeper::Application unless user.is_admin?
       can [:update, :destroy, :create_accessibility, :update_accessibility, :destroy_accessibility], Doorkeeper::Application do |app|
         app.in?(user.all_oauth_applications) && user.all_oauth_accessibilities.where(oauth_application: app).map{|a| a.can_manage }.include?(true)
       end
       can [:read, :create], Doorkeeper::Application
 
-      cannot :manage, OauthAccessibility unless user.is_admin == true
+      cannot :manage, OauthAccessibility unless user.is_admin?
       can [:update, :destroy], OauthAccessibility do |acc|
         acc.in?(user.all_oauth_accessibilities) && user.all_oauth_accessibilities.where(oauth_application: acc.oauth_application).map{|a| a.can_manage }.include?(true)
       end
@@ -38,8 +46,8 @@ class Ability
       
     end
 
-    can :manage, User if user.is_admin == true
-    cannot :index, User unless user.is_admin == true
+    can :manage, User if user.is_admin?
+    cannot :index, User unless user.is_admin?
     can [:show, :create, :update, :destroy], User do |u|
       u == user
     end

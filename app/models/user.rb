@@ -27,10 +27,12 @@ class User < ApplicationRecord
   has_many :projects, through: :memberships
   has_many :project_oauth_applications, through: :projects, source: :oauth_applications
   has_many :project_oauth_accessibilities, through: :projects, source: :oauth_accessibilities
-  has_one :profile
-  has_many :audits
+  has_one :profile, dependent: :destroy
+  has_many :audits, dependent: :destroy
 
   before_create :build_profile
+  after_update :audit_password_change, if: :needs_password_change_audit?
+  after_create :send_admin_mail
 
   def all_oauth_applications
     Doorkeeper::Application.joins(:accessibilities).where('oauth_accessibilities.id IN (?)', all_oauth_accessibilities.ids).order(id: :asc)
@@ -79,5 +81,54 @@ class User < ApplicationRecord
   def accessible
     [id, self.class.name].join(",")
   end
+
+
+  def active_for_authentication? 
+    super && approved? 
+  end 
+  
+  def inactive_message 
+    if !approved? 
+      :not_approved 
+    else 
+      super # Use whatever other message 
+    end 
+  end
+
+  def send_admin_mail
+    AdminMailer.new_user_waiting_for_approval(self).deliver
+  end
+
+  def self.send_reset_password_instructions(attributes={})
+    recoverable = find_or_initialize_with_errors(reset_password_keys, attributes, :not_found)
+    if !recoverable.approved?
+      recoverable.errors[:base] << I18n.t("devise.failure.not_approved")
+    elsif recoverable.persisted?
+      recoverable.send_reset_password_instructions
+    end
+    recoverable
+  end
+
+  def audit_account_changes_by(admin)
+    if self.approved_changed? && self.approved?
+      Audit.create!(user: self, actor: admin, action: "user.account_approved", actor_ip: admin.last_sign_in_ip)
+      approved = true
+    end
+    if self.is_admin.changed? && self.is_admin?
+      Audit.create!(user: self, actor: admin, action: "user.account_is_admin", actor_ip: admin.last_sign_in_ip)
+      is_admin = true
+    end
+    return approved || is_admin
+  end
+
+  private
+  
+    def needs_password_change_audit?
+      encrypted_password_changed? && persisted?
+    end
+     
+    def audit_password_change
+      Audit.create!(user: self, actor: self, action: "user.password_changed", actor_ip: self.last_sign_in_ip)
+    end
 
 end

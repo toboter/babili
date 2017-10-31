@@ -14,7 +14,6 @@
       <th>Name</th>
       <th>Email</th>
 	    <th>Roles</th>
-      <th></th>
     </tr>
   </thead>
 
@@ -27,15 +26,15 @@
         <td>
           <%= user.email %>
         </td>
-        <%= simple_form_for [user], remote: true do |f| %>
-          <td>
+        <%= content_tag :td, id: "edit_user_#{user.id}" do %>
+          <%= simple_form_for user, url: approve_user_path(user), remote: true, html: { id: "approve_user_#{user.id}", class: 'approve_user' } do |f| %>
             <%= f.error_notification %>
-            <%= f.check_box :is_active %> Is Active<br>
-            <%= f.check_box :is_admin %> Is Admin
-          </td>
-          <td id="user_<%= user.id %>_submit">
-            <%= f.submit 'Update', class: "btn btn-sm btn-default" %>
-          </td>
+            <%= f.input :approved, input_html: { onchange: "$(this.form).submit();", id: "user_approved_#{user.id}" } %>
+          <% end %>
+          <%= simple_form_for user, url: make_admin_user_path(user), remote: true, html: { id: "make_admin_user_#{user.id}", class: 'make_admin_user' } do |f| %>
+            <%= f.error_notification %>
+            <%= f.input :is_admin, input_html: { onchange: "$(this.form).submit();", id: "user_is_admin_#{user.id}" } %>
+          <% end %>
         <% end %>
       </tr>
     <% end %>

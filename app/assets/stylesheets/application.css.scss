@@ -139,13 +139,46 @@ form {
     }
 }
 
-.session-state-indicator {
-    width: 8px;
-    height: 8px;
-    margin-top: 10px;
-    border-radius: 5px;
-    .recent {
-        background-color: #28a745;
-        box-shadow: 0 0 10px rgba(108,198,68,0.5);
+#sessions {
+    .session-device {
+        position: relative; 
+        .session-state-indicator {
+            float: left;
+            width: 8px;
+            height: 8px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .recent {
+            background-color: #28a745;
+            box-shadow: 0 0 10px rgba(108,198,68,0.5);
+        }
+        .session-icon {
+            float: left;
+            width: 32px;
+            margin-top: 1px;
+            margin-left: 10px;
+            color: #bbb;
+            text-align: center;
+        }
+        .session-details {
+            margin-left: 70px;
+        }
+        .session-details-more-info {
+            padding-top: 10px;
+        }
     }
+}
+
+.d-block {
+    display: block !important;
+}
+
+.bg-success-fadeIn {
+    @extend .bg-success;
+    -webkit-transition: all 1s ease;
+}
+.bg-fadeOut {
+    background-color: #fff;
+    -webkit-transition: all 1s ease;
 }

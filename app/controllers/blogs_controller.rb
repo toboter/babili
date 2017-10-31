@@ -8,7 +8,7 @@ class BlogsController < ApplicationController
   # GET /blogs.json
   def index
     @blogs = type_class.all
-    @blog_years = @blogs.order(posted_at: :desc).group_by { |t| t.posted_at.strftime('%Y') }
+    @blog_years = @blogs.order(posted_at: :desc).group_by { |t| t.posted_at.strftime('%Y') } if type_class.name == 'Novelity'
   end
 
   # GET /blogs/1
