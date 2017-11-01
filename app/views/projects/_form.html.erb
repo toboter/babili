@@ -1,4 +1,4 @@
-<%= simple_form_for @project, html: { class: 'form-horizontal' },
+<%= simple_form_for [:settings, @project], html: { class: 'form-horizontal' },
   wrapper: :horizontal_form do |f| %>
   
   <div class="row">
@@ -25,7 +25,7 @@
       <div class="row" id="memberships">
         <%= f.label :memberships, class: 'col-sm-3 control-label' %>
         <div class="col-md-9">
-          <table class="table table-bordered" style="margin-bottom: 10px;">
+          <table class="table table-simple" style="margin-bottom: 10px;">
             <thead>
               <tr>
                 <th>User name</th>
@@ -49,7 +49,7 @@
         <div class="col-md-6">
           <hr>
           <%= f.submit class: 'btn btn-primary' %>
-          <%= link_to 'Cancel', (@project.new_record? ? projects_path : @project), class: "btn btn-default" %>
+          <%= link_to 'Cancel', settings_projects_path, class: "btn btn-default" %>
         </div>
       </div>
     </div>

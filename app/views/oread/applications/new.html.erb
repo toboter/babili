@@ -1,9 +1,7 @@
-<% title "New read-/searchable application", false %>
+<% title "New search path" %>
 
 <% content_for :breadcrumbs do %>
-  <%= content_tag :li, link_to('home', root_url) %>
-  <%= content_tag :li, link_to('Searchable applications', oread_applications_path) %>
-  <%= content_tag :li, 'new', class: 'active' %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
 
 <%= render 'form', application: @application %>

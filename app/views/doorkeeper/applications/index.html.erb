@@ -8,11 +8,34 @@
 <% end if can?(:create, Doorkeeper::Application) %>
 
 
-<div id="oauth-applications-list">
-  <p class="text-muted">Applications listet are authenticated and authorized through babili.<p>
-  <div class="list-group">
-    <%= render @applications %>
-  </div>
-</div>
-
-<%= render 'shared/links' %>
+<main role="main">
+  <table class="table table-simple">
+    <thead>
+    <tr>
+      <th style="width:70%;"><%= t('doorkeeper.applications.index.application') %></th>
+      <th><%= t('doorkeeper.applications.index.created_at') %></th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @applications.each do |application| %>
+      <tr>
+        <td>
+          <strong><%= link_to application.name, oauth_application_path(application) %></strong>
+          <%= content_tag :p, truncate(application.description, length: 200), class: 'text-muted text-small' if application.description? %>
+          <%= content_tag :p, "Owner: #{application.owner.try(:name)}", class: 'text-muted text-small' %>        
+        </td>
+        <td>
+          <%= application.created_at.strftime(t('doorkeeper.authorized_applications.index.date_format')) %>
+        </td>
+        <td>
+          <% if can?(:update, application) || can?(:destroy, application) %>
+            <p><%= link_to t('doorkeeper.applications.buttons.edit'), edit_oauth_application_path(application), class: 'btn btn-primary btn-sm text-strong' if can?(:update, application) %></p>
+            <p><%= render 'delete_form', application: application, submit_btn_css: 'btn btn-danger btn-sm text-strong' if can?(:destroy, application) %></p>
+          <% end %>        
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</main>

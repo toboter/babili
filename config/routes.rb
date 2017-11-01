@@ -7,9 +7,10 @@ Rails.application.routes.draw do
   get '/imprint', to: 'home#imprint'
   get '/contact', to: 'home#contact'
   get '/explore', to: 'home#explore'
-  
-  resources :projects, only: :show
-  resources :profiles, except: [:destroy, :edit]
+
+  scope 'oauth' do
+    resources :applications, as: :oauth_application, only: :show, controller: 'doorkeeper/applications'
+  end
   use_doorkeeper do
     skip_controllers :applications, :authorized_applications
   end
@@ -18,35 +19,38 @@ Rails.application.routes.draw do
   end
 
   get '/settings', to: redirect("/settings/profile")
-  scope path: 'settings' do
+  scope path: '/settings' do
+    resources :projects, only: [:index, :new, :create, :edit, :update, :destroy], as: :settings_projects
     get 'profile', to: 'profiles#edit', as: 'edit_current_profile'
+    resources :profiles, only: [:update], as: :settings_profiles
+    
     devise_scope :user do
       get "/account" => "devise/registrations#edit"
     end
     use_doorkeeper do
       skip_controllers :tokens, :applications, :authorizations
     end
-    resources :projects, except: :show
     get '/security', to: 'security#index', as: 'security_settings'
-    namespace :oread do
-      resources :applications, except: :show do
-        # resources :oread_accessibilities, 
-        #   only: [:new, :create, :destroy], 
-        #   as: :accessibilities, 
-        #   path: 'accessibilities',
-        #   controller: '/oread_accessibilities'
-        resources :access_tokens,
-          only: [:new, :create, :destroy], 
-          as: :tokens, 
-          path: 'tokens'
-      end
-    end
+
 
     get '/admin', to: redirect("/settings/admin/users"), as: 'admin_settings'
     scope path: 'admin' do
       resources :users, only: [:index, :update] do
         patch :approve, on: :member
         patch :make_admin, on: :member
+      end
+      namespace :oread, as: :settings_admin_oread do
+        resources :applications, except: :show do
+          # resources :oread_accessibilities, 
+          #   only: [:new, :create, :destroy], 
+          #   as: :accessibilities, 
+          #   path: 'accessibilities',
+          #   controller: '/oread_accessibilities'
+          resources :access_tokens,
+            only: [:new, :create, :destroy], 
+            as: :tokens, 
+            path: 'tokens'
+        end
       end
     end
 
@@ -56,7 +60,7 @@ Rails.application.routes.draw do
         skip_controllers :authorizations, :tokens, :authorized_applications
       end
       scope :oauth do
-        resources :applications, as: :oauth_application do
+        resources :applications, as: :oauth_application, except: :show do
           resources :oauth_accessibilities, 
             only: [:new, :edit, :create, :update, :destroy], 
             as: :accessibilities, 
@@ -67,6 +71,9 @@ Rails.application.routes.draw do
     end
   end
   devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}, :controllers => { :registrations => :registrations }
+  resources :profiles, only: [:index, :show]
+  resources :projects, only: [:show]
+
 
   namespace :api do
     get 'me', to: 'users#me'

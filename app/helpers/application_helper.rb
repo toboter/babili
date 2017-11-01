@@ -39,4 +39,14 @@ module ApplicationHelper
     Redcarpet::Markdown.new(renderer, options).render(text).html_safe
   end
 
+
+  def render_image_or_pattern(image=nil, version=nil, text='default text babylon-online.org', height=200)
+    if image
+      image_tag version, class: 'img-responsive', style: "width: 100%;"
+    else
+      pattern = GeoPattern.generate(text)
+      return "<div style='background-image: #{pattern.to_data_uri}; width: 100%; height: #{height}px;'></div>".html_safe
+    end
+  end
+
 end

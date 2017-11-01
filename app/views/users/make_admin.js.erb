@@ -1,4 +1,11 @@
-$('#edit_user_<%= @user.id %>').removeClass("bg-fadeOut").addClass('bg-success-fadeIn');
+var color = $('#edit_user_<%= @user.id %>').css( "background-color" );
+$('#edit_user_<%= @user.id %>').css({
+      "background-color": "#dff0d8",
+      "-webkit-transition": "all 1s ease"
+    });
 setTimeout(function () {      
-  $("#edit_user_<%= @user.id %>").addClass("bg-fadeOut").removeClass('bg-success-fadeIn');         
+  $("#edit_user_<%= @user.id %>").css({
+      "background-color": color,
+      "-webkit-transition": "all 1s ease"
+    });
 }, 800);

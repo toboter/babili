@@ -1,6 +1,6 @@
 <%= link_to application, class: 'media list-group-item' do %>
   <div class="media-left" style="max-width: 80px;">
-    <%= image_tag application.image_url(:small_thumb), class: '', style: 'width: 70px;' %>
+    <%= content_tag :div, render_image_or_pattern(application.image, application.image_url(:small_thumb), application.name, height=70), style: 'width: 70px;' %>
   </div>
   <div class="media-body">
     <h4 class="media-heading"><%= application.name %></h4>

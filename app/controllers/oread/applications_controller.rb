@@ -6,13 +6,13 @@ module Oread
     before_action :set_application, only: [:show, :edit, :update, :destroy]
     before_action :authenticate_user!, except: :show
     load_and_authorize_resource
-    layout "settings", except: :show
+    layout "admin", except: :show
           
     # GET /applications
     # GET /applications.json
     def index
       # oread_application_ownerships
-      @applications = current_user.oread_applications.order(name: :asc).all.uniq
+      @applications = Oread::Application.order(name: :asc)
     end
 
     # GET /applications/1
@@ -49,7 +49,7 @@ module Oread
 
       respond_to do |format|
         if @application.save
-          format.html { redirect_to @application, notice: 'Application was successfully created.' }
+          format.html { redirect_to settings_admin_oread_applications_path, notice: 'Application was successfully created.' }
           format.json { render :show, status: :created, location: @application }
         else
           format.html { render :new }
@@ -65,7 +65,7 @@ module Oread
 
       respond_to do |format|
         if @application.update(application_params)
-          format.html { redirect_to @application, notice: 'Application was successfully updated.' }
+          format.html { redirect_to settings_admin_oread_applications_path, notice: 'Application was successfully updated.' }
           format.json { render :show, status: :ok, location: @application }
         else
           format.html { render :edit }
@@ -79,7 +79,7 @@ module Oread
     def destroy
       @application.destroy
       respond_to do |format|
-        format.html { redirect_to url_for(Oread::Application), notice: 'Application was successfully destroyed.' }
+        format.html { redirect_to settings_admin_oread_applications_path, notice: 'Application was successfully destroyed.' }
         format.json { head :no_content }
       end
     end

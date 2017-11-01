@@ -1,17 +1,44 @@
-<% title "Searchable applications" %>
+<% title "Registered search paths" %>
 
 <% content_for :breadcrumbs do %>
   <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
 <% content_for :buttons do %>
-  <%= link_to 'New application', new_oread_application_path, class: 'btn btn-default text-strong' %>
+  <%= link_to 'Create new path', new_settings_admin_oread_application_path, class: 'btn btn-default text-strong' %>
 <% end if can? :create, Oread::Application %>
 
+<p class="text-muted">Paths and their applications listet here will offer their data for keywords search.<p>
 
-<div id="oread-applications-list">
-  <p class="text-muted">Applications listet here will offer their data for keywords search.<p>
-  <div class="list-group">
-    <%= render @applications %>
-  </div>
-</div>
-<%= render 'shared/links' %>
+<main role="main">
+  <table class="table table-simple">
+    <thead>
+    <tr>
+      <th>Path</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @applications.each do |application| %>
+      <tr>
+        <td>
+          <%= content_tag :span, "#{pluralize(application.users.uniq.count, 'user' )}", class: 'text-muted pull-right' %>
+          <p>
+            <span class="text-strong"><%= link_to application.name, application %></span> 
+            &ndash; <span class="text-muted"><%= application.url %></span>
+          </p>
+          <%= content_tag :p, truncate(application.description, length: 200), class: 'text-small' if application.description? %>
+          <%= content_tag :p, class: 'text-muted text-small' do %>
+            <%= "Created by: #{application.owner.name}" %><br>
+            <%= "Created at: #{application.created_at.to_date.to_formatted_s(:long)}" %><br>
+            <%= link_to application.app_url, application.app_url %>
+          <% end %>
+        </td>
+        <td>
+          <p><%= link_to 'Edit', edit_settings_admin_oread_application_path(application), class: 'btn btn-default btn-sm text-strong' if can?(:update, application) %></p>
+          <p><%= link_to 'Remove', application, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm text-strong' if can?(:destroy, application) %></p></p>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</main>

@@ -5,20 +5,25 @@
 <% end %>
 
 <main role="main">
-  <table class="table table-striped">
+  <table class="table table-simple">
     <thead>
     <tr>
-      <th><%= t('doorkeeper.authorized_applications.index.application') %></th>
+      <th style="width: 70%;"><%= t('doorkeeper.authorized_applications.index.application') %></th>
       <th><%= t('doorkeeper.authorized_applications.index.created_at') %></th>
-      <th></th>
       <th></th>
     </tr>
     </thead>
     <tbody>
     <% @applications.each do |application| %>
       <tr>
-        <td><%= application.name %></td>
-        <td><%= application.created_at.strftime(t('doorkeeper.authorized_applications.index.date_format')) %></td>
+        <td>
+          <strong><%= link_to application.name, oauth_application_path(application) %></strong>
+          <%= content_tag :p, truncate(application.description, length: 200), class: 'text-muted text-small' if application.description? %>
+          <%= content_tag :p, "Owner: #{application.owner.try(:name)}", class: 'text-muted text-small' %>        
+        </td>
+        <td>
+          <%= application.created_at.strftime(t('doorkeeper.authorized_applications.index.date_format')) %>
+        </td>
         <td><%= render 'delete_form', application: application %></td>
       </tr>
     <% end %>

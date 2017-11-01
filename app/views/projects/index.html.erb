@@ -1,14 +1,45 @@
-<% title 'Your Projects' %>
+<% title 'Your projects' %>
 
 <% content_for :breadcrumbs do %>
   <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
 <% content_for :buttons do %>
-  <%= link_to 'New project', new_project_path, class: 'btn btn-default text-strong' %>
+  <%= link_to 'Create a new project', new_settings_project_path, class: 'btn btn-default text-strong' %>
 <% end if can?(:create, Project) %>
 
 
-<div class="list-group">
-  <%= render @projects %>
-</div>
-<%= render 'shared/links' %>
+<main role="main">
+  <table class="table table-simple">
+    <thead>
+    <tr>
+      <th style="width:60%;">Project</th>
+      <th>Your role</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @memberships.each do |membership| %>
+      <tr>
+        <td>
+          <p class="text-strong"><%= link_to membership.project.name, project_path(membership.project) %></p>
+          <%= content_tag :p, truncate(membership.project.description, length: 200), class: 'text-small' if membership.project.description? %>
+          <%= content_tag :p, class: 'text-muted text-small' do %>
+            <%= "Current owner: #{membership.project.owner.map(&:name).join(', ')}" %><br>
+            <%= "Created at: #{membership.project.created_at.to_date.to_formatted_s(:long)}" %>
+          <% end %>
+        </td>
+        <td>
+          <%= content_tag :p, class: 'text-muted text-small' do %>
+            <%= content_tag :span, "#{membership.role}", class: 'text-strong' %><br>
+            <%= "Since: #{membership.updated_at.to_date.to_formatted_s(:long)}" %>
+          <% end %>
+        </td>
+        <td>
+          <p><%= link_to 'Edit', edit_settings_project_path(membership.project), class: 'btn btn-default btn-sm text-strong' if can?(:update, membership.project) %></p>
+          <p><%= link_to 'Remove', [:settings, membership.project], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm text-strong' if can?(:destroy, membership.project) %></p></p>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</main>

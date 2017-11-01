@@ -23,6 +23,14 @@
 .text-strong {
     font-weight: bold;
 }
+.text-small {
+    font-size: small;
+}
+
+.table-simple {
+    @extend .table-striped;
+    border: 1px solid #ddd;
+}
 
 .col-centered{
     float: none;
@@ -172,13 +180,4 @@ form {
 
 .d-block {
     display: block !important;
-}
-
-.bg-success-fadeIn {
-    @extend .bg-success;
-    -webkit-transition: all 1s ease;
-}
-.bg-fadeOut {
-    background-color: #fff;
-    -webkit-transition: all 1s ease;
 }

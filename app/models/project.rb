@@ -19,7 +19,7 @@ class Project < ApplicationRecord
   end
   
   def owner
-    memberships.where(role: 'Owner').first.user
+    members.where(memberships: {role: 'Owner'})
   end
 
   def accessible

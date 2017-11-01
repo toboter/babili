@@ -40,6 +40,8 @@ en:
         new: 'Register a new application'
         name: 'Name'
         callback_url: 'Callback URL'
+        created_at: 'Created at'
+        application: 'Application'
       new:
         title: 'Register a new OAuth application'
       show:
@@ -71,8 +73,8 @@ en:
       index:
         title: 'Authorized OAuth Apps'
         application: 'Application'
-        created_at: 'Created At'
-        date_format: '%Y-%m-%d %H:%M:%S'
+        created_at: 'Authorized at'
+        date_format: '%d.%m.%Y %H:%M'
 
     errors:
       messages:

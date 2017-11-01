@@ -64,6 +64,8 @@ gem 'fastimage'
 gem 'down'
 gem 'rails-bootstrap-markdown'
 gem 'cocoon'
+gem 'geo_pattern'  # https://github.com/jasonlong/geo_pattern
+gem 'inline_svg'   # https://github.com/jamesmartin/inline_svg
 
 gem 'devise'
 gem 'doorkeeper'

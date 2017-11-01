@@ -5,16 +5,17 @@
       label_method: :name, 
       value_method: :id, 
       include_blank: true,
-      label: false %>
+      label: false,
+      disabled: (f.object.user == current_user || !f.object.new_record?) %>
   </td>
   <td>
     <%= f.input :role, 
       collection: @roles, 
       include_blank: true,
       label: false,
-      disabled: f.object.role == 'Owner' %>
+      disabled: f.object.user == current_user %>
   </td>
   <td>
-    <%= link_to_remove_association fa_icon('remove', text: 'remove'), f %>
+    <%= link_to_remove_association fa_icon('remove', text: 'remove'), f unless f.object.user == current_user %>
   </td>
 </tr>

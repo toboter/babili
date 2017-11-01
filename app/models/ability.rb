@@ -33,10 +33,10 @@ class Ability
       # can create oread_access_token?
   
       cannot :manage, Doorkeeper::Application unless user.is_admin?
-      can [:update, :destroy, :create_accessibility, :update_accessibility, :destroy_accessibility], Doorkeeper::Application do |app|
+      can [:index, :update, :destroy, :create_accessibility, :update_accessibility, :destroy_accessibility], Doorkeeper::Application do |app|
         app.in?(user.all_oauth_applications) && user.all_oauth_accessibilities.where(oauth_application: app).map{|a| a.can_manage }.include?(true)
       end
-      can [:read, :create], Doorkeeper::Application
+      can [:show, :create], Doorkeeper::Application
 
       cannot :manage, OauthAccessibility unless user.is_admin?
       can [:update, :destroy], OauthAccessibility do |acc|

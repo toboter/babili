@@ -2,7 +2,7 @@
 
 <% content_for :breadcrumbs do %>
   <%= content_tag :li, link_to('home', root_url) %>
-  <%= content_tag :li, link_to('Searchable applications', oread_applications_path) %>
+  <%= content_tag :li, link_to('Explore', explore_url) %>
   <%= content_tag :li, @application.name, class: 'active' %>
 <% end %>
 
@@ -12,8 +12,8 @@
       <strong>You have admin priviledges on this application!</strong>
     </div>
     <div class="panel-body">
-      <%= link_to fa_icon('edit', text: 'Administrate'), edit_oread_application_path(@application), class: 'btn btn-warning' if can? :update, @application %>
-      <%= link_to fa_icon('remove', text: 'Delete'), @application, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' if can? :destroy, @application %>
+      <%= link_to fa_icon('edit', text: 'Administrate'), edit_settings_admin_oread_application_path(@application), class: 'btn btn-warning' if can? :update, @application %>
+      <%= link_to fa_icon('remove', text: 'Delete'), [:settings, :admin, @application], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' if can? :destroy, @application %>
     </div>
   <% end if can?(:edit, @application) || can?(:destroy, @application) %>
 
@@ -21,9 +21,9 @@
     <div id="user-application-token" class="panel panel-default">
       <div class="panel-heading">
         <strong>Personal Access Token</strong>
-        <%= link_to fa_icon('plus', text: 'personal token'), new_oread_application_token_path(@application), class: 'btn btn-default btn-xs pull-right', style: '' if can? :create, Oread::AccessToken %>
+        <%= link_to fa_icon('plus', text: 'personal token'), new_settings_admin_oread_application_token_path(@application), class: 'btn btn-default btn-xs pull-right', style: '' if can? :create, Oread::AccessToken %>
       </div>
-      <div class="panel-body">
+      <div class="panel-body bg-danger">
         <% if @token %>
           <p><strong><%= @token.token %></strong></p>
           <td><%= @token.refresh_token %></td>
@@ -31,7 +31,7 @@
           <td><%= @token.token_type %></td>
           <td>
             <%= @token.created_at %>
-            <%= link_to fa_icon('remove'), oread_application_token_path(@application, @token), method: :delete, class: 'pull-right' %>
+            <%= link_to fa_icon('remove'), settings_admin_oread_application_token_path(@application, @token), method: :delete, class: 'pull-right' %>
           </td>
         <% end %>
       </div>
@@ -50,17 +50,13 @@
       </p>
     </div>
   <% end %>
-  
-  <%= render 'shared/links' %>
-
-
 
 <% end %>
 
 <div class="row">
   <div class="col-md-5">
     <div class='panel panel-default' id="application-<%= @application.id %>-description">
-      <%= image_tag @application.image_url(:small_banner), class: 'img-responsive', style: 'width: 100%' %>
+      <%= render_image_or_pattern(@application.image, @application.image_url(:small_banner), @application.name) %>
       <div class="panel-body text-center">
         <h4><%= @application.name %></h4>
         <p class="small text-muted">Created on <%= @application.created_at.to_date.to_formatted_s(:long_ordinal) %>. <%= pluralize( @application.users.uniq.count, 'user' ) %></p>
@@ -88,8 +84,6 @@
   </div>
 
   <div class="col-md-7">
-
-
     <%= form_tag oread_application_path(@application), :method => 'get', class: "" do %>
       <div class="input-group">
         <span class="input-group-addon">

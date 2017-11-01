@@ -7,7 +7,9 @@ module Doorkeeper
       @applications = current_user.oauth_application_ownerships.order(name: :asc)
     end
 
-    def show; end
+    def show
+      render layout: 'application'
+    end
 
     def new
       @application = Application.new

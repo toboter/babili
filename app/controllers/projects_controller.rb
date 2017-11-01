@@ -10,7 +10,7 @@ class ProjectsController < ApplicationController
   # GET /projects
   # GET /projects.json
   def index
-    @projects = current_user.projects
+    @memberships = current_user.memberships.joins(:project).order('projects.name ASC')
   end
 
   # GET /projects/1
@@ -36,10 +36,11 @@ class ProjectsController < ApplicationController
   # POST /projects.json
   def create
     @project = Project.new(project_params)
+    @project.memberships.build(user: current_user, role: 'Owner')
 
     respond_to do |format|
       if @project.save
-        format.html { redirect_to @project, notice: 'Project was successfully created.' }
+        format.html { redirect_to settings_projects_path, notice: 'Project was successfully created.' }
         format.json { render :show, status: :created, location: @project }
       else
         format.html { render :new }
@@ -59,7 +60,7 @@ class ProjectsController < ApplicationController
         @project.oauth_applications.each do |app|
           UpdateClientAppUserAccessibilitiesJob.perform_later(app.id, changed_ids)
         end
-        format.html { redirect_to @project, notice: "Project was successfully updated." }
+        format.html { redirect_to settings_projects_path, notice: "Project was successfully updated." }
         format.json { render :show, status: :ok, location: @project }
       else
         format.html { render :edit }
@@ -73,7 +74,7 @@ class ProjectsController < ApplicationController
   def destroy
     @project.destroy
     respond_to do |format|
-      format.html { redirect_to projects_url, notice: 'Project was successfully destroyed.' }
+      format.html { redirect_to settings_projects_url, notice: 'Project was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

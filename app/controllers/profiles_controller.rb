@@ -23,7 +23,7 @@ class ProfilesController < ApplicationController
 
     respond_to do |format|
       if @profile.save
-        format.html { redirect_to @profile, flash: { success: 'Profile was successfully created.' } }
+        format.html { redirect_to edit_current_profile_path, flash: { success: 'Profile was successfully created.' } }
         format.json { render :show, status: :created, location: @profile }
       else
         format.html { render :new }

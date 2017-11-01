@@ -5,7 +5,7 @@
   <% end %>
 
   <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-12">
       <%= content_tag :div, class: "form-group#{' has-error' if application.errors[:name].present?}" do %>
         <%= f.label :name, 'Application name', class: 'control-label' %>
         <div class="">

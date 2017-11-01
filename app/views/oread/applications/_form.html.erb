@@ -1,4 +1,4 @@
-<%= simple_form_for @application, html: { class: 'form-horizontal' },
+<%= simple_form_for [:settings, :admin, @application], html: { class: 'form-horizontal' },
   wrapper: :horizontal_form do |f| %>
   
   <div class="row">
@@ -13,10 +13,6 @@
             <%= f.input :port, hint: 'typically this is 80.' %>
             <%= f.input :search_path, hint: 'The API path to query and add the query params to. Like: /api/objects/search.json' %>
             <%= f.input :description %>
-            <%= f.association :owner, 
-              collection: User.all, 
-              include_blank: false, 
-              hint: "After changing this to someone else you won't be able to make changes anymore." unless @application.new_record? %>
 
             <%= content_tag :div, class: "form-group", style: 'margin-top: 20px;' do %>
               <%= f.label :image, class: 'col-sm-3 control-label' %>
@@ -33,7 +29,7 @@
         <div class="col-md-6">
           <hr>
           <%= f.submit class: 'btn btn-primary' %>
-          <%= link_to 'Cancel', (@application.new_record? ? oread_applications_path : @application), class: "btn btn-default" %>
+          <%= link_to 'Cancel', settings_admin_oread_applications_path, class: "btn btn-default" %>
         </div>
       </div>
     </div>
