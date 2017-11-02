@@ -16,10 +16,10 @@ class SearchController < ApplicationController
         begin
           response = RestClient.get(url, {:Authorization => "#{app_user_token.try(:token_type)} #{app_user_token.try(:token)}"})
         rescue Errno::ECONNREFUSED
-          @failed_connections << url
-          puts "Server at #{url} is refusing connection. Err No #{@failed_connections.count}"
+          @failed_connections << "<strong>#{app.app_url}</strong> connection refused".html_safe
+          puts "#{app.app_url} connection refused. Errcount #{@failed_connections.count}"
         end
-        flash.now[:notice] = @failed_connections.count == 1 ? "Results from #{@failed_connections.first.to_s} missing. Can't connect to server." : "Multiple connections failing. Results from #{@failed_connections.join(', ')} missing." if @failed_connections.count > 0
+        flash.now[:warning] = @failed_connections.count == 1 ? "Missing results: #{@failed_connections.first.to_s}. <br><strong>Connection error.</strong>".html_safe : "Missing results (#{@failed_connections.count}): #{@failed_connections.join(', ')}. <br><strong>Connection error.</strong>".html_safe if @failed_connections.count > 0
         @results.concat(JSON.parse(response)) if response
       end
       @grouped_results = @results.group_by { |r| r['type'] }

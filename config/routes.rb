@@ -15,7 +15,12 @@ Rails.application.routes.draw do
     skip_controllers :applications, :authorized_applications
   end
   namespace :oread do
-    resources :applications, only: :show
+    resources :applications, only: :show do
+      resources :access_tokens,
+      only: [:new, :create, :destroy], 
+      as: :tokens, 
+      path: 'tokens'
+    end
   end
 
   get '/settings', to: redirect("/settings/profile")
@@ -31,7 +36,7 @@ Rails.application.routes.draw do
       skip_controllers :tokens, :applications, :authorizations
     end
     get '/security', to: 'security#index', as: 'security_settings'
-
+    get '/collections', to: 'oread/authorized_applications#index', as: :settings_collections
 
     get '/admin', to: redirect("/settings/admin/users"), as: 'admin_settings'
     scope path: 'admin' do
@@ -46,10 +51,6 @@ Rails.application.routes.draw do
           #   as: :accessibilities, 
           #   path: 'accessibilities',
           #   controller: '/oread_accessibilities'
-          resources :access_tokens,
-            only: [:new, :create, :destroy], 
-            as: :tokens, 
-            path: 'tokens'
         end
       end
     end

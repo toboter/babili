@@ -35,7 +35,7 @@
         </td>
         <td>
           <p><%= link_to 'Edit', edit_settings_admin_oread_application_path(application), class: 'btn btn-default btn-sm text-strong' if can?(:update, application) %></p>
-          <p><%= link_to 'Remove', application, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm text-strong' if can?(:destroy, application) %></p></p>
+          <p><%= link_to 'Remove', [:settings, :admin, application], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm text-strong' if can?(:destroy, application) %></p></p>
         </td>
       </tr>
     <% end %>

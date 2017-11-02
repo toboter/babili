@@ -1,0 +1,47 @@
+<% title 'Your personal collections'%>
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
+<% end %>
+
+<%= content_tag :p, 'Personal collections are applications which offer their data for personalized keyword-search-results on babylon-online.org.
+  Collections are registered by an admin and can be used by any user. By default all collection applications are searched against public available data. 
+  Personal collections data means, you need to add a personal access token (manually or automatically). 
+  The following lists those applications where a personal token is present.', class: 'text-muted' %>
+
+<main role="main">
+  <table class="table table-simple">
+    <thead>
+    <tr>
+      <th>Path</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @authorized_applications.each do |application| %>
+      <tr>
+        <td>
+          <%= content_tag :span, "#{pluralize(application.users.uniq.count, 'user' )}", class: 'text-muted pull-right' %>
+          <p>
+            <span class="text-strong"><%= link_to application.name, application %></span> 
+            &ndash; <span class="text-muted"><%= application.url %></span>
+          </p>
+          <%= content_tag :p, truncate(application.description, length: 200), class: 'text-small' if application.description? %>
+          <%= content_tag :div, class: 'text-muted text-small' do %>
+            <%= "Created by: #{application.owner.name}" %><br>
+            <%= "Created at: #{application.created_at.to_date.to_formatted_s(:long)}" %><br>
+            <%= link_to application.app_url, application.app_url %>
+          <% end %>
+          <%= content_tag :div, class: 'text-small' do %>
+            <%= "Last token: #{application.access_tokens.where(resource_owner: current_user).last.inspect}" %><br>
+            personal token count: <%= application.access_tokens.where(resource_owner: current_user).count %>
+          <% end %>
+        </td>
+        <td>
+        <%= link_to fa_icon('plus', text: 'personal token'), new_oread_application_token_path(application), class: 'btn btn-default btn-xs pull-right', style: '' if can? :create, Oread::AccessToken %>
+          
+          </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</main>

@@ -28,7 +28,7 @@ class Ability
       can [:update, :destroy], Oread::Application do |app|
         app.owner == user
       end
-      can [:read, :create], Oread::Application
+      can [:read], Oread::Application
 
       # can create oread_access_token?
   
