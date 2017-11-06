@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  enrollee: one
+  application: one
+  creator: one
+
+two:
+  enrollee: two
+  application: two
+  creator: two

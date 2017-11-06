@@ -14,13 +14,8 @@ Rails.application.routes.draw do
   use_doorkeeper do
     skip_controllers :applications, :authorized_applications
   end
-  namespace :oread do
-    resources :applications, only: :show do
-      resources :access_tokens,
-      only: [:new, :create, :destroy], 
-      as: :tokens, 
-      path: 'tokens'
-    end
+  namespace :oread, path: 'collections' do
+    resources :applications, only: :show
   end
 
   get '/settings', to: redirect("/settings/profile")
@@ -36,7 +31,15 @@ Rails.application.routes.draw do
       skip_controllers :tokens, :applications, :authorizations
     end
     get '/security', to: 'security#index', as: 'security_settings'
-    get '/collections', to: 'oread/authorized_applications#index', as: :settings_collections
+    # get '/collections', to: 'oread/access_enrollments#index', as: :settings_collections
+    namespace :oread, as: :settings_oread do
+      resources :access_enrollments, only: :index, as: :enrollments do
+        resources :access_tokens,
+        only: [:new, :create, :destroy], 
+        as: :tokens, 
+        path: 'tokens'
+      end
+    end
 
     get '/admin', to: redirect("/settings/admin/users"), as: 'admin_settings'
     scope path: 'admin' do
@@ -45,13 +48,7 @@ Rails.application.routes.draw do
         patch :make_admin, on: :member
       end
       namespace :oread, as: :settings_admin_oread do
-        resources :applications, except: :show do
-          # resources :oread_accessibilities, 
-          #   only: [:new, :create, :destroy], 
-          #   as: :accessibilities, 
-          #   path: 'accessibilities',
-          #   controller: '/oread_accessibilities'
-        end
+        resources :applications, except: :show
       end
     end
 

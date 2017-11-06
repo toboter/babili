@@ -18,29 +18,12 @@
   <% end if can?(:edit, @application) || can?(:destroy, @application) %>
 
   <% if current_user %>
-    <div id="user-application-token" class="panel panel-default">
-      <div class="panel-heading">
-        <strong>Personal Access Token</strong>
-        <%= link_to fa_icon('plus', text: 'personal token'), new_settings_admin_oread_application_token_path(@application), class: 'btn btn-default btn-xs pull-right', style: '' if can? :create, Oread::AccessToken %>
-      </div>
-      <div class="panel-body bg-danger">
-        <% if @token %>
-          <p><strong><%= @token.token %></strong></p>
-          <td><%= @token.refresh_token %></td>
-          <td><%= @token.expires_in %></td>
-          <td><%= @token.token_type %></td>
-          <td>
-            <%= @token.created_at %>
-            <%= link_to fa_icon('remove'), settings_admin_oread_application_token_path(@application, @token), method: :delete, class: 'pull-right' %>
-          </td>
-        <% end %>
-      </div>
-    </div>
+    View your collections <%= link_to 'settings', settings_oread_enrollments_path %>.
   <% end %>
 
   <%= content_tag :div, class: 'panel panel-info' do %>
     <div class="panel-heading">
-      <strong>What is a search-/readable application?</strong>
+      <strong>What is a search-/readable collection?</strong>
     </div>
     <div class="panel-body">
       <p>
@@ -59,7 +42,10 @@
       <%= render_image_or_pattern(@application.image, @application.image_url(:small_banner), @application.name) %>
       <div class="panel-body text-center">
         <h4><%= @application.name %></h4>
-        <p class="small text-muted">Created on <%= @application.created_at.to_date.to_formatted_s(:long_ordinal) %>. <%= pluralize( @application.users.uniq.count, 'user' ) %></p>
+        <p class="small text-muted">
+          Created on <%= @application.created_at.to_date.to_formatted_s(:long_ordinal) %>. 
+          <%= pluralize( @application.token_holders.uniq.count, 'holder' ) %>
+        </p>
       </div>
     </div>
     <div class='panel panel-default'>
@@ -75,11 +61,11 @@
     </div>
 
     <%= content_tag :div, class: 'list-group' do %>
-    <h4>Users</h4>
-      <% for user in @application.users.uniq do %>
-        <%= render partial: "/#{user.to_partial_path}", object: user %>    
+    <h4>Token Holders</h4>
+      <% for holder in @application.token_holders.uniq do %>
+        <%= render partial: "/#{holder.to_partial_path}", object: holder %>    
       <% end %>
-    <% end if @application.users.any? %>
+    <% end if @application.token_holders.any? %>
 
   </div>
 

@@ -17,8 +17,8 @@
   <% end if user_signed_in? && @profile == current_user.profile %>
 
   <h4>Search &amp; Read <small>applications</small></h4>
-  <% if @profile.user.oread_applications.any? %>
-    <%= render @profile.user.oread_applications.uniq %>
+  <% if @profile.user.oread_token_applications.any? %>
+    <%= render @profile.user.oread_token_applications.uniq %>
   <% else %>
     <p class="text-muted">
       none yet<br>

@@ -15,15 +15,19 @@ class User < ApplicationRecord
     }
   validates_format_of :username, with: /^[a-zA-Z0-9_\.]*$/, multiline: true
 
-  has_many :oauth_accessibilities, as: :accessor, dependent: :delete_all
+  has_many :oauth_accessibilities, as: :accessor, dependent: :destroy
   has_many :oauth_applications, through: :oauth_accessibilities
   has_many :oauth_application_ownerships, class_name: 'Doorkeeper::Application', as: :owner
 
-  has_many :oread_access_tokens, class_name: 'Oread::AccessToken', foreign_key: 'resource_owner_id'
-  has_many :oread_applications, through: :oread_access_tokens, source: :application
+  has_many :oread_access_tokens, class_name: 'Oread::AccessToken', foreign_key: 'resource_owner_id', dependent: :destroy
+  has_many :oread_access_enrollments, class_name: 'Oread::AccessEnrollment', foreign_key: 'enrollee_id', dependent: :destroy
+
+  has_many :oread_token_applications, through: :oread_access_tokens, source: :application
+  has_many :oread_enrolled_applications, through: :oread_access_enrollments, source: :application
+
   has_many :oread_application_ownerships, class_name: 'Oread::Application', as: :owner
 
-  has_many :memberships, dependent: :delete_all
+  has_many :memberships, dependent: :destroy
   has_many :projects, through: :memberships
   has_many :project_oauth_applications, through: :projects, source: :oauth_applications
   has_many :project_oauth_accessibilities, through: :projects, source: :oauth_accessibilities
@@ -31,6 +35,7 @@ class User < ApplicationRecord
   has_many :audits, dependent: :destroy
 
   before_create :build_profile
+  after_update :enroll_to_default_oread_apps, if: :is_approved?
   after_update :audit_password_change, if: :needs_password_change_audit?
   after_create :send_admin_mail
 
@@ -110,7 +115,7 @@ class User < ApplicationRecord
   end
 
   def audit_account_changes_by(admin)
-    if self.approved_changed? && self.approved?
+    if self.is_approved?
       Audit.create!(user: self, actor: admin, action: "user.account_approved", actor_ip: admin.last_sign_in_ip)
       approved = true
     end
@@ -121,7 +126,17 @@ class User < ApplicationRecord
     return approved || is_admin
   end
 
+  def enroll_to_default_oread_apps
+    Oread::Application.where(enroll_users_default: true).each do |app|
+      self.oread_access_enrollments << Oread::AccessEnrollment.new(application: app, creator: self)
+    end
+    return :enrollments_created
+  end
+
   private
+    def is_approved?
+      approved_changed? && approved?
+    end
   
     def needs_password_change_audit?
       encrypted_password_changed? && persisted?

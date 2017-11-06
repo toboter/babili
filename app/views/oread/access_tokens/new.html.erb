@@ -1,6 +1,6 @@
 <% title "New personal access token for #{@application.name}" %>
 
-<%= simple_form_for([@application, @access_token], url: oread_application_tokens_path) do |f| %>
+<%= simple_form_for([@application, @access_token], url: settings_oread_authorized_application_tokens_path) do |f| %>
   <%= f.error_notification %>
 
   <div class="form-inputs">

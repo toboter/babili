@@ -44,7 +44,7 @@ en:
       update_needs_confirmation: "You updated your account successfully, but we need to verify your new email address. Please check your email and follow the confirm link to confirm your new email address."
       updated: "Your account has been updated successfully."
       user:
-        signed_up_but_not_approved: 'You have signed up successfully but your account has not been approved by your administrator yet'
+        signed_up_but_not_approved: 'You have signed up successfully but your account is awaiting approval by an administrator. But also a message with a confirmation link has been sent to your email address. Follow the link to activate your account first.'
     sessions:
       signed_in: "Signed in successfully."
       signed_out: "Signed out successfully."

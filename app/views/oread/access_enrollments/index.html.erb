@@ -12,7 +12,7 @@
   <table class="table table-simple">
     <thead>
     <tr>
-      <th>Path</th>
+      <th>You're accessing</th>
       <th></th>
     </tr>
     </thead>
@@ -20,7 +20,7 @@
     <% @authorized_applications.each do |application| %>
       <tr>
         <td>
-          <%= content_tag :span, "#{pluralize(application.users.uniq.count, 'user' )}", class: 'text-muted pull-right' %>
+          <%= content_tag :span, "#{pluralize(application.token_holders.uniq.count, 'holder' )}", class: 'text-muted pull-right' %>
           <p>
             <span class="text-strong"><%= link_to application.name, application %></span> 
             &ndash; <span class="text-muted"><%= application.url %></span>
@@ -31,13 +31,16 @@
             <%= "Created at: #{application.created_at.to_date.to_formatted_s(:long)}" %><br>
             <%= link_to application.app_url, application.app_url %>
           <% end %>
+          <%= content_tag :p, class: 'text-muted', style: 'margin-top:10px;' do %>
+            through <%= content_tag :span, application.access_tokens.where(resource_owner: current_user).last.token, class: 'text-strong' %>
+          <% end if application.access_tokens.where(resource_owner: current_user).any? %>
           <%= content_tag :div, class: 'text-small' do %>
-            <%= "Last token: #{application.access_tokens.where(resource_owner: current_user).last.inspect}" %><br>
-            personal token count: <%= application.access_tokens.where(resource_owner: current_user).count %>
-          <% end %>
+            token history: <%= application.access_tokens.where(resource_owner: current_user).count %>
+            (<%= link_to 'remove last token', settings_oread_enrollment_token_path(application, application.access_tokens.where(resource_owner: current_user).last), method: :delete %>)
+          <% end if application.access_tokens.where(resource_owner: current_user).any? %>
         </td>
         <td>
-        <%= link_to fa_icon('plus', text: 'personal token'), new_oread_application_token_path(application), class: 'btn btn-default btn-xs pull-right', style: '' if can? :create, Oread::AccessToken %>
+        <%= link_to fa_icon('plus', text: 'personal token'), new_settings_oread_enrollment_token_path(application), class: 'btn btn-default btn-xs pull-right', style: '' if can? :create, Oread::AccessToken %>
           
           </td>
       </tr>

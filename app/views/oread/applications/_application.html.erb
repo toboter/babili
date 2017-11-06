@@ -4,7 +4,10 @@
   </div>
   <div class="media-body">
     <h4 class="media-heading"><%= application.name %></h4>
-    <p class="small text-muted">Created on <%= application.created_at.to_date.to_formatted_s(:long_ordinal) %>. <%= 'Used by ' + pluralize(application.users.uniq.count, 'user' ) %>.</p>
+    <p class="small text-muted">
+      Created on <%= application.created_at.to_date.to_formatted_s(:long_ordinal) %>. 
+      <%= 'Used by ' + pluralize(application.token_holders.uniq.count, 'holder' ) %>.
+    </p>
     <%= truncate(application.description, length: 150, separator: ' ') %>
   </div>
   <div class="media-right">

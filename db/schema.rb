@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171031141425) do
+ActiveRecord::Schema.define(version: 20171106152108) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -125,6 +125,18 @@ ActiveRecord::Schema.define(version: 20171031141425) do
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
   end
 
+  create_table "oread_access_enrollments", force: :cascade do |t|
+    t.integer  "enrollee_id"
+    t.integer  "application_id"
+    t.integer  "creator_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.index ["application_id"], name: "index_oread_access_enrollments_on_application_id", using: :btree
+    t.index ["creator_id"], name: "index_oread_access_enrollments_on_creator_id", using: :btree
+    t.index ["enrollee_id", "application_id"], name: "index_oread_access_enrollments_on_enrollee_and_application", unique: true, using: :btree
+    t.index ["enrollee_id"], name: "index_oread_access_enrollments_on_enrollee_id", using: :btree
+  end
+
   create_table "oread_access_tokens", force: :cascade do |t|
     t.integer  "resource_owner_id"
     t.integer  "application_id"
@@ -142,14 +154,15 @@ ActiveRecord::Schema.define(version: 20171031141425) do
   create_table "oread_applications", force: :cascade do |t|
     t.string   "name"
     t.string   "search_path"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
     t.string   "host"
     t.text     "description"
     t.integer  "owner_id"
     t.string   "owner_type"
     t.integer  "port"
     t.text     "image_data"
+    t.boolean  "enroll_users_default", default: true, null: false
     t.index ["owner_id", "owner_type"], name: "index_oread_applications_on_owner_id_and_owner_type", using: :btree
   end
 
@@ -214,5 +227,8 @@ ActiveRecord::Schema.define(version: 20171031141425) do
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_accessibilities", "oauth_applications"
+  add_foreign_key "oread_access_enrollments", "oread_applications", column: "application_id"
+  add_foreign_key "oread_access_enrollments", "users", column: "creator_id"
+  add_foreign_key "oread_access_enrollments", "users", column: "enrollee_id"
   add_foreign_key "profiles", "users"
 end
