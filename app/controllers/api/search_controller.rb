@@ -8,12 +8,12 @@ class Api::SearchController < Api::BaseController
 
   def index
     if params[:q].present?
-      @apps = Oread::Application.all
+      @apps = current_resource_owner.present? ? current_resource_owner.oread_enrolled_applications : Oread::Application.where(enroll_users_default: true)
       @results =[]
       @failed_connections = []
       @apps.each do |app|
         response = nil
-        app_user_token = app.try(:access_tokens).where(resource_owner: current_user).last
+        app_user_token = app.try(:access_tokens).where(resource_owner: current_resource_owner).last
         instance_variable_set("@#{app.name.parameterize.underscore}_url", "#{app.url}?q=#{url_encode(params[:q])}")
         url = instance_variable_get("@#{app.name.parameterize.underscore}_url")
         begin

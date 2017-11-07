@@ -1,0 +1,3 @@
+toastr["success"]("Successfully added <%= @enrollment.application.name %> to your collections.");
+$("#new_oread_access_enrollment_<%= @enrollment.application.id %>").replaceWith("<%= escape_javascript(link_to 'In your collections', settings_oread_enrollments_path, class: 'btn btn-default btn-sm text-strong') %>");
+$("#app_enrollees_count_for_<%= @enrollment.application.id %>").replaceWith("<%= escape_javascript(content_tag :span, pluralize(@enrollment.application.enrollees.count, 'enrolled user' ), id: "app_enrollees_count_for_#{@enrollment.application.id}") %>");

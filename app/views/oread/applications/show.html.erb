@@ -1,9 +1,10 @@
 <% title @application.name, false %>
 
 <% content_for :breadcrumbs do %>
-  <%= content_tag :li, link_to('home', root_url) %>
+  <%= content_tag :li, link_to('Home', root_url) %>
   <%= content_tag :li, link_to('Explore', explore_url) %>
-  <%= content_tag :li, @application.name, class: 'active' %>
+  <%= content_tag :li, link_to('Collection applications', collections_url) %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
 
 <% content_for :sidebar do %>
@@ -39,7 +40,7 @@
 <div class="row">
   <div class="col-md-5">
     <div class='panel panel-default' id="application-<%= @application.id %>-description">
-      <%= render_image_or_pattern(@application.image, @application.image_url(:small_banner), @application.name) %>
+      <%= background_image_div(@application, :small_banner, {class: '', style: 'height:150px;width:100%; background-position:center;'}) %>
       <div class="panel-body text-center">
         <h4><%= @application.name %></h4>
         <p class="small text-muted">

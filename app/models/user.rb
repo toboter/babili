@@ -130,7 +130,7 @@ class User < ApplicationRecord
     Oread::Application.where(enroll_users_default: true).each do |app|
       self.oread_access_enrollments << Oread::AccessEnrollment.new(application: app, creator: self)
     end
-    return :enrollments_created
+    return true
   end
 
   private

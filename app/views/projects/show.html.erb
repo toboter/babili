@@ -1,9 +1,10 @@
 <% title @project.name, false %>
 
 <% content_for :breadcrumbs do %>
-  <%= content_tag :li, link_to('home', root_url) %>
-  <%= content_tag :li, link_to('explore', explore_url) %>
-  <%= content_tag :li, @project.name, class: 'active' %>
+  <%= content_tag :li, link_to('Home', root_url) %>
+  <%= content_tag :li, link_to('Explore', explore_url) %>
+  <%= content_tag :li, link_to('Projects', projects_url) %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
 
 <% content_for :sidebar do %>

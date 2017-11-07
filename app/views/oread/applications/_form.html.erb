@@ -1,5 +1,4 @@
-<%= simple_form_for [:settings, :admin, @application], html: { class: 'form-horizontal' },
-  wrapper: :horizontal_form do |f| %>
+<%= simple_form_for [:settings, :admin, @application] do |f| %>
   
   <div class="row">
     <div class="col-md-12">
@@ -13,14 +12,12 @@
             <%= f.input :port, hint: 'typically this is 80.' %>
             <%= f.input :search_path, hint: 'The API path to query and add the query params to. Like: /api/objects/search.json' %>
             <%= f.input :description %>
+            <%= f.input :enroll_users_default, as: :boolean %>
 
-            <%= content_tag :div, class: "form-group", style: 'margin-top: 20px;' do %>
-              <%= f.label :image, class: 'col-sm-3 control-label' %>
-              <div class="col-sm-9">
+
                 <%= f.hidden_field :image, value: @application.cached_image_data %>
-                <%= f.file_field :image, as: :file %>
-              </div>
-            <% end %>
+                <%= f.input :image, as: :file %>
+
           </div>
         <% end %>
       </div>

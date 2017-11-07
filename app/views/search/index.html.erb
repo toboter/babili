@@ -54,9 +54,11 @@
   </p>
 
   <br>
-  <p class="text-muted">
-    Searching all registered, searchable applications.
-    <%= content_tag :span, "<br>Looking for unpublished content in:".html_safe if user_signed_in? %>
-  </p>
-  <%= render current_user.oread_applications.uniq if user_signed_in? %>
+  <%= content_tag :p, 'Searching all registered, searchable collections.', class: "text-muted" if !user_signed_in? %>
+
+  <%= content_tag :h4, "Looking for personalized content in:", class: 'text-muted' if user_signed_in? %>
+  <%= render current_user.oread_enrolled_applications.order(name: :asc) if user_signed_in? %>
+
+  <%= content_tag :h4, "Looking for unpublished content in:", class: 'text-muted' if user_signed_in? %>
+  <%= render current_user.oread_token_applications.where(id: current_user.oread_enrolled_application_ids).order(name: :asc).uniq if user_signed_in? %>
 <% end %>

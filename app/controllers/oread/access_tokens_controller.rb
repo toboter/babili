@@ -4,7 +4,7 @@ class Oread::AccessTokensController < ApplicationController
   layout 'settings'
 
   def new
-    @access_token = @application.access_tokens.new
+    @access_token = current_user.oread_access_tokens.new
   end
   
   def create
@@ -13,7 +13,7 @@ class Oread::AccessTokensController < ApplicationController
 
     respond_to do |format|
       if @access_token.save
-        format.html { redirect_to settings_oread_authorized_applications_path, notice: "Token was successfully set for #{@application.name}." }
+        format.html { redirect_to settings_oread_enrollments_path, notice: "Token was successfully set for #{@application.name}." }
         format.json { render :show, status: :created, location: @application }
       else
         format.html { render :new }
@@ -23,10 +23,10 @@ class Oread::AccessTokensController < ApplicationController
   end
 
   def destroy
-    @access_token = @application.access_tokens.find_by_id_and_resource_owner_id(params[:id], current_user.id)
+    @access_token = current_user.oread_access_tokens.find(params[:id])
     @access_token.destroy
     respond_to do |format|
-      format.html { redirect_to settings_oread_authorized_applications_path, notice: 'Token was successfully removed.' }
+      format.html { redirect_to settings_oread_enrollments_path, notice: 'Token was successfully removed.' }
       format.json { head :no_content }
     end
   end
@@ -34,13 +34,13 @@ class Oread::AccessTokensController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_application
-      @application = Oread::Application.find(params[:authorized_application_id])
+      @application = Oread::Application.find(params[:application_id])
     end
 
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def access_token_params
-      params.require(:oread_access_token).permit(:authorized_application_id, :resource_owner_id, :token, :refresh_token, :expires_in, :token_type)
+      params.require(:oread_access_token).permit(:application_id, :resource_owner_id, :token, :refresh_token, :expires_in, :token_type)
     end
     
 end

@@ -27,14 +27,27 @@
     font-size: small;
 }
 
+.text-center {
+    text-align: center;
+}
+
 .table-simple {
     @extend .table-striped;
     border: 1px solid #ddd;
 }
 
-.col-centered{
+a.no-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.col-centered {
     float: none;
     margin: 0 auto;
+}
+
+.navbar-default {
+    font-weight: bold;
 }
 
 .about-content, .post-content {

@@ -7,6 +7,9 @@ class Profile < ApplicationRecord
 
   belongs_to :user
 
+  def name
+    display_name
+  end
   def display_name
     [honorific_prefix, given_name, family_name, honorific_suffix].join(' ').strip
   end

@@ -5,7 +5,7 @@ class ImageUploader < Shrine
   plugin :processing
   plugin :versions   # enable Shrine to handle a hash of files
   plugin :delete_raw # delete processed files after uploading
-  plugin :default_url
+  # plugin :default_url
 
   Attacher.default_url do |options|
     "/assets/defaults/#{options[:version]}.svg"

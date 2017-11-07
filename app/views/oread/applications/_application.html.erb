@@ -1,20 +1,30 @@
-<%= link_to application, class: 'media list-group-item' do %>
-  <div class="media-left" style="max-width: 80px;">
-    <%= content_tag :div, render_image_or_pattern(application.image, application.image_url(:small_thumb), application.name, height=70), style: 'width: 70px;' %>
-  </div>
-  <div class="media-body">
-    <h4 class="media-heading"><%= application.name %></h4>
-    <p class="small text-muted">
-      Created on <%= application.created_at.to_date.to_formatted_s(:long_ordinal) %>. 
-      <%= 'Used by ' + pluralize(application.token_holders.uniq.count, 'holder' ) %>.
+<div class='panel panel-default' id="application-<%= application.id %>">
+  <%= link_to application do %>
+    <%= background_image_div(application, :small_banner, {class: '', style: 'height:200px;width:100%; background-position:center;'}) %>
+  <% end if local_assigns[:full] %>
+  <div class="panel-body text-center">
+    <h4><%= link_to application.name, application %></h4>
+    <p class="text-small text-muted">
+      Created on <%= application.created_at.to_date.to_formatted_s(:long_ordinal) %>.
+      <br>
+      <%= pluralize(application.token_holders.uniq.count, 'token holder' ) %>.
+      <%= content_tag :span, pluralize(application.enrollees.count, 'enrolled user' ), id: "app_enrollees_count_for_#{application.id}" %>.
     </p>
-    <%= truncate(application.description, length: 150, separator: ' ') %>
+    <%= content_tag :p, truncate(application.description, length: 130, separator: ' '), style:'min-height:60px;' if local_assigns[:full] %>
+
+    <%= content_tag :div, class: 'enrollment-actions' do %>
+      <% if !application.enrollees.include?(current_user) %>
+        <%= form_for Oread::AccessEnrollment.new, url: settings_oread_enrollments_path, remote: true, html: {id: "new_oread_access_enrollment_#{application.id}", style: "display:inline!important;"} do |f| %>
+          <%= f.hidden_field :application_id, value: application.id %>
+          <%= f.submit 'Enroll to this collection', class: 'btn btn-sm btn-default text-strong' %>
+        <% end %>
+      <% else %>
+        <%= link_to 'In your collections', settings_oread_enrollments_path, class: 'btn btn-default btn-sm text-strong' %>
+      <% end %>
+      <div style="margin-left:10px;display:inline;">
+        <%= content_tag :span, fa_icon('check'), data: {toggle: "tooltip", placement: "top"}, title: "Personal search-token exists.", class: 'text-success' if application.access_tokens.where(resource_owner: current_user).exists? %>
+        <%= content_tag :span, fa_icon('ban'), data: {toggle: "tooltip", placement: "top"}, title: "You have to login once or add a search token or you will only be able to read published content.", class: 'text-warning' if !application.access_tokens.where(resource_owner: current_user).exists? %>
+      </div>
+    <% end if user_signed_in? && local_assigns[:actions] %>
   </div>
-  <div class="media-right">
-    <% if user_signed_in? && application.access_tokens.where(resource_owner: current_user).exists? %>
-      <%= content_tag :span, fa_icon('check'), data: {toggle: "tooltip", placement: "left"}, title: "Personal search-token exists.", class: 'text-success' %>
-    <% elsif user_signed_in? %>
-      <%= content_tag :span, fa_icon('ban'), data: {toggle: "tooltip", placement: "left"}, title: "You have to login once or add a search token or you will only be able to read published content.", class: 'text-warning' %>
-    <% end %>
-  </div>
-<% end %>
+</div>

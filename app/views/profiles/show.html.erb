@@ -1,7 +1,8 @@
 <% title(@profile.user.name, false) %>
 
 <% content_for :breadcrumbs do %>
-  <%= content_tag :li, link_to('home', root_url) %>
+  <%= content_tag :li, link_to('Home', root_url) %>
+  <%= content_tag :li, link_to('Explore', explore_url) %>
   <%= content_tag :li, link_to('User profiles', profiles_url) %>
   <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>

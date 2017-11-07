@@ -40,12 +40,18 @@ module ApplicationHelper
   end
 
 
-  def render_image_or_pattern(image=nil, version=nil, text='default text babylon-online.org', height=200)
-    if image
-      image_tag version, class: 'img-responsive', style: "width: 100%;"
+  def background_image_div obj, size, options={}
+    style = options.delete(:style) { |el| "" }
+    klass = options.delete(:class) { |el| "" }
+    content_tag :div, '', style: "background-image: #{background_image_url obj, size};background-repeat: no-repeat;background-size: cover;#{style}", class: "#{klass}"
+  end
+
+  def background_image_url obj, size
+    if obj.image.present?
+      "url(#{obj.image_url(size)})"
     else
-      pattern = GeoPattern.generate(text)
-      return "<div style='background-image: #{pattern.to_data_uri}; width: 100%; height: #{height}px;'></div>".html_safe
+      pattern = GeoPattern.generate(obj.name.presence || 'default text')
+      pattern.to_data_uri
     end
   end
 

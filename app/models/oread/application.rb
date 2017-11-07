@@ -19,8 +19,4 @@ class Oread::Application < ApplicationRecord
     "#{host}#{':'+port.to_s if (port && port != 80)}"
   end
 
-  # add as attributes
-  def enroll_users_default
-    true
-  end
 end

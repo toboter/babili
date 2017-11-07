@@ -5,7 +5,7 @@ class SearchController < ApplicationController
 
   def index
     if params[:q].present?
-      @apps = Oread::Application.all
+      @apps = user_signed_in? ? current_user.oread_enrolled_applications : Oread::Application.where(enroll_users_default: true)
       @results =[]
       @failed_connections = []
       @apps.each do |app|

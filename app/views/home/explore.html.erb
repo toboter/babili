@@ -1,51 +1,95 @@
 <% title "Explore", false %>
-<% content_for(:breadcrumbs) do %>
-  <%= content_tag :li, link_to('home', root_url) %>
-  <%= content_tag :li, 'Explore', class: 'active' %>
-<% end %>
 
-<% content_for :sidebar do %>
-<div class="row">
-  <div class="col-md-12">
-    <h4>
-      Users
-      <span class="badge"><%= @users.count %></span>
-      <span class='pull-right small'><%= link_to 'view all', profiles_path, class: '' %></span>
-    </h4>
-  </div>
-  <% for user in @users.limit(12) do %>
-    <div class="col-md-6 col-sm-12" style="margin-bottom:20px;">
-      <%= render user %>
+<% content_for :content do %>
+  <div class="jumbotron" style="margin-bottom: 0px;height: 500px; background-image: <%= background_image_url(@showcased, :small_banner) %>; background-position: center; background-size: cover; background-repeat: no-repeat;color: white; text-shadow: #ddd 0.05em 0.05em 0.1em;">
+    <div class="container" style="margin-top:60px;">
+      <h1><%= link_to @showcased.name, @showcased, class: 'no-link' %></h1> 
+      <div class="row">
+        <div class="col-md-7">
+          <p class='lead'><%= link_to @showcased.description, @showcased, class: 'no-link' %></p>
+          <%= content_tag :div, class: 'enrollment-actions', style: 'margin-top:30px;' do %>
+            <% if !@showcased.enrollees.include?(current_user) %>
+              <%= form_for Oread::AccessEnrollment.new, url: settings_oread_enrollments_path, remote: true, html: {id: "new_oread_access_enrollment_#{@showcased.id}", style: "display:inline!important;"} do |f| %>
+                <%= f.hidden_field :application_id, value: @showcased.id %>
+                <%= f.submit 'Enroll to this collection', class: 'btn btn-sm btn-default text-strong' %>
+              <% end %>
+            <% else %>
+              <%= link_to 'In your collections', settings_oread_enrollments_path, class: 'btn btn-sm btn-default text-strong' %>
+            <% end %>
+            <div style="margin-left:10px;display:inline;">
+              <%= content_tag :span, fa_icon('check'), data: {toggle: "tooltip", placement: "right"}, title: "Personal search-token exists.", class: 'text-success' if @showcased.access_tokens.where(resource_owner: current_user).exists? %>
+              <%= content_tag :span, fa_icon('ban'), data: {toggle: "tooltip", placement: "right"}, title: "You have to login once or add a search token or you will only be able to read published content.", class: 'text-warning' if !@showcased.access_tokens.where(resource_owner: current_user).exists? %>
+            </div>
+          <% end if user_signed_in? %>
+        </div>
+      </div> 
+      <%=  %>
     </div>
-  <% end %>
-</div>
-<% end %>
+  </div>
 
-<h1>Showcase</h1>
-<p class="text-muted" style="margin-bottom: 20px;">
-  Babylon-Online is organized by a number of different interconnected data pools (applications)', from different materials 
-  and techniques to objects (like figurines) and culture. Records are also organized by the season—when the 
-  object was excavated—and the museum that houses the object today.
-</p>
+  <div class="container" style="padding-bottom:50px;">
 
-<div class="row">
-  <div class="col-md-6">
-    <div id="explore-oread-applications">
-      <h4 class="">
-        Searchable applications
+    <div class="page-header text-center">
+      <h1>
+        Collections
         <span class="badge"><%= @oread_applications.count %></span>
-      </h4> 
-      <% for application in @oread_applications.limit(5) do %>
-        <%= render application %>
+      </h1>
+      <p class="text-muted lead">
+        Babylon-Online is organized by a number of different interconnected data pools (collections). From different materials 
+        and techniques to objects (like figurines) and culture. Learn more on the <%= link_to 'settings page', settings_oread_enrollments_path %>.
+      </p>
+    </div>
+    <div class="row">
+      <% for application in @oread_applications.limit(3) do %>
+        <div class="col-md-4">
+          <%= render application, full: true, actions: true %>
+        </div>
       <% end if can? :read, Oread::Application %>
     </div>
-  </div>
+    <div class="row">
+      <%= link_to 'View all.', collections_path, class: 'col-md-12' %>
+    </div>
 
-  <div class="col-md-6">
-	<h4>
-    Projects / Groups
-    <span class="badge"><%= @projects.count %></span>
-  </h4>
-  <%= render @projects.limit(5) %>
+
+    <div class="page-header text-center">
+      <h1>
+        Projects
+        <span class="badge"><%= @projects.count %></span>
+      </h1>
+      <p class="text-muted lead">
+        On babylon-online, you can join projects, which are groups of people with a shared interest. These projects can be 
+        authorized together as one. Learn more on your personal <%= link_to 'projects settings page', settings_projects_path %>.
+      </p>
+    </div>
+    <div class="row" style="margin-bottom:20px;">
+      <% for project in @projects.limit(4) do %>
+        <div class="col-md-6">
+          <%= render project %>
+        </div>
+      <% end %>
+    </div>
+    <div class="row">
+      <%= link_to 'View all.', projects_path, class: 'col-md-12' %>
+    </div>
+    
+    <div class="page-header text-center">
+      <h1>
+        Users
+        <span class="badge"><%= @users.count %></span>
+      </h1>
+      <p class="text-muted lead">
+        View all of them in a <%= link_to 'list', profiles_path %>.
+      </p>
+    </div>
+    <div class="row">
+      <% for user in @users.limit(6) do %>
+        <div class="col-md-4 col-sm-6" style="margin-bottom:20px;">
+          <%= render user %>
+        </div>
+      <% end %>
+    </div>
+    <div class="row">
+      <%= link_to 'View all.', profiles_path, class: 'col-md-12' %>
+    </div>
   </div>
-</div>
+<% end %>

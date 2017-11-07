@@ -14,12 +14,20 @@ class HomeController < ApplicationController
   
   def contact
   end
+
+  def projects
+    @projects = Project.order(name: :asc)
+  end
+
+  def collections
+    @collection_apps = Oread::Application.order(name: :asc)
+  end
   
   def explore
-    @oread_applications = Oread::Application.order(name: :asc).all
-    @oauth_applications = Doorkeeper::Application.order(name: :asc).all
-    @projects = Project.order(created_at: :desc).all
-    @users = User.all
+    @oread_applications = Oread::Application.order("RANDOM()")
+    @projects = Project.order("RANDOM()")
+    @users = User.order("RANDOM()")
+    @showcased = Oread::Application.order("RANDOM()").first
   end
   
 end

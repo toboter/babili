@@ -34,7 +34,7 @@ class Api::UsersController < Api::BaseController
 
   # /api/my/accessibilities/search
   def my_search_abilities
-    oread_applications = current_resource_owner.oread_applications.distinct
+    oread_applications = current_resource_owner.oread_token_applications.distinct
     render json: oread_applications, each_serializer: OreadApplicationSerializer
   end
 

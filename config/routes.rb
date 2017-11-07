@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   get '/imprint', to: 'home#imprint'
   get '/contact', to: 'home#contact'
   get '/explore', to: 'home#explore'
+  get :projects, to: 'home#projects'
+  get '/collections/applications', to: 'home#collections', as: :collections
 
   scope 'oauth' do
     resources :applications, as: :oauth_application, only: :show, controller: 'doorkeeper/applications'
@@ -33,7 +35,10 @@ Rails.application.routes.draw do
     get '/security', to: 'security#index', as: 'security_settings'
     # get '/collections', to: 'oread/access_enrollments#index', as: :settings_collections
     namespace :oread, as: :settings_oread do
-      resources :access_enrollments, only: :index, as: :enrollments do
+      resources :access_enrollments, only: [:index, :create, :destroy], as: :enrollments, path: 'enrollments' do
+        get 'restore_default', on: :collection
+      end
+      resources :oread_applications, only: [], as: :applications, path: 'applications' do
         resources :access_tokens,
         only: [:new, :create, :destroy], 
         as: :tokens, 

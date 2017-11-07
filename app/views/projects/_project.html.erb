@@ -1,6 +1,6 @@
     <%= link_to project_path(project), class: 'media list-group-item' do %>
       <div class="media-left" style="max-width: 80px;">
-        <%= image_tag project.image_url(:small_thumb), class: '', style: 'width: 70px;' %>
+        <%= background_image_div(project, :small_thumb, {class: 'media-object', style: 'height:70px;width:70px; background-position:center;'}) %>
       </div>
       <div class="media-body">
         <h4 class="media-heading"><%= project.name %></h4>

@@ -3,48 +3,63 @@
   <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
 
-<%= content_tag :p, 'Personal collections are applications which offer their data for personalized keyword-search-results on babylon-online.org.
-  Collections are registered by an admin and can be used by any user. By default all collection applications are searched against public available data. 
-  Personal collections data means, you need to add a personal access token (manually or automatically). 
-  The following lists those applications where a personal token is present.', class: 'text-muted' %>
+<%= content_tag :p, class: 'text-muted' do %>
+  To look up data, it is possible to register any application to babylon-online which has an API (ask your admin). These Collections 
+  offer their published data for keyword search. If you sign up to babylon-online, any registered app which has default 
+  enroll settings will be listed here and will be searched by default. New apps will be added likewise. Adding an app to your personal 
+  search-engine, can be done through the <%= link_to 'showcase', explore_path %>. To be able, to also look for closed/unpublished data,
+  you here also have the ability, to add a access-token to your collection. If supported by the collection-app, this can also be automated.
+  <br><br>
+  In the near future you will also optionally receive updates to your enrollments by mail.
+<% end %>
 
 <main role="main">
   <table class="table table-simple">
     <thead>
     <tr>
-      <th>You're accessing</th>
+      <th>You're currently accessing</th>
       <th></th>
     </tr>
     </thead>
     <tbody>
-    <% @authorized_applications.each do |application| %>
+    <% @enrollments.each do |enrollment| %>
       <tr>
         <td>
-          <%= content_tag :span, "#{pluralize(application.token_holders.uniq.count, 'holder' )}", class: 'text-muted pull-right' %>
           <p>
-            <span class="text-strong"><%= link_to application.name, application %></span> 
-            &ndash; <span class="text-muted"><%= application.url %></span>
+            <span class="text-strong"><%= link_to enrollment.application.name, enrollment.application %></span> 
+            &ndash; <span class="text-muted"><%= enrollment.application.url %></span>
           </p>
-          <%= content_tag :p, truncate(application.description, length: 200), class: 'text-small' if application.description? %>
+          <%= content_tag :p, truncate(enrollment.application.description, length: 200), class: 'text-small' if enrollment.application.description? %>
           <%= content_tag :div, class: 'text-muted text-small' do %>
-            <%= "Created by: #{application.owner.name}" %><br>
-            <%= "Created at: #{application.created_at.to_date.to_formatted_s(:long)}" %><br>
-            <%= link_to application.app_url, application.app_url %>
+            <%= "Created by: #{enrollment.application.owner.name}" %><br>
+            <%= "Created at: #{enrollment.application.created_at.to_date.to_formatted_s(:long)}" %><br>
+            <%= link_to enrollment.application.app_url, enrollment.application.app_url %>
           <% end %>
           <%= content_tag :p, class: 'text-muted', style: 'margin-top:10px;' do %>
-            through <%= content_tag :span, application.access_tokens.where(resource_owner: current_user).last.token, class: 'text-strong' %>
-          <% end if application.access_tokens.where(resource_owner: current_user).any? %>
+            through <%= content_tag :span, enrollment.application.access_tokens.where(resource_owner: current_user).last.token, class: 'text-strong' %>
+          <% end if enrollment.application.access_tokens.where(resource_owner: current_user).any? %>
+          
           <%= content_tag :div, class: 'text-small' do %>
-            token history: <%= application.access_tokens.where(resource_owner: current_user).count %>
-            (<%= link_to 'remove last token', settings_oread_enrollment_token_path(application, application.access_tokens.where(resource_owner: current_user).last), method: :delete %>)
-          <% end if application.access_tokens.where(resource_owner: current_user).any? %>
+            token history: <%= enrollment.application.access_tokens.where(resource_owner: current_user).count %>
+            (<%= link_to 'remove last token', settings_oread_application_token_path(enrollment.application, enrollment.application.access_tokens.where(resource_owner: current_user).last), method: :delete %>)
+          <% end if enrollment.application.access_tokens.where(resource_owner: current_user).any? %>
         </td>
         <td>
-        <%= link_to fa_icon('plus', text: 'personal token'), new_settings_oread_enrollment_token_path(application), class: 'btn btn-default btn-xs pull-right', style: '' if can? :create, Oread::AccessToken %>
-          
-          </td>
+          <p>
+            <%= link_to fa_icon('plus', text: 'new token'), new_settings_oread_application_token_path(enrollment.application), class: 'btn btn-default btn-sm text-strong' if can? :create, Oread::AccessToken %>
+          </p>
+          <p> 
+            <%= link_to fa_icon('trash', text: 'remove enrollment'), 
+              settings_oread_enrollment_path(enrollment), 
+              method: :delete, 
+              class: 'btn btn-default btn-sm text-strong',
+              data: {toggle: "tooltip", placement: "bottom"}, 
+              title: 'Removing means, you will no longer search this collection.' %> 
+          </p>
+        </td>
       </tr>
     <% end %>
     </tbody>
   </table>
+  <%= link_to 'restore defaults', restore_default_settings_oread_enrollments_path, class: 'btn btn-sm btn-default text-strong' %> 
 </main>

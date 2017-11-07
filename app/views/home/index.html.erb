@@ -1,60 +1,61 @@
-<%= content_tag :header do %>
-  <div class="header-content">
-    <div class="header-content-inner">
-      <!-- 
-      <h2>Wiedererstehendes</h2>
-      <h1 id="homeHeading">Babylon</h1>
-      <p>Explore the City of Babylon as it lays before us today.</p>
-      -->
-      <h2 id="homeHeading" style="margin: 30px 0;">babylon-online.org</h2>
+<%= content_for(:content) do %>
+  <%= content_tag :header do %>
+    <div class="header-content">
+      <div class="header-content-inner">
+        <!-- 
+        <h2>Wiedererstehendes</h2>
+        <h1 id="homeHeading">Babylon</h1>
+        <p>Explore the City of Babylon as it lays before us today.</p>
+        -->
+        <h2 id="homeHeading" style="margin: 30px 0;">babylon-online.org</h2>
 
-      <div class="row" style="margin-bottom:40px;">
-        <div class="col-md-6 col-centered">
-          <%= render 'shared/search' %>
+        <div class="row" style="margin-bottom:40px;">
+          <div class="col-md-6 col-centered">
+            <%= render 'shared/search' %>
+          </div>
+        </div>
+              
+        <div style="margin-top:100px;">
+          <p style="margin-bottom:40px">babylon-online.org and its content is work in progress. <br>Data may be incomplete or even not existing.</p>
+          <%= link_to fa_icon('chevron-circle-down 4x'), '#about', class: 'page-scroll', style: '' %>       
+        </div>
+
+      </div>
+    </div>
+  <% end %> 
+        
+  <section class="bg-primary" id="about">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-lg-offset-2">
+          <% for entry in Blog.where(type: 'About').order('position') do %>
+            <h2 class="section-heading"><%= entry.title %></h2>
+            <p class="">
+              <%= entry.abstract ? "#{entry.abstract} ... #{link_to 'continue reading', entry}".html_safe : truncate(teaser(entry.content), length: 500, separator: ' ', escape: false) { link_to " continue reading", entry } %>
+            </p>
+            <hr class="light">
+          <% end %>
         </div>
       </div>
-            
-      <div style="margin-top:100px;">
-        <p style="margin-bottom:40px">babylon-online.org and its content is work in progress. <br>Data may be incomplete or even not existing.</p>
-        <%= link_to fa_icon('chevron-circle-down 4x'), '#about', class: 'page-scroll', style: '' %>       
-      </div>
-
     </div>
-  </div>
-<% end %> 
-      
-<section class="bg-primary" id="about">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 col-lg-offset-2">
-        <% for entry in Blog.where(type: 'About').order('position') do %>
-          <h2 class="section-heading"><%= entry.title %></h2>
-          <p class="">
-            <%= entry.abstract ? "#{entry.abstract} ... #{link_to 'continue reading', entry}".html_safe : truncate(teaser(entry.content), length: 500, separator: ' ', escape: false) { link_to " continue reading", entry } %>
-          </p>
-          <hr class="light">
-        <% end %>
+  </section>
+
+
+  <aside class="bg-dark">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-5">
+          <%= link_to image_tag('fu-logo.svg', style: 'height: 100px; margin: 0 auto;'), 'http://www.fu-berlin.de', target: :_blank %>
+        </div>
+        <div class="col-md-3">
+          <%= link_to image_tag('dog-logo.png', style: 'height: 70px; margin: 20px auto;'), 'http://www.orient-gesellschaft.de', target: :_blank %>
+        </div>
+        <div class="col-md-4">
+          <%= link_to image_tag('smb-logo.svg', style: 'height: 70px; margin: 20px auto;'), 'http://smb.museum', target: :_blank %>
+        </div>
       </div>
     </div>
-  </div>
-</section>
-
-
-<aside class="bg-dark">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-5">
-        <%= link_to image_tag('fu-logo.svg', style: 'height: 100px; margin: 0 auto;'), 'http://www.fu-berlin.de', target: :_blank %>
-      </div>
-      <div class="col-md-3">
-        <%= link_to image_tag('dog-logo.png', style: 'height: 70px; margin: 20px auto;'), 'http://www.orient-gesellschaft.de', target: :_blank %>
-      </div>
-      <div class="col-md-4">
-        <%= link_to image_tag('smb-logo.svg', style: 'height: 70px; margin: 20px auto;'), 'http://smb.museum', target: :_blank %>
-      </div>
-    </div>
-  </div>
-</aside>
-
+  </aside>
+<% end %>
 
 

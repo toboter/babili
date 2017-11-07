@@ -1,4 +1,4 @@
-<% title 'User profiles' %>
+<% title 'Collection applications' %>
 
 <% content_for :breadcrumbs do %>
   <%= content_tag :li, link_to('Home', root_url) %>
@@ -6,10 +6,10 @@
   <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
 
-<div class="list-group">
-  <% @profiles.each do |profile| %>
-    <div class="col-md-6" style="margin-bottom:20px;">
-      <%= render profile.user %>
+<div class="row">
+  <% @collection_apps.each do |app| %>
+    <div class="col-md-6">
+      <%= render app, full: true, actions: true %>
     </div>
   <% end %>
 </div>

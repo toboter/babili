@@ -21,7 +21,10 @@
     <% @applications.each do |application| %>
       <tr>
         <td>
-          <%= content_tag :span, "#{pluralize(application.token_holders.uniq.count, 'holder' )}", class: 'text-muted pull-right' %>
+          <%= content_tag :span, class: 'text-muted pull-right' do %>
+            <%= fa_icon('star') if application.enroll_users_default? %>
+            <%= "#{pluralize(application.token_holders.uniq.count, 'token holder' )}" %>
+          <% end %>
           <p>
             <span class="text-strong"><%= link_to application.name, application %></span> 
             &ndash; <span class="text-muted"><%= application.url %></span>
