@@ -32,7 +32,11 @@ Rails.application.routes.draw do
     use_doorkeeper do
       skip_controllers :tokens, :applications, :authorizations
     end
-    get '/security', to: 'security#index', as: 'security_settings'
+    #get '/security', to: 'security#index', as: 'security_settings'
+    resource :security, only: :show, as: :security_settings do
+      resources :user_sessions, only: :destroy
+    end
+    # '/security/revoke_user_session/', to: 'security#revoke_user_session', as: :settings_security_user_session_revoke
     # get '/collections', to: 'oread/access_enrollments#index', as: :settings_collections
     namespace :oread, as: :settings_oread do
       resources :access_enrollments, only: [:index, :create, :destroy], as: :enrollments, path: 'enrollments' do

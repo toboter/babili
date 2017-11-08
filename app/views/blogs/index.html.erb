@@ -1,7 +1,8 @@
-<% title "#{@type.pluralize.humanize}", false %>
+<% title "#{@type == 'Post' ? 'Blog posts' : (@type == 'Novelity' ? 'News' : @type.humanize)}", false %>
 <% content_for(:breadcrumbs) do %>
-  <%= content_tag :li, link_to('home', root_url) %>
-  <%= content_tag :li, @type.pluralize.humanize, class: 'active' %>
+  <%= content_tag :li, link_to('Home', root_url) %>
+  <%= content_tag :li, link_to('Explore', explore_url) %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
 
 <% content_for :sidebar do %>

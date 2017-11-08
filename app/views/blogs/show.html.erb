@@ -1,8 +1,9 @@
-<% title "#{@blog.type.humanize}: #{@blog.title}", false %>
+<% title "#{@blog.title}", false %>
 <% content_for(:breadcrumbs) do %>
-  <%= content_tag :li, link_to('home', root_url) %>
-  <%= content_tag :li, link_to(@blog.type.pluralize, sti_blog_path(@type)) %>
-  <%= content_tag :li, @blog.title, class: 'active' %>
+  <%= content_tag :li, link_to('Home', root_url) %>
+  <%= content_tag :li, link_to('Explore', explore_url) %>
+  <%= content_tag :li, link_to(@blog.type == 'Post' ? 'Blog posts' : @blog.type, sti_blog_path(@type)) %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
 
 <% content_for :sidebar do %>
