@@ -25,7 +25,9 @@
         <% end %>
         <%= content_tag :div, class: "col-xs-4 col-sm-3 col-md-3 col-md-offset-1" do %>
           <strong>Profile picture</strong>
-          <%= content_tag :div, image_tag(@profile.image_url(:thumb), style: 'width: 100%;border-radius: 5px;'), class: '', style: 'margin-top:3px; margin-bottom:10px;' %>
+          <%= content_tag :div, class: '', style: 'margin-top:3px; margin-bottom:10px;' do %>
+            <%= image_tag(@profile.image_url(:big_thumb), style: 'width: 100%;border-radius: 5px;') %>
+          <% end %>
           <%= f.hidden_field :image, value: @profile.cached_image_data %>
           <label class="btn btn-default" style="width:100%;">
             <span class="text-muted"><strong>Upload new picture</strong></span>

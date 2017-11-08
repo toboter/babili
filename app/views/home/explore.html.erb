@@ -2,11 +2,11 @@
 
 <% content_for :content do %>
   <div class="jumbotron" style="margin-bottom: 0px;height: 500px; background-image: <%= background_image_url(@showcased, :small_banner) %>; background-position: center; background-size: cover; background-repeat: no-repeat;color: white; text-shadow: #ddd 0.05em 0.05em 0.1em;">
-    <div class="container" style="margin-top:60px;">
+    <div class="container" style="margin-top:40px;">
       <h1><%= link_to @showcased.name, @showcased, class: 'no-link' %></h1> 
       <div class="row">
         <div class="col-md-7">
-          <p class='lead'><%= link_to @showcased.description, @showcased, class: 'no-link' %></p>
+          <p class='lead'><%= link_to truncate(@showcased.description, length: 200, seperator: ' '), @showcased, class: 'no-link' %></p>
           <%= content_tag :div, class: 'enrollment-actions', style: 'margin-top:30px;' do %>
             <% if !@showcased.enrollees.include?(current_user) %>
               <%= form_for Oread::AccessEnrollment.new, url: settings_oread_enrollments_path, remote: true, html: {id: "new_oread_access_enrollment_#{@showcased.id}", style: "display:inline!important;"} do |f| %>

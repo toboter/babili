@@ -19,7 +19,8 @@ class ImageUploader < Shrine
     size_300 = resize_to_limit(size_500,  300, 300)
     size_800_250 = resize_to_fill(size_800, 800, 250)
     size_650_350 = resize_to_fill(size_800, 650, 350)
-    thumb_100 = resize_to_fill(size_300, 100, 100)
+    thumb_200 = resize_to_fill(size_300, 200, 200)
+    thumb_100 = resize_to_fill(thumb_200, 100, 100)
     thumb_50 = resize_to_fill(thumb_100, 50, 50)
 
     {
@@ -29,6 +30,7 @@ class ImageUploader < Shrine
       small: size_300,
       banner: size_800_250,
       small_banner: size_650_350,
+      big_thumb: thumb_200,
       thumb: thumb_100,
       small_thumb: thumb_50
     }

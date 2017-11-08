@@ -3,7 +3,7 @@
     <%= background_image_div(application, :small_banner, {class: '', style: 'height:200px;width:100%; background-position:center;'}) %>
   <% end if local_assigns[:full] %>
   <div class="panel-body text-center">
-    <h4><%= link_to application.name, application %></h4>
+    <h4><%= link_to truncate(application.name, length: 35, seperator: ' '), application %></h4>
     <p class="text-small text-muted">
       Created on <%= application.created_at.to_date.to_formatted_s(:long_ordinal) %>.
       <br>

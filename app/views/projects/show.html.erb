@@ -50,7 +50,7 @@
         <%= content_tag :div, id: "user-#{membership.user.id}", class: 'media' do %>
           <%= link_to membership.user.profile, class: 'list-group-item' do %>
             <div class="media-left">
-              <%= image_tag membership.user.profile.image_url(:small_thumb), class: "media-object img-circle", style: 'height:50px;' %>
+              <%= background_image_div(membership.user.profile, :small_thumb, {class: 'media-object img-circle', style: 'height:50px;width:50px; background-position:center;'}) %>
             </div>
             <div class="media-body">
               <h5 class="media-heading"><%= membership.user.name %></h5>
