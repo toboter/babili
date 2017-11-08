@@ -141,6 +141,7 @@ class User < ApplicationRecord
     new_session.user_agent = options[:user_agent] if options[:user_agent]
     new_session.save
     purge_old_sessions
+    Audit.create!(user: self, actor: self, action: "user.login", action_description: "Originated from #{new_session.ip}", actor_ip: self.last_sign_in_ip)
     new_session.session_id
   end
 
