@@ -1,7 +1,7 @@
 <% title "Explore", false %>
 
 <% content_for :content do %>
-  <div class="jumbotron" style="margin-bottom: 0px;height: 500px; background-image: <%= background_image_url(@showcased, :banner) %>; background-position: center; background-size: cover; background-repeat: no-repeat;color: white; text-shadow: #ddd 0.05em 0.05em 0.1em;">
+  <div class="jumbotron" style="margin-bottom: 0px;height: 50vw; background-image: <%= background_image_url(@showcased, :small_banner) %>; background-position: center; background-size: cover; background-repeat: no-repeat;color: white; text-shadow: #ddd 0.05em 0.05em 0.1em;">
     <div class="container" style="margin-top:40px;">
       <h1><%= link_to @showcased.name, @showcased, class: 'no-link' %></h1> 
       <div class="row">
