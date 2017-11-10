@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171108151946) do
+ActiveRecord::Schema.define(version: 20171109145308) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,8 +58,9 @@ ActiveRecord::Schema.define(version: 20171108151946) do
     t.integer  "user_id"
     t.integer  "project_id"
     t.string   "role"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.boolean  "verified",   default: false, null: false
     t.index ["project_id"], name: "index_memberships_on_project_id", using: :btree
     t.index ["user_id"], name: "index_memberships_on_user_id", using: :btree
   end
@@ -189,9 +190,9 @@ ActiveRecord::Schema.define(version: 20171108151946) do
     t.text     "image_data"
     t.text     "description"
     t.string   "slug"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-    t.boolean  "data_published"
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.boolean  "private",     default: false, null: false
     t.index ["slug"], name: "index_projects_on_slug", unique: true, using: :btree
   end
 

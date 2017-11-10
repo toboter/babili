@@ -22,7 +22,9 @@ Rails.application.routes.draw do
 
   get '/settings', to: redirect("/settings/profile")
   scope path: '/settings' do
-    resources :projects, only: [:index, :new, :create, :edit, :update, :destroy], as: :settings_projects
+    resources :projects, only: [:index, :new, :create, :edit, :update, :destroy], as: :settings_projects do
+      resources :memberships, only: [:create, :destroy]
+    end
     get 'profile', to: 'profiles#edit', as: 'edit_current_profile'
     resources :profiles, only: [:update], as: :settings_profiles
     
@@ -80,7 +82,6 @@ Rails.application.routes.draw do
   devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}, :controllers => { :registrations => :registrations }
   resources :profiles, only: [:index, :show]
   resources :projects, only: [:show]
-
 
   namespace :api do
     get 'me', to: 'users#me'

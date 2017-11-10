@@ -16,6 +16,9 @@
       disabled: f.object.user == current_user %>
   </td>
   <td>
+    <%= f.input :verified %>
+  </td>
+  <td>
     <%= link_to_remove_association fa_icon('remove', text: 'remove'), f unless f.object.user == current_user %>
   </td>
 </tr>

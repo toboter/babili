@@ -10,7 +10,8 @@ class ProjectsController < ApplicationController
   # GET /projects
   # GET /projects.json
   def index
-    @memberships = current_user.memberships.joins(:project).order('projects.name ASC')
+    @applyments = current_user.memberships.joins(:project).where(verified: false).order('projects.name ASC')
+    @memberships = current_user.memberships.joins(:project).where(verified: true).order('projects.name ASC')
   end
 
   # GET /projects/1
@@ -23,7 +24,7 @@ class ProjectsController < ApplicationController
     @project = Project.new
     @users = User.all
     @roles = ['Member', 'Admin', 'Owner']
-    @project.memberships.build(user: current_user, role: 'Owner')
+    @project.memberships.build(user: current_user, role: 'Owner', verified: true)
   end
 
   # GET /projects/1/edit
@@ -36,7 +37,7 @@ class ProjectsController < ApplicationController
   # POST /projects.json
   def create
     @project = Project.new(project_params)
-    @project.memberships.build(user: current_user, role: 'Owner')
+    @project.memberships.build(user: current_user, role: 'Owner', verified: true)
 
     respond_to do |format|
       if @project.save
@@ -87,7 +88,7 @@ class ProjectsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def project_params
-      params.require(:project).permit(:name, :image, :cached_image_data, :description, memberships_attributes: [:id, :user_id, :role, :_destroy])
+      params.require(:project).permit(:name, :image, :cached_image_data, :private, :description, memberships_attributes: [:id, :user_id, :role, :verified, :_destroy])
     end
     
 end

@@ -26,7 +26,7 @@ $(function () {
   $('.about-content img, .post-content img').tooltip({
       placement: 'bottom'
   });
-  
+  $('[data-toggle="popover"]').popover();
 })
 
 // fixing changing width of a panel while affix-scrolling

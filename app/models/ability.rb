@@ -22,7 +22,10 @@ class Ability
       can [:update, :destroy], Project do |project|
         user.in?(project.members) && project.memberships.where(user_id: user.id).first.role.in?(['Owner', 'Admin'])
       end
-      can [:read, :create], Project
+      can [:create], Project
+      can [:read], Project do |project|
+        !project.private? || user.in?(project.members)
+      end
 
       cannot :manage, Oread::Application unless user.is_admin?
       can [:update, :destroy], Oread::Application do |app|
