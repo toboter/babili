@@ -1,51 +1,7 @@
-<% title @profile.user.name %>
+<% title 'Public profile' %>
 
 <% content_for :breadcrumbs do %>
   <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
 
-
-<%= simple_form_for @profile, html: { class: 'form-horizontal' },
-  wrapper: :horizontal_form do |f| %>
-
-  <div class="row">
-    <div class="col-md-12">
-      <%= f.error_notification %>
-  
-      <div class="row">
-        <%= content_tag :div, class: "col-sm-8 col-md-8" do %>
-          <div class="form-inputs">
-            <%= f.input :honorific_prefix %>
-            <%= f.input :given_name %>
-            <%= f.input :family_name %>
-            <%= f.input :honorific_suffix %>
-            <%= f.input :about_me, label: 'Bio', input_html: { rows: 3 }, hint: 'Should be between 70 and 150 characters.' %>
-            <%= f.input :url %>
-            <%= f.input :institution %>
-            <%= f.input :location %>
-          </div>
-        <% end %>
-        <%= content_tag :div, class: "col-xs-4 col-sm-3 col-md-3 col-md-offset-1" do %>
-          <strong>Profile picture</strong>
-          <%= content_tag :div, image_tag(@profile.image_url(:thumb), style: 'width: 100%;border-radius: 5px;'), class: '', style: 'margin-top:3px; margin-bottom:10px;' if @profile.image %>
-          <%= f.hidden_field :image, value: @profile.cached_image_data %>
-          <label class="btn btn-default" style="width:100%;">
-            <span class="text-muted"><strong>Upload new picture</strong></span>
-            <span style="display:none;">
-              <%= f.file_field :image, as: :file, required: true %>
-            </span>
-          </label>
-        <% end %>
-      </div>
-  
-      <div class="row">
-        <div class="col-md-6">
-          <hr>
-          <%= f.submit class: 'btn btn-primary' %>
-          <%= link_to 'Cancel', (@profile.new_record? ? profiles_path : @profile), class: "btn btn-default" %>
-        </div>
-      </div>
-    </div>
-  </div>
-
-<% end %>
+<%= render 'form', project: @project %>

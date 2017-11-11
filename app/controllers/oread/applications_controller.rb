@@ -21,12 +21,12 @@ class Oread::ApplicationsController < ApplicationController
     @access_tokens = @application.access_tokens.where(resource_owner: current_user)
     @token = @access_tokens.last
     if params[:q].present?
-      url = "#{@application.url}?q=#{url_encode(params[:q])}"
+      url = "#{@application.url}?q=#{url_encode(params[:q])}&limit=#{params[:limit]}"
       begin
         response = RestClient.get(url, {:Authorization => "#{@token.try(:token_type)} #{@token.try(:token)}"})
       rescue Errno::ECONNREFUSED
         puts "Server at #{url} is refusing connection."
-        flash.now[:notice] = "Results from #{@application.name} missing. Can't connect to server."
+        flash.now[:warning] = "Results from #{@application.name} missing. Can't connect to server."
       end
       @results = JSON.parse(response) if response
     end

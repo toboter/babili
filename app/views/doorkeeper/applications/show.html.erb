@@ -1,17 +1,21 @@
 <% title t('.title', name: @application.name), false %>
 
 <% content_for :breadcrumbs do %>
-  <%= content_tag :li, link_to('explore', explore_url) %>
-  <%= content_tag :li, t('.title', name: @application.name), class: 'active'  %>
+  <%= content_tag :li, link_to('Home', root_url) %>
+  <%= content_tag :li, link_to('Explore', explore_url) %>
+  <%= content_tag :li, 'OAuth applications', class: 'active'  %>
+  <%= content_tag :li, yield(:title), class: 'active'  %>
 <% end %>
 
 
-
-<div class="row">
-  <div class="col-md-12">
-    <strong><%= @application.name %></strong>
-    <%= content_tag :p, @application.description, class: 'text-muted text-small' if @application.description? %>
-    <%= content_tag :p, "Owner: #{@application.owner.try(:name)}", class: 'text-muted text-small' %>        
-    <%= content_tag :p, @application.created_at.strftime(t('doorkeeper.authorized_applications.index.date_format')) %>
+<% content_for :container do %>
+  <div class="row">
+    <div class="col-md-12">
+      <%= render @application %>
+      <strong><%= @application.name %></strong>
+      <%= content_tag :p, @application.description, class: 'text-muted text-small' if @application.description? %>
+      <%= content_tag :p, "Owner: #{@application.owner.try(:name)}", class: 'text-muted text-small' %>        
+      <%= content_tag :p, @application.created_at.strftime(t('doorkeeper.authorized_applications.index.date_format')) %>
+    </div>
   </div>
-</div>
+<% end %>

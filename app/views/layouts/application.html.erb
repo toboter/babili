@@ -71,6 +71,13 @@
 
     <% if content_for?(:content) %>
       <%= yield(:content) %>
+    <% elsif content_for?(:container) && !content_for?(:content) %>
+      <div class="container" style="margin-top: 60px;margin-bottom: 100px;">
+        <%= content_tag :ol, class: 'breadcrumb' do %>
+          <%= yield(:breadcrumbs) %>
+        <% end if content_for?(:breadcrumbs) %>
+        <%= yield(:container) %>
+      </div>
     <% else %>
       <div class="container-fluid" style="margin: 60px 0 100px 0;">
         <%= content_tag :ol, class: 'breadcrumb' do %>

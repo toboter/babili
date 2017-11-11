@@ -7,98 +7,78 @@
   <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
 
-<% content_for :sidebar do %>
-  <%= content_tag :div, class: 'panel panel-warning' do %>
-    <div class="panel-heading">
-      <strong>You have admin priviledges on this application!</strong>
-    </div>
-    <div class="panel-body">
-      <%= link_to fa_icon('edit', text: 'Administrate'), edit_settings_admin_oread_application_path(@application), class: 'btn btn-warning' if can? :update, @application %>
-      <%= link_to fa_icon('remove', text: 'Delete'), [:settings, :admin, @application], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' if can? :destroy, @application %>
-    </div>
-  <% end if can?(:edit, @application) || can?(:destroy, @application) %>
+<% content_for :container do %>
+  <div class="row">
+    <div class="col-md-5">
+      <%= render 'application', application: @application, full: true, actions: true, no_description: true %>  
+      <h4 class="subhead --spacious">
+        About
+        <%= link_to fa_icon('question-circle'), 'javascript:void(0)', 
+          rel: 'popover',
+          class: 'pull-right',
+          data: { 
+            toggle: "popover", 
+            placement: "right",
+            trigger: 'focus',
+            container: 'body',
+            html: true,
+            title: 'What is a collection application?',
+            content: "Dies sind Webseiten die durchsuchbar sind. Insofern die Zugriffsrechte auf Daten dieser Applikationen 
+              begrenzt sind, kann ein Zugriffstoken angegeben werden um Inhalte zusammen zu führen. Das Token ist personalisiert 
+              und wird über Schnittstellen an über babylon-online.org authentifizierte Applikationen weiter gegeben. Weitere Informationen
+              finden Sie unter #{link_to 'settings collections', settings_oread_enrollments_path}" }
+        %>
+      </h4>
+      <%= content_tag :div, markdown(@application.description), id: 'application-description', class: 'text-muted' %>
 
-  <% if current_user %>
-    View your collections <%= link_to 'settings', settings_oread_enrollments_path %>.
-  <% end %>
+      <%= content_tag :div, class: 'list-group --spacious' do %>
+        <h4>Enrollees <%= content_tag :span, @application.enrollees.count, class: 'badge' %></h4>
+        <% for enrollee in @application.enrollees.limit(5) do %>
+          <%= render partial: "/#{enrollee.to_partial_path}", object: enrollee %>    
+        <% end %>
+      <% end if @application.enrollees.any? %>
+    </div>
 
-  <%= content_tag :div, class: 'panel panel-info' do %>
-    <div class="panel-heading">
-      <strong>What is a search-/readable collection?</strong>
+    <div class="col-md-7">
+      <h4>
+        Collection preview
+        <%= content_tag :span, class: 'text-small text-muted pull-right' do %>
+          Find the full collection on:
+          <%= link_to(@application.app_url, @application.app_url, target: '_blank', class: 'text-strong') %>
+        <% end %>
+      </h4>
+      <%= form_tag oread_application_path(@application), :method => 'get', class: "" do %>
+        <div class="input-group">
+          <span class="input-group-addon">
+            <%= link_to fa_icon('search'), help_path(anchor: 'searching') %>
+          </span>
+          <%= search_field_tag :q, params[:q], placeholder: "Search #{@application.name} by Keyword", class: "form-control" %>
+        </div>
+      <% end %>
+
+        <% if @results.present? %>
+          <table class="table table-bordered table-responsive" style="margin-top:20px;">
+            <tbody>
+              <% @results.each do |result| %>
+                <tr>
+                  <td>
+                    <%= link_to result['full_entry'], result['links']['human'] %><br>
+                    <!-- <%= content_tag :span, "#{result['type']}<br>".html_safe if result['type'] %> -->
+                    <small><%= result['links']['human'] %></small>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% else %>
+          <%= content_tag :p, "no results", class: 'bg-info', style: 'padding: 15px; margin-top: 20px;' %>
+        <% end %>
+
+        <p class="text-small text-muted --spacious">
+          Requested API: <%= link_to @application.url, @application.url, target: '_blank' %>
+        </p>
+
+      </div>
     </div>
-    <div class="panel-body">
-      <p>
-        Dies sind Applikationen die durchsuchbar sind. Insofern die Zugriffsrechte auf Daten dieser Applikationen begrenzt sind, 
-        kann ein Zugriffstoken angegeben werden um Inhalte zusammen zu führen. Das Token ist personalisiert und wird über Schnittstellen 
-        an über babylon-online.org authentifizierte Applikationen weiter gegeben.
-      </p>
-    </div>
-  <% end %>
 
 <% end %>
-
-<div class="row">
-  <div class="col-md-5">
-    <div class='panel panel-default' id="application-<%= @application.id %>-description">
-      <%= background_image_div(@application, :small_banner, {class: '', style: 'height:150px;width:100%; background-position:center;'}) %>
-      <div class="panel-body text-center">
-        <h4><%= @application.name %></h4>
-        <p class="small text-muted">
-          Created on <%= @application.created_at.to_date.to_formatted_s(:long_ordinal) %>. 
-          <%= pluralize( @application.token_holders.uniq.count, 'holder' ) %>
-        </p>
-      </div>
-    </div>
-    <div class='panel panel-default'>
-      <div class="panel-body">
-        <p>
-          API: <%= link_to @application.url, @application.url, target: '_blank' %><br>
-          External link: <%= link_to @application.app_url, @application.app_url, target: '_blank' %>
-        </p>
-        <p>
-          Administration/Owner: <%= @application.owner.try(:name) %>
-        </p>
-      </div>
-    </div>
-
-    <%= content_tag :div, class: 'list-group' do %>
-    <h4>Token Holders</h4>
-      <% for holder in @application.token_holders.uniq do %>
-        <%= render partial: "/#{holder.to_partial_path}", object: holder %>    
-      <% end %>
-    <% end if @application.token_holders.any? %>
-
-  </div>
-
-  <div class="col-md-7">
-    <%= form_tag oread_application_path(@application), :method => 'get', class: "" do %>
-      <div class="input-group">
-        <span class="input-group-addon">
-          <%= link_to fa_icon('search'), help_path(anchor: 'searching') %>
-        </span>
-        <%= search_field_tag :q, params[:q], placeholder: "Search #{@application.name} by Keyword", class: "form-control" %>
-      </div>
-    <% end %>
-
-    <% if @results.present? %>
-      <table class="table table-bordered table-responsive" style="margin-top:20px;">
-        <tbody>
-          <% @results.each do |result| %>
-            <tr>
-              <td>
-                <%= link_to result['full_entry'], result['links']['human'] %><br>
-                <!-- <%= content_tag :span, "#{result['type']}<br>".html_safe if result['type'] %> -->
-                <small><%= result['links']['human'] %></small>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    <% else %>
-      <%= content_tag :p, "no results for <strong>#{params[:q]}</strong>".html_safe, class: 'bg-info', style: 'padding: 15px; margin-top: 20px;' if params[:q] && !params[:q].empty? %>
-      <br>
-      <h4>About</h4>
-      <%= content_tag :div, markdown(@application.description), id: 'project-description' %>
-    <% end %>
-  </div>
-</div>

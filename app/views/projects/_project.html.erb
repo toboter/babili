@@ -1,39 +1,65 @@
-    <%= content_tag :div, class: 'media list-group-item', style: 'margin-bottom: 20px;' do %>
-      <div class="media-left" style="max-width: 80px;">
-        <%= link_to project_path(project) do %>
-          <%= background_image_div(project, :small_thumb, {class: 'media-object', style: 'height:70px;width:70px; background-position:center;'}) %>
-        <% end %>
-      </div>
-      <div class="media-body">
-        <%= content_tag :div, class: 'membership-actions pull-right' do %>
-          <% if !project.members.include?(current_user) %>
-            <%= form_for Membership.new, url: settings_project_memberships_path(project), remote: true, html: {id: "new_project_membership_#{project.id}", style: "display:inline!important;"} do |f| %>
-              <%= f.submit 'Apply', class: 'btn btn-sm btn-default text-strong' %>
-            <% end %>
-          <% elsif project.members.joins(:memberships).where(memberships: {verified: false}).include?(current_user) %>
-            <%= link_to fa_icon('user', text: 'Awaiting confirmation'), settings_projects_path, class: 'btn btn-default btn-sm text-strong' %>
-          <% else %>
-            <%= link_to fa_icon('group', text: 'In your projects'), settings_projects_path, class: 'btn btn-default btn-sm text-strong' %>
-          <% end %>
-        <% end if user_signed_in? && local_assigns[:actions] %>
-        <h4 class="media-heading">
-          <%= link_to project.name, project_path(project) %>
-        </h4>
-        <p class="small text-muted">
-          Created on <%= project.created_at.to_date.to_formatted_s(:long_ordinal) %>. 
-          <%= link_to pluralize( project.memberships.where(verified: true).count, 'member' ), 'javascript:void(0)', 
-            rel: 'popover',
-            data: { 
-              toggle: "popover", 
-              placement: "left",
-              trigger: 'focus',
-              container: 'body',
-              html: true,
-              title: 'Members',
-              content: content_tag(:ul, project.memberships.where(verified: true).map{ |m| content_tag(:li, m.user.name) }.join, class: 'list-unstyled') }
-          %>
-        </p>
-        <%= link_to truncate(project.description, length: 180, separator: ' '), project_path(project), class: 'no-link' %>
-      </div>
-    <% end %>
+<% unless local_assigns[:banner] %>
 
+  <%= content_tag :div, class: 'media list-group-item', style: 'margin-bottom: 20px;' do %>
+    <div class="media-left" style="max-width: 80px;">
+      <%= link_to project_path(project) do %>
+        <%= background_image_div(project, :small_thumb, {class: 'media-object', style: 'height:70px;width:70px; background-position:center;'}) %>
+      <% end %>
+    </div>
+    <div class="media-body">
+      <%= content_tag :div, class: 'membership-actions pull-right' do %>
+        <% if !project.members.include?(current_user) %>
+          <%= form_for Membership.new, url: settings_project_memberships_path(project), remote: true, html: {id: "new_project_membership_#{project.id}", style: "display:inline!important;"} do |f| %>
+            <%= f.submit 'Apply', class: 'btn btn-sm btn-default text-strong' %>
+          <% end %>
+        <% elsif project.members.joins(:memberships).where(memberships: {verified: false}).include?(current_user) %>
+          <%= link_to fa_icon('user', text: 'Awaiting confirmation'), settings_projects_path, class: 'btn btn-default btn-sm text-strong' %>
+        <% else %>
+          <%= link_to fa_icon('group', text: 'In your projects'), settings_projects_path, class: 'btn btn-default btn-sm text-strong' %>
+        <% end %>
+      <% end if user_signed_in? && local_assigns[:actions] %>
+      <h4 class="media-heading">
+        <%= link_to project.name, project_path(project) %>
+      </h4>
+      <p class="small text-muted">
+        Created on <%= project.created_at.to_date.to_formatted_s(:long_ordinal) %>. <br>
+        <%= link_to pluralize( project.memberships.where(verified: true).count, 'member' ), 'javascript:void(0)', 
+          rel: 'popover',
+          data: { 
+            toggle: "popover", 
+            placement: "left",
+            trigger: 'focus',
+            container: 'body',
+            html: true,
+            title: 'Members',
+            content: content_tag(:ul, project.memberships.where(verified: true).map{ |m| content_tag(:li, m.user.name) }.join, class: 'list-unstyled') }
+        %>
+      </p>
+      <%= link_to truncate(project.description, length: 180, separator: ' '), project_path(project), class: 'no-link' %>
+    </div>
+  <% end %>
+
+<% else %>
+
+  <%= content_tag :div, class: 'panel panel-default' do %>
+    <%= background_image_div(project, :small_banner, {class: '', style: 'height:200px;width:100%; background-position:center;'}) %>
+
+    <div class="panel-body text-center">
+      <h4><%= project.name %></h4>
+      <p class="small text-muted">Created on <%= project.created_at.to_date.to_formatted_s(:long_ordinal) %>. <%= pluralize( project.memberships.count, 'member' ) %></p>
+
+      <%= content_tag :div, class: 'membership-actions' do %>
+        <% if !project.members.include?(current_user) %>
+          <%= form_for Membership.new, url: settings_project_memberships_path(project), remote: true, html: {id: "new_project_membership_#{project.id}", style: "display:inline!important;"} do |f| %>
+            <%= f.submit 'Apply', class: 'btn btn-sm btn-default text-strong' %>
+          <% end %>
+        <% elsif project.members.joins(:memberships).where(memberships: {verified: false}).include?(current_user) %>
+          <%= link_to fa_icon('user', text: 'Awaiting confirmation'), settings_projects_path, class: 'btn btn-default btn-sm text-strong' %>
+        <% else %>
+          <%= link_to fa_icon('group', text: 'In your projects'), settings_projects_path, class: 'btn btn-default btn-sm text-strong' %>
+        <% end %>
+      <% end if user_signed_in? && local_assigns[:actions] %>
+    </div>
+  <% end  %>
+
+<% end %>

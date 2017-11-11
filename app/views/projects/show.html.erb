@@ -7,81 +7,80 @@
   <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
 
-<% content_for :sidebar do %>
-  <%= content_tag :div, class: 'panel panel-warning' do %>
-    <div class="panel-heading">
-      <strong>You have admin priviledges on this project!</strong>
-    </div>
-    <div class="panel-body">
-      <%= link_to fa_icon('edit', text: 'Administrate'), edit_settings_project_path(@project), class: 'btn btn-warning' if can?(:update, @project) %>
-      <%= link_to fa_icon('remove', text: 'Delete'), [:settings, @project], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' if can?(:destroy, @project) %>
-    </div>
-  <% end if can?(:update, @project) || can?(:destroy, @project) %>
+<% content_for :container do %>
+  <div class="row">
+    <div class="col-md-5">
+      <%= render 'project', project: @project, banner: true, actions: true, no_description: true %> 
 
-  <%= content_tag :div, class: 'panel panel-info' do %>
-    <div class="panel-heading">
-      <strong>What is a project?</strong>
-    </div>
-    <div class="panel-body">
-      <p>
-        Projekte sind Gruppen von Personen, die sich durch ein gemeinsames Interesse auszeichen. 
-      
-      </p>
-    </div>
-  <% end %>
+      <%= content_tag :div, id: "project-#{@project.id}-oauth_accessibilities", class: '--spacious' do %>
+        <h4 class="subhead --spacious">
+          Applications
+          <%= content_tag :span, @project.oauth_accessibilities.count, class: 'badge' %>
+        </h4>
+        <p class="text-muted">
+          The members of this project can <strong>read &amp; edit</strong> data in the following babili-authenticated-applications marked with this project/group.
+        </p>
+        <% for accessibility in @project.oauth_accessibilities do %>
+          <%=  render accessibility.oauth_application %>
 
-<% end %>
-
-
-
-<div class="row">
-  <div class="col-md-5">
-    <div class='panel panel-default'>
-      <%= image_tag @project.image_url(:small_banner), class: 'img-responsive', style: 'width: 100%' %>
-      <div class="panel-body text-center">
-        <h4><%= @project.name %></h4>
-        <p class="small text-muted">Created on <%= @project.created_at.to_date.to_formatted_s(:long_ordinal) %>. <%= pluralize( @project.memberships.count, 'member' ) %></p>
-      </div>
-    </div>
-
-    <h4>Memberships</h4>
-    <%= content_tag :div, class: 'list-group' do %>
-      <% for membership in @project.memberships do %>
-        <%= content_tag :div, id: "user-#{membership.user.id}", class: 'media' do %>
-          <%= link_to membership.user.profile, class: 'list-group-item' do %>
-            <div class="media-left">
-              <%= background_image_div(membership.user.profile, :small_thumb, {class: 'media-object img-circle', style: 'height:50px;width:50px; background-position:center;'}) %>
-            </div>
-            <div class="media-body">
-              <h5 class="media-heading"><%= membership.user.name %></h5>
-              <span class="text-muted"><%= membership.role %></span>
-            </div>
-            <div class="media-right">
-              <%= content_tag :span, fa_icon('universal-access'), data: {toggle: "tooltip", placement: "left"}, title: "Project administrator" if membership.role.in?(['Admin', 'Owner']) %>
-            </div>
-          <% end %>      
         <% end %>
-      <% end %>
-    <% end if @project.memberships.any? %>
+      <% end if @project.oauth_accessibilities.any? %>
 
-  </div>
+    </div>
 
-  <div class="col-md-7">
-    <h4>What we do</h4>
-    <%= content_tag :div, markdown(@project.description), id: 'project-description' %>
+    <div class="col-md-7">
 
-    <hr>
+      <%= content_tag :div, class: 'row' do %>
+        <%= content_tag :div, class: 'col-md-12' do %>
+          <h4 class="subhead">
+            Memberships
+            <%= content_tag :span, @project.memberships.count, class: 'badge' %>
+          </h4>
+        <% end %>
+        <div class="list-group">
+          <% for membership in @project.memberships do %>
+            <div class="col-md-6" style="margin-bottom: 20px;">
+              <%= content_tag :div, id: "user-#{membership.user.id}", class: 'media' do %>
+                <%= link_to membership.user.profile, class: 'list-group-item' do %>
+                  <div class="media-left">
+                    <%= background_image_div(membership.user.profile, :small_thumb, {class: 'media-object img-circle', style: 'height:50px;width:50px; background-position:center;'}) %>
+                  </div>
+                  <div class="media-body">
+                    <h5 class="media-heading"><%= membership.user.name %></h5>
+                    <span class="text-muted"><%= membership.role %></span>
+                  </div>
+                  <div class="media-right">
+                    <%= content_tag :span, fa_icon('universal-access'), data: {toggle: "tooltip", placement: "left"}, title: "Project administrator" if membership.role.in?(['Admin', 'Owner']) %>
+                  </div>
+                <% end %>      
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      <% end if @project.memberships.any? %>
 
-    <%= content_tag :div, id: "project-#{@project.id}-oauth_accessibilities" do %>
-      <h4>Applications</small></h4>
-      <p class="text-muted">
-        The members of this project can <strong>read &amp; edit</strong> any data in the following babili-authenticated-applications marked with this project/group.
-      </p>
-      <% for accessibility in @project.oauth_accessibilities do %>
-        <%=  render accessibility.oauth_application %>
+      <h4 class="subhead --spacious">
+        About
+        <%= link_to fa_icon('question-circle'), 'javascript:void(0)', 
+          rel: 'popover',
+          class: 'pull-right',
+          data: { 
+            toggle: "popover", 
+            placement: "left",
+            trigger: 'focus',
+            container: 'body',
+            html: true,
+            title: 'Was ist ein Projekt?',
+            content: "Projekte sind Gruppen von Personen, die sich durch ein gemeinsames Interesse auszeichen. Weitere Informationen
+              finden Sie unter #{link_to 'settings projects', settings_projects_path}" }
+        %>
+      </h4>
+      <%= content_tag :div, markdown(@project.description), id: 'projects-description' %>
 
-      <% end %>
-    <% end if @project.oauth_accessibilities.any? %>
+
+
+
 
   </div>
 </div>
+<% end %>

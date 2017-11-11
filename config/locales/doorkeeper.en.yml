@@ -45,7 +45,7 @@ en:
       new:
         title: 'Register a new OAuth application'
       show:
-        title: 'Application: %{name}'
+        title: 'OAuth application: %{name}'
         application_id: 'Application Id'
         secret: 'Secret'
         scopes: 'Scopes'

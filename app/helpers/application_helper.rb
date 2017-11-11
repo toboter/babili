@@ -47,7 +47,7 @@ module ApplicationHelper
   end
 
   def background_image_url obj, size
-    if obj.image.present?
+    if obj.image.present? && size != 'false'
       "url(#{obj.image_url(size)})"
     else
       pattern = GeoPattern.generate(obj.name.presence || 'default text')

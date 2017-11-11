@@ -7,96 +7,93 @@
   <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
 
-<% content_for :sidebar do %>
-  <%= content_tag :div, class: 'panel panel-warning bg-warning' do %>
-    <div class="panel-heading">
-      <strong>This is you!</strong>
-    </div>
-    <div class="panel-body">
-      <%= link_to fa_icon('edit', text: 'Edit'), edit_current_profile_path, class: 'btn btn-warning' %>
-    </div>
-  <% end if user_signed_in? && @profile == current_user.profile %>
-
-  <h4>Search &amp; Read <small>applications</small></h4>
-  <% if @profile.user.oread_token_applications.any? %>
-    <%= render @profile.user.oread_token_applications.uniq %>
-  <% else %>
-    <p class="text-muted">
-      none yet<br>
-    </p>
-  <% end %>
-
-  <hr>
-
-  <h4>Authorized <small>applications</small></h4>
-  <% if @profile.user.all_oauth_applications.any? %>
-    <% for accessibility in @profile.user.all_combined_oauth_accessibility_grants do %>
-      <%= render accessibility.oauth_application %>
-      <div class="panel panel-default panel-attach">
-        <%= content_tag :ul, class: "panel-body list-inline" do %>
-          <%= content_tag :li, fa_icon('universal-access'), data: {toggle: "tooltip", placement: "left"}, title: "Can manage everything." if accessibility.can_manage %>
-          <%= content_tag :li, fa_icon('plus'), data: {toggle: "tooltip", placement: "left"}, title: "Can create records." if accessibility.can_create %>
-          <%= content_tag :li, fa_icon('info'), data: {toggle: "tooltip", placement: "left"}, title: "Can read records." if accessibility.can_read %>
-          <%= content_tag :li, fa_icon('edit'), data: {toggle: "tooltip", placement: "left"}, title: "Can edit records." if accessibility.can_update %>
-          <%= content_tag :li, fa_icon('remove'), data: {toggle: "tooltip", placement: "left"}, title: "Can remove records." if accessibility.can_destroy %>
-          <%= content_tag :li, fa_icon('comment-o'), data: {toggle: "tooltip", placement: "left"}, title: "Can comment on records." if accessibility.can_comment %>
-          <%= content_tag :li, fa_icon('eye'), data: {toggle: "tooltip", placement: "left"}, title: "Can comment on records." if accessibility.can_publish %>
-        <% end %>
-        <div class="panel-footer small">
-          <strong>Grants through: </strong>
-          <%= accessibility.oauth_application.accessibilities.where(id: @profile.user.all_oauth_accessibilities.ids).map{ |acc| "#{fa_icon(acc.accessor.class.name == 'Project' ? 'group' : acc.accessor.class.name.downcase)} #{link_to(acc.accessor.name, acc.accessor)}" }.join(' ').html_safe %>
+<% content_for :container do %>
+  <div class="row">
+    <div class="col-md-5">
+      <div class='panel panel-default'>
+        <%= background_image_div(@profile, 'false', {class: '', style: 'height:200px;width:100%;'}) %>
+        <%= background_image_div(@profile, :thumb, {class: 'img-responsive img-circle', style: 'width:120px; height:120px;border: solid white 2px; margin: -60px auto 0 auto;'}) %>
+        <div style="padding: 10px;" class="text-center">
+          <%= content_tag :p do %>
+            <%= "<strong>#{@profile.display_name}</strong>".html_safe %>
+            <%= content_tag :span, fa_icon('universal-access'), data: {toggle: "tooltip", placement: "right"}, title: "Administrator" if @profile.user.is_admin %><br>
+            <%= "(#{@profile.user.username})" %>
+            <%= content_tag :span, "<br>#{@profile.institution}".html_safe, class: '' if @profile.institution.present? %>
+            <%= content_tag :span, "<br>#{@profile.location}".html_safe, class: '' if @profile.location.present? %>
+            <%= content_tag :p, @profile.about_me, class: '' if @profile.about_me.present? %>
+            <%= content_tag :span, link_to(@profile.url, @profile.url), class: '' if @profile.url.present? %>
+          <% end %>
+          <ul class="pllv">
+            <li class="pllve">
+              Projects<br>
+              <strong><%= @profile.user.projects.count %></strong>
+            </li>
+            <li class="pllve">
+              Authorizations<br>
+              <strong><%= @profile.user.all_oauth_applications.count %></strong>
+            </li>
+          </ul>
         </div>
       </div>
-    <% end %>
-  <% else %>
-    <p class="text-muted">
-      none yet<br>
-      link_to 'find or create applications', oauth_applications_path if user_signed_in? && @profile == current_user.profile %>
-    </p>
-  <% end %>
+      <%= link_to fa_icon('edit', text: 'Edit your profile'), edit_current_profile_path, class: 'btn btn-sm btn-default text-strong' if user_signed_in? && @profile == current_user.profile %>
 
-<% end %>
-
-<div class="row">
-  <div class="col-md-5">
-    <div class='panel panel-default'>
-      <%= image_tag 'categories/media.jpg', class: 'img-responsive' %>
-      <%= image_tag @profile.image_url(:thumb), class: 'img-responsive img-circle', style: "border: solid white 2px; margin: -50px auto 0 auto;" %>
-      <div style="padding: 10px;" class="text-center">
-        <%= content_tag :p do %>
-          <%= "<strong>#{@profile.display_name}</strong>".html_safe %>
-          <%= content_tag :span, fa_icon('universal-access'), data: {toggle: "tooltip", placement: "right"}, title: "Administrator" if @profile.user.is_admin %><br>
-          <%= "(#{@profile.user.username})" %>
-          <%= content_tag :span, "<br>#{@profile.institution}".html_safe, class: '' if @profile.institution.present? %>
-          <%= content_tag :span, "<br>#{@profile.location}".html_safe, class: '' if @profile.location.present? %>
-          <%= content_tag :p, @profile.about_me, class: '' if @profile.about_me.present? %>
-          <%= content_tag :span, link_to(@profile.url, @profile.url), class: '' if @profile.url.present? %>
+      <h4 class="subhead --spacious">
+        OAuth authorized applications
+      </h4>
+      <% if @profile.user.all_oauth_applications.any? %>
+        <% for accessibility in @profile.user.all_combined_oauth_accessibility_grants do %>
+          <%= render accessibility.oauth_application %>
+          <div class="panel panel-default panel-attach">
+            <%= content_tag :ul, class: "panel-body list-inline" do %>
+              <%= content_tag :li, fa_icon('universal-access'), data: {toggle: "tooltip", placement: "left"}, title: "Can manage everything." if accessibility.can_manage %>
+              <%= content_tag :li, fa_icon('plus'), data: {toggle: "tooltip", placement: "left"}, title: "Can create records." if accessibility.can_create %>
+              <%= content_tag :li, fa_icon('info'), data: {toggle: "tooltip", placement: "left"}, title: "Can read records." if accessibility.can_read %>
+              <%= content_tag :li, fa_icon('edit'), data: {toggle: "tooltip", placement: "left"}, title: "Can edit records." if accessibility.can_update %>
+              <%= content_tag :li, fa_icon('remove'), data: {toggle: "tooltip", placement: "left"}, title: "Can remove records." if accessibility.can_destroy %>
+              <%= content_tag :li, fa_icon('comment-o'), data: {toggle: "tooltip", placement: "left"}, title: "Can comment on records." if accessibility.can_comment %>
+              <%= content_tag :li, fa_icon('eye'), data: {toggle: "tooltip", placement: "left"}, title: "Can comment on records." if accessibility.can_publish %>
+            <% end %>
+            <div class="panel-footer small">
+              <strong>Grants through: </strong>
+              <%= accessibility.oauth_application.accessibilities.where(id: @profile.user.all_oauth_accessibilities.ids).map{ |acc| "#{fa_icon(acc.accessor.class.name == 'Project' ? 'group' : acc.accessor.class.name.downcase)} #{link_to(acc.accessor.name, acc.accessor)}" }.join(' ').html_safe %>
+            </div>
+          </div>
         <% end %>
-        <ul class="pllv">
-          <li class="pllve">
-            Projects<br>
-            <strong><%= @profile.user.projects.count %></strong>
-          </li>
-          <li class="pllve">
-            Authorizations<br>
-            <strong><%= @profile.user.all_oauth_applications.count %></strong>
-          </li>
-        </ul>
-      </div>
+      <% else %>
+        <p class="text-muted">
+          none assigned
+        </p>
+      <% end %>
     </div>
 
-    <h4>Projects</h4>
-    <% if @profile.user.projects.any? %>
-      <%= render @profile.user.projects %>
-    <% else %>
-      <p class="text-muted">
-        none yet<br>
-        <%= link_to 'find or create projects', projects_path if user_signed_in? && @profile == current_user.profile %>
-      </p>
-    <% end %>
-    
+    <div class="col-md-7">
+      <h4 class="subhead">
+        Project memberships
+      </h4>
+      <% if @profile.user.projects.any? %>
+        <%= render @profile.user.projects %>
+      <% else %>
+        <p class="text-muted">
+          none &mdash; Find projects on the <%= link_to 'explore page', explore_path %>.
+        </p>
+      <% end %>
+
+      <h4 class="subhead --spacious">
+        Collection enrollments
+      </h4>
+      <% if @profile.user.oread_enrolled_applications.any? %>
+        <div class="row">
+          <% @profile.user.oread_enrolled_applications.each do |enrollment| %>
+            <div class="col-md-6">
+              <%= render enrollment, full: true %>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="text-muted">
+          none &mdash; Find collections on the <%= link_to 'explore page', explore_path %>.
+        </p>
+      <% end %>
+    </div>
   </div>
-  <div class="col-md-7">
-    no content yet
-  </div>
-</div>
+<% end %>

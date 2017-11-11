@@ -1,14 +1,16 @@
-<%= content_tag :div, id: "user-#{user.id}", class: 'media' do %>
-  <%= link_to user.profile, class: 'list-group-item' do %>
-    <div class="media-left">
+<%= content_tag :div, id: "user-#{user.id}", class: 'media list-group-item' do %>
+  <div class="media-left">
+    <%= link_to user.profile do %>
       <%= background_image_div(user.profile, :small_thumb, {class: 'media-object img-circle', style: 'height:50px;width:50px; background-position:center;'}) %>
-    </div>
-    <div class="media-body">
-      <h5 class="media-heading"><%= user.name %></h5>
-      <p class="text-small text-muted" style="min-height:55px;"><%= truncate(user.profile.about_me, length: 110, seperator: ' ') %></p>
-    </div>
-    <div class="media-right">
-      <%= content_tag :span, fa_icon('universal-access'), data: {toggle: "tooltip", placement: "left"}, title: "Administrator" if user.is_admin %>
-    </div>
-  <% end %> 
+    <% end %>
+  </div>
+  <div class="media-body">
+    <h4 class="media-heading"><%= link_to user.name, user.profile %></h4>
+    <p class="text-small text-muted" style="min-height:55px;">
+      <%= link_to truncate(user.profile.about_me, length: 75, seperator: ' '), user.profile, class: 'no-link' if user.profile.about_me? %>
+    </p>
+  </div>
+  <div class="media-right">
+    <%= content_tag :span, fa_icon('universal-access'), data: {toggle: "tooltip", placement: "left"}, title: "Administrator" if user.is_admin %>
+  </div>
 <% end %>

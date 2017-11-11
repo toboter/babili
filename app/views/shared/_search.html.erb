@@ -3,6 +3,6 @@
     <span class="input-group-addon">
       <%= link_to fa_icon('search'), help_path(anchor: 'searching') %>
     </span>
-    <%= search_field_tag :q, params[:q], placeholder: "Search by Keyword", class: "form-control" %>
+    <%= search_field_tag :q, params[:q], placeholder: "Search by Keyword", class: "form-control", autofocus: true %>
   </div>
 <% end %>

@@ -9,7 +9,6 @@
         <%= application.created_at.to_date.to_formatted_s(:long_ordinal) %>. 
         <%= 'Accessible by ' + pluralize((application.project_accessors.map{|p|p.members.ids} + application.user_accessors.ids).flatten.uniq.count, 'user' ) %>.
       </p>
-      <%= application.redirect_uri %>
     </div>
     <div class="media-right">
       <% if user_signed_in? && application.access_tokens.where(resource_owner_id: current_user.id).exists? %>

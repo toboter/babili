@@ -1,0 +1,68 @@
+<%= simple_form_for [:settings, @profile], method: :put do |f| %>
+
+  <div class="row">
+      <div class="col-md-12">
+      <%= f.error_notification %>
+  
+      <div class="row">
+        <%= content_tag :div, class: "col-sm-8 col-md-8" do %>
+          <div class="form-inputs">
+            <%= f.input :honorific_prefix %>
+            <%= f.input :given_name %>
+            <%= f.input :family_name %>
+            <%= f.input :honorific_suffix %>
+            <%= f.input :about_me, label: 'Bio', input_html: { rows: 3 }, hint: 'Should be between 70 and 150 characters.' %>
+            <%= f.input :url %>
+            <%= f.input :institution %>
+            <%= f.input :location %>
+          </div>
+        <% end %>
+        <%= content_tag :div, class: "col-xs-4 col-sm-3 col-md-3 col-md-offset-1 col-sm-offset-1" do %>
+          <strong>Profile picture</strong>
+          <%= content_tag :div, class: '', style: 'margin-top:3px; margin-bottom:10px;' do %>
+            <%= image_tag(@profile.image_url(:big_thumb), id: 'profile-img-square', style: 'border-radius: 5px;width: 100%;') %>
+          <% end %>
+          <%= f.hidden_field :image, value: @profile.cached_image_data %>
+          <label class="btn btn-default" style="width:100%;">
+            <span class="text-muted"><strong>Upload new picture</strong></span>
+            <span style="display:none;">
+              <%= f.file_field :image, as: :file, required: true, onchange: "previewFile()" %>
+            </span>
+          </label>
+        <% end %>
+      </div>
+  
+      <div class="row --spacious">
+        <div class="col-md-12">
+          <%= f.submit 'Update', class: 'btn btn-primary text-strong' %>
+          <%= link_to 'Cancel', edit_current_profile_path, class: "btn btn-default" %>
+          <%= link_to 'View profile', current_user.profile, class: "btn btn-default" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<% end %>
+
+<script>
+  function previewFile() {
+    var preview = document.querySelector('#profile-img-square');
+    var file    = document.querySelector('input[type=file]').files[0];
+    var reader  = new FileReader();
+    var divWidth = $('#profile-img-square').width();
+
+    reader.addEventListener("load", function () {
+      preview.src = reader.result;
+    }, false);
+
+    if (file) {
+      reader.readAsDataURL(file);
+    };
+    $('#profile-img-square').css({height: divWidth, 'object-position': 'center', 'object-fit': 'cover', overflow: 'hidden'});
+  };
+  
+  $(window).resize(function(){
+    var divWidth = $('#profile-img-square').width(); 
+    $('#profile-img-square').height(divWidth);
+  });
+</script>
