@@ -38,6 +38,7 @@ class User < ApplicationRecord
   before_create :build_profile
   after_update :enroll_to_default_oread_apps, if: :is_approved?
   after_update :audit_password_change, if: :needs_password_change_audit?
+  after_update :send_approval_mail, if: :is_approved?
   after_create :send_admin_mail
 
   def all_oauth_applications
@@ -103,6 +104,10 @@ class User < ApplicationRecord
 
   def send_admin_mail
     AdminMailer.new_user_waiting_for_approval(self).deliver
+  end
+
+  def send_approval_mail
+    UserMailer.account_approved(self).deliver
   end
 
   def self.send_reset_password_instructions(attributes={})
