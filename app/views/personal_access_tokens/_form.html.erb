@@ -1,0 +1,69 @@
+<%= simple_form_for(@personal_access_token) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs --spacious">
+    <div class="row">
+      <div class="col-md-8">
+        <%= f.input :description, label: 'Token description', hint: "What's this token for?", autofocus: true %>
+      </div>
+    </div>
+
+    <h5 class="text-strong">Select scopes</h5>
+    <p>Scopes define the access for personal tokens. </p>
+
+    <table class="table table-simple" id="personal-token-scopes">
+      <tbody>
+        <%= content_tag :tr, id: 'collections' do %>
+            <td class="scope-input text-strong">
+              <%= f.input :collections, as: :boolean %>
+            </td>
+            <td class="scope-description">
+              <p class="text-muted">Read your collections and access your collection tokens.</p>
+            </td>
+        <% end %>
+        <%= content_tag :tr, id: 'search' do %>
+            <td class="scope-input text-strong">
+              <%= f.input :search, as: :boolean %>
+            </td>
+            <td class="scope-description">
+              <p class="text-muted">Search babylon-online in your name.</p>
+            </td>
+        <% end %>
+        <%= content_tag :tr, id: 'notifications' do %>
+            <td class="scope-input">
+              <%= f.input :notifications, as: :boolean %>
+            </td>
+            <td class="scope-description">
+              <p class="text-muted">Access notifications.</p>
+            </td>
+        <% end %>
+        <%= content_tag :tr, id: 'projects' do %>
+            <td class="scope-input">
+              <%= f.input :projects, as: :boolean %>
+            </td>
+            <td class="scope-description">
+              <p class="text-muted">Read your projects.</p>
+            </td>
+        <% end %>
+        <%= content_tag :tr, id: 'user' do %>
+            <td class="scope-input">
+              <%= f.input :user_profile, as: :boolean %>
+              <%= f.input :user_email, as: :boolean, label_html: {style: 'padding-top:-10px;'} %>
+            </td>
+            <td class="scope-description">
+              <p class="text-muted">
+                Read all user profile data.<br>
+                Access user email addresses (read-only).
+              </p>
+            </td>
+        <% end %>
+      </tbody>
+    </table>
+
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, class: 'btn btn-primary text-strong' %>
+    <%= link_to 'Cancel', personal_access_tokens_path, class: 'btn btn-default text-strong' %>
+  </div>
+<% end %>

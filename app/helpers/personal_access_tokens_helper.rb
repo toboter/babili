@@ -1,0 +1,2 @@
+module PersonalAccessTokensHelper
+end

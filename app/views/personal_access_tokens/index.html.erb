@@ -1,0 +1,60 @@
+<% title 'Personal access tokens' %>
+
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
+<% end %>
+<% content_for :buttons do %>
+  <%= link_to 'Generate new token', new_personal_access_token_path, class: 'btn btn-default text-strong' %>
+<% end if can?(:create, Doorkeeper::Application) %>
+
+<p>Tokens you have generated that can be used to access the babili API.</p>
+
+<%= content_tag :div, id: "personal-token-notice", class: 'panel panel-info' do %>
+  <div class="panel-body bg-info">
+    Make sure to copy your new personal access token now. You won’t be able to see it again!
+  </div>
+<% end if flash[:personal_token] %>
+
+<table class="table table-simple">
+  <tbody>
+    <% @personal_access_tokens.each do |personal_access_token| %>
+      <% unless flash[:personal_token] == personal_access_token.access_token %>
+        <%= content_tag :tr, id: "personal-token-#{personal_access_token.id}" do %>
+          <td>
+            <div style="margin-top:5px">
+              <%= content_tag :span, personal_access_token.description, class: 'text-strong' %> &mdash; 
+              <%= content_tag :span, personal_access_token.scope.map{|s| s.first if s.last }.compact.join(', '), class: 'text-italic text-small' %>
+            </div>
+          </td>
+          <td>
+            <div class="actions  pull-right">
+              <%= link_to 'Edit', edit_personal_access_token_path(personal_access_token), class: 'btn btn-default btn-sm text-strong' %>
+              <%= link_to 'Delete', personal_access_token, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm text-strong' %>
+            </div>
+          </td>
+        <% end %>
+      <% else %>
+        <%= content_tag :tr, id: "personal-token-#{personal_access_token.id}", class: 'success' do %>
+          <td>
+            <div style="margin-top:5px">
+              <%= content_tag :span, fa_icon('check'), style: 'color: #28a745;' %>
+              <%= content_tag :span, flash[:personal_token], class: 'text-strong' %>
+            </div>
+          </td>
+          <td>
+            <div class="actions  pull-right">
+              <%= link_to 'Edit', edit_personal_access_token_path(personal_access_token), class: 'btn btn-default btn-sm text-strong' %>
+              <%= link_to 'Delete', personal_access_token, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm text-strong' %>
+            </div>
+          </td>
+        <% end %>
+      <% end %>
+
+    <% end %>
+  </tbody>
+</table>
+
+<p class="text-small --spacious">
+  Personal access tokens function like ordinary OAuth access tokens. They can be used 
+  instead of a password for accessing data over HTTP(S), or can be used to authenticate to the API.
+</p>

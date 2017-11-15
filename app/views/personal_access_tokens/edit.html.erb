@@ -1,0 +1,17 @@
+<% title 'Edit personal access token' %>
+
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
+<% end %>
+
+<div class="panel panel-warning">
+  <div class="panel-body bg-warning">
+    <p>
+      <%= link_to 'Regenerate Token', '', class: 'btn btn-danger btn-sm text-strong pull-right' %>
+      If you’ve lost or forgotten this token, you can regenerate it, but be aware that any 
+      scripts or applications using this token will need to be updated.
+    </p>
+  </div>
+</div>
+
+<%= render 'form', personal_access_token: @personal_access_token %>

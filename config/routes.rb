@@ -77,6 +77,7 @@ Rails.application.routes.draw do
           get 'send_accessibilities_to_clients', to: 'oauth_accessibilities#send_all_accessibilities_to_clients'
         end
       end
+      resources :personal_access_tokens, except: :show
     end
   end
   devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}, :controllers => { :registrations => :registrations }
@@ -86,11 +87,6 @@ Rails.application.routes.draw do
   namespace :api do
     get 'me', to: 'users#me'
     scope :my do
-      get 'projects', to: 'users#my_projects'         #old please delete
-      scope :authorizations do
-        get 'read', to: 'users#my_search_abilities'   #old please delete
-      end
-      #new
       scope :accessibilities do
         get 'searchable', to: 'users#my_search_abilities'
         get 'crud/:uid', to: 'users#my_crud_abilities'
@@ -101,7 +97,6 @@ Rails.application.routes.draw do
     resources :users, only: [:index, :show]
     resources :projects, only: [:index, :show]
     get 'search', to: 'search#index'
-    post 'oread_application_access_token', to: 'oread_access_tokens#create'   #old please delete
     resources :oread_applications, only: [] do
       post 'set_access_token', to: 'oread_access_tokens#create', on: :collection
     end

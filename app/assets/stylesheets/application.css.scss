@@ -23,6 +23,11 @@
 .text-strong {
     font-weight: bold;
 }
+
+.text-italic {
+    font-style: italic;
+}
+
 .text-small {
     font-size: small;
 }
@@ -191,6 +196,20 @@ form {
         .session-details-more-info {
             padding-top: 10px;
         }
+    }
+}
+
+#personal-token-scopes {
+    td.scope-input {
+        width: 20%;
+        div.checkbox {
+            margin-top:0px;
+            margin-bottom:0px;
+        }
+
+    }
+
+    td.scope-description {
     }
 }
 

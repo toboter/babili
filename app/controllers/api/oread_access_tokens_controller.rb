@@ -3,12 +3,12 @@ class Api::OreadAccessTokensController < Api::BaseController
 
   def create
     # raise oread_access_token_params.inspect
-    # raise current_resource_owner.inspect
+    # raise current_user.inspect
     @application = Oread::Application.find_by_host_and_port(oread_access_token_params[:host], oread_access_token_params[:port])
     if @application
-      if current_resource_owner && @application
+      if current_user && @application
         token_type = oread_access_token_params[:token_type] || 'Token'
-        @token = @application.access_tokens.create(resource_owner: current_resource_owner, token: oread_access_token_params[:token], token_type: token_type)
+        @token = @application.access_tokens.create(resource_owner: current_user, token: oread_access_token_params[:token], token_type: token_type)
         render status: 200, json: @application.to_json
       else
         render status: 403, json: 'not allowed'

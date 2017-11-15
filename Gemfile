@@ -74,5 +74,6 @@ gem 'active_model_serializers', '~> 0.10.0'
 gem 'rest-client'
 gem 'sidekiq'
 gem 'sinatra', github: 'sinatra'
+gem "jsonb_accessor", "~> 1.0.0"
 
 ruby '2.3.1'

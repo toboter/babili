@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171109145308) do
+ActiveRecord::Schema.define(version: 20171114135851) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -165,6 +165,18 @@ ActiveRecord::Schema.define(version: 20171109145308) do
     t.text     "image_data"
     t.boolean  "enroll_users_default", default: true, null: false
     t.index ["owner_id", "owner_type"], name: "index_oread_applications_on_owner_id_and_owner_type", using: :btree
+  end
+
+  create_table "personal_access_tokens", force: :cascade do |t|
+    t.integer  "resource_owner_id"
+    t.string   "access_token"
+    t.string   "description"
+    t.jsonb    "scope"
+    t.boolean  "revoked",           default: false, null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+    t.index ["access_token"], name: "index_personal_access_tokens_on_access_token", unique: true, using: :btree
+    t.index ["resource_owner_id"], name: "index_personal_access_tokens_on_resource_owner_id", using: :btree
   end
 
   create_table "profiles", force: :cascade do |t|

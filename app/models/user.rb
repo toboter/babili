@@ -27,6 +27,8 @@ class User < ApplicationRecord
 
   has_many :oread_application_ownerships, class_name: 'Oread::Application', as: :owner
 
+  has_many :personal_access_tokens, foreign_key: :resource_owner_id
+
   has_many :memberships, dependent: :destroy
   has_many :projects, through: :memberships
   has_many :project_oauth_applications, through: :projects, source: :oauth_applications
@@ -120,18 +122,6 @@ class User < ApplicationRecord
     recoverable
   end
 
-  def audit_account_changes_by(admin)
-    if self.is_approved?
-      Audit.create!(user: self, actor: admin, action: "user.account_approved", actor_ip: admin.last_sign_in_ip)
-      approved = true
-    end
-    if self.is_admin.changed? && self.is_admin?
-      Audit.create!(user: self, actor: admin, action: "user.account_is_admin", actor_ip: admin.last_sign_in_ip)
-      is_admin = true
-    end
-    return approved || is_admin
-  end
-
   def enroll_to_default_oread_apps
     Oread::Application.where(enroll_users_default: true).each do |app|
       self.oread_access_enrollments << Oread::AccessEnrollment.new(application: app, creator: self)
@@ -161,7 +151,6 @@ class User < ApplicationRecord
   def purge_old_sessions
     user_sessions.order('created_at desc').offset(10).destroy_all
   end
-
 
   private
     def is_approved?

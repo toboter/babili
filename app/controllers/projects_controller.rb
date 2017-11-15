@@ -37,7 +37,6 @@ class ProjectsController < ApplicationController
   # POST /projects.json
   def create
     @project = Project.new(project_params)
-    @project.memberships.build(user: current_user, role: 'Owner', verified: true)
 
     respond_to do |format|
       if @project.save
@@ -88,7 +87,13 @@ class ProjectsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def project_params
-      params.require(:project).permit(:name, :image, :cached_image_data, :private, :description, memberships_attributes: [:id, :user_id, :role, :verified, :_destroy])
+      params.require(:project).permit(
+        :name, 
+        :image, 
+        :cached_image_data, 
+        :private, 
+        :description, 
+        memberships_attributes: [:id, :user_id, :role, :verified, :_destroy])
     end
     
 end
