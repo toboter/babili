@@ -5,7 +5,7 @@ class OreadApplicationSerializer < ActiveModel::Serializer
   attributes :id, :name, :host, :port, :path, :url, :user_access_token, :provider_presentation_human
 
   def user_access_token
-    object.access_tokens.where(resource_owner: Thread.current[:current_user]).last.try(:token)
+    object.access_tokens.where(resource_owner: current_user).last.try(:token)
   end
 
   def path
