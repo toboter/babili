@@ -3,14 +3,14 @@
     <%= background_image_div(application, :small_banner, {class: '', style: 'height:200px;width:100%; background-position:center;'}) %>
   <% end if local_assigns[:full] %>
   <div class="panel-body text-center">
-    <h4><%= link_to truncate(application.name, length: 32, seperator: ' '), application %></h4>
+    <h4><%= link_to truncate(application.name, length: 32, seperator: ' '), application, data: {toggle: "tooltip", placement: "top"}, title: application.name %></h4>
     <p class="text-small text-muted">
       Created on <%= application.created_at.to_date.to_formatted_s(:long_ordinal) %>.
       <br>
       <%= pluralize(application.token_holders.uniq.count, 'token holder' ) %>.
       <%= content_tag :span, pluralize(application.enrollees.count, 'enrolled user' ), id: "app_enrollees_count_for_#{application.id}" %>.
     </p>
-    <%= content_tag :p, truncate(application.description, length: 110, separator: ' '), style:'min-height:60px;' if local_assigns[:full] && !local_assigns[:no_description] %>
+    <%= content_tag :p, truncate(application.description, length: 110, separator: ' '), style:'min-height:60px;', data: {toggle: "tooltip", placement: "top"}, title: application.description if local_assigns[:full] && !local_assigns[:no_description] %>
 
     <%= content_tag :div, class: 'enrollment-actions' do %>
       <% if !application.enrollees.include?(current_user) %>

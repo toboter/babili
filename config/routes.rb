@@ -16,9 +16,16 @@ Rails.application.routes.draw do
   use_doorkeeper do
     skip_controllers :applications, :authorized_applications
   end
+
+  # redirecting the user to the client instead of the show page for the application
+  get 'collections/applications/:id', to: redirect { |params, request|
+    obj = Oread::Application.find(params[:id])
+    obj.app_url
+  }
   namespace :oread, path: 'collections' do
     resources :applications, only: :show
   end
+
 
   get '/settings', to: redirect("/settings/profile")
   scope path: '/settings' do
