@@ -18,10 +18,10 @@ Rails.application.routes.draw do
   end
 
   # redirecting the user to the client instead of the show page for the application
-  get 'collections/applications/:id', to: redirect { |params, request|
-    obj = Oread::Application.find(params[:id])
-    obj.app_url
-  }
+  # get 'collections/applications/:id', to: redirect { |params, request|
+  #   obj = Oread::Application.find(params[:id])
+  #   obj.app_url
+  # }
   namespace :oread, path: 'collections' do
     resources :applications, only: :show
   end

@@ -47,7 +47,7 @@
           <%= link_to(@application.app_url, @application.app_url, target: '_blank', class: 'text-strong') %>
         <% end %>
       </h4>
-      <%= form_tag oread_application_path(@application), :method => 'get', class: "" do %>
+      <%= form_tag oread_application_path(@application), :method => 'get', class: "hidden" do %>
         <div class="input-group">
           <span class="input-group-addon">
             <%= link_to fa_icon('search'), help_path(anchor: 'searching') %>
@@ -57,7 +57,7 @@
       <% end %>
 
         <% if @results.present? %>
-          <table class="table table-bordered table-responsive" style="margin-top:20px;">
+          <table class="table table-bordered table-responsive hidden" style="margin-top:20px;">
             <tbody>
               <% @results.each do |result| %>
                 <tr>
@@ -71,7 +71,7 @@
             </tbody>
           </table>
         <% else %>
-          <%= content_tag :p, "no results", class: 'bg-info', style: 'padding: 15px; margin-top: 20px;' %>
+          <%= content_tag :p, "no results", class: 'bg-info hidden', style: 'padding: 15px; margin-top: 20px;' %>
         <% end %>
 
         <p class="text-small text-muted --spacious">
