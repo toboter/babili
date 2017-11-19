@@ -30,7 +30,8 @@ class CMS::BlogPagesController < ApplicationController
   def create
     @blog = CMS::BlogPage.new(blog_page_params)
     @blog.author = current_user
-
+    @blog.published_at = Time.now if params[:commit] == 'Publish now'
+    
     respond_to do |format|
       if @blog.save
         format.html { redirect_to @blog, notice: "Blog was successfully created." }
@@ -45,6 +46,7 @@ class CMS::BlogPagesController < ApplicationController
   # PATCH/PUT /blogs/1
   # PATCH/PUT /blogs/1.json
   def update
+    @blog.published_at = Time.now if params[:commit] == 'Publish now'
     respond_to do |format|
       if @blog.update(blog_page_params)
         format.html { redirect_to @blog, notice: "Blog was successfully updated." }

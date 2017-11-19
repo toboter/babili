@@ -1,9 +1,9 @@
-<div class="blog-post" id="blog-post-<%= blog_page.id %>">
+<%= content_tag :div, class: "blog-post", id: "blog-post-#{blog_page.id}" do %>
   <%= link_to fa_icon("trash", text: 'Remove'), blog_page, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default btn-sm text-strong text-danger pull-right' if can?(:destroy, blog_page) %>
   <%= link_to fa_icon("edit", text: 'Edit'), [:edit, blog_page], class: 'btn btn-default btn-sm text-strong pull-right', style: 'margin-right:10px;' if can?(:update, blog_page) %>
   <%= content_tag :h2, link_to(blog_page.title, blog_page), class: 'blog-post-title h-condensed' %>
   <%= content_tag :ul, class: 'blog-post-meta' do %>
-    <%= content_tag :li, fa_icon('calendar', text: blog_page.created_at.to_date.to_formatted_s(:long_ordinal)), class: 'meta-item' %>
+    <%= content_tag :li, fa_icon('calendar', text: "#{blog_page.published_at.present? ? blog_page.published_at.to_date.to_formatted_s(:long_ordinal) : 'unpublished'}"), class: 'meta-item' %>
     <%= content_tag :li, class: 'meta-item mid' do %>
       <%= background_image_div(blog_page.author.profile, :small_thumb, {class: 'author-avatar'}) %>
       <%= link_to blog_page.author.name, blog_page.author.try(:profile) %>
@@ -14,4 +14,4 @@
   <%= content_tag :div, class: "blog-post-body markdown-body --spacious" do %>
     <%= markdown(blog_page.content) %>
   <% end %>
-</div>
+<% end if blog_page.published_at.present? || blog_page.author == current_user %>

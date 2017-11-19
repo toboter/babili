@@ -6,7 +6,10 @@ class Ability
 
     cannot :manage, :all
     can :read, :all
-    cannot :read, [CMS::HelpCategory, CMS::BlogCategory]
+    cannot :read, [CMS::HelpCategory, CMS::BlogCategory, CMS::BlogPage]
+    can :read, CMS::BlogPage do |page|
+      page.published_at.present?
+    end
 
     if user.approved?
       can :manage, :all
@@ -15,7 +18,10 @@ class Ability
       cannot :read, [CMS::HelpCategory, CMS::BlogCategory] unless user.is_admin?
       can :read, [CMS::Novelity, CMS::HelpPage]
       cannot :manage, CMS::BlogPage unless user.is_admin?
-      can [:read, :create], CMS::BlogPage
+      can :create, CMS::BlogPage
+      can :read, CMS::BlogPage do |page|
+        page.published_at.present? || page.author == user
+      end
       can [:update, :destroy], CMS::BlogPage do |post|
         user == post.author
       end

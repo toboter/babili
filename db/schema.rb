@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171119222145) do
+ActiveRecord::Schema.define(version: 20171119231534) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,6 +61,7 @@ ActiveRecord::Schema.define(version: 20171119222145) do
     t.jsonb    "type_details"
     t.integer  "parent_id"
     t.integer  "category_id"
+    t.datetime "published_at"
     t.index ["slug"], name: "index_cms_contents_on_slug", using: :btree
   end
 
