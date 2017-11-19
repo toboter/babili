@@ -5,7 +5,7 @@ class Oread::ApplicationsController < ApplicationController
 
   before_action :set_application, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, except: :show
-  load_and_authorize_resource
+  load_and_authorize_resource class: "Oread::Application"
   layout "admin", except: :show
         
   # GET /applications
@@ -34,7 +34,7 @@ class Oread::ApplicationsController < ApplicationController
 
   # GET /applications/new
   def new
-    @application = Application.new
+    @application = Oread::Application.new
   end
 
   # GET /applications/1/edit
@@ -44,7 +44,7 @@ class Oread::ApplicationsController < ApplicationController
   # POST /applications
   # POST /applications.json
   def create
-    @application = Application.new(application_params)
+    @application = Oread::Application.new(application_params)
     @application.owner = current_user
     respond_to do |format|
       if @application.save
