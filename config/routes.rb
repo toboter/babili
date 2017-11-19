@@ -68,7 +68,9 @@ Rails.application.routes.draw do
       end
       namespace :cms, path: nil do
         namespace :admin, path: nil do
-          resources :help_categories, except: :show
+          resources :help_categories, except: :show do
+            put :move, on: :member
+          end
           resources :blog_categories, except: :show
         end
       end 

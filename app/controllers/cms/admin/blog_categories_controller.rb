@@ -7,7 +7,7 @@ class CMS::Admin::BlogCategoriesController < ApplicationController
   # GET /cms/blog_categories
   # GET /cms/blog_categories.json
   def index
-    @cms_blog_categories = CMS::BlogCategory.all
+    @cms_blog_categories = CMS::BlogCategory.order(name: :asc)
   end
 
   # GET /cms/blog_categories/new

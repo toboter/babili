@@ -6,7 +6,7 @@ class CMS::HelpPagesController < ApplicationController
   # GET /help_pages
   # GET /help_pages.json
   def index
-    @categories = CMS::HelpCategory.all
+    @categories = CMS::HelpCategory.order(position: :asc)
   end
 
   # GET /help_pages/1

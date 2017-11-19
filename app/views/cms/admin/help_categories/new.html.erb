@@ -1,3 +1,7 @@
-<h1>New CMS Help Category</h1>
+<% title "New CMS Help Category" %>
+
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
+<% end %>
 
 <%= render 'form', cms_help_category: @cms_help_category %>

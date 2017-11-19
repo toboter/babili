@@ -1,5 +1,12 @@
 <% title "CMS Blog Categories" %>
 
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
+<% end %>
+<% content_for :buttons do %>
+  <%= link_to 'Create a new CMS Blog Category', new_cms_admin_blog_category_path, class: 'btn btn-default text-strong' %>
+<% end if can?(:create, CMS::BlogCategory) %>
+
 <table class="table table-simple">
   <thead>
     <tr>
@@ -11,14 +18,10 @@
   <tbody>
     <% @cms_blog_categories.each do |category| %>
       <tr>
-        <td><%= category.name %></td>
+        <td><%= link_to category.name, cms_blog_category_path(category) %></td>
         <td><%= link_to 'Edit', edit_cms_admin_blog_category_path(category) %></td>
         <td><%= link_to 'Destroy', cms_admin_blog_category_path(category), method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
-<br>
-
-<%= link_to 'New CMS Blog Category', new_cms_admin_blog_category_path %>
