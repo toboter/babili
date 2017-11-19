@@ -1,0 +1,8 @@
+<% title "New help page entry" %>
+
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, link_to('Help', cms_help_pages_url) %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
+<% end %>
+
+<%= render 'form', page: @page %>

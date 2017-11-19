@@ -1,0 +1,8 @@
+<% title "New blog entry" %>
+
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, link_to('Blog', cms_blog_pages_url) %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
+<% end %>
+
+<%= render 'form', blog: @blog %>

@@ -1,0 +1,23 @@
+<% title "#{@page.title}" %>
+
+<% content_for(:breadcrumbs) do %>
+  <%= content_tag :li, link_to('Help', cms_help_pages_url) %>
+  <%= content_tag :li, link_to(@page.category.name, @page.category) %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
+<% end %>
+
+<% content_for :container do %>
+  <div class="row help-articles">
+    <div class="col-sm-12 col-md-8">
+      <%= render @page %>
+    </div>
+    <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
+      <%= content_tag :div, class: 'actions' do %>
+        <%= link_to fa_icon("trash", text: 'Remove'), @page, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default btn-sm text-strong text-danger pull-right' if can?(:destroy, @page) %>
+        <%= link_to fa_icon("edit", text: 'Edit'), [:edit, @page], class: 'btn btn-default btn-sm text-strong pull-right', style: 'margin-right:5px;' if can?(:update, @page) %>
+        <%= link_to fa_icon('plus', text: 'Create a story part'), new_cms_help_page_path(category_id: @page.category.id, parent_id: @page.id), class: 'btn btn-default text-strong text-primary pull-right' if can?(:create, CMS::HelpPage) %>
+      <% end %>
+    <% end %>
+
+  </div>
+<% end %>

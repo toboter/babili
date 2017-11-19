@@ -1,0 +1,2 @@
+module CMS::BlogCategoriesHelper
+end

@@ -1,0 +1,11 @@
+<%= simple_form_for @cms_blog_category, url: url_for(controller: 'cms/admin/blog_categories', action: @cms_blog_category.new_record? ? 'create' : 'update') do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :name %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

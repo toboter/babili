@@ -12,6 +12,8 @@
           <div class="list-group">
             <%= link_to 'User registration', users_path, class: "list-group-item #{'active text-strong' if current_page?(users_path)}" %>
             <%= link_to 'Search path registration', settings_admin_oread_applications_path, class: "list-group-item #{'active text-strong' if current_page?(settings_admin_oread_applications_path)}" %>
+            <%= link_to 'Help pages categories', cms_admin_help_categories_path, class: "list-group-item #{'active text-strong' if current_page?(cms_admin_help_categories_path)}" %>
+            <%= link_to 'Blog pages categories', cms_admin_blog_categories_path, class: "list-group-item #{'active text-strong' if current_page?(cms_admin_blog_categories_path)}" %>
           </div>
         </div>
       </div>

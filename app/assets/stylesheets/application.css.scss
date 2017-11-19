@@ -18,6 +18,7 @@
 
 @import "creative";
 @import "profiles";
+@import "cms";
 @import "toastr";
 
 .text-strong {
@@ -55,47 +56,6 @@ a.no-link {
     font-weight: bold;
 }
 
-.about-content, .post-content {
-    img {
-        display: block;
-        max-width: 100%;
-        max-height: 800px;
-        margin: 1em auto;
-    }
-    .tooltip-inner {
-        max-width: 600px;
-    }
-    p {
-        line-height: 2.4rem;
-    }
-    p.lead {
-        line-height: 2.8rem;
-    }
-}
-
-
-#about {
-    a {
-        color: #d8d8d8;
-    }
-    img {
-        display: none !important;
-    }
-}
-
-.about-entry img, .post-entry img {
-    display: none !important;
-}
-
-.toc {
-    ul {
-        @extend .nav;
-        padding-left: 5px;
-        li {
-            @extend .nav-stacked;
-        }
-    }
-}
 
 td {
     .form-group {

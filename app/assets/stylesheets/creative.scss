@@ -261,8 +261,10 @@ header .header-content .header-content-inner p {
     border-top: 1px solid #ddd;
     padding: 50px 0 40px 0;
     background-color: #f8f8f8;
-    p {
-        margin-left: 15px;
+    #footer-doc-links {
+        li {
+            a {margin-left: 20px;}
+        }
     }
 }
 

@@ -1,0 +1,20 @@
+<% title "#{@blog.title}" %>
+
+<% content_for(:breadcrumbs) do %>
+  <%= content_tag :li, link_to('Blog', cms_blog_pages_url) %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
+<% end %>
+
+<% content_for :container do %>
+  <div class="row posts">
+    <div class="col-sm-12 col-md-8 main">
+      <%= render @blog %>
+    </div>
+
+    <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
+      <%= render 'cms/blog_categories/categories_list' %>  
+    <% end %>
+  </div>
+<% end %>
+
+

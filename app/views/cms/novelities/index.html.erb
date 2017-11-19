@@ -1,0 +1,35 @@
+<% title "News & Press" %>
+
+<% content_for(:breadcrumbs) do %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
+<% end %>
+
+<% content_for :container do %>    
+  <div class="row novelities">
+    <div class="col-sm-12 col-md-7">
+      <% @news_by_years.each do |year, news| %>
+        <h2><%= year %></h2>  
+        <table class="table novelities-list">
+          <% news.each do |novelity| %>
+            <tr class="novelity">
+              <td>
+                <span class="actions pull-right">
+                  <%= link_to fa_icon("edit", text: 'Edit'), [:edit, novelity], class: 'btn btn-default btn-sm text-strong text-warning' if can?(:update, novelity) %>
+                  <%= link_to fa_icon("remove", text: 'Delete'), novelity, method: :delete, data: { confirm: 'Remove this item. Are you sure?' }, class: 'btn btn-default btn-sm text-strong text-danger' if can?(:destroy, novelity) %>
+                </span>
+                <%= link_to novelity.title, target: :_blank, class: 'novelity-title-link' do %>
+                  <%= novelity.title %>
+                <% end %>
+                <%= content_tag :small, markdown(novelity.content) if novelity.content %>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+      <% end %>
+    </div>
+    <div class="col-md-2 col-md-offset-3 sidebar">
+      <%= link_to fa_icon("add", text: 'Create a new novelity'), new_cms_novelity_path, class: 'btn btn-default text-strong pull-right' if can?(:create, CMS::Novelity) %>
+    </div>
+  </div>
+
+<% end %>

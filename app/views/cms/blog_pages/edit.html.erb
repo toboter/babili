@@ -1,0 +1,9 @@
+<% title "Editing: #{@blog.title}" %>
+
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, link_to('Blog', cms_blog_pages_url) %>
+  <%= content_tag :li, link_to(@blog.title, @blog) %>
+  <%= content_tag :li, 'edit', class: 'active' %>
+<% end %>
+
+<%= render 'form', blog: @blog %>

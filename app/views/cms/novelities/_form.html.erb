@@ -1,0 +1,26 @@
+<%= content_for(:container) do %>
+  <%= simple_form_for novelity do |f| %>
+    <div class="row">
+      <div class="col-md-12">
+        <%= f.error_notification %>
+    
+        <div class="row">
+          <%= content_tag :div, class: "col-md-12" do %>
+
+            <div class="form-inputs">
+              <%= f.input :title, hint: 'This should be a link.' %>
+              <%= f.input :content, input_html: {class: '', rows: '2', }, placeholder: 'Destribe the link in a few words.' %>
+            </div>
+          <% end %>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <hr>
+            <%= f.button :submit, class: "btn btn-primary" %>
+            <%= link_to 'Cancel', cms_novelities_path, class: "btn btn-default" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>

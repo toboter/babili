@@ -22,28 +22,18 @@
         <div id="navbar" class="navbar-collapse collapse">
           <%= content_tag :ul, class: "nav navbar-nav navbar-right" do %>
             <li><%= link_to 'Explore', explore_path %></li>
-            <%= content_tag :li, class: "dropdown" do %>
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <% for entry in Blog.where(type: 'About').order('position') do %>
-                  <%= content_tag :li, link_to(entry.title, entry) %>
-                <% end %>
-                <li role="separator" class="divider"></li>
-                <%= content_tag :li, link_to('All postings in this section', abouts_path) %>
-              </ul>
-            <% end %>
-            <%= content_tag :li, class: "dropdown" do %>
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Blog posts <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <% for entry in Blog.where(type: 'Post').order('position').limit(8) do %>
-                  <%= content_tag :li, link_to(entry.title, entry) %>
-                <% end %>
-                <li role="separator" class="divider"></li>
-                <%= content_tag :li, link_to('All postings in this section', posts_path) %>
-              </ul>
-            <% end %>
-            <li><%= link_to 'News', novelities_path %></li>
             <li><%= link_to fa_icon('search', text: 'Search'), search_path %></li>
+            <%= content_tag :li, class: "dropdown" do %>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Blog<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <% for page in CMS::BlogPage.type_details_where(featured: true).order(created_at: :desc).limit(5) do %>
+                  <%= content_tag :li, link_to(page.title, page) %>
+                <% end %>
+                <li role="separator" class="divider"></li>
+                <%= content_tag :li, link_to('All postings in this section', cms_blog_pages_path) %>
+              </ul>
+            <% end %>
+            <li><%= link_to 'News', cms_novelities_path %></li>
             <% if user_signed_in? %>
               <%= content_tag :li, class: "dropdown" do %>
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">You<span class="caret"></span></a>
@@ -52,7 +42,7 @@
                   <li role="separator" class="divider"></li>
                   <%= content_tag :li, link_to("Your profile", (current_user.profile ? current_user.profile : new_profile_path)), class: "" %>
                   <li role="separator" class="divider"></li>
-                  <%= content_tag :li, link_to("Help", help_path), class: "" %>
+                  <%= content_tag :li, link_to("Help", cms_help_pages_path), class: "" %>
                   <%= content_tag :li, link_to("Settings", settings_path), class: "" if can?(:show, current_user) %>
                   <%= content_tag :li, link_to("Sign Out", destroy_user_session_path, method: :delete) %>
                 </ul>
@@ -106,8 +96,8 @@
     <div class="footer" id="footer">
       <div class="container">
         <div class="row">
-          <div class="col-md-10 col-lg-10 col-sm-12">
-            <p id="footer-info-copyright" class="text-muted">
+          <div class="col-md-8 col-lg-8 col-sm-12">
+            <p id="footer-info-copyright" class="text-muted text-small">
               Der Inhalt ist unter der Lizenz „Creative Commons Attribution/Share Alike“ verfügbar; 
               Informationen zu den Urhebern und zum Lizenzstatus eingebundener Mediendateien (etwa 
               Bilder oder andere Dokumente) können im Regelfall durch Anklicken dieser abgerufen werden. 
@@ -115,19 +105,22 @@
               dieser Website erklären Sie sich mit den Nutzungsbedingungen und der Datenschutzrichtlinie 
               einverstanden.
             </p>
-            <p class="text-muted">
-              &copy; <%= Time.now.strftime("%Y") %> <%= link_to 'babylon-online.org', root_path %>
-              <small>(v. <%= APP_VERSION %>)</small>
-            </p>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-12">
-            <ul id="footer-doc-links" class="nav nav-pills"> 
-              <li><%= link_to "Contact", contact_path %></li>
-              <li><%= link_to "Help", help_path %></li>
-              <li><%= link_to "Imprint", imprint_path %></li>
-              <li><%= link_to "Developers", api_path %></li>
+        <div class="row --spacious">
+          <div class="col-md-12 ">
+            <ul id="footer-doc-links" class="list-inline text-small">
+              <li>&copy; <%= Time.now.strftime("%Y") %> babylon-online.org</li>
+              <li>(v. <%= APP_VERSION %>)</li>
+              <li><%= link_to "Terms", cms_help_category_path('site') %></li>
+              <li><%= link_to "Security", security_settings_path %></li>
+              <li><%= link_to "Help", cms_help_pages_path %></li>
+              <span class="pull-right list-inline">
+                <li><%= link_to "Contact", contact_path %></li>
+                <li><%= link_to "API", cms_help_category_path('api') %></li>
+                <li><%= link_to "Blog", cms_blog_pages_path %></li>
+                <li><%= link_to "About", about_path %></li>
+              </span>
             </ul>
           </div>
         </div>

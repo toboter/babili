@@ -1,24 +1,24 @@
-class BlogsController < ApplicationController
-  before_action :set_blog, only: [:show, :edit, :update, :destroy, :move]
-  before_action :set_type
+class CMS::BlogPagesController < ApplicationController
+  before_action :set_blog_page, only: [:show, :edit, :update, :destroy, :move]
   before_action :authenticate_user!, except: [:index, :show]
-  load_and_authorize_resource
+  load_and_authorize_resource find_by: :slug
   
   # GET /blogs
   # GET /blogs.json
   def index
-    @blogs = type_class.all
-    @blog_years = @blogs.order(posted_at: :desc).group_by { |t| t.posted_at.strftime('%Y') } if type_class.name == 'Novelity'
+    @blogs = CMS::BlogPage.type_details_where(featured: true).order(created_at: :desc)
+    @categories = CMS::BlogCategory.order(name: :asc)
   end
 
   # GET /blogs/1
   # GET /blogs/1.json
   def show
+    @categories = CMS::BlogCategory.order(name: :asc)
   end
 
   # GET /blogs/new
   def new
-    @blog = type_class.new
+    @blog = CMS::BlogPage.new
   end
 
   # GET /blogs/1/edit
@@ -28,11 +28,12 @@ class BlogsController < ApplicationController
   # POST /blogs
   # POST /blogs.json
   def create
-    @blog = Blog.new(blog_params)
+    @blog = CMS::BlogPage.new(blog_page_params)
+    @blog.author = current_user
 
     respond_to do |format|
       if @blog.save
-        format.html { redirect_to (@type == 'Novelity' ? novelities_path : @blog), notice: "#{@type} was successfully created." }
+        format.html { redirect_to @blog, notice: "Blog was successfully created." }
         format.json { render :show, status: :created, location: @blog }
       else
         format.html { render :new }
@@ -45,8 +46,8 @@ class BlogsController < ApplicationController
   # PATCH/PUT /blogs/1.json
   def update
     respond_to do |format|
-      if @blog.update(blog_params)
-        format.html { redirect_to @blog, notice: "#{@type} was successfully updated." }
+      if @blog.update(blog_page_params)
+        format.html { redirect_to @blog, notice: "Blog was successfully updated." }
         format.json { render :show, status: :ok, location: @blog }
       else
         format.html { render :edit }
@@ -81,31 +82,20 @@ class BlogsController < ApplicationController
   def destroy
     @blog.destroy
     respond_to do |format|
-      format.html { redirect_to send("#{@type.underscore.pluralize}_url"), notice: "#{@type} was successfully destroyed." }
+      format.html { redirect_to cms_blog_pages_path, notice: "Blog was successfully removed." }
       format.json { head :no_content }
     end
   end
 
   private
-    def set_type
-      @type = type
-    end
-    
-    def type
-      Blog.types.include?(params[:type]) ? params[:type] : "Blog"
-    end
-    
-    def type_class
-      type.constantize
-    end
-    
+   
     # Use callbacks to share common setup or constraints between actions.
-    def set_blog
-      @blog = type_class.friendly.find(params[:id])
+    def set_blog_page
+      @blog = CMS::BlogPage.friendly.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
-    def blog_params
-      params.require(type.underscore.to_sym).permit(:type, :author_id, :title, :abstract, :content, :external_link, :posted_at)
+    def blog_page_params
+      params.require(:cms_blog_page).permit(:type, :category_id, :featured, :title, :content, further_reading: [])
     end
 end

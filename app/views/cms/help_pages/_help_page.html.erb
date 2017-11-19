@@ -1,0 +1,6 @@
+<div class="help-article" id="help-article-<%= help_page.id %>">
+  <%= content_tag :h2, help_page.title, class: 'help-article-title h-condensed' %>
+  <%= content_tag :div, class: "help-article-body markdown-body" do %>
+    <%= markdown(help_page.content) %>
+  <% end %>
+</div>

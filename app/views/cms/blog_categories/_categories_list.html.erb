@@ -1,0 +1,7 @@
+<div class="category-list">
+  <%= link_to "Featured", cms_blog_pages_url, class: "list-group-item#{' active' if current_page?(cms_blog_pages_url)}" %>
+  <%= link_to "All posts", all_cms_blog_categories_path, class: "list-group-item#{' active' if current_page?(all_cms_blog_categories_path)}" %>
+  <% @categories.each do |category| %>
+    <%= link_to category.name, category, class: "list-group-item#{' active' if current_page?(category) || category == @blog_page.try(:category)}" %>
+  <% end %>
+</div>

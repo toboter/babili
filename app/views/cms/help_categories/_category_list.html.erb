@@ -1,0 +1,6 @@
+<%= content_tag :li, content_tag(:h5, link_to(category.name, category, class: 'text-muted text-strong'), class: 'category-heading'), id: "help-category-#{category.id}" %>
+<ul class="category-articles">
+  <% category.help_pages.each do |article| %>
+    <%= content_tag :li, link_to(article.title, article, class: "#{'indent' if article.child?}"), class: "help-link", id: "help-article-#{article.id}" %>
+  <% end %>
+</ul>

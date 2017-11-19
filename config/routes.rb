@@ -1,13 +1,11 @@
 Rails.application.routes.draw do
   require 'sidekiq/web'
 
-  get 'search', to: 'search#index'
-  get '/api', to: 'home#api'  
-  get '/help', to: 'home#help'
-  get '/imprint', to: 'home#imprint'
+  get '/search', to: 'search#index'
+  get '/about', to: 'home#about'
   get '/contact', to: 'home#contact'
   get '/explore', to: 'home#explore'
-  get :projects, to: 'home#projects'
+  get '/projects', to: 'home#projects'
   get '/collections/applications', to: 'home#collections', as: :collections
 
   scope 'oauth' do
@@ -68,6 +66,12 @@ Rails.application.routes.draw do
       namespace :oread, as: :settings_admin_oread do
         resources :applications, except: :show
       end
+      namespace :cms, path: nil do
+        namespace :admin, path: nil do
+          resources :help_categories, except: :show
+          resources :blog_categories, except: :show
+        end
+      end 
     end
 
     get '/developer', to: redirect("/settings/developer/oauth/applications"), as: 'developer_settings'
@@ -110,18 +114,21 @@ Rails.application.routes.draw do
 
   end
 
-  resources :blogs, only: :index
-  resources :abouts, path: :about, controller: 'blogs', type: 'About' do 
-    member do
-      put :move
+  namespace :cms, path: nil do
+    resources :blog_pages, path: :blog, only: :index
+    scope path: :blog do
+      resources :blog_categories, only: :show, path: 'categories' do
+        get 'all', on: :collection
+      end
+      resources :blog_pages, path: '', except: :index
     end
-  end
-  resources :posts, controller: 'blogs', type: 'Post' do 
-    member do
-      put :move
+    resources :help_pages, path: :help, only: [:index, :create]
+    scope path: :help do
+      resources :help_categories, only: :show, path: 'categories'
+      resources :help_pages, path: :articles, except: [:index, :create]
     end
+    resources :novelities, path: :news, except: :show
   end
-  resources :novelities, path: :news, controller: 'blogs', type: 'Novelity'
 
   authenticate :user, lambda { |u| u.is_admin } do
     mount Sidekiq::Web => '/sidekiq'

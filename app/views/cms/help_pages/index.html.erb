@@ -1,0 +1,20 @@
+<% title "Help" %>
+
+<% content_for(:breadcrumbs) do %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
+<% end %>
+
+<% content_for :container do %>
+  <div class="row help-articles">
+    <div class="col-sm-12 col-md-8">
+      <ul class="categories-tree">
+        <%= render partial: 'cms/help_categories/category_list', collection: @categories, as: :category %>
+      </ul>
+    </div>
+    <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
+      <%= content_tag :div, class: 'actions' do %>
+        <%= link_to fa_icon('add', text: 'Create a new help page entry'), new_cms_help_page_path, class: 'btn btn-default text-strong text-primary pull-right' if can?(:create, CMS::HelpPage) %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171114135851) do
+ActiveRecord::Schema.define(version: 20171119012825) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,19 +27,49 @@ ActiveRecord::Schema.define(version: 20171114135851) do
     t.index ["user_id"], name: "index_audits_on_user_id", using: :btree
   end
 
-  create_table "blogs", force: :cascade do |t|
+  create_table "cms_blog_categories", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "slug"
+    t.index ["slug"], name: "index_cms_blog_categories_on_slug", unique: true, using: :btree
+  end
+
+  create_table "cms_content_hierarchies", id: false, force: :cascade do |t|
+    t.integer "ancestor_id",   null: false
+    t.integer "descendant_id", null: false
+    t.integer "generations",   null: false
+    t.index ["ancestor_id", "descendant_id", "generations"], name: "cms_base_anc_desc_idx", unique: true, using: :btree
+    t.index ["descendant_id"], name: "cms_base_desc_idx", using: :btree
+  end
+
+  create_table "cms_content_links", force: :cascade do |t|
+    t.text     "body"
+    t.integer  "page_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "cms_contents", force: :cascade do |t|
     t.string   "type"
     t.integer  "author_id"
     t.string   "title"
     t.text     "content"
-    t.string   "external_link"
-    t.datetime "posted_at"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.integer  "position"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
     t.string   "slug"
-    t.text     "abstract"
-    t.index ["slug"], name: "index_blogs_on_slug", unique: true, using: :btree
+    t.jsonb    "type_details"
+    t.integer  "parent_id"
+    t.integer  "category_id"
+    t.index ["slug"], name: "index_cms_contents_on_slug", using: :btree
+  end
+
+  create_table "cms_help_categories", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "slug"
+    t.index ["slug"], name: "index_cms_help_categories_on_slug", unique: true, using: :btree
   end
 
   create_table "friendly_id_slugs", force: :cascade do |t|

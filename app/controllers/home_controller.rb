@@ -6,7 +6,7 @@ class HomeController < ApplicationController
   def api
   end
   
-  def help
+  def about
   end
   
   def imprint
