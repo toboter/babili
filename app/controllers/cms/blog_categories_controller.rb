@@ -22,7 +22,7 @@ class CMS::BlogCategoriesController < ApplicationController
     end
 
     def get_unpublished
-      @unpublished_blogs = current_user.blog_pages.where(published_at: nil)
+      @unpublished_blogs = current_user.blog_pages.where(published_at: nil) if user_signed_in?
     end
   
 end

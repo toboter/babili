@@ -8,14 +8,14 @@ class CMS::BlogPagesController < ApplicationController
   def index
     @blogs = CMS::BlogPage.type_details_where(featured: true).order(created_at: :desc)
     @categories = CMS::BlogCategory.order(name: :asc)
-    @unpublished_blogs = current_user.blog_pages.where(published_at: nil)
+    @unpublished_blogs = current_user.blog_pages.where(published_at: nil) if user_signed_in?
   end
 
   # GET /blogs/1
   # GET /blogs/1.json
   def show
     @categories = CMS::BlogCategory.order(name: :asc)
-    @unpublished_blogs = current_user.blog_pages.where(published_at: nil)
+    @unpublished_blogs = current_user.blog_pages.where(published_at: nil) if user_signed_in?
   end
 
   # GET /blogs/new
