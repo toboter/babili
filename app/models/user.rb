@@ -34,6 +34,7 @@ class User < ApplicationRecord
   has_many :project_oauth_applications, through: :projects, source: :oauth_applications
   has_many :project_oauth_accessibilities, through: :projects, source: :oauth_accessibilities
   has_one :profile, dependent: :destroy
+  has_many :blog_pages, class_name: 'CMS::BlogPage', foreign_key: :author_id
   has_many :audits, dependent: :destroy
   has_many :user_sessions, class_name: 'UserSession', dependent: :destroy
 

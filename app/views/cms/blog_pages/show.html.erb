@@ -2,6 +2,7 @@
 
 <% content_for(:breadcrumbs) do %>
   <%= content_tag :li, link_to('Blog', cms_blog_pages_url) %>
+  <%= content_tag :li, link_to(@blog.category.try(:name), @blog.category) %>
   <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
 
@@ -12,6 +13,9 @@
     </div>
 
     <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
+      <%= content_tag :div, class: 'actions clearfix' do %>
+        <%= link_to fa_icon('add', text: 'Create a new blog entry'), new_cms_blog_page_path, class: 'btn btn-default text-strong text-primary pull-right' %>
+      <% end if can?(:create, CMS::BlogPage) %>
       <%= render 'cms/blog_categories/categories_list' %>  
     <% end %>
   </div>

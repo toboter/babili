@@ -121,6 +121,7 @@ Rails.application.routes.draw do
     scope path: :blog do
       resources :blog_categories, only: :show, path: 'categories' do
         get 'all', on: :collection
+        get 'unpublished', to: 'blog_categories#unpublished_blogs', on: :collection
       end
       resources :blog_pages, path: '', except: :index
     end
