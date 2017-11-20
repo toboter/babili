@@ -28,10 +28,10 @@
     <div class="container">
       <div class="row featured-blog-entries">
         <div class="col-lg-8 col-centered">
-          <% for entry in CMS::BlogPage.type_details_where(featured: true).order(created_at: :desc).limit(5) do %>
-            <h2 class="section-heading"><%= entry.title %></h2>
+          <% @blog_pages.each do |page| %>
+            <h2 class="section-heading"><%= page.title %></h2>
             <div class="featured-teaser">
-              <%= truncate(teaser(entry.content), length: 500, separator: ' ', escape: false) { link_to " continue reading", entry } %>
+              <%= truncate(teaser(page.content), length: 500, separator: ' ', escape: false) { link_to " continue reading", page } %>
             </div>
             <hr class="light">
           <% end %>
