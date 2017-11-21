@@ -1,2 +1,2 @@
 <%= content_tag :li, content_tag(:h5, link_to(category.name, category, class: 'text-muted text-strong'), class: 'category-heading'), id: "help-category-#{category.id}" %>
-<%= view_page_tree_for(category.help_pages.roots) %>
+<%= view_page_tree_for(category.help_pages.order(title: :asc).roots) %>
