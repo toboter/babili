@@ -99,11 +99,12 @@
       <div class="container">
         <div class="row">
           <div class="col-md-12 ">
-            <ul class="footer-link-line">
-              <li>&copy; <%= Time.now.strftime("%Y") %> babylon-online.org</li>
-              <li>(v. <%= APP_VERSION %>)</li>
-              <li><%= link_to "Terms", cms_help_category_path('site') %></li>
-              <li><%= link_to "Security", security_settings_path %></li>
+            <ul class="footer-links">
+              <span class="footer-links-left">
+                <li>&copy; <%= Time.now.strftime("%Y") %> babylon-online.org (v. <%= APP_VERSION %>)</li>
+                <li><%= link_to "Terms", cms_help_category_path('site') %></li>
+                <li><%= link_to "Security", security_settings_path %></li>
+              </span>
               <span class="footer-links-right">
                 <li><%= link_to "Help", cms_help_pages_path %></li>
                 <li><%= link_to "Contact", contact_path %></li>
