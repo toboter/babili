@@ -1,49 +1,38 @@
 <%= content_for(:content) do %>
+
   <%= content_tag :header do %>
-    <div class="header-content">
-      <div class="header-content-inner">
-        <!-- 
-        <h2>Wiedererstehendes</h2>
-        <h1 id="homeHeading">Babylon</h1>
-        <p>Explore the City of Babylon as it lays before us today.</p>
-        -->
-        <h2 id="homeHeading" style="margin: 30px 0;">babylon-online.org</h2>
-
-        <div class="row" style="margin-bottom:40px;">
-          <div class="col-md-6 col-centered">
-            <%= render 'shared/search' %>
-          </div>
+    <%= link_to fa_icon('chevron-down 2x'), "javascript:scrollToAnchor('features');", class: 'chevron-about page-scroll', id: '', style: '' %>
+    <div class="container">
+      <div class="row heading">
+        <div class="col-md-8 col-centered">
+          <h1><strong>babylon-online.org</strong></h1>
+          <h2>ein digitales Findbuch</h2>
         </div>
-              
-        <div style="margin-top:100px;">
-          <p style="margin-bottom:40px">babylon-online.org and its content is work in progress. <br>Data may be incomplete or even not existing.</p>
-          <%= link_to fa_icon('chevron-circle-down 4x'), '#about', class: 'page-scroll', style: '' %>       
+      </div>
+      <div class="row searchbox">
+        <div class="col-md-6 col-sm-8 col-xs-10 col-centered">
+          <%= render 'shared/search' %>
         </div>
-
+      </div>
+      <div class="row infobox">
+        <div class="col-md-6 col-sm-8 col-xs-12 col-centered alert alert-info">
+          <p>
+            <%= content_tag :span, fa_icon('exclamation-triangle 2x'), class: 'pull-left', style: 'margin: 10px 20px 0 10px;' %>
+            babylon-online.org and its content is work in progress. <br>Data may be incomplete or even not existing.
+          </p>
+        </div>
+      </div>
+      <div class="row about-line">
+        <div class="col-md-6 col-centered">
+          <p><%= link_to 'About', about_path, class: 'about-link' %></p>
+        </div>
       </div>
     </div>
   <% end %> 
-        
-  <section class="bg-primary" id="about">
-    <div class="container">
-      <div class="row featured-blog-entries">
-        <div class="col-lg-8 col-centered">
-          <% @blog_pages.each do |page| %>
-            <h2 class="section-heading"><%= page.title %></h2>
-            <div class="featured-teaser">
-              <%= truncate(teaser(page.content), length: 500, separator: ' ', escape: false) { link_to " continue reading", page } %>
-            </div>
-            <hr class="light">
-          <% end %>
-        </div>
-      </div>
-    </div>
-  </section>
-
 
   <aside class="bg-dark">
     <div class="container">
-      <div class="row">
+      <div class="row text-center">
         <div class="col-md-5">
           <%= link_to image_tag('fu-logo.svg', style: 'height: 100px; margin: 0 auto;'), 'http://www.fu-berlin.de', target: :_blank %>
         </div>
@@ -56,6 +45,44 @@
       </div>
     </div>
   </aside>
+
+  <section class="featured-blog-entries --spacious" id="features">
+    <div class="container">
+      <div class="posts">
+        <div class="page-header">
+          <%= content_tag :h1, link_to('Featured blogs', cms_blog_pages_path) %>
+        </div>
+        <% @blog_pages.each_slice(2) do |slice| %>
+          <div class="row">
+            <% slice.each_with_index do |blog_page, index| %>
+              <%= content_tag :div, class: "col-md-6" do %>
+                <%= content_tag :div, class: "blog-post", id: "blog-post-#{blog_page.id}" do %>
+                  <%= content_tag :h2, link_to(blog_page.title, blog_page), class: 'blog-post-title h-condensed' %>
+                  <%= content_tag :ul, class: 'blog-post-meta' do %>
+                    <%= content_tag :li, fa_icon('calendar', text: "#{blog_page.published_at.present? ? blog_page.published_at.to_date.to_formatted_s(:long_ordinal) : 'unpublished'}"), class: 'meta-item' %>
+                    <%= content_tag :li, class: 'meta-item mid' do %>
+                      <%= background_image_div(blog_page.author.profile, :small_thumb, {class: 'author-avatar'}) %>
+                      <%= link_to blog_page.author.name, blog_page.author.try(:profile) %>
+                    <% end %>
+                    <%= content_tag :li, fa_icon('archive', text: link_to(blog_page.category.try(:name), blog_page.category)), class: 'meta-item' %>
+                  <% end %>
+                  <%= content_tag :div, class: "blog-post-body markdown-body --spacious" do %>
+                    <%= link_to(truncate(teaser(blog_page.content), length: 280, separator: ' ', escape: false), blog_page, class: 'no-link text-gray') %>
+                  <% end %>
+                <% end if blog_page.published_at.present? || blog_page.author == current_user %>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </section>
+
+<script>
+  function scrollToAnchor(aid){
+      var aTag = $("#"+ aid);
+      $('html,body').animate({scrollTop: aTag.offset().top},'slow');
+  };
+</script>
+
 <% end %>
-
-

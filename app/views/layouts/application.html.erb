@@ -36,7 +36,9 @@
             <li><%= link_to 'News', cms_novelities_path %></li>
             <% if user_signed_in? %>
               <%= content_tag :li, class: "dropdown" do %>
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">You<span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                  <%= background_image_div(current_user.profile, :small_thumb, {class: 'site-user-avatar'}) %> <span class="caret"></span>
+                </a>
                 <ul class="dropdown-menu">
                   <%= content_tag :li, "Signed in as <strong>#{current_user.name}</strong>".html_safe, class: 'text-muted dropdown-header' %>
                   <li role="separator" class="divider"></li>
@@ -93,29 +95,17 @@
     <% end %>
 
 
-    <div class="footer" id="footer">
+    <footer>
       <div class="container">
         <div class="row">
-          <div class="col-md-8 col-lg-8 col-sm-12">
-            <p id="footer-info-copyright" class="text-muted text-small">
-              Der Inhalt ist unter der Lizenz „Creative Commons Attribution/Share Alike“ verfügbar; 
-              Informationen zu den Urhebern und zum Lizenzstatus eingebundener Mediendateien (etwa 
-              Bilder oder andere Dokumente) können im Regelfall durch Anklicken dieser abgerufen werden. 
-              Möglicherweise unterliegen die Inhalte jeweils zusätzlichen Bedingungen. Durch die Nutzung 
-              dieser Website erklären Sie sich mit den Nutzungsbedingungen und der Datenschutzrichtlinie 
-              einverstanden.
-            </p>
-          </div>
-        </div>
-        <div class="row --spacious">
           <div class="col-md-12 ">
-            <ul id="footer-doc-links" class="list-inline text-small">
+            <ul class="footer-link-line">
               <li>&copy; <%= Time.now.strftime("%Y") %> babylon-online.org</li>
               <li>(v. <%= APP_VERSION %>)</li>
               <li><%= link_to "Terms", cms_help_category_path('site') %></li>
               <li><%= link_to "Security", security_settings_path %></li>
-              <li><%= link_to "Help", cms_help_pages_path %></li>
-              <span class="pull-right list-inline">
+              <span class="footer-links-right">
+                <li><%= link_to "Help", cms_help_pages_path %></li>
                 <li><%= link_to "Contact", contact_path %></li>
                 <li><%= link_to "API", cms_help_category_path('api') %></li>
                 <li><%= link_to "Blog", cms_blog_pages_path %></li>
@@ -125,7 +115,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </footer>
 
   </body>
 </html>

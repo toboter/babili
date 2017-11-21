@@ -16,9 +16,11 @@
 @import "bootstrap";
 @import "font-awesome";
 
-@import "creative";
+@import "site";
 @import "profiles";
 @import "cms";
+@import "settings";
+@import "about";
 @import "toastr";
 
 .text-strong {
@@ -31,6 +33,10 @@
 
 .text-small {
     font-size: small;
+}
+
+.text-gray {
+    color: #586069 !important;
 }
 
 .text-center {
@@ -54,6 +60,15 @@ a.no-link {
 
 .navbar-default {
     font-weight: bold;
+}
+
+.site-user-avatar {
+    vertical-align: top;
+    border-radius: 3px;
+    height:23px;
+    width:23px; 
+    background-position:center;
+    display: inline-block; margin-top:-2px;
 }
 
 
@@ -128,51 +143,4 @@ form {
     }
 }
 
-#sessions {
-    .session-device {
-        position: relative; 
-        .session-state-indicator {
-            float: left;
-            width: 8px;
-            height: 8px;
-            margin-top: 10px;
-            border-radius: 5px;
-        }
-        .recent {
-            background-color: #28a745;
-            box-shadow: 0 0 10px rgba(108,198,68,0.5);
-        }
-        .session-icon {
-            float: left;
-            width: 32px;
-            margin-top: 1px;
-            margin-left: 10px;
-            color: #bbb;
-            text-align: center;
-        }
-        .session-details {
-            margin-left: 70px;
-        }
-        .session-details-more-info {
-            padding-top: 10px;
-        }
-    }
-}
 
-#personal-token-scopes {
-    td.scope-input {
-        width: 20%;
-        div.checkbox {
-            margin-top:0px;
-            margin-bottom:0px;
-        }
-
-    }
-
-    td.scope-description {
-    }
-}
-
-.d-block {
-    display: block !important;
-}
