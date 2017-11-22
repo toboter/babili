@@ -1,13 +1,15 @@
 <div class="help-article" id="help-article-<%= help_page.id %>">
-  <%= content_tag :h3, link_to(help_page.parent.title, help_page.parent), class: 'help-article-title h-condensed' if help_page.child? %>
+  <%= content_tag :p, link_to(fa_icon('chevron-up', text: help_page.parent.title), help_page.parent, style: 'color: #0366d6'), class: 'help-article-title h-condensed' if help_page.child? %>
   <%= content_tag :h2, help_page.title, class: 'help-article-title h-condensed' %>
+  <%= content_tag :p, help_page.abstract, class: 'text-gray' %>
   <%= content_tag :div, class: "help-article-body markdown-body" do %>
     <%= markdown(help_page.content) %>
     <%= content_tag :div, class: 'children-list' do %>
       <% help_page.descendants.each do |child| %>
         <%= content_tag :h3, link_to(child.title, child), class: 'help-article-title h-condensed' %>
-        <%= truncate(markdown(child.content), length: 100, separator: ' ', escape: false) %>
+        <%= child.abstract %>
       <% end %>
     <% end if help_page.children.any? %>
   <% end %>
+
 </div>

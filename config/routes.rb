@@ -97,25 +97,6 @@ Rails.application.routes.draw do
   resources :profiles, only: [:index, :show]
   resources :projects, only: [:show]
 
-  namespace :api do
-    get 'me', to: 'users#me'
-    scope :my do
-      scope :accessibilities do
-        get 'searchable', to: 'users#my_search_abilities'
-        get 'crud/:uid', to: 'users#my_crud_abilities'
-        get 'projects/:uid', to: 'users#my_app_projects'
-      end
-    end
-
-    resources :users, only: [:index, :show]
-    resources :projects, only: [:index, :show]
-    get 'search', to: 'search#index'
-    resources :oread_applications, only: [] do
-      post 'set_access_token', to: 'oread_access_tokens#create', on: :collection
-    end
-
-  end
-
   namespace :cms, path: nil do
     resources :blog_pages, path: :blog, only: :index
     scope path: :blog do
@@ -136,6 +117,28 @@ Rails.application.routes.draw do
   authenticate :user, lambda { |u| u.is_admin } do
     mount Sidekiq::Web => '/sidekiq'
   end
+
+
+  namespace :api do
+    get 'me', to: 'users#me'
+    scope :my do
+      scope :accessibilities do
+        get 'searchable', to: 'users#my_search_abilities'
+        get 'crud/:uid', to: 'users#my_crud_abilities'
+        get 'projects/:uid', to: 'users#my_app_projects'
+      end
+    end
+
+    resources :users, only: [:index, :show]
+    resources :projects, only: [:index, :show]
+    get 'search', to: 'search#index'
+    resources :oread_applications, only: [] do
+      post 'set_access_token', to: 'oread_access_tokens#create', on: :collection
+    end
+
+  end
+
+
 
   root to: "home#index"
 

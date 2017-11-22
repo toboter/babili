@@ -27,7 +27,8 @@ class Ability
       end
 
       cannot :manage, Project unless user.is_admin?
-      can [:update, :destroy], Project do |project|
+      # in folgendes noch Memberships aufnehmen?
+      can [:update, :destroy], Project do |project| 
         user.in?(project.members) && project.memberships.where(user_id: user.id).first.role.in?(['Owner', 'Admin'])
       end
       can [:create], Project

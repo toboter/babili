@@ -1,14 +1,13 @@
 class Api::UsersController < Api::BaseController
-  load_and_authorize_resource
+  load_and_authorize_resource find_by: :username
 
   def index
-    users = User.accessible_by(current_ability).all
+    users = User.accessible_by(current_ability).order(id: :asc)
     render json: users
   end
 
   def show
-    user = User.accessible_by(current_ability).find(params[:id])
-    render json: user
+    render json: @user
   end
 
   def me

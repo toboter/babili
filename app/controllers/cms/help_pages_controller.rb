@@ -74,6 +74,6 @@ class CMS::HelpPagesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def help_page_params
-      params.require(:cms_help_page).permit(:title, :content, :parent_id, :category_id)
+      params.require(:cms_help_page).permit(:title, :content, :abstract, :parent_id, :category_id)
     end
 end

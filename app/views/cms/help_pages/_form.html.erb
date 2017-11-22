@@ -8,10 +8,17 @@
           <%= content_tag :div, class: "col-md-12" do %>
 
             <div class="form-inputs">
-              <%= f.input :title %>
-              <%= f.input :category_id, collection: CMS::HelpCategory.all, label_method: :name, value_method: :id %>
-              <%= f.input :parent_id, label: 'Subentry to', collection: CMS::HelpPage.all-f.object.self_and_descendants, label_method: :title, value_method: :id %>
-              <%= f.input :content, input_html: {id: 'blog_content', class: '', rows: '14', data: {provide: "markdown"}}, hint: "Check #{link_to('adam-p Markdown-Cheatsheet', 'https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet', target: :blank)} on github.".html_safe %>
+              <div class="row">
+                <div class="col-md-6">
+                  <%= f.input :title %>
+                  <%= f.input :category_id, collection: CMS::HelpCategory.all, label_method: :name, value_method: :id %>
+                  <%= f.input :parent_id, label: 'Subentry to', collection: CMS::HelpPage.all-f.object.self_and_descendants, label_method: :title, value_method: :id %>
+                </div>
+                <div class="col-md-5 col-md-offset-1">
+                  <%= f.input :abstract, as: :text, input_html: {id: 'help_abstract', class: '', rows: '4'}, hint: "Shouldn't be longer than 20 words." %>
+                </div>
+              </div>
+              <%= f.input :content, input_html: {id: 'blog_content', class: '', rows: '16', data: {provide: "markdown"}}, hint: "Check #{link_to('adam-p Markdown-Cheatsheet', 'https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet', target: :blank)} on github.".html_safe %>
             </div>
           <% end %>
         </div>

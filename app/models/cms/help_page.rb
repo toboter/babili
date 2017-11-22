@@ -6,7 +6,10 @@ class CMS::HelpPage < CMS::Content
 
   has_closure_tree
 
-  validates :title, :author_id, :category_id, :content, presence: true
+  jsonb_accessor :type_details,
+    abstract: :text
+
+  validates :title, :author_id, :category_id, :abstract, presence: true
 
   def should_generate_new_friendly_id?
     title_changed? || super
