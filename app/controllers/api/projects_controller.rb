@@ -2,7 +2,7 @@ class Api::ProjectsController < Api::BaseController
   load_and_authorize_resource
 
   def index
-    projects = Project.where(private: false).order(created_at: :desc)
+    projects = Project.where(private: false).order(id: :asc)
     render json: projects
   end
 

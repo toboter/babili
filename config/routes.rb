@@ -120,21 +120,48 @@ Rails.application.routes.draw do
 
 
   namespace :api do
-    get 'me', to: 'users#me'
-    scope :my do
-      scope :accessibilities do
-        get 'searchable', to: 'users#my_search_abilities'
-        get 'crud/:uid', to: 'users#my_crud_abilities'
-        get 'projects/:uid', to: 'users#my_app_projects'
+    # deprecated
+      get 'me', to: 'users#me'
+      scope :my do
+        scope :accessibilities do
+          get 'searchable', to: 'users#my_search_abilities'
+          get 'crud/:uid', to: 'users#my_crud_abilities'
+          get 'projects/:uid', to: 'users#my_app_projects'
+        end
       end
+      resources :oread_applications, only: [] do
+        post 'set_access_token', to: 'oread_access_tokens#create', on: :collection
+      end
+    # end
+
+
+
+    # Users
+    resources :users, only: [:index, :show] do
+      get 'projects', on: :member
+      get 'collections', on: :member
+    end
+    resource :user, only: [:show], controller: 'user' do
+      get 'collections', on: :member
+      get 'projects', on: :member
+      get 'applications', on: :member
     end
 
-    resources :users, only: [:index, :show]
-    resources :projects, only: [:index, :show]
-    get 'search', to: 'search#index'
-    resources :oread_applications, only: [] do
-      post 'set_access_token', to: 'oread_access_tokens#create', on: :collection
+    # Projects
+    resources :projects, only: [:index, :show] do
+      resources :members, only: [:index, :show]
+      resources :memberships, only: :show
     end
+
+    # Collections
+    resources :collections, only: [:index, :show]
+
+    # Applications
+    resources :applications, only: [:index, :show]
+
+    # Search
+    get 'search', to: 'search#index'
+
 
   end
 
