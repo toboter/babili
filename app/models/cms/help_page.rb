@@ -11,7 +11,4 @@ class CMS::HelpPage < CMS::Content
 
   validates :title, :author_id, :category_id, :abstract, presence: true
 
-  def should_generate_new_friendly_id?
-    title_changed? || super
-  end
 end

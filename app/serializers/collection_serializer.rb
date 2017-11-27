@@ -16,11 +16,6 @@ class CollectionSerializer < ActiveModel::Serializer
     url_for([object, {only_path: Rails.env.test?}])
   end
   
-  attribute :owner do
-    {
-      name: object.owner.try(:name),
-      profile_human: url_for([object.owner.profile, {only_path: Rails.env.test?}])
-    }
-  end
+  belongs_to :owner, serializer: UserSerializer
 
 end

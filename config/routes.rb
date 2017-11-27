@@ -8,22 +8,9 @@ Rails.application.routes.draw do
   get '/projects', to: 'home#projects'
   get '/collections/applications', to: 'home#collections', as: :collections
 
-  scope 'oauth' do
-    resources :applications, as: :oauth_application, only: :show, controller: 'doorkeeper/applications'
-  end
-  use_doorkeeper do
-    skip_controllers :applications, :authorized_applications
-  end
-
-  # redirecting the user to the client instead of the show page for the application
-  # get 'collections/applications/:id', to: redirect { |params, request|
-  #   obj = Oread::Application.find(params[:id])
-  #   obj.app_url
-  # }
   namespace :oread, path: 'collections' do
     resources :applications, only: :show
   end
-
 
   get '/settings', to: redirect("/settings/profile")
   scope path: '/settings' do
@@ -36,13 +23,11 @@ Rails.application.routes.draw do
     devise_scope :user do
       get "/account" => "devise/registrations#edit"
     end
-    use_doorkeeper do
-      skip_controllers :tokens, :applications, :authorizations
-    end
-    #get '/security', to: 'security#index', as: 'security_settings'
+
     resource :security, only: :show, as: :security_settings do
       resources :user_sessions, only: :destroy
     end
+
     # '/security/revoke_user_session/', to: 'security#revoke_user_session', as: :settings_security_user_session_revoke
     # get '/collections', to: 'oread/access_enrollments#index', as: :settings_collections
     namespace :oread, as: :settings_oread do
@@ -78,21 +63,10 @@ Rails.application.routes.draw do
 
     get '/developer', to: redirect("/settings/developer/oauth/applications"), as: 'developer_settings'
     scope path: 'developer' do
-      use_doorkeeper do
-        skip_controllers :authorizations, :tokens, :authorized_applications
-      end
-      scope :oauth do
-        resources :applications, as: :oauth_application, except: :show do
-          resources :oauth_accessibilities, 
-            only: [:new, :edit, :create, :update, :destroy], 
-            as: :accessibilities, 
-            path: 'accessibilities'
-          get 'send_accessibilities_to_clients', to: 'oauth_accessibilities#send_all_accessibilities_to_clients'
-        end
-      end
       resources :personal_access_tokens, except: :show
     end
   end
+
   devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}, :controllers => { :registrations => :registrations }
   resources :profiles, only: [:index, :show]
   resources :projects, only: [:show]
@@ -120,7 +94,7 @@ Rails.application.routes.draw do
 
 
   namespace :api do
-    # deprecated
+    # deprecated start
       get 'me', to: 'users#me'
       scope :my do
         scope :accessibilities do
@@ -132,19 +106,16 @@ Rails.application.routes.draw do
       resources :oread_applications, only: [] do
         post 'set_access_token', to: 'oread_access_tokens#create', on: :collection
       end
-    # end
-
-
+    # deprecated end
 
     # Users
     resources :users, only: [:index, :show] do
       get 'projects', on: :member
       get 'collections', on: :member
     end
-    resource :user, only: [:show], controller: 'user' do
-      get 'collections', on: :member
+    resource :user, only: [:show], controller: 'user' do      # was get 'me', to: 'users#me'
+      get 'collections', on: :member                          # was get 'searchable', to: 'users#my_search_abilities'
       get 'projects', on: :member
-      get 'applications', on: :member
     end
 
     # Projects
@@ -154,18 +125,52 @@ Rails.application.routes.draw do
     end
 
     # Collections
-    resources :collections, only: [:index, :show]
+    resources :collections, only: [:index, :show] do
+      resources :access_tokens, controller: 'collection_access_tokens', path: 'tokens' # was post 'set_access_token', to: 'oread_access_tokens#create'
+    end
 
     # Applications
-    resources :applications, only: [:index, :show]
+    resources :applications, only: [:index, :show] do
+      collection do
+        resources :grants, controller: 'applications_grants'
+      end
+    end
+    resources :authorizations, controller: 'applications_authorizations' do
+      get 'clients/:uid', to: 'applications_authorizations#client', on: :collection
+    end
 
     # Search
     get 'search', to: 'search#index'
 
-
   end
 
-
+  # doorkeeper paths
+  scope 'oauth' do
+    resources :applications, as: :oauth_application, only: :show, controller: 'doorkeeper/applications'
+  end
+  use_doorkeeper do
+    skip_controllers :applications, :authorized_applications #tokens, authorizations
+  end
+  scope path: '/settings' do
+    use_doorkeeper do
+      skip_controllers :tokens, :applications, :authorizations
+    end
+    scope path: 'developer' do
+      use_doorkeeper do
+        skip_controllers :authorizations, :tokens, :authorized_applications
+      end
+      scope :oauth do
+        resources :applications, as: :oauth_application, except: :show do
+          resources :oauth_accessibilities, 
+            except: :show, 
+            as: :accessibilities, 
+            path: 'accessibilities'
+          get 'send_accessibilities_to_clients', to: 'oauth_accessibilities#send_all_accessibilities_to_clients'
+        end
+      end
+    end
+  end
+  # end doorkeeper paths
 
   root to: "home#index"
 

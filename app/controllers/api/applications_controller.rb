@@ -3,10 +3,11 @@ class Api::ApplicationsController < Api::BaseController
 
   def index
     applications = @applications.order(id: :asc)
-    render json: applications
+    render json: applications, each_serializer: ApplicationSerializer
   end
 
   def show
-    render json: @application
+    render json: @application, serializer: ApplicationSerializer
   end
+
 end

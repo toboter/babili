@@ -1,3 +1,5 @@
+# deprecated
+
 class Api::OreadAccessTokensController < Api::BaseController
   load_and_authorize_resource :user, only: %i[create]
 

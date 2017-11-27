@@ -15,8 +15,4 @@ class Api::UserController < Api::BaseController
     render json: projects, each_serializer: ProjectSerializer
   end
 
-  def applications
-    applications = current_user.oauth_applications
-    render json: applications
-  end
 end

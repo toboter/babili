@@ -6,8 +6,12 @@ class OauthAccessibilitiesController < ApplicationController
   require 'uri'
   require 'rest-client'
   require 'json'
+  layout 'developer'
 
   # after_action :send_client_hook
+  def index
+    @accessibilities = @oauth_application.accessibilities.order(created_at: :desc)
+  end
 
   def new
     authorize! :create_accessibility, @oauth_application
@@ -26,7 +30,7 @@ class OauthAccessibilitiesController < ApplicationController
     respond_to do |format|
       if @oauth_accessibility.save
         UpdateClientAppUserAccessibilitiesJob.perform_later(@oauth_application.id, accessor_user_ids)
-        format.html { redirect_to oauth_application_path(@oauth_application), notice: 'Accessibility was successfully created.' }
+        format.html { redirect_to edit_oauth_application_path(@oauth_application), notice: 'Accessibility was successfully created.' }
         format.json { render :show, status: :created, location: @oauth_application }
       else
         format.html { render :new }
@@ -40,7 +44,7 @@ class OauthAccessibilitiesController < ApplicationController
     respond_to do |format|
       if @oauth_accessibility.update(oauth_accessibility_params)
         UpdateClientAppUserAccessibilitiesJob.perform_later(@oauth_application.id, accessor_user_ids)
-        format.html { redirect_to oauth_application_path(@oauth_application), flash: { success: "Accessibility was successfully updated." } }
+        format.html { redirect_to edit_oauth_application_path(@oauth_application), flash: { success: "Accessibility was successfully updated." } }
         format.json { render :show, status: :ok, location: @oauth_application }
       else
         format.html { render :edit }
@@ -57,10 +61,10 @@ class OauthAccessibilitiesController < ApplicationController
     respond_to do |format|
       if accessor_user_ids.flatten.uniq
         UpdateClientAppUserAccessibilitiesJob.perform_later(@oauth_application.id, accessor_user_ids.flatten.uniq)
-        format.html { redirect_to oauth_application_path(@oauth_application), flash: { success: "Updating accessibilities." } }
+        format.html { redirect_to edit_oauth_application_path(@oauth_application), flash: { success: "Updating accessibilities." } }
         format.js { render js: "toastr.info('Updating');", status: :ok }
       else
-        format.html { redirect_to oauth_application_path(@oauth_application), flash: { error: "Nothing updated." } }
+        format.html { redirect_to edit_oauth_application_path(@oauth_application), flash: { error: "Nothing updated." } }
         format.js { render js: "toastr.error('Error');", status: :error }
       end
     end
@@ -71,7 +75,7 @@ class OauthAccessibilitiesController < ApplicationController
     @oauth_accessibility.destroy
     UpdateClientAppUserAccessibilitiesJob.perform_later(@oauth_application.id, accessor_user_ids)
     respond_to do |format|
-      format.html { redirect_to oauth_application_path(@oauth_application), notice: 'Accessibility was successfully destroyed.' }
+      format.html { redirect_to edit_oauth_application_path(@oauth_application), notice: 'Accessibility was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

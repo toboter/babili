@@ -20,13 +20,14 @@ class Api::UsersController < Api::BaseController
     render json: collections, each_serializer: CollectionSerializer
   end
 
+
   # deprecated
-    def me
+    def me #user
       render json: current_user
     end
 
     # /api/my/accessibilities/crud/:uid
-    def my_crud_abilities
+    def my_crud_abilities #applications_authorizations_client_url(uid)(user_permissions)
       application = Doorkeeper::Application.find_by_uid(params[:uid])
       obj = OauthAccessibility.new(oauth_application_id: application.id)
       application.accessibilities.where(id: current_user.all_oauth_accessibilities.ids).each do |a|
@@ -43,13 +44,13 @@ class Api::UsersController < Api::BaseController
     end
 
     # /api/my/accessibilities/search
-    def my_search_abilities
+    def my_search_abilities #user/collections
       oread_applications = current_user.oread_token_applications.distinct
       render json: oread_applications, each_serializer: OreadApplicationSerializer
     end
 
     # /api/my/accessibilities/projects/:uid
-    def my_app_projects
+    def my_app_projects #applications_authorizations_client_url(uid)(project_accessors)
       application = Doorkeeper::Application.find_by_uid(params[:uid])
       projects = current_user.projects.joins(:oauth_applications).where(oauth_applications: {id: application.id})
       render json: projects

@@ -127,3 +127,7 @@ en:
           home: 'Home'
       application:
         title: 'OAuth authorization required'
+
+    scopes:
+      public: 'Access your public data'
+      write: 'Update your information'

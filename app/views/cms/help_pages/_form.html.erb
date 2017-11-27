@@ -15,6 +15,7 @@
                   <%= f.input :parent_id, label: 'Subentry to', collection: CMS::HelpPage.all-f.object.self_and_descendants, label_method: :title, value_method: :id %>
                 </div>
                 <div class="col-md-5 col-md-offset-1">
+                  <%= f.input :slug %>
                   <%= f.input :abstract, as: :text, input_html: {id: 'help_abstract', class: '', rows: '4'}, hint: "Shouldn't be longer than 20 words." %>
                 </div>
               </div>

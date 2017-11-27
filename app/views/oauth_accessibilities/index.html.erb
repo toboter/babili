@@ -1,0 +1,40 @@
+<% title "Edit #{@oauth_application.name}" %>
+
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, link_to('OAuth applications', oauth_applications_path)%>
+  <%= content_tag :li, yield(:title), class: 'active' %>
+<% end %>
+
+<% content_for :buttons do %>
+  <%= link_to fa_icon('plus', text: 'Accessibility'), new_oauth_application_accessibility_path(@oauth_application), class: 'btn btn-default text-strong' %>
+<% end if can?(:create_accessibility, @oauth_application) %>
+
+<%= content_tag :ul, class: 'nav nav-pills' do %>
+  <%= content_tag :li, link_to(@oauth_application.name, edit_oauth_application_path(@oauth_application)), class: "#{' active text-strong' if current_page?(edit_oauth_application_path(@oauth_application))}" %>
+  <%= content_tag :li, link_to('Scopes', oauth_application_accessibilities_path(@oauth_application)), class: "#{' active text-strong' if current_page?(oauth_applications_path)}" %>
+  <%= content_tag :li, link_to('Accessors', oauth_application_accessibilities_path(@oauth_application)), class: "#{' active text-strong' if current_page?(oauth_application_accessibilities_path(@oauth_application))}" %>
+<% end %>
+
+
+<div class="row">
+  <div class="col-md-12">
+    <% for accessibility in @accessibilities do %>
+      <%= render partial: accessibility.accessor.to_partial_path, object: accessibility.accessor if accessibility.accessor %>
+      <div class="panel panel-default panel-attach">
+        <%= content_tag :ul, class: "panel-body list-inline" do %>
+          <%= content_tag :li, fa_icon('universal-access'), data: {toggle: "tooltip", placement: "left"}, title: "Can manage everything." if accessibility.can_manage %>
+          <%= content_tag :li, fa_icon('plus'), data: {toggle: "tooltip", placement: "left"}, title: "Can create records." if accessibility.can_create %>
+          <%= content_tag :li, fa_icon('info'), data: {toggle: "tooltip", placement: "left"}, title: "Can read records." if accessibility.can_read %>
+          <%= content_tag :li, fa_icon('edit'), data: {toggle: "tooltip", placement: "left"}, title: "Can edit records." if accessibility.can_update %>
+          <%= content_tag :li, fa_icon('remove'), data: {toggle: "tooltip", placement: "left"}, title: "Can remove records." if accessibility.can_destroy %>
+          <%= content_tag :li, fa_icon('comment-o'), data: {toggle: "tooltip", placement: "left"}, title: "Can comment on records." if accessibility.can_comment %>
+          <%= content_tag :li, fa_icon('eye'), data: {toggle: "tooltip", placement: "left"}, title: "Can publish records." if accessibility.can_publish %>
+
+          <%= content_tag :li, link_to(fa_icon('pencil', text: 'Edit'), edit_oauth_application_accessibility_path(@oauth_application, accessibility), class: 'btn btn-default btn-xs'), class: 'pull-right' if can?(:update_accessibility, @oauth_application) %>
+          <%= content_tag :li, link_to(fa_icon('remove', text: 'Delete'), oauth_application_accessibility_path(@oauth_application, accessibility), method: :delete, class: 'btn btn-default btn-xs'), class: 'pull-right' if can?(:destroy_accessibility, @oauth_application) %>
+        <% end %>
+      </div>
+    <% end %>
+    <%= link_to 'Update Client', oauth_application_send_accessibilities_to_clients_path(@oauth_application), remote: true, class: 'btn btn-default btn-sm', style: 'margin-top:10px;' if can?(:update, @oauth_application) %>
+  </div>
+</div>

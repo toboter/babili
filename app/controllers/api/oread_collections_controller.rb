@@ -1,3 +1,5 @@
+# deprecated
+
 class Api::OreadCollectionsController < Api::BaseController
   require 'rest-client'
   require 'json'
