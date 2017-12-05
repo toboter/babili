@@ -1,4 +1,4 @@
-class Api::CollectionsController < Api::BaseController
+class Api::RepositoriesController < Api::BaseController
   load_and_authorize_resource class: 'Oread::Application'
 
   # included from deprecated oread_collections_controller
@@ -16,12 +16,12 @@ class Api::CollectionsController < Api::BaseController
 
 
   def index
-    collections = @collections.order(id: :asc)
-    render json: collections, each_serializer: CollectionSerializer
+    repositories = @repositories.order(id: :asc)
+    render json: repositories, each_serializer: RepositorySerializer
   end
 
   def show
-    render json: @collection, serializer: CollectionSerializer
+    render json: @repository, serializer: RepositorySerializer
   end
 
 end

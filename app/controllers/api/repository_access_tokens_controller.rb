@@ -1,7 +1,7 @@
-class Api::CollectionAccessTokensController < Api::BaseController
-  before_action :set_collection
-  load_and_authorize_resource :collection, class: 'Oread::Application'
-  load_and_authorize_resource :access_token, through: :collection, class: 'Oread::AccessToken', parent: false, param_method: :collection_access_token_params
+class Api::RepositoryAccessTokensController < Api::BaseController
+  before_action :set_repository
+  load_and_authorize_resource :repository, class: 'Oread::Application'
+  load_and_authorize_resource :access_token, through: :repository, class: 'Oread::AccessToken', parent: false, param_method: :repository_access_token_params
 
   def index
     render json: @access_tokens.where(resource_owner_id: current_user.id)
@@ -28,11 +28,11 @@ class Api::CollectionAccessTokensController < Api::BaseController
   
   private
     # Never trust parameters from the scary internet, only allow the white list through.
-    def collection_access_token_params
+    def repository_access_token_params
       params.permit(:token, :token_type, :refresh_token, :expires_in)
     end
 
-    def set_collection
-      @collection = current_user.oread_token_applications.find(params[:collection_id])
+    def set_repository
+      @repository = current_user.oread_token_applications.find(params[:repository_id])
     end
 end

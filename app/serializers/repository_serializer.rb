@@ -1,4 +1,4 @@
-class CollectionSerializer < ActiveModel::Serializer
+class RepositorySerializer < ActiveModel::Serializer
   include ActiveModel::Serializers
   include Rails.application.routes.url_helpers
 

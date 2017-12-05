@@ -111,10 +111,10 @@ Rails.application.routes.draw do
     # Users
     resources :users, only: [:index, :show] do
       get 'projects', on: :member
-      get 'collections', on: :member
+      get 'repositories', on: :member
     end
     resource :user, only: [:show], controller: 'user' do      # was get 'me', to: 'users#me'
-      get 'collections', on: :member                          # was get 'searchable', to: 'users#my_search_abilities'
+      get 'repositories', on: :member                          # was get 'searchable', to: 'users#my_search_abilities'
       get 'projects', on: :member
     end
 
@@ -124,9 +124,9 @@ Rails.application.routes.draw do
       resources :memberships, only: :show
     end
 
-    # Collections
-    resources :collections, only: [:index, :show] do
-      resources :access_tokens, controller: 'collection_access_tokens', path: 'tokens' # was post 'set_access_token', to: 'oread_access_tokens#create'
+    # Repositories
+    resources :repositories, only: [:index, :show] do
+      resources :access_tokens, controller: 'repository_access_tokens', path: 'tokens' # was post 'set_access_token', to: 'oread_access_tokens#create'
     end
 
     # Applications
