@@ -126,6 +126,7 @@ Rails.application.routes.draw do
 
     # Repositories
     resources :repositories, only: [:index, :show] do
+      get 'resources/:uid', to: 'repositories#resource_host', on: :collection
       resources :access_tokens, controller: 'repository_access_tokens', path: 'tokens' # was post 'set_access_token', to: 'oread_access_tokens#create'
     end
 
@@ -146,7 +147,7 @@ Rails.application.routes.draw do
 
   # doorkeeper paths
   scope 'oauth' do
-    resources :applications, as: :oauth_application, only: :show, controller: 'doorkeeper/applications'
+    resources :applications, as: :oauth_application, only: [:destroy, :show], controller: 'doorkeeper/applications'
   end
   use_doorkeeper do
     skip_controllers :applications, :authorized_applications #tokens, authorizations
@@ -160,7 +161,7 @@ Rails.application.routes.draw do
         skip_controllers :authorizations, :tokens, :authorized_applications
       end
       scope :oauth do
-        resources :applications, as: :oauth_application, except: :show do
+        resources :applications, as: :oauth_application, except: [:destroy, :show] do
           resources :oauth_accessibilities, 
             except: :show, 
             as: :accessibilities, 

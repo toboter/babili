@@ -12,7 +12,7 @@
             <%= link_to 'Profile', edit_current_profile_path, class: "list-group-item #{'active text-strong' if current_page?(edit_current_profile_path)}" %>
             <%= link_to 'Acccount', account_path, class: "list-group-item #{'active text-strong' if current_page?(account_path)}" %>
             <%= link_to 'Notifications', account_path, class: "list-group-item disabled" %>
-            <%= link_to 'Collections', settings_oread_enrollments_path, class: "list-group-item #{'active text-strong' if current_page?(settings_oread_enrollments_path)}" %>
+            <%= link_to 'Repositories', settings_oread_enrollments_path, class: "list-group-item #{'active text-strong' if current_page?(settings_oread_enrollments_path)}" %>
             <%= link_to 'Projects', settings_projects_path, class: "list-group-item #{'active text-strong' if current_page?(settings_projects_path)}" %>
             <%= link_to 'Security', security_settings_path, class: "list-group-item  #{'active text-strong' if current_page?(security_settings_path)}" %>
             <%= link_to 'Applications', oauth_authorized_applications_path, class: "list-group-item #{'active text-strong' if current_page?(oauth_authorized_applications_path)}" %>

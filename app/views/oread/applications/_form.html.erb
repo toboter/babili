@@ -8,6 +8,7 @@
         <%= content_tag :div, class: "col-md-12" do %>
           <div class="form-inputs">
             <%= f.input :name %>
+            <%= f.input :uid, label: 'Host id' %>
             <%= f.input :host, hint: 'Complete base_url with schema, like: http://xyz.babylon-online.org' %>
             <%= f.input :port, hint: 'typically this is 80.' %>
             <%= f.input :search_path, hint: 'The API path to query and add the query params to. Like: /api/objects/search.json' %>

@@ -90,7 +90,7 @@ class Oread::ApplicationsController < ApplicationController
     end
     # Never trust parameters from the scary internet, only allow the white list through.
     def application_params
-      params.require(:oread_application).permit(:name, :host, :port, :search_path, :description, :image, :cached_image_data, 
+      params.require(:oread_application).permit(:name, :uid, :host, :port, :search_path, :description, :image, :cached_image_data, 
         :owner_id, :owner_type, :enroll_users_default)
     end
 end

@@ -2,7 +2,7 @@ class RepositorySerializer < ActiveModel::Serializer
   include ActiveModel::Serializers
   include Rails.application.routes.url_helpers
 
-  attributes :id, :name, :host, :port, :path, :url, :user_access_token, :provider_presentation_human
+  attributes :id, :name, :uid, :host, :port, :path, :url, :user_access_token, :provider_presentation_human
 
   def user_access_token
     object.access_tokens.where(resource_owner: current_user).last.try(:token)

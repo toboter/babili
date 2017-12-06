@@ -44,7 +44,7 @@ class Api::UsersController < Api::BaseController
     end
 
     # /api/my/accessibilities/search
-    def my_search_abilities #user/collections
+    def my_search_abilities #user/repositories
       oread_applications = current_user.oread_token_applications.distinct
       render json: oread_applications, each_serializer: OreadApplicationSerializer
     end

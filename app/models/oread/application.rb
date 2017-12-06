@@ -1,7 +1,7 @@
 class Oread::Application < ApplicationRecord
   include ImageUploader[:image]
   
-  validates :name, :search_path, :host, :port, presence: true
+  validates :name, :uid, :search_path, :host, :port, presence: true
   validates :name, uniqueness: true
 
   belongs_to :owner, polymorphic: true

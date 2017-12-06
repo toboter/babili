@@ -48,7 +48,7 @@ class Ability
       can [:update, :destroy, :create_accessibility, :update_accessibility, :destroy_accessibility], Doorkeeper::Application do |app|
         app.in?(user.all_oauth_applications) && user.all_oauth_accessibilities.where(oauth_application: app).map{|a| a.can_manage }.include?(true)
       end
-      can [:show, :create], Doorkeeper::Application
+      can [:read, :create], Doorkeeper::Application
 
       cannot :manage, OauthAccessibility unless user.is_admin?
       can [:update, :destroy], OauthAccessibility do |acc|

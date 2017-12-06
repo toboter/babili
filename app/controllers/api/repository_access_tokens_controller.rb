@@ -1,5 +1,4 @@
 class Api::RepositoryAccessTokensController < Api::BaseController
-  before_action :set_repository
   load_and_authorize_resource :repository, class: 'Oread::Application'
   load_and_authorize_resource :access_token, through: :repository, class: 'Oread::AccessToken', parent: false, param_method: :repository_access_token_params
 
@@ -32,7 +31,4 @@ class Api::RepositoryAccessTokensController < Api::BaseController
       params.permit(:token, :token_type, :refresh_token, :expires_in)
     end
 
-    def set_repository
-      @repository = current_user.oread_token_applications.find(params[:repository_id])
-    end
 end

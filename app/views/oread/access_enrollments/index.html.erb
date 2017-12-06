@@ -1,14 +1,14 @@
-<% title 'Your personal collections'%>
+<% title 'Your personal repositories'%>
 <% content_for :breadcrumbs do %>
   <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
 
 <%= content_tag :p, class: 'text-muted' do %>
-  To look up data, it is possible to register any application to babylon-online which has an API (ask your admin). These Collections 
-  offer their published data for keyword search. If you sign up to babylon-online, any registered app which has default 
-  enroll settings will be listed here and will be searched by default. New apps will be added likewise. Adding an app to your personal 
+  To look up data, it is possible to register any repository to babylon-online which has an API (ask your admin). These Collections 
+  offer their published data for keyword search. If you sign up to babylon-online, any registered repo which has default 
+  enroll settings will be listed here and will be searched by default. New repos will be added likewise. Adding an repo to your personal 
   search-engine, can be done through the <%= link_to 'showcase', explore_path %>. To be able, to also look for closed/unpublished data,
-  you here also have the ability, to add a access-token to your collection. If supported by the collection-app, this can also be automated.
+  you here also have the ability, to add a access-token to your repository. If supported by the repository-app, this can also be automated.
   <br><br>
   In the near future you will also optionally receive updates to your enrollments by mail.
 <% end %>

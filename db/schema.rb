@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171119231534) do
+ActiveRecord::Schema.define(version: 20171206112515) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -196,6 +196,7 @@ ActiveRecord::Schema.define(version: 20171119231534) do
     t.integer  "port"
     t.text     "image_data"
     t.boolean  "enroll_users_default", default: true, null: false
+    t.string   "uid"
     t.index ["owner_id", "owner_type"], name: "index_oread_applications_on_owner_id_and_owner_type", using: :btree
   end
 

@@ -1,19 +1,19 @@
-<% title "Registered search paths / Collections" %>
+<% title "Repositories" %>
 
 <% content_for :breadcrumbs do %>
   <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
 <% content_for :buttons do %>
-  <%= link_to 'Create new path', new_settings_admin_oread_application_path, class: 'btn btn-default text-strong' %>
+  <%= link_to 'Create new integration', new_settings_admin_oread_application_path, class: 'btn btn-default text-strong' %>
 <% end if can? :create, Oread::Application %>
 
-<p class="text-muted">Paths and their applications listet here will offer their data for keywords search.<p>
+<p class="text-muted">Paths and their repositories listet here will offer their data for keywords search.<p>
 
 <main role="main">
   <table class="table table-simple">
     <thead>
     <tr>
-      <th>Path</th>
+      <th>Repos</th>
       <th></th>
     </tr>
     </thead>

@@ -1,5 +1,5 @@
 class Api::RepositoriesController < Api::BaseController
-  load_and_authorize_resource class: 'Oread::Application'
+  load_and_authorize_resource class: 'Oread::Application', except: :resource_host
 
   # included from deprecated oread_collections_controller
   # require 'rest-client'
@@ -14,7 +14,6 @@ class Api::RepositoriesController < Api::BaseController
   # before_action  -> { authorize_personal_api_methods(:collections) }, only: :index
   
 
-
   def index
     repositories = @repositories.order(id: :asc)
     render json: repositories, each_serializer: RepositorySerializer
@@ -22,6 +21,12 @@ class Api::RepositoriesController < Api::BaseController
 
   def show
     render json: @repository, serializer: RepositorySerializer
+  end
+
+  def resource_host
+    repositories = Oread::Application.where(uid: params[:uid])
+    authorize! :read, repositories
+    render json: repositories, each_serializer: RepositorySerializer
   end
 
 end
