@@ -9,12 +9,12 @@ class Api::BaseController < ActionController::API
 
   # before_action :authorization_method
 
-  before_action -> { doorkeeper_authorize! :public } # if: _auth_method == doorkeeper
+  # before_action -> { doorkeeper_authorize! :public } # if: _auth_method == doorkeeper
   # before_action only: [:create, :update, :destroy] do
   #   doorkeeper_authorize! :admin, :write, :update
   # end
 
-  # before_action :doorkeeper_authorize!
+  before_action :doorkeeper_authorize!
   before_action :authenticate_user_with_doorkeeper!
   check_authorization unless: :devise_controller?
 
