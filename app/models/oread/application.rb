@@ -1,7 +1,7 @@
 class Oread::Application < ApplicationRecord
   include ImageUploader[:image]
   
-  validates :name, :uid, :search_path, :host, :port, presence: true
+  validates :name, :uid, :repository_classes, :host, :port, presence: true
   validates :name, uniqueness: true
 
   belongs_to :owner, polymorphic: true
@@ -10,6 +10,9 @@ class Oread::Application < ApplicationRecord
   has_many :token_holders, through: :access_tokens, source: :resource_owner
   has_many :access_enrollments, dependent: :delete_all, class_name: 'Oread::AccessEnrollment'
   has_many :enrollees, through: :access_enrollments, source: :enrollee
+  has_many :repository_classes, class_name: 'RepositoryClass', dependent: :destroy, foreign_key: :repository_id
+
+  accepts_nested_attributes_for :repository_classes, reject_if: :all_blank, allow_destroy: true
 
   def url
     "#{host}#{':'+port.to_s if port}#{search_path}"

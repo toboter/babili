@@ -8,43 +8,23 @@
 </div>
 
 
-<% if @grouped_results %>
-  <% @grouped_results.each do |group, results| %>
     <table class="table table-bordered table-responsive">
       <thead>
         <tr>
-          <th><%= group.pluralize %></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
-        <% results.each do |result| %>
+        <% @results.each do |result| %>
           <tr>
             <td>
-              <%= link_to result['full_entry'], "#{result['links']['human']}" %><br>
-              <!-- <%= content_tag :span, "#{result['type']}<br>".html_safe if result['type'] %> -->
-              <small><%= result['links']['human'] %></small>
+              <small><%= result %></small>
             </td>
           </tr>
         <% end %>
       </tbody>
     </table>
-  <% end %>
-<% else %>
-  <table class="table table-bordered table-responsive">
-    <thead>
-      <tr>
-        <th>Search Results</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>
-          Empty
-        </td>
-      </tr>
-    </tbody>
-  </table>
-<% end %>
+
 
 <% content_for :sidebar do %>
 	<h4>Filter</h4>

@@ -35,6 +35,7 @@ class Oread::ApplicationsController < ApplicationController
   # GET /applications/new
   def new
     @application = Oread::Application.new
+    @application.repository_classes.build
   end
 
   # GET /applications/1/edit
@@ -91,6 +92,6 @@ class Oread::ApplicationsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def application_params
       params.require(:oread_application).permit(:name, :uid, :host, :port, :search_path, :description, :image, :cached_image_data, 
-        :owner_id, :owner_type, :enroll_users_default)
+        :owner_id, :owner_type, :enroll_users_default, repository_classes_attributes: [:id, :repository_id, :repo_api_url, :_destroy])
     end
 end
