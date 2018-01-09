@@ -67,6 +67,7 @@ gem 'rails-bootstrap-markdown'
 gem 'cocoon'
 gem 'geo_pattern'  # https://github.com/jasonlong/geo_pattern
 gem 'inline_svg'   # https://github.com/jamesmartin/inline_svg
+gem "selectize-rails"
 
 gem 'devise'
 gem 'doorkeeper'
@@ -76,5 +77,8 @@ gem 'rest-client'
 gem 'sidekiq'
 gem 'sinatra', git: 'https://github.com/sinatra/sinatra.git'
 gem "jsonb_accessor", "~> 1.0.0"
+gem 'sparql-client'
+gem 'acts_as_dag', git: 'https://github.com/rrn/acts_as_dag.git'
+gem 'language_list'
 
 ruby '2.3.1'

@@ -1,0 +1,83 @@
+<%= simple_form_for [:vocab, @scheme, @concept] do |f| %>
+  <%= content_tag :div, class: 'row' do %>
+    <div class="col-md-12">
+      <%= f.error_notification %>
+    </div>
+  <% end %>
+  <%= content_tag :div, class: 'row' do %>
+
+    <div class="col-md-12">
+      <h3 class="subhead">Properties</h3>
+      <%= f.input :status, collection: Vocab::Concept.statuses %>
+      <%= f.input :type, collection: Vocab::Concept.types, include_blank: false, selected: @concept.type, as: :hidden %>
+    </div>
+
+    <div class="col-md-12">
+      <h3 class="subhead">Labels</h3>
+      <div id="labels">
+        <%= f.simple_fields_for :labels do |l| %>
+          <%= render 'label_fields', f: l %>
+        <% end %>
+        <div class="links">
+          <%= link_to_add_association fa_icon('plus', text: 'Label'), f, :labels, class: 'btn btn-default btn-sm' %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <h3 class="subhead">Relations</h3>
+      <%= f.input :broader_concepts, 
+        collection: @scheme.concepts-@concept.subtree, 
+        input_html: {
+          id: 'vocab_broader_id',
+          multiple: true }, 
+        selected: @concept.broader_concept_ids, 
+        label: 'Broader terms',
+        label_method: :name,
+        value_method: :id %>
+
+      <%= f.input :narrower_concepts, 
+        collection: @scheme.concepts-@concept.path, 
+        input_html: {
+          id: 'vocab_narrower_id',
+          multiple: true }, 
+        selected: @concept.narrower_concept_ids, 
+        label: 'Narrower terms',
+        label_method: :name,
+        value_method: :id %>
+    </div>
+
+    <div class="col-md-12">
+      <h3 class="subhead">Matches</h3>
+      <div id="matches">
+        <%= f.simple_fields_for :matches do |m| %>
+          <%= render 'match_fields', f: m %>
+        <% end %>
+        <div class="links">
+          <%= link_to_add_association fa_icon('plus', text: 'Match'), f, :matches, class: 'btn btn-default btn-sm' %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <h3 class="subhead">Definitions &amp; Notes</h3>
+      <div id="notes">
+        <%= f.simple_fields_for :notes do |id| %>
+          <%= render 'note_fields', f: id %>
+        <% end %>
+        <div class="links">
+          <%= link_to_add_association fa_icon('plus', text: 'Note'), f, :notes, class: 'btn btn-default btn-sm' %>
+        </div>
+      </div>
+    </div>
+
+  <% end %>
+
+  <div class="row">
+    <div class="col-md-6">
+      <hr>
+      <%= f.submit class: 'btn btn-primary' %>
+      <%= link_to 'Cancel', vocab_scheme_concepts_path(@concept.scheme), class: "btn btn-default" %>
+    </div>
+  </div>
+<% end %>

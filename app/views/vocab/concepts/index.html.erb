@@ -1,0 +1,31 @@
+<% title "Concepts" %>
+
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, link_to('Vocabularies', vocab_schemes_path) %>
+  <%= content_tag :li, link_to(@scheme.title, vocab_scheme_path(@scheme)) %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
+<% end %>
+
+<% content_for :container do %>
+  <div class="vocab">
+    <div class="row --spacious">
+      <div class="col-sm-12 col-md-8 main">
+        <table class="table table-simple">
+          <thead>
+          </thead>
+
+          <tbody>
+            <%= render @concepts.roots %>
+          </tbody>
+        </table>
+      </div>
+      <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
+        <div class="list-group">
+          <%= link_to fa_icon('plus', text: 'Create concept'), [:new, :vocab, @scheme, :concept], class: 'list-group-item' %>
+          <%= link_to fa_icon('plus', text: 'Create collection'), [:new, :vocab, @scheme, :concept, type: 'Collection'], class: 'list-group-item' %>
+          <%= link_to fa_icon('angle-double-up', text: @scheme.abbr.humanize), vocab_scheme_path(@scheme), class: 'list-group-item' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,10 @@
+<tr>
+  <%= content_tag :td, style: "padding-left: #{concept.indent}px;" do %>
+    <strong> <%= link_to concept.name(@language), [:vocab, concept.scheme, concept], style: ('text-decoration: underline;' if concept.root?) %></strong>
+  <% end %>
+  <td>
+    <%= link_to 'edit', [:edit, :vocab, concept.scheme, concept] %>
+    <%= link_to 'delete', [:vocab, concept.scheme, concept], method: :delete %>
+  </td>
+</tr>
+<%= render concept.children %>

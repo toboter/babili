@@ -1,0 +1,13 @@
+<div class="nested-fields match-fields form-inline">
+  <%= f.input :scheme, label: false, collection: Vocab::Scheme.all-[@scheme], label_method: :abbr, value_method: :id, include_blank: 'Other' %>
+  <%= f.input :value, 
+    collection: Vocab::Concept.where(type: 'Concept').map{|c| ["#{c.scheme.abbr}:#{c.name}", c.uri]}.push([f.object.value, f.object.value]),
+    input_html: {
+      id: 'vocab_match_string' }, 
+    label: false,
+    label_method: :first,
+    value_method: :last,
+    selected: f.object.value %>
+  <%= f.input :property, label: false, collection: Vocab::AssociativeRelation.properties  %>
+  <%= link_to_remove_association fa_icon('trash'), f, class: 'btn btn-default btn-sm' %>
+</div>

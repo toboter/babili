@@ -1,0 +1,24 @@
+<% title "#{@scheme.title}" %>
+
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, link_to('Vocabularies', vocab_schemes_path) %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
+<% end %>
+
+<% content_for :container do %>
+  <div class="vocab">
+    <div class="row --spacious">
+      <div class="col-sm-12 col-md-8 main">
+        <%= render @scheme %>
+      </div>
+      <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
+        <div class="list-group">
+          <%= link_to fa_icon('angle-double-down', text: 'Concepts'), [:vocab, @scheme, :concepts], class: 'list-group-item' %>
+          <%= link_to fa_icon('plus', text: 'Create concept'), [:new, :vocab, @scheme, :concept], class: 'list-group-item' %>
+          <%= link_to fa_icon('angle-double-up', text: 'All vocabularies'), vocab_schemes_path, class: 'list-group-item' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+

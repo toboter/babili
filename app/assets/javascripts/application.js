@@ -16,6 +16,7 @@
 //= require toastr
 //= require bootstrap-markdown-bundle
 //= require cocoon
+//= require selectize
 //= require bootstrap
 //= require turbolinks
 //= require turbolinks-compatibility

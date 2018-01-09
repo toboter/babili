@@ -1,0 +1,60 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <%= content_tag :span, class: 'clearfix' do %>
+      <%= link_to [:vocab, scheme], class: 'text-strong' do %>
+        <%= scheme.title %> 
+      <% end %>
+      <%= link_to fa_icon('edit', text: 'Edit'), [:edit, :vocab, scheme], class: 'btn btn-default btn-sm text-strong pull-right' if can?(:update, Vocab::Scheme) %>
+    <% end %>
+  </div>
+  <div class="panel-body">
+    <%= content_tag :p, scheme.definition, class: 'text-small --spacing-20' %>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span class="text-strong">Abbreviation</span>
+      </div>
+      <div class="panel-body">
+        <%= scheme.abbr %>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span class="text-strong">Namespace</span>
+      </div>
+      <div class="panel-body">
+        <%= polymorphic_url([:vocab, scheme]) %>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span class="text-strong">Contributors</span>
+      </div>
+      <div class="panel-body">
+        <%= scheme.contributors.map{|c| link_to(c.name, c.profile)}.join(', ').html_safe %>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span class="text-strong">Defined for</span>
+      </div>
+      <div class="panel-body">
+        <%= scheme.definer_id %>, <%= scheme.definer_type %>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span class="text-strong">Root facets</span>
+      </div>
+      <div class="panel-body">
+        <% scheme.concepts.roots.each do |concept| %>
+          <%= link_to concept.name(@language), [:vocab, scheme, concept] %><br>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

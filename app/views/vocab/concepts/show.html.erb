@@ -1,0 +1,93 @@
+<% title @concept.name(@language) %>
+
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, link_to('Vocabularies', vocab_schemes_path) %>
+  <%= content_tag :li, link_to(@scheme.title, vocab_scheme_path(@scheme)) %>
+  <%= content_tag :li, link_to('Concepts', vocab_scheme_concepts_path(@scheme)) %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
+<% end %>
+
+<% content_for :container do %>
+  <div class="vocab">
+    <div class="row --spacious">
+
+      <div class="col-md-9 main">
+        <div class="row">
+          <div class="col-md-6">
+            <% (@concept.root? ? [@concept] : @concept.ancestors.roots).each do |croot| %>
+              <table class="table table-simple">
+                <thead>
+                </thead>
+                <tbody>
+                  <% (croot.subtree).each do |concept| %>
+                    <tr>
+                      <%= content_tag :td, style: "padding-left: #{concept.indent}px;" do %>
+                        <strong>
+                          <% if concept == @concept %>
+                            <%= concept.name(@language) %>
+                          <% else %>
+                            <%= link_to concept.name(@language), [:vocab, concept.scheme, concept] %>
+                          <% end %>
+                        </strong>
+                      <% end %>
+                      <td>
+                        <%= content_tag :span, concept.descendants.count, class: 'pull-right' %>
+                      </td>
+                    </tr>
+                  <% end %>
+
+                </tbody>
+              </table>
+            <% end %>
+            <div id='related-matches'>
+              <div id="matches">
+                <h4 class='subhead --spacious'>Related matches</h4>
+                <% @concept.matches.each do |match| %>
+                  <%= match.property %> <%= link_to match.value, match.value %><br>
+                <% end %>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h4>ID: <%= @concept.uuid %></h4>
+            <p><span class="text-strong">Typ: </span><%= @concept.type %></p>
+            <div id='definition'>
+              <h4 class='subhead --spacious'>Definition</h4>
+              <%= @definition.try(:body) %>
+            </div>
+          </div>
+        </div>
+        <div class="row --spacious">
+          <div class="col-md-12">
+            <h4 class='subhead --spacious'>Terms</h4>
+            <ul class="list-unstyled">
+              <% @concept.labels.each do |label| %>
+                <%= content_tag :li do %>
+                  <%= content_tag :span, label.body, class: 'text-strong' %>
+                  (
+                    <%= content_tag :span, 'Preferred, ' if label.type == 'Preferred' && !label.is_abbrevation?  %>
+                    <%= content_tag :span, label.language %>
+                  )
+                <% end %>
+              <% end %>
+            </ul>
+            <h4 class='subhead --spacious'>Additional notes</h4>
+            <% @other_definitions.each do |definition| %>
+              <%= content_tag :p do %>
+                <%= content_tag :span, '['+definition.language+']... ' %>
+                <%= content_tag :span, definition.body %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <%= content_tag :div, class: 'col-md-3 sidebar' do %>
+        <div class="list-group">
+          <%= link_to fa_icon('edit', text: 'Edit'), edit_vocab_scheme_concept_path(@concept.scheme, @concept), class: 'list-group-item' %>
+          <%= link_to fa_icon('plus', text: 'Create narrower concept'), new_vocab_scheme_concept_path(@concept.scheme, broader_concept: @concept), class: 'list-group-item' %>
+          <%= link_to fa_icon('angle-double-up', text: 'All concepts'), vocab_scheme_concepts_path(@concept.scheme), class: 'list-group-item' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

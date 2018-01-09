@@ -22,6 +22,9 @@
 @import "settings";
 @import "about";
 @import "toastr";
+@import "vocab";
+@import 'selectize';
+@import 'selectize.bootstrap3';
 
 .text-strong {
     font-weight: bold;
@@ -57,6 +60,8 @@ a.no-link {
     float: none;
     margin: 0 auto;
 }
+
+.borderless { border: none; }
 
 .navbar-default {
     font-weight: bold;
@@ -120,11 +125,17 @@ div.panel-attach {
     margin-bottom: 16px;
     border-bottom: 1px #e1e4e8 solid;
 }
+.--spacious-80 {
+    margin-top: 80px;
+}
 .--spacious {
     margin-top: 40px;
 }
 .--spacing {
     margin-bottom: 40px;
+}
+.--spacing-20 {
+    margin-bottom: 20px;
 }
 
 div.list-group {

@@ -1,4 +1,5 @@
 class CMS::BlogPage < CMS::Content
+  # evtl gibt es einen Fehler in CanCan, der verhindert, dass die history durchsucht werden kann.
   extend FriendlyId
   friendly_id :identifier_and_title, use: [:slugged, :scoped, :history], scope: :type
 

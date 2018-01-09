@@ -1,0 +1,20 @@
+<% title 'Vocabularies' %>
+
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
+<% end %>
+
+<% content_for :container do %>
+  <div class="vocab">
+    <div class="row --spacious">
+      <div class="col-sm-12 col-md-8 main">
+        <%= render @schemes %>
+      </div>
+      <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
+        <%= content_tag :div, class: 'actions clearfix' do %>
+          <%= link_to fa_icon('add', text: 'Create a new vocabulary scheme'), new_vocab_scheme_path, class: 'btn btn-default text-strong text-primary pull-right' %>
+        <% end if can?(:create, Vocab::Scheme) %>   
+      <% end %>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,9 @@
+<%= simple_form_for [:vocab, @scheme] do |f| %>
+<%= f.error_notification %>
+  <%= f.input :abbr %>
+  <%= f.input :title %>
+  <%= f.input :definition %>
+
+  <%= f.submit class: 'btn btn-primary' %>
+  <%= link_to 'Cancel', vocab_schemes_path, class: "btn btn-default" %>
+<% end %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171213230623) do
+ActiveRecord::Schema.define(version: 20171221202431) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -283,6 +283,68 @@ ActiveRecord::Schema.define(version: 20171213230623) do
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  end
+
+  create_table "vocab_associative_relations", force: :cascade do |t|
+    t.integer "concept_id"
+    t.string  "property"
+    t.integer "related_concept_id"
+    t.string  "value"
+  end
+
+  create_table "vocab_concepts", force: :cascade do |t|
+    t.string  "uuid"
+    t.integer "scheme_id"
+    t.integer "creator_id"
+    t.string  "type"
+    t.string  "status"
+    t.string  "slug"
+  end
+
+  create_table "vocab_descendants", force: :cascade do |t|
+    t.string  "category_type"
+    t.integer "ancestor_id"
+    t.integer "descendant_id"
+    t.integer "distance"
+    t.index ["ancestor_id"], name: "index_vocab_descendants_on_ancestor_id", using: :btree
+    t.index ["descendant_id"], name: "index_vocab_descendants_on_descendant_id", using: :btree
+  end
+
+  create_table "vocab_labels", force: :cascade do |t|
+    t.integer "concept_id"
+    t.string  "type"
+    t.string  "vernacular"
+    t.string  "historical"
+    t.string  "body"
+    t.string  "language"
+    t.boolean "is_abbrevation"
+    t.integer "creator_id"
+  end
+
+  create_table "vocab_links", force: :cascade do |t|
+    t.string  "category_type"
+    t.integer "parent_id"
+    t.integer "child_id"
+    t.index ["child_id"], name: "index_vocab_links_on_child_id", using: :btree
+    t.index ["parent_id"], name: "index_vocab_links_on_parent_id", using: :btree
+  end
+
+  create_table "vocab_notes", force: :cascade do |t|
+    t.integer "concept_id"
+    t.string  "type"
+    t.text    "body"
+    t.string  "language"
+    t.integer "creator_id"
+  end
+
+  create_table "vocab_schemes", force: :cascade do |t|
+    t.string  "abbr"
+    t.string  "title"
+    t.text    "definition"
+    t.integer "definer_id"
+    t.string  "definer_type"
+    t.integer "creator_id"
+    t.string  "slug"
   end
 
   add_foreign_key "audits", "users"

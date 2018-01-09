@@ -2,7 +2,7 @@
 
 <% content_for :content do %>
   <div class="about-page">
-    <%= image_tag('smb.jpg')%>
+    <%= image_tag('team.jpg')%>
     <div class="container">
       <div class="row">
         <div class="col-md-10 col-centered">
@@ -11,30 +11,35 @@
               <strong>babylon-online.org</strong> ein digitales Findbuch
             </h1>
             <p class="main-lead">
-              Das Portal babylon-online.org ist im Rahmen des Babylon-Projektes entwickelt geworden. Es vernetzt verschiedene Datenpools und funktioniert als zentrales, digitales Findbuch zu allen verfügbaren Daten aus den deutschen Koldewey-Grabungen, seien es Artefakte, Dokumentation, Literatur, beteiligte Personen oder Medien-Dateien.
+              Das Portal babylon-online.org ist im Rahmen des Babylon-Projektes entwickelt geworden. 
+              Es vernetzt verschiedene Datenpools und funktioniert als zentrales, digitales Findbuch 
+              zu allen verfügbaren Daten aus den deutschen Koldewey-Grabungen, seien es Artefakte, 
+              Dokumentation, Literatur, beteiligte Personen oder Medien-Dateien.
             </p>
           </div>
 
           <div class="col-md-6">
             <%= content_tag :h3, link_to('Blog', cms_blog_pages_path) %>
             <p class="text-gray sublead">
-              Neueste Infos rund um Babylon. Neuigkeiten zur Plattform, zu Datenbanken, Applikationen und Schnittstellen. 
+              Neueste Infos rund um Babylon. Neuigkeiten zur Plattform, zu Datenbanken, Applikationen und 
+              Schnittstellen. 
             </p>
           </div>
           <div class="col-md-6">
             <%= content_tag :h3, link_to('News & Press', cms_novelities_path) %>
             <p class="text-gray sublead">
-              Kurze Nachrichten von und zu babylon-online.org und Babylon im Allgemeinen. Kurz verlinkt nach anderswo.
+              Kurze Nachrichten von und zu babylon-online.org und Babylon im Allgemeinen. Kurz verlinkt 
+              nach anderswo.
             </p>
           </div>
           <div class="col-md-12 --spacious">
             <%= content_tag :h3, 'Further reading' %>
             <ul class="text-gray list-unstyled link-list chevron">
-              <%= content_tag :li, link_to('Die Babylon-Sammlung am Vorderasiatischen Museum', "http://babili.toboter.de/blog/die-babylon-sammlung-am-vorderasiatischen-museum") %>
-              <%= content_tag :li, link_to('Die deutschen Koldewey-Grabungen', "http://babili.toboter.de/blog/die-deutschen-koldewey-grabungen") %>
-              <%= content_tag :li, link_to('Babylon-online.org', "http://babili.toboter.de/blog/babylon-online-org") %>
-              <%= content_tag :li, link_to('Das Babylon-Projekt', "http://babili.toboter.de/blog/das-babylon-projekt") %>
-              <%= content_tag :li, link_to('Das antike Babylon', "http://babili.toboter.de/blog/das-antike-babylon") %>
+              <%= content_tag :li, link_to('Die Babylon-Sammlung am Vorderasiatischen Museum', "http://babylon-online.org/blog/die-babylon-sammlung-am-vorderasiatischen-museum") %>
+              <%= content_tag :li, link_to('Die deutschen Koldewey-Grabungen', "http://babylon-online.org/blog/die-deutschen-koldewey-grabungen") %>
+              <%= content_tag :li, link_to('Babylon-online.org', "http://babylon-online.org/blog/babylon-online-org") %>
+              <%= content_tag :li, link_to('Das Babylon-Projekt', "http://babylon-online.org/blog/das-babylon-projekt") %>
+              <%= content_tag :li, link_to('Das antike Babylon', "http://babylon-online.org/blog/das-antike-babylon") %>
             </ul>
           </div>
         </div>
