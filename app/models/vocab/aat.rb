@@ -8,10 +8,11 @@ class Vocab::AAT
     @concept = concept
   end
 
-  def self.factes
+  def self.facets
     query = "select * {?f a gvp:Facet; skos:inScheme aat: ; gvp:prefLabelGVP/xl:literalForm ?l}"
     sparql = SPARQL::Client.new("http://vocab.getty.edu/sparql")
     concepts=[]
+    puts query
     sparql.query(query).each do |s|
       concepts << new(s['l'].to_s, s['f'].to_s.split('/').last)
     end
@@ -37,6 +38,7 @@ class Vocab::AAT
       optional {?l gvp:estEnd ?end}
       optional {?l rdfs:comment ?comment}
     } order by ?ord"
+    puts query
     sparql = SPARQL::Client.new("http://vocab.getty.edu/sparql")
     new(sparql.query(query), param)
   end

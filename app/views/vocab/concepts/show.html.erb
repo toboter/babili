@@ -82,10 +82,18 @@
         </div>
       </div>
       <%= content_tag :div, class: 'col-md-3 sidebar' do %>
-        <div class="list-group">
+        <div class="list-group" id="actions">
           <%= link_to fa_icon('edit', text: 'Edit'), edit_vocab_scheme_concept_path(@concept.scheme, @concept), class: 'list-group-item' %>
           <%= link_to fa_icon('plus', text: 'Create narrower concept'), new_vocab_scheme_concept_path(@concept.scheme, broader_concept: @concept), class: 'list-group-item' %>
           <%= link_to fa_icon('angle-double-up', text: 'All concepts'), vocab_scheme_concepts_path(@concept.scheme), class: 'list-group-item' %>
+        </div>
+        <div class="list-group" id="representations">
+          <h4 class="--spacious">Representations</h4>
+          <%= link_to fa_icon('link', text: 'HTML'), [:vocab, @concept.scheme, @concept, format: :html], class: 'list-group-item' %>
+          <%= link_to fa_icon('link', text: 'JSON'), [:vocab, @concept.scheme, @concept, format: :json], class: 'list-group-item disabled' %>
+          <%= link_to fa_icon('link', text: 'RDF/XML'), [:vocab, @concept.scheme, @concept, format: :rdf], class: 'list-group-item disabled' %>
+          <%= link_to fa_icon('link', text: 'RDF/TURTLE'), [:vocab, @concept.scheme, @concept, format: :ttl], class: 'list-group-item disabled' %>
+          <%= link_to fa_icon('link', text: 'RDF/NTRIPLES'), [:vocab, @concept.scheme, @concept, format: :nt], class: 'list-group-item disabled' %>
         </div>
       <% end %>
     </div>

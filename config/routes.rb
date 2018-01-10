@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   require 'sidekiq/web'
 
   namespace :vocab, path: :vocabularies do
-    resources :aat
+    resources :aat, path: 'aat/concepts'
     resources :schemes, path: '/' do
       resources :concepts
     end
