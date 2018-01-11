@@ -27,13 +27,17 @@ class Vocab::Concept < ApplicationRecord
 
   belongs_to :scheme
   belongs_to :creator, class_name: 'User'
-  has_many :labels, dependent: :destroy, inverse_of: :concept
+  has_many :labels, class_name: 'Vocab::Label', dependent: :destroy, inverse_of: :concept
   has_many :notes, dependent: :destroy, inverse_of: :concept
   has_many :definitions, -> { where type: 'Definition' }, class_name: 'Note'
 
   accepts_nested_attributes_for :labels, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :notes, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :matches, reject_if: :all_blank, allow_destroy: true
+
+  def self.search(q)
+    joins(:labels).where('vocab_labels.body LIKE ?', "#{q}%")
+  end
 
   def preferred_label(lang=nil)
     labels.where(type: 'Preferred', language: lang, is_abbrevation: false).first || labels.where(type: 'Preferred', is_abbrevation: false).first

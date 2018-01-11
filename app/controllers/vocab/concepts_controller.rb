@@ -2,8 +2,9 @@ class Vocab::ConceptsController < ApplicationController
   before_action :set_language
   load_and_authorize_resource :scheme, find_by: :slug
   load_and_authorize_resource through: :scheme, find_by: :slug
-  
+
   def index
+    @concepts = @concepts.roots
   end
 
   def show

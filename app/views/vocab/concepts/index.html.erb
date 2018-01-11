@@ -15,7 +15,7 @@
           </thead>
 
           <tbody>
-            <%= render @concepts.roots %>
+            <%= render partial: 'vocab/concepts/concept', collection: @concepts, locals: { depth: 1 } %>
           </tbody>
         </table>
       </div>
