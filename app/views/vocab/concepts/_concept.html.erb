@@ -1,10 +1,10 @@
 <tr>
   <%= content_tag :td, style: "padding-left: #{depth*20}px;" do %>
-    <strong> <%= link_to concept.name(@language), vocab_scheme_concept_path(concept.scheme, concept), style: ('text-decoration: underline;' if concept.root?) %></strong>
+    <strong> <%= link_to concept.name(@language), vocab_scheme_concept_path(concept.scheme, concept.slug), style: ('text-decoration: underline;' if concept.root?) %></strong>
   <% end %>
   <td>
     <%= link_to 'edit', [:edit, :vocab, concept.scheme, concept] if concept.persisted? %>
     <%= link_to 'delete', [:vocab, concept.scheme, concept], method: :delete if concept.persisted? %>
   </td>
 </tr>
-<%= render partial: 'vocab/concepts/concept', collection: concept.children, locals: {depth: depth+1} if depth < 1 || concept.persisted? %>
+<%= render partial: 'vocab/concepts/concept', collection: concept.children, locals: {depth: depth+1} if depth < 2 || concept.persisted? %>

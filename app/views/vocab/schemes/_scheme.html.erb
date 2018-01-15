@@ -1,15 +1,19 @@
 <div class="panel panel-default">
   <div class="panel-heading">
-    <%= content_tag :span, class: 'clearfix' do %>
+    <%= content_tag :p, class: 'clearfix' do %>
       <%= link_to [:vocab, scheme], class: 'text-strong' do %>
         <%= scheme.title %> 
       <% end %>
       <%= link_to fa_icon('edit', text: 'Edit'), [:edit, :vocab, scheme], class: 'btn btn-default btn-sm text-strong pull-right' if can?(:update, Vocab::Scheme) %>
+      <%= content_tag :p, scheme.definition, class: 'text-small --spacious-20' %>
     <% end %>
+    <%= link_to 'View more', "#info-box-scheme-#{scheme.id}", 
+          role: :button,
+          data: { toggle: :collapse },
+          aria: { controls: :"info-box-scheme-#{scheme.id}", expanded: false },
+          class: 'text-small' if !local_assigns[:full] %>
   </div>
-  <div class="panel-body">
-    <%= content_tag :p, scheme.definition, class: 'text-small --spacing-20' %>
-
+  <div class="panel-body <%= 'collapse' if !local_assigns[:full] %>" id="info-box-scheme-<%= scheme.id %>">
     <div class="panel panel-default">
       <div class="panel-heading">
         <span class="text-strong">Abbreviation</span>

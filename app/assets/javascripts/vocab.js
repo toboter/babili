@@ -36,7 +36,10 @@ $(document).on('turbolinks:load', function(){
       },
       render: {
         option: function(item, escape) {
-          return `<div>` + escape(item.name) + `</div>`
+          return '<div>' + '<strong>' + escape(item.name) + '</strong>' +
+                    '<p class="text-small">' + '<em>' + escape(item.parents) + '</em>' + '</p>' +
+                    '<p class="text-small">' + escape(item.note) + '</p>' +
+                 '</div>'
         }
       }
     });

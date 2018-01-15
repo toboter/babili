@@ -1,0 +1,9 @@
+<% @concept.parents.each do |c| %>
+  <%= link_to c.name, vocab_aat_path(c.id) %>
+<% end %>
+
+<p><%= @concept.labels.map{|l| "#{l.body} (#{l.language}) [#{l.type}]"}.join(', ') %></p>
+
+<% @concept.children.each do |c| %>
+  <%= link_to c.name, vocab_aat_path(c.id) %>
+<% end %>
