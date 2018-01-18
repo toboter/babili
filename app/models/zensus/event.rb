@@ -1,21 +1,30 @@
 # t.string    :type
 # t.string    :beginn
-# t.string    :end
+# t.string    :ended
 # t.boolean   :circa
+# t.integer   :place_id
+# t.integer   :period_id
 
 class Zensus::Event < ApplicationRecord
+  self.inheritance_column = :_type_disabled
+  
   has_many    :notes, as: :issueable
   has_many    :event_relations
   has_many    :activities
-  has_many    :agents, through: :activities, source_type: 'Zensus::Agent'
+  has_many    :agents, through: :activities, source_type: 'Zensus::Agent', source: :actable
   has_many    :notes, as: :issueable
   belongs_to  :place, class_name: 'Vocab::Concept'
   belongs_to  :period, class_name: 'Vocab::Concept'
+
+  accepts_nested_attributes_for :activities, reject_if: :all_blank, allow_destroy: true
 
   def self.types
     ['Activity', 'Acquisition', 'Move', 'Transfer of Custody', 'Beginning of Existence', 'Formation', 'Birth', 'Transformation', 'Joining', 'End of Existence', 'Dissolution', 'Death', 'Leaving']
   end
 
+  def title
+    "#{type}: #{beginn}"
+  end
 end
 
 # Entity
@@ -70,7 +79,7 @@ end
 #e P11 had participant (participated in): E39 Actor
 #e P12 occurred in the presence of (was present at): E77 Persistent Item (Actor, Thing)
 
--> Activity
+# -> Activity
 # Beginning of Existence < Event
 # P92 brought into existence (was brought into existence by): E77 Persistent Item
 

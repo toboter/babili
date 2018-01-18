@@ -1,0 +1,14 @@
+  <%= f.input :type, collection: Zensus::Event.types, label: false %>
+  <%= f.input :beginn, label: false, placeholder: 'Beginn' %>
+  <%= f.input :end, label: false, placeholder: 'End' %>
+  <%= f.input :circa %>
+
+  <div class="activities">
+    <% f.object.activities.build(actable_gid: @agent.to_global_id) if f.object.new_record? %>
+    <%= f.simple_fields_for :activities do |a| %>
+      <%= render 'activity_fields', f: a %>
+    <% end %>
+    <div class="links">
+      <%= link_to_add_association fa_icon('plus', text: 'Activity'), f, :activities, class: 'btn btn-default btn-sm' %>
+    </div>
+  </div>

@@ -68,6 +68,7 @@ gem 'cocoon'
 gem 'geo_pattern'  # https://github.com/jasonlong/geo_pattern
 gem 'inline_svg'   # https://github.com/jamesmartin/inline_svg
 gem "selectize-rails"
+gem 'globalid'
 
 gem 'devise'
 gem 'doorkeeper'

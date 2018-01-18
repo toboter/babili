@@ -12,7 +12,14 @@ Rails.application.routes.draw do
   end
 
   namespace :zensus do
-    resources :agents
+    resources :agents do
+      collection do
+        resources :people, controller: 'agents', type: 'Zensus::Person'
+        resources :groups, controller: 'agents', type: 'Zensus::Group'
+      end
+      resources :activities
+    end
+    resources :events
   end
 
   get '/search', to: 'search#index'

@@ -1,0 +1,28 @@
+<%= simple_form_for [:zensus, @agent], as: :zensus_agent do |f| %>
+  <%= f.error_notification %>
+  <%= f.input :type, as: :hidden %>
+
+  <h4>Appellations</h4>
+  <div id="appellations">
+    <%= f.simple_fields_for :appellations do |a| %>
+      <%= render 'appellation_fields', f: a %>
+    <% end %>
+    <div class="links">
+      <%= link_to_add_association fa_icon('plus', text: 'Appellation'), f, :appellations, class: 'btn btn-default btn-sm' %>
+    </div>
+  </div>
+
+  <h4>Activities</h4>
+  <div id="activities">
+    <%= f.simple_fields_for :activities do |a| %>
+      <%= render 'activity_fields', f: a %>
+    <% end %>
+    <div class="links">
+      <%= link_to_add_association fa_icon('plus', text: 'Activity'), f, :activities, class: 'btn btn-default btn-sm' %>
+    </div>
+  </div>
+
+  <%= f.input :address %>
+  <%= f.submit class: 'btn btn-primary' %>
+  <%= link_to 'Cancel', zensus_agents_path, class: "btn btn-default" %>
+<% end %>

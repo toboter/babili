@@ -1,0 +1,15 @@
+<%= simple_form_for [:zensus, :agent, @activity], as: :zensus_activity do |f| %>
+  <div class="form-inline">
+    <%= f.input :actable_type, as: :hidden %>
+    <%= f.input :actable_id, as: :hidden %>
+    <%= f.input :property, collection: (Zensus::Activity.properties.collect {|p| [ p[:property].last, p[:id] ] }), label: false %>
+    <%= f.input :event_id, 
+      collection: Zensus::Event.all, 
+      value_method: :id, 
+      label_method: :title,
+      label: false %>
+  </div>
+  
+  <%= f.submit class: 'btn btn-primary' %>
+  <%= link_to 'Cancel', zensus_agent_activities_path(@agent), class: "btn btn-default" %>
+<% end %>

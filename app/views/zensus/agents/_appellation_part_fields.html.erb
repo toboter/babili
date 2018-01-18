@@ -1,0 +1,7 @@
+<div class="nested-fields appellation-part-fields">
+  <%= f.input :type, collection: Zensus::AppellationPart.types, label: false %>
+  <%= f.input :body, label: false %>
+  <%= f.input :preferred %>
+  pos
+  <%= link_to_remove_association fa_icon('trash'), f %>
+</div>

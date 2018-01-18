@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171221202431) do
+ActiveRecord::Schema.define(version: 20180112163944) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -345,6 +345,83 @@ ActiveRecord::Schema.define(version: 20171221202431) do
     t.string  "definer_type"
     t.integer "creator_id"
     t.string  "slug"
+  end
+
+  create_table "zensus_activities", force: :cascade do |t|
+    t.integer  "event_id"
+    t.string   "property"
+    t.integer  "actable_id"
+    t.string   "actable_type"
+    t.text     "note"
+    t.string   "note_type"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.index ["actable_id", "actable_type"], name: "index_zensus_activities_on_actable_id_and_actable_type", using: :btree
+    t.index ["event_id"], name: "index_zensus_activities_on_event_id", using: :btree
+    t.index ["property"], name: "index_zensus_activities_on_property", using: :btree
+  end
+
+  create_table "zensus_agents", force: :cascade do |t|
+    t.string   "slug"
+    t.string   "type"
+    t.text     "address"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_zensus_agents_on_slug", unique: true, using: :btree
+    t.index ["type"], name: "index_zensus_agents_on_type", using: :btree
+  end
+
+  create_table "zensus_appellation_parts", force: :cascade do |t|
+    t.integer  "appellation_id"
+    t.integer  "position"
+    t.string   "body"
+    t.string   "type"
+    t.boolean  "preferred",      default: false, null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.index ["appellation_id"], name: "index_zensus_appellation_parts_on_appellation_id", using: :btree
+    t.index ["preferred"], name: "index_zensus_appellation_parts_on_preferred", using: :btree
+    t.index ["type"], name: "index_zensus_appellation_parts_on_type", using: :btree
+  end
+
+  create_table "zensus_appellations", force: :cascade do |t|
+    t.integer  "agent_id"
+    t.string   "language"
+    t.string   "period"
+    t.string   "trans"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["agent_id"], name: "index_zensus_appellations_on_agent_id", using: :btree
+  end
+
+  create_table "zensus_event_relations", force: :cascade do |t|
+    t.integer  "event_id"
+    t.string   "property"
+    t.integer  "related_event_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.index ["event_id"], name: "index_zensus_event_relations_on_event_id", using: :btree
+    t.index ["property"], name: "index_zensus_event_relations_on_property", using: :btree
+    t.index ["related_event_id"], name: "index_zensus_event_relations_on_related_event_id", using: :btree
+  end
+
+  create_table "zensus_events", force: :cascade do |t|
+    t.string   "type"
+    t.string   "beginn"
+    t.string   "end"
+    t.boolean  "circa",      default: false, null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.index ["type"], name: "index_zensus_events_on_type", using: :btree
+  end
+
+  create_table "zensus_links", force: :cascade do |t|
+    t.integer  "agent_id"
+    t.string   "uri"
+    t.string   "type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["agent_id"], name: "index_zensus_links_on_agent_id", using: :btree
   end
 
   add_foreign_key "audits", "users"

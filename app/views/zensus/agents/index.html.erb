@@ -1,1 +1,26 @@
-hello agents
+<% title "Agents" %>
+
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
+<% end %>
+
+<% content_for :container do %>
+  <div class="zensus">
+    <div class="row --spacious">
+      <div class="col-sm-12 col-md-8 main">
+        <div class="list-group">
+          <% @agents.each do |agent|%>
+            <%= link_to agent.default_name, zensus_agent_path(agent), class: 'text-strong list-group-item' %>
+          <% end %>
+        </div>
+      </div>
+      <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
+        <div class="list-group">
+          <%= link_to fa_icon('plus', text: 'New person'), new_zensus_person_path, class: 'list-group-item' %>
+          <%= link_to fa_icon('plus', text: 'New group'), new_zensus_group_path, class: 'list-group-item' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+

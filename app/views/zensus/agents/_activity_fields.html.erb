@@ -1,0 +1,12 @@
+<div class="nested-fields activity-fields well">
+  <div class="form-inline">
+    <%= f.input :property, collection: (Zensus::Activity.properties.collect {|p| [ p[:property].last, p[:id] ] }), label: false %>
+    <%= f.input :event_id, 
+      collection: Zensus::Event.all, 
+      value_method: :id, 
+      label_method: :title,
+      label: false %>
+    <%= link_to_remove_association fa_icon('trash'), f %>
+  </div>
+  <%= f.input :note %>
+</div>

@@ -4,17 +4,31 @@
 # t.text      :address
 
 class Zensus::Agent < ApplicationRecord
-  has_many :appellations
-  has_many :appellation_parts, through: :appellations
-  has_many :links
-  has_many :activities, as: :actables
+  extend FriendlyId
+  friendly_id :default_name, use: :slugged
+
+  has_many :appellations, dependent: :destroy
+  has_many :links, dependent: :destroy
+  has_many :activities, as: :actable, dependent: :destroy
   has_many :events, through: :activities
   has_many :places, through: :events
   has_many :notes, as: :issueable
 
+  accepts_nested_attributes_for :appellations, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :activities, reject_if: :all_blank, allow_destroy: true
+
+  def default_name
+    appellations.first.name
+  end
+
+  def should_generate_new_friendly_id?
+    appellations.any? {|a| a.changed?} || super
+  end
+
   def self.types
     %w[Person Group]
   end
+
 end
 
 

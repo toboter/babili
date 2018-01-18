@@ -21,8 +21,8 @@
       </div>
       <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
         <div class="list-group">
-          <%= link_to fa_icon('plus', text: 'Create concept'), [:new, :vocab, @scheme, :concept], class: 'list-group-item' %>
-          <%= link_to fa_icon('plus', text: 'Create collection'), [:new, :vocab, @scheme, :concept, type: 'Collection'], class: 'list-group-item' %>
+          <%= link_to fa_icon('plus', text: 'New concept'), [:new, :vocab, @scheme, :concept], class: 'list-group-item' %>
+          <%= link_to fa_icon('plus', text: 'New collection'), [:new, :vocab, @scheme, :concept, type: 'Collection'], class: 'list-group-item' %>
           <%= link_to fa_icon('angle-double-up', text: @scheme.abbr.humanize), vocab_scheme_path(@scheme), class: 'list-group-item' %>
         </div>
       <% end %>

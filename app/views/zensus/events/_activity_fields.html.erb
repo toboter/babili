@@ -1,0 +1,12 @@
+<div class="nested-fields activity-fields well --spacious">
+  <div class="form-inline">
+    <%= f.input :property, collection: Zensus::Activity.properties.map{|p| p[:property].first}, label: false %>
+    <%= f.input :actable_gid, 
+      collection: Zensus::Agent.all, 
+      value_method: :to_global_id, 
+      label_method: :default_name,
+      label: false %>
+    <%= link_to_remove_association fa_icon('trash'), f %>
+  </div>
+  <%= f.input :note %>
+</div>
