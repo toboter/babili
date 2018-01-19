@@ -1,4 +1,4 @@
-<% title "#{@activity.event.type} #{ @activity.event_to_actable }" %>
+<% title "#{@activity.description }" %>
 
 <% content_for :breadcrumbs do %>
   <%= content_tag :li, link_to('Agents', zensus_agents_path) %>
@@ -11,9 +11,9 @@
   <div class="zensus">
     <div class="row --spacious">
       <div class="col-sm-12 col-md-8 main">
-        <strong><%= @activity.event.title %></strong>
+        <strong><%= @activity.description %></strong>
         <ul>
-          <% @activity.event.activities.each do |activity| %>
+          <%( @activity.event.activities-[@activity]).each do |activity| %>
             <li>
               <%= activity.event_to_actable %> <%= link_to activity.actable.default_name, [:zensus, activity.actable] %><br>
             </li>

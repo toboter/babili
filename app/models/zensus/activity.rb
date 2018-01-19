@@ -1,5 +1,5 @@
 # t.integer    :event_id
-# t.string     :property
+# t.integer    :property_id
 # t.references :actable
 # t.text       :note
 # t.string     :note_type
@@ -53,11 +53,16 @@ class Zensus::Activity < ApplicationRecord
   end
 
   def event_to_actable
-    Zensus::Activity.properties.select {|p| p[:id] == property.to_i  }.first[:property].first
+    Zensus::Activity.properties.select {|p| p[:id] == property_id  }.first[:property].first
   end
 
   def actable_to_event
-    Zensus::Activity.properties.select {|p| p[:id] == property.to_i  }.first[:property].last
+    Zensus::Activity.properties.select {|p| p[:id] == property_id  }.first[:property].last
+  end
+
+  def description
+    "#{actable.default_name} #{actable_to_event} on #{event.default_date}"
+    #  #{event.type} #{[event.activities-[self]].flatten.map{|a| a.actable.default_name}.join(', ')}
   end
 
   def actable_gid

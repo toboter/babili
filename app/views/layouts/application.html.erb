@@ -118,5 +118,6 @@
       </div>
     </footer>
 
+    <%= yield(:modals) if content_for?(:modals) %>
   </body>
 </html>

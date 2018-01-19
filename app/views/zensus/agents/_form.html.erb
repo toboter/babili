@@ -12,7 +12,7 @@
     </div>
   </div>
 
-  <h4>Activities</h4>
+  <h4 class="subhead --spacious">Activity statements</h4>
   <div id="activities">
     <%= f.simple_fields_for :activities do |a| %>
       <%= render 'activity_fields', f: a %>
@@ -22,7 +22,15 @@
     </div>
   </div>
 
+  <h4 class="subhead --spacious">Other</h4>
   <%= f.input :address %>
-  <%= f.submit class: 'btn btn-primary' %>
-  <%= link_to 'Cancel', zensus_agents_path, class: "btn btn-default" %>
+
+  <div class="actions --spacious">
+    <%= f.submit class: 'btn btn-primary' %>
+    <%= link_to 'Cancel', zensus_agents_path, class: "btn btn-default" %>
+  </div>
+<% end %>
+
+<% content_for :modals do %>
+  <%= render 'zensus/events/new_modal' %>
 <% end %>

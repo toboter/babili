@@ -11,8 +11,7 @@ class CreateZensus < ActiveRecord::Migration[5.0]
 
     create_table :zensus_activities do |t|
       t.integer   :event_id
-      t.string    :property
-      #t.integer    :property_id
+      t.integer   :property_id
       t.integer   :actable_id
       t.string    :actable_type
       t.text      :note
@@ -20,7 +19,7 @@ class CreateZensus < ActiveRecord::Migration[5.0]
       t.timestamps
     end
     add_index :zensus_activities, :event_id
-    add_index :zensus_activities, :property
+    add_index :zensus_activities, :property_id
     add_index :zensus_activities, [:actable_id, :actable_type]
 
     create_table :zensus_appellation_parts do |t|
@@ -46,22 +45,21 @@ class CreateZensus < ActiveRecord::Migration[5.0]
 
     create_table :zensus_event_relations do |t|
       t.integer   :event_id
-      t.string    :property
+      t.integer   :property_id
       t.integer   :related_event_id
       t.timestamps
     end
     add_index :zensus_event_relations, :event_id
-    add_index :zensus_event_relations, :property
+    add_index :zensus_event_relations, :property_id
     add_index :zensus_event_relations, :related_event_id
 
     create_table :zensus_events do |t|
       t.string    :type
       t.string    :beginn
-      t.string    :end
-      #t.string    :ended
+      t.string    :ended
       t.boolean   :circa, null: false, default: false
-      #t.integer   :place_id
-      #t.integer   :period_id
+      t.integer   :place_id
+      t.integer   :period_id
       t.timestamps
     end
     add_index :zensus_events, :type

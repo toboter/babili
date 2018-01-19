@@ -1,15 +1,28 @@
 <%= simple_form_for [:zensus, :agent, @activity], as: :zensus_activity do |f| %>
-  <div class="form-inline">
-    <%= f.input :actable_type, as: :hidden %>
-    <%= f.input :actable_id, as: :hidden %>
-    <%= f.input :property, collection: (Zensus::Activity.properties.collect {|p| [ p[:property].last, p[:id] ] }), label: false %>
+  <div class="activity-form">
+    <%= content_tag :p, @activity.actable.default_name, class: 'text-strong' %>
+    <%= f.input :property_id, 
+      collection: (Zensus::Activity.properties.collect {|p| [ p[:property].last, p[:id] ] }), 
+      label: false,
+      input_html: {
+        class: 'zensus_activity_property'
+      } %>
     <%= f.input :event_id, 
       collection: Zensus::Event.all, 
       value_method: :id, 
-      label_method: :title,
-      label: false %>
+      label_method: :description,
+      label: "Event",
+      input_html: {
+        class: 'zensus_activity_event',
+        id: 'zensus_activity_event_id'
+      } %>
   </div>
   
   <%= f.submit class: 'btn btn-primary' %>
   <%= link_to 'Cancel', zensus_agent_activities_path(@agent), class: "btn btn-default" %>
+<% end %>
+
+
+<% content_for :modals do %>
+  <%= render 'zensus/events/new_modal' %>
 <% end %>

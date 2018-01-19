@@ -349,7 +349,7 @@ ActiveRecord::Schema.define(version: 20180112163944) do
 
   create_table "zensus_activities", force: :cascade do |t|
     t.integer  "event_id"
-    t.string   "property"
+    t.integer  "property_id"
     t.integer  "actable_id"
     t.string   "actable_type"
     t.text     "note"
@@ -358,7 +358,7 @@ ActiveRecord::Schema.define(version: 20180112163944) do
     t.datetime "updated_at",   null: false
     t.index ["actable_id", "actable_type"], name: "index_zensus_activities_on_actable_id_and_actable_type", using: :btree
     t.index ["event_id"], name: "index_zensus_activities_on_event_id", using: :btree
-    t.index ["property"], name: "index_zensus_activities_on_property", using: :btree
+    t.index ["property_id"], name: "index_zensus_activities_on_property_id", using: :btree
   end
 
   create_table "zensus_agents", force: :cascade do |t|
@@ -396,20 +396,22 @@ ActiveRecord::Schema.define(version: 20180112163944) do
 
   create_table "zensus_event_relations", force: :cascade do |t|
     t.integer  "event_id"
-    t.string   "property"
+    t.integer  "property_id"
     t.integer  "related_event_id"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.index ["event_id"], name: "index_zensus_event_relations_on_event_id", using: :btree
-    t.index ["property"], name: "index_zensus_event_relations_on_property", using: :btree
+    t.index ["property_id"], name: "index_zensus_event_relations_on_property_id", using: :btree
     t.index ["related_event_id"], name: "index_zensus_event_relations_on_related_event_id", using: :btree
   end
 
   create_table "zensus_events", force: :cascade do |t|
     t.string   "type"
     t.string   "beginn"
-    t.string   "end"
+    t.string   "ended"
     t.boolean  "circa",      default: false, null: false
+    t.integer  "place_id"
+    t.integer  "period_id"
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
     t.index ["type"], name: "index_zensus_events_on_type", using: :btree

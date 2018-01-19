@@ -52,8 +52,10 @@ class Zensus::ActivitiesController < ApplicationController
     params.require(:zensus_activity).permit(
       :actable_id,
       :actable_type,
-      :property,
+      :property_id,
       :event_id,
+      :note,
+      :note_type,
       event_attributes: [
         :id,
         :type,

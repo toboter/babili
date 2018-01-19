@@ -12,7 +12,7 @@
       <div class="col-sm-12 col-md-8 main">
         <div class="list-group">
           <% @activities.each do |activity|%>
-            <%= link_to activity.inspect, zensus_agent_activity_path(@agent, activity), class: 'text-strong list-group-item' %>
+            <%= link_to activity.description, zensus_agent_activity_path(@agent, activity), class: 'text-strong list-group-item' %>
           <% end %>
         </div>
       </div>

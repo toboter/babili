@@ -1,1 +1,25 @@
-<%= @events.inspect %>
+<% title "Events" %>
+
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
+<% end %>
+
+<% content_for :container do %>
+  <div class="zensus">
+    <div class="row --spacious">
+      <div class="col-sm-12 col-md-8 main">
+        <div class="list-group">
+          <% @events.each do |event|%>
+            <%= link_to event.description, zensus_event_path(event), class: 'text-strong list-group-item' %>
+          <% end %>
+        </div>
+      </div>
+      <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
+        <div class="list-group">
+          <%= link_to fa_icon('plus', text: 'New event'), new_zensus_event_path, class: 'list-group-item' %>
+          <%= link_to fa_icon('angle-double-right', text: 'Agents'), zensus_agents_path, class: 'list-group-item' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

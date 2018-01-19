@@ -6,7 +6,7 @@
 
 class Zensus::AppellationPart < ApplicationRecord
   self.inheritance_column = :_type_disabled
-  belongs_to :appellation
+  belongs_to :appellation, touch: true
   acts_as_list scope: :appellation
 
   after_create :set_position

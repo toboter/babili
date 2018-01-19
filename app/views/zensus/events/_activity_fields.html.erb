@@ -1,12 +1,23 @@
-<div class="nested-fields activity-fields well --spacious">
-  <div class="form-inline">
-    <%= f.input :property, collection: Zensus::Activity.properties.map{|p| p[:property].first}, label: false %>
+<div class="nested-fields activity-fields well">
+  <div class="activity-form">
+    <%= content_tag :p do %>
+      <%= content_tag :span, 'Event', class: 'text-strong' %>
+      <%= content_tag :span, link_to_remove_association(fa_icon('trash'), f), class: 'pull-right' %>
+    <% end %>
+    <%= f.input :property_id, 
+      collection: (Zensus::Activity.properties.collect {|p| [ p[:property].first, p[:id] ] }), 
+      label: false,
+      input_html: {
+        class: 'zensus_activity_property'
+      } %>
     <%= f.input :actable_gid, 
       collection: Zensus::Agent.all, 
       value_method: :to_global_id, 
       label_method: :default_name,
-      label: false %>
-    <%= link_to_remove_association fa_icon('trash'), f %>
+      label: false,
+      input_html: {
+        class: 'zensus_activity_actable'
+      } %>
+    <%= f.input :note %>
   </div>
-  <%= f.input :note %>
 </div>

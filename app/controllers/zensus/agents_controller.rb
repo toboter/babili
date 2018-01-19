@@ -71,8 +71,10 @@ class Zensus::AgentsController < ApplicationController
       ],
       activities_attributes: [
         :id,
-        :property,
+        :property_id,
         :event_id,
+        :note,
+        :note_type,
         :_destroy
       ]
     )

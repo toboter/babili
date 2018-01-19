@@ -9,28 +9,7 @@
   <div class="zensus">
     <div class="row --spacious">
       <div class="col-sm-12 col-md-8 main">
-        <%= @agent.inspect %>
-        <ul>
-          <% @agent.appellations.each do |appellation| %>
-            <li>
-              <%= appellation.name %>
-              <ul>
-                <% appellation.appellation_parts.each do |part| %>
-                  <li><%= part.inspect %></li>
-                <% end %>
-              </ul>
-            </li>
-          <% end %>
-        </ul>
-
-        <ul>
-          <% @agent.events.each do |event| %>
-            <li>
-              <%= event.beginn %> <%= event.inspect %><br>
-              <%= event.activities.inspect %>
-            </li>
-          <% end %>
-        </ul>
+        <%= render partial: 'zensus/agents/agent', locals: {agent: @agent}, as: :agent %>
       </div>
       <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
         <div class="list-group">

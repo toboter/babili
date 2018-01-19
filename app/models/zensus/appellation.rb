@@ -4,7 +4,7 @@
 # t.string    :trans
 
 class Zensus::Appellation < ApplicationRecord
-  belongs_to :agent
+  belongs_to :agent, touch: true
   has_many :appellation_parts, -> { order(position: :asc) }
 
   accepts_nested_attributes_for :appellation_parts, reject_if: :all_blank, allow_destroy: true

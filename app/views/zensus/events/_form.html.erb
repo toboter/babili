@@ -1,10 +1,10 @@
+<%= simple_form_for [:zensus, @event], as: :zensus_event do |f| %>
   <%= f.input :type, collection: Zensus::Event.types, label: false %>
   <%= f.input :beginn, label: false, placeholder: 'Beginn' %>
-  <%= f.input :end, label: false, placeholder: 'End' %>
+  <%= f.input :ended, label: false, placeholder: 'End' %>
   <%= f.input :circa %>
 
-  <div class="activities">
-    <% f.object.activities.build(actable_gid: @agent.to_global_id) if f.object.new_record? %>
+  <div id="activities">
     <%= f.simple_fields_for :activities do |a| %>
       <%= render 'activity_fields', f: a %>
     <% end %>
@@ -12,3 +12,7 @@
       <%= link_to_add_association fa_icon('plus', text: 'Activity'), f, :activities, class: 'btn btn-default btn-sm' %>
     </div>
   </div>
+
+  <%= f.submit class: 'btn btn-primary' %>
+  <%= link_to 'Cancel', zensus_events_path, class: "btn btn-default" %>
+<% end %>

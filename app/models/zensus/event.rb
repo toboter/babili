@@ -9,8 +9,8 @@ class Zensus::Event < ApplicationRecord
   self.inheritance_column = :_type_disabled
   
   has_many    :notes, as: :issueable
-  has_many    :event_relations
-  has_many    :activities
+  has_many    :event_relations, dependent: :destroy
+  has_many    :activities, dependent: :destroy
   has_many    :agents, through: :activities, source_type: 'Zensus::Agent', source: :actable
   has_many    :notes, as: :issueable
   belongs_to  :place, class_name: 'Vocab::Concept'
@@ -22,8 +22,14 @@ class Zensus::Event < ApplicationRecord
     ['Activity', 'Acquisition', 'Move', 'Transfer of Custody', 'Beginning of Existence', 'Formation', 'Birth', 'Transformation', 'Joining', 'End of Existence', 'Dissolution', 'Death', 'Leaving']
   end
 
-  def title
-    "#{type}: #{beginn}"
+  def default_date
+    "#{'~ ' if circa?}#{beginn}#{' - '+ended if ended?}"
+  end
+
+  def description(gid=nil)
+    actor = GlobalID::Locator.locate gid
+    #raise actor.activities.where(event_id: id).inspect #.where(actable_id: agent.id, actable_type: agent.class.base_class)
+    activities.any? ? activities.map{|a| a.description }.join(' and ') : "Birth #{default_date}"
   end
 end
 

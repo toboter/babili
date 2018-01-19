@@ -22,7 +22,7 @@ class Zensus::Agent < ApplicationRecord
   end
 
   def should_generate_new_friendly_id?
-    appellations.any? {|a| a.changed?} || super
+    appellations.any? { |a| a.changed? } || super
   end
 
   def self.types
