@@ -6,7 +6,9 @@ class Zensus::Link < ApplicationRecord
   self.inheritance_column = :_type_disabled
   belongs_to :agent
 
+  validates :uri, :type, presence: true
+
   def self.types
-    %w[NormdateiID ImageURL URIRepresentation]
+    %w[DataRepresentation PublicationOn]
   end
 end

@@ -17,9 +17,10 @@ Rails.application.routes.draw do
         resources :people, controller: 'agents', type: 'Zensus::Person'
         resources :groups, controller: 'agents', type: 'Zensus::Group'
       end
+    end
+    resources :events do
       resources :activities
     end
-    resources :events
   end
 
   get '/search', to: 'search#index'

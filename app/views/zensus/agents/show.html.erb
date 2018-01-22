@@ -9,14 +9,64 @@
   <div class="zensus">
     <div class="row --spacious">
       <div class="col-sm-12 col-md-8 main">
-        <%= render partial: 'zensus/agents/agent', locals: {agent: @agent}, as: :agent %>
+        <%= content_tag :div, class: "agent", id: "agent-#{@agent.id}" do %>
+          <%= link_to fa_icon("trash", text: 'Remove'), [:zensus, @agent], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default btn-sm text-strong text-danger pull-right' if can?(:destroy, @agent) %>
+          <%= link_to fa_icon("edit", text: 'Edit'), [:edit, :zensus, @agent], class: 'btn btn-default btn-sm text-strong pull-right', style: 'margin-right:10px;' if can?(:update, @agent) %>
+          <%= content_tag :h2, link_to(@agent.default_name, [:zensus, @agent]), class: 'agent-title h-condensed' %>
+
+          <% if @agent.type == 'Zensus::Person' %>
+            <h4 class="subhead --spacious">Family</h4>
+            <ul class="list-unstyled">
+              <%= content_tag :li, ('Parents: ' + @agent.parents.map{ |g| link_to(g.default_name, [:zensus, g]) }.join(', ')).html_safe if @agent.parents.present? %>
+              <%= content_tag :li, ('Children: ' + @agent.children.map{ |g| link_to(g.default_name, [:zensus, g]) }.join(', ')).html_safe if @agent.children.present? %>
+              <%= content_tag :li, ('Siblings: ' + @agent.siblings.map{ |g| link_to(g.default_name, [:zensus, g]) }.join(', ')).html_safe if @agent.siblings.present? %>
+            </ul>
+            <h4 class="subhead --spacious">Affiliations</h4>
+            <ul class="list-unstyled">
+              <% @agent.groups.each do |group| %>
+                <%= content_tag :li, link_to(group.default_name, [:zensus, group]) %>
+              <% end if @agent.groups %>
+            </ul>
+          <% elsif @agent.type == 'Zensus::Group' %>
+            <h4 class="subhead --spacious">Members</h4>
+            <ul class="list-unstyled">
+              <% @agent.members.each do |member| %>
+                <%= content_tag :li, link_to(member.default_name, [:zensus, member]) %>
+              <% end if @agent.members %>
+            </ul>
+          <% end %>
+
+          <h4 class="subhead --spacious">Appellations</h4>
+                <ul class="list-unstyled">
+                  <% @agent.appellations.each do |appellation| %>
+                    <li>
+                      <%= appellation.name(prefix: true, suffix: true, preferred: false) %>
+                    </li>
+                  <% end %>
+                </ul>
+          <h4 class="subhead --spacious">Activities</h4>
+                <ul>
+                  <% @agent.activities.each do |activity| %>
+                    <li>
+                      <%= link_to activity.description, zensus_event_activity_path(activity.event, activity) %>
+                    </li>
+                  <% end %>
+                </ul>
+
+          <h4 class="subhead --spacious">Other representations</h4>
+                <ul>
+                  <% @agent.links.each do |link| %>
+                    <li>
+                      <%= link_to(link.uri, link.uri, target: :blank) %>
+                    </li>
+                  <% end %>
+                </ul>
+        <% end %>
       </div>
       <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
         <div class="list-group">
-          <%= link_to fa_icon('edit', text: 'Edit'), edit_zensus_agent_path(@agent), class: 'list-group-item' %>
-          <%= link_to fa_icon('trash', text: 'Delete'), zensus_agent_path(@agent), method: :delete, data: { confirm: 'Are you sure?' }, class: 'list-group-item' %>
-          <%= link_to fa_icon('angle-double-right', text: 'Activities'), zensus_agent_activities_path(@agent), class: 'list-group-item' %>
           <%= link_to fa_icon('angle-double-up', text: 'All agents'), zensus_agents_path, class: 'list-group-item' %>
+          <%= link_to fa_icon('angle-double-up', text: 'All events'), zensus_events_path, class: 'list-group-item' %>
         </div>
       <% end %>
     </div>

@@ -36,7 +36,8 @@ $(document).on('turbolinks:load', function(){
   
         $(".event-modal").modal();
         $("#zensus_event_type").val(input);
-      }
+      },
+      placeholder: 'Click to select event, type to add...'
     });
 
     $(addedItem).find('.zensus_activity_actable').selectize({
@@ -44,7 +45,8 @@ $(document).on('turbolinks:load', function(){
     });
 
     $(addedItem).find('.zensus_activity_property').selectize({
-      sortField: 'text'
+      sortField: 'text',
+      placeholder: 'Click to select property...'
     });
   });
 
@@ -55,7 +57,8 @@ $(document).on('turbolinks:load', function(){
 
       $(".event-modal").modal();
       $("#zensus_event_type").val(input);
-    }
+    },
+    placeholder: 'Click to select event, type to add...'
   });
 
   $('.zensus_activity_actable').selectize({
@@ -63,7 +66,8 @@ $(document).on('turbolinks:load', function(){
   });
 
   $('.zensus_activity_property').selectize({
-    sortField: 'text'
+    sortField: 'text',
+    placeholder: 'Click to select property...'
   });
 
 });

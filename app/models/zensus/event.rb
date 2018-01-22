@@ -10,6 +10,9 @@ class Zensus::Event < ApplicationRecord
   
   has_many    :notes, as: :issueable
   has_many    :event_relations, dependent: :destroy
+  has_many    :related_events, through: :event_relations
+  has_many    :inverse_event_relations, dependent: :destroy, class_name: 'Zensus::EventRelation', foreign_key: :related_event_id
+  has_many    :inverse_related_events, through: :inverse_event_relations, source: :event
   has_many    :activities, dependent: :destroy
   has_many    :agents, through: :activities, source_type: 'Zensus::Agent', source: :actable
   has_many    :notes, as: :issueable
@@ -17,6 +20,9 @@ class Zensus::Event < ApplicationRecord
   belongs_to  :period, class_name: 'Vocab::Concept'
 
   accepts_nested_attributes_for :activities, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :event_relations, reject_if: :all_blank, allow_destroy: true
+
+  validates :type, :beginn, presence: true
 
   def self.types
     ['Activity', 'Acquisition', 'Move', 'Transfer of Custody', 'Beginning of Existence', 'Formation', 'Birth', 'Transformation', 'Joining', 'End of Existence', 'Dissolution', 'Death', 'Leaving']
@@ -29,8 +35,9 @@ class Zensus::Event < ApplicationRecord
   def description(gid=nil)
     actor = GlobalID::Locator.locate gid
     #raise actor.activities.where(event_id: id).inspect #.where(actable_id: agent.id, actable_type: agent.class.base_class)
-    activities.any? ? activities.map{|a| a.description }.join(' and ') : "Birth #{default_date}"
+    "#{type} #{'on ' + default_date} #{'('+activities.map{|a| a.description }.join(', ')+')' if activities.any?}"
   end
+  
 end
 
 # Entity

@@ -26,9 +26,9 @@ class Zensus::Activity < ApplicationRecord
       {id: 13, event_scopes: ['Transfer of Custody'], property: ['custody surrendered by', 'surrendered custody through'], actable_scopes: ['Zensus::Actor']},
       {id: 14, event_scopes: ['Transfer of Custody'], property: ['custody received by', 'received custody through'], actable_scopes: ['Zensus::Actor']},
       {id: 15, event_scopes: ['Transfer of Custody'], property: ['transferred custody of', 'custody transferred through'], actable_scopes: ['Aggregation']},
-      {id: 16, event_scopes: ['Joining'], property: ['joined', 'was joined by'], actable_scopes: ['Zensus::Actor']},
+      {id: 16, event_scopes: ['Joining'], property: ['joined by', 'was joined by'], actable_scopes: ['Zensus::Actor']},
       {id: 17, event_scopes: ['Joining'], property: ['joined with', 'gained member by'], actable_scopes: ['Zensus::Group']},
-      {id: 18, event_scopes: ['Leaving'], property: ['separated', 'left by'], actable_scopes: ['Zensus::Actor']},
+      {id: 18, event_scopes: ['Leaving'], property: ['left by', 'separated'], actable_scopes: ['Zensus::Actor']},
       {id: 19, event_scopes: ['Leaving'], property: ['separated from', 'lost member by'], actable_scopes: ['Zensus::Group']},
       {id: 20, event_scopes: ['Beginning of Existence'], property: ['brought into existence', 'was brought into existence by'], actable_scopes: ['Zensus::Actor', 'Aggregation']},
       {id: 21, event_scopes: ['Formation'], property: ['has formed', 'was formed by'], actable_scopes: ['Zensus::Group']},
@@ -60,8 +60,12 @@ class Zensus::Activity < ApplicationRecord
     Zensus::Activity.properties.select {|p| p[:id] == property_id  }.first[:property].last
   end
 
+  def title
+    "#{actable_to_event} (#{event.type}) on #{event.default_date}"
+  end
+
   def description
-    "#{actable.default_name} #{actable_to_event} on #{event.default_date}"
+    "#{actable.default_name} #{actable_to_event} #{[event.activities-[self]].flatten.map{|a| [a.event_to_actable, a.actable.default_name].join(' ') }.join(', ')} on #{event.default_date}"
     #  #{event.type} #{[event.activities-[self]].flatten.map{|a| a.actable.default_name}.join(', ')}
   end
 

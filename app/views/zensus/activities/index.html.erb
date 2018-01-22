@@ -1,8 +1,8 @@
-<% title "#{@agent.default_name} activities" %>
+<% title "#{@event.description} activities" %>
 
 <% content_for :breadcrumbs do %>
-  <%= content_tag :li, link_to('Agents', zensus_agents_path) %>
-  <%= content_tag :li, link_to(@agent.default_name, zensus_agent_path(@agent)) %>
+  <%= content_tag :li, link_to('Events', zensus_events_path) %>
+  <%= content_tag :li, link_to(@event.description, zensus_event_path(@event)) %>
   <%= content_tag :li, 'Activities', class: 'active' %>
 <% end %>
 
@@ -12,14 +12,18 @@
       <div class="col-sm-12 col-md-8 main">
         <div class="list-group">
           <% @activities.each do |activity|%>
-            <%= link_to activity.description, zensus_agent_activity_path(@agent, activity), class: 'text-strong list-group-item' %>
+            <%= link_to zensus_event_activity_path(@event, activity), class: 'list-group-item' do %>
+              <%= content_tag :span, activity.actable.default_name, class: 'text-strong' %>
+              <%= content_tag :span, activity.title, class: 'text-strong' %>
+              <%= content_tag :p, activity.description, class: 'text-small; text-muted' %>
+            <% end %>
           <% end %>
         </div>
       </div>
       <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
         <div class="list-group">
-          <%= link_to fa_icon('plus', text: 'New activity'), new_zensus_agent_activity_path(@agent), class: 'list-group-item' %>
-          <%= link_to fa_icon('angle-double-up', text: @agent.default_name), zensus_agent_path(@agent), class: 'list-group-item' %>
+          <%= link_to fa_icon('plus', text: 'New activity'), new_zensus_event_activity_path(@event), class: 'list-group-item' if can?(:create, Zensus::Activity) %>
+          <%= link_to fa_icon('angle-double-up', text: @event.description), zensus_event_path(@event), class: 'list-group-item' %>
         </div>
       <% end %>
     </div>

@@ -1,5 +1,5 @@
 class Zensus::AgentsController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource find_by: :slug
 
   def index
     @agents = @agents.where(type: params[:type]) if params[:type]
@@ -76,6 +76,11 @@ class Zensus::AgentsController < ApplicationController
         :note,
         :note_type,
         :_destroy
+      ],
+      links_attributes: [
+        :id,
+        :uri,
+        :type
       ]
     )
   end

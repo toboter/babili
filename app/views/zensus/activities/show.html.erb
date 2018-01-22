@@ -1,9 +1,9 @@
-<% title "#{@activity.description }" %>
+<% title "#{@activity.actable.default_name} #{@activity.title }" %>
 
 <% content_for :breadcrumbs do %>
-  <%= content_tag :li, link_to('Agents', zensus_agents_path) %>
-  <%= content_tag :li, link_to(@agent.default_name, zensus_agent_path(@agent)) %>
-  <%= content_tag :li, link_to('Activities', zensus_agent_activities_path(@agent)) %>
+  <%= content_tag :li, link_to('Events', zensus_events_path) %>
+  <%= content_tag :li, link_to(@event.description, zensus_event_path(@event)) %>
+  <%= content_tag :li, link_to('Activities', zensus_event_activities_path(@event)) %>
   <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
 
@@ -11,20 +11,21 @@
   <div class="zensus">
     <div class="row --spacious">
       <div class="col-sm-12 col-md-8 main">
-        <strong><%= @activity.description %></strong>
+        <strong><%= @activity.actable.default_name %> <%= @activity.title %></strong>
         <ul>
-          <%( @activity.event.activities-[@activity]).each do |activity| %>
+          <% @activity.event.activities.each do |activity| %>
             <li>
               <%= activity.event_to_actable %> <%= link_to activity.actable.default_name, [:zensus, activity.actable] %><br>
             </li>
           <% end %>
         </ul>
+        <%= content_tag :p, @activity.note %>
       </div>
       <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
         <div class="list-group">
-          <%= link_to fa_icon('edit', text: 'Edit'), edit_zensus_agent_activity_path(@agent, @activity), class: 'list-group-item' %>
-          <%= link_to fa_icon('trash', text: 'Delete'), zensus_agent_activity_path(@agent, @activity), method: :delete, data: { confirm: 'Are you sure?' }, class: 'list-group-item' %>
-          <%= link_to fa_icon('angle-double-up', text: 'Activities'), zensus_agent_activities_path(@agent), class: 'list-group-item' %>
+          <%= link_to fa_icon('edit', text: 'Edit'), edit_zensus_event_activity_path(@event, @activity), class: 'list-group-item' if can?(:update, @activity) %>
+          <%= link_to fa_icon('trash', text: 'Delete'), zensus_event_activity_path(@event, @activity), method: :delete, data: { confirm: 'Are you sure?' }, class: 'list-group-item' if can?(:destroy, @activity) %>
+          <%= link_to fa_icon('angle-double-up', text: 'Activities'), zensus_event_activities_path(@event), class: 'list-group-item' %>
         </div>
       <% end %>
     </div>

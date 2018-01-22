@@ -1,0 +1,12 @@
+<div class="nested-fields event-relation-fields well">
+  <%= f.input :property_id, 
+    collection: (Zensus::EventRelation.properties.collect {|p| [ p[:property].first, p[:id] ] }), 
+    label: false %>
+  <%= f.input :related_event_id, 
+    collection: Zensus::Event.all-[@event], 
+    label_method: :description,
+    value_method: :id,
+    label: false %>
+
+  <%= link_to_remove_association fa_icon('trash'), f %>
+</div>

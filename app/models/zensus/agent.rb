@@ -16,6 +16,7 @@ class Zensus::Agent < ApplicationRecord
 
   accepts_nested_attributes_for :appellations, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :activities, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :links, reject_if: :all_blank, allow_destroy: true
 
   def default_name
     appellations.first.name

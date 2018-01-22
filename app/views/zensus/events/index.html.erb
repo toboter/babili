@@ -10,13 +10,16 @@
       <div class="col-sm-12 col-md-8 main">
         <div class="list-group">
           <% @events.each do |event|%>
-            <%= link_to event.description, zensus_event_path(event), class: 'text-strong list-group-item' %>
+            <%= link_to zensus_event_path(event), class: 'list-group-item' do %>
+              <%= content_tag :span, event.description, class: 'text-strong' %>
+              <%= content_tag :p, "#{event.activities.map{|a| a.description }.join(', ')}", class: 'text-small; text-muted' if event.activities.any? %>
+            <% end %>
           <% end %>
         </div>
       </div>
       <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
         <div class="list-group">
-          <%= link_to fa_icon('plus', text: 'New event'), new_zensus_event_path, class: 'list-group-item' %>
+          <%= link_to fa_icon('plus', text: 'New event'), new_zensus_event_path, class: 'list-group-item' if can?(:create, Zensus::Event) %>
           <%= link_to fa_icon('angle-double-right', text: 'Agents'), zensus_agents_path, class: 'list-group-item' %>
         </div>
       <% end %>

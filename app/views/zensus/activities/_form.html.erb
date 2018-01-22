@@ -1,25 +1,33 @@
-<%= simple_form_for [:zensus, :agent, @activity], as: :zensus_activity do |f| %>
-  <div class="activity-form">
-    <%= content_tag :p, @activity.actable.default_name, class: 'text-strong' %>
-    <%= f.input :property_id, 
-      collection: (Zensus::Activity.properties.collect {|p| [ p[:property].last, p[:id] ] }), 
-      label: false,
-      input_html: {
-        class: 'zensus_activity_property'
-      } %>
-    <%= f.input :event_id, 
-      collection: Zensus::Event.all, 
-      value_method: :id, 
-      label_method: :description,
-      label: "Event",
-      input_html: {
-        class: 'zensus_activity_event',
-        id: 'zensus_activity_event_id'
-      } %>
+<% content_for :container do %>
+  <div class="row --spacious zensus">
+    <div class="col-sm-12 col-md-8 main">
+      <%= simple_form_for [:zensus, @event, @activity], as: :zensus_activity do |f| %>
+        <div class="activity-form">
+          <%= content_tag :p, @activity.actable.default_name, class: 'text-strong' %>
+          <%= f.input :property_id, 
+            collection: (Zensus::Activity.properties.collect {|p| [ p[:property].last, p[:id] ] }), 
+            label: false,
+            input_html: {
+              class: 'zensus_activity_property'
+            } %>
+          <%= f.input :event_id, 
+            collection: Zensus::Event.all, 
+            value_method: :id, 
+            label_method: :description,
+            label: "Event",
+            input_html: {
+              class: 'zensus_activity_event',
+              id: 'zensus_activity_event_id'
+            },
+            hint: @activity.new_record? ? '' : ('or ' + link_to('edit event', zensus_event_path(@activity.event))).html_safe %>
+          <%= f.input :note %>
+        </div>
+        
+        <%= f.submit class: 'btn btn-primary' %>
+        <%= link_to 'Cancel', zensus_event_activities_path(@event), class: "btn btn-default" %>
+      <% end %>
+    </div>
   </div>
-  
-  <%= f.submit class: 'btn btn-primary' %>
-  <%= link_to 'Cancel', zensus_agent_activities_path(@agent), class: "btn btn-default" %>
 <% end %>
 
 

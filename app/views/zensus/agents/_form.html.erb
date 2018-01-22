@@ -1,36 +1,62 @@
-<%= simple_form_for [:zensus, @agent], as: :zensus_agent do |f| %>
-  <%= f.error_notification %>
-  <%= f.input :type, as: :hidden %>
+<% content_for :container do %>
+  <div class="row --spacious zensus">
+    <div class="col-sm-12 col-md-8 main">
+      <%= simple_form_for [:zensus, @agent], as: :zensus_agent do |f| %>
+        <%= f.error_notification %>
+        <%= f.input :type, as: :hidden %>
 
-  <h4>Appellations</h4>
-  <div id="appellations">
-    <%= f.simple_fields_for :appellations do |a| %>
-      <%= render 'appellation_fields', f: a %>
-    <% end %>
-    <div class="links">
-      <%= link_to_add_association fa_icon('plus', text: 'Appellation'), f, :appellations, class: 'btn btn-default btn-sm' %>
+        <h4>Appellations</h4>
+        <div id="appellations">
+          <%= f.simple_fields_for :appellations do |a| %>
+            <%= render 'appellation_fields', f: a %>
+          <% end %>
+          <div class="links">
+            <%= link_to_add_association fa_icon('plus', text: 'Appellation'), f, :appellations, class: 'btn btn-default btn-sm' %>
+          </div>
+        </div>
+
+        <h4 class="subhead --spacious">Activity statements</h4>
+        <div id="activities">
+          <%= f.simple_fields_for :activities do |a| %>
+            <%= render 'activity_fields', f: a %>
+          <% end %>
+          <div class="links">
+            <%= link_to_add_association fa_icon('plus', text: 'Activity'), f, :activities, class: 'btn btn-default btn-sm' %>
+          </div>
+        </div>
+
+        <h4 class="subhead --spacious">Other</h4>
+        <%= f.input :address %>
+
+        <div id="links --spacious">
+          <strong>Uri's on the web</strong>
+          <%= f.simple_fields_for :links do |a| %>
+            <%= render 'link_fields', f: a %>
+          <% end %>
+          <div class="links">
+            <%= link_to_add_association fa_icon('plus', text: 'URI'), f, :links, class: 'btn btn-default btn-sm' %>
+          </div>
+        </div>
+
+        <div id="links --spacious">
+          <strong>Media objects</strong>
+          <%= f.simple_fields_for :links do |a| %>
+            <%= render 'link_fields', f: a %>
+          <% end %>
+          <div class="links">
+            <%= link_to_add_association fa_icon('plus', text: 'Media object'), f, :links, class: 'btn btn-default btn-sm' %>
+          </div>
+        </div>
+
+        <div class="actions --spacious">
+          <%= f.submit class: 'btn btn-primary' %>
+          <%= link_to 'Cancel', @agent.new_record? ? zensus_agents_path : zensus_agent_path(@agent), class: "btn btn-default" %>
+        </div>
+      <% end %>
+
+      <% content_for :modals do %>
+        <%= render 'zensus/events/new_modal' %>
+      <% end %>
     </div>
   </div>
-
-  <h4 class="subhead --spacious">Activity statements</h4>
-  <div id="activities">
-    <%= f.simple_fields_for :activities do |a| %>
-      <%= render 'activity_fields', f: a %>
-    <% end %>
-    <div class="links">
-      <%= link_to_add_association fa_icon('plus', text: 'Activity'), f, :activities, class: 'btn btn-default btn-sm' %>
-    </div>
-  </div>
-
-  <h4 class="subhead --spacious">Other</h4>
-  <%= f.input :address %>
-
-  <div class="actions --spacious">
-    <%= f.submit class: 'btn btn-primary' %>
-    <%= link_to 'Cancel', zensus_agents_path, class: "btn btn-default" %>
-  </div>
-<% end %>
-
-<% content_for :modals do %>
-  <%= render 'zensus/events/new_modal' %>
 <% end %>

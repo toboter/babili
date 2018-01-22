@@ -2,6 +2,7 @@ class Zensus::EventsController < ApplicationController
   load_and_authorize_resource
 
   def index
+    @events = @events.order(beginn: :desc)
     respond_to do |format|
       format.html
       format.json  { render json: @events, include: :activities, methods: [:description, :default_date] }
@@ -68,6 +69,12 @@ class Zensus::EventsController < ApplicationController
         :property_id,
         :note,
         :note_type,
+        :_destroy
+      ],
+      event_relations_attributes: [
+        :id,
+        :property_id,
+        :related_event_id,
         :_destroy
       ]
     )

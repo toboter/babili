@@ -9,19 +9,21 @@
     <div class="row --spacious">
       <div class="col-sm-12 col-md-8 main">
         <div class="list-group">
-          <% @agents.each do |agent|%>
-            <%= link_to agent.default_name, zensus_agent_path(agent), class: 'text-strong list-group-item' %>
+          <% @agents.sort_by(&:default_name).each do |agent|%>
+            <%= link_to zensus_agent_path(agent), class: 'list-group-item' do %>
+              <%= content_tag :span, fa_icon(agent.type == 'Zensus::Person' ? 'user' : 'group'), style: 'float: left; width: 30px;' %>
+              <%= content_tag :span, agent.default_name, class: 'text-strong', style: '' %>
+            <% end %>
           <% end %>
         </div>
       </div>
       <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
         <div class="list-group">
-          <%= link_to fa_icon('plus', text: 'New person'), new_zensus_person_path, class: 'list-group-item' %>
-          <%= link_to fa_icon('plus', text: 'New group'), new_zensus_group_path, class: 'list-group-item' %>
+          <%= link_to fa_icon('plus', text: 'New person'), new_zensus_person_path, class: 'list-group-item' if can?(:create, Zensus::Agent) %>
+          <%= link_to fa_icon('plus', text: 'New group'), new_zensus_group_path, class: 'list-group-item' if can?(:create, Zensus::Agent) %>
           <%= link_to fa_icon('angle-double-right', text: 'Events'), zensus_events_path, class: 'list-group-item' %>
         </div>
       <% end %>
     </div>
   </div>
 <% end %>
-

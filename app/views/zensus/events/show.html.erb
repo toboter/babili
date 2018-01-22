@@ -13,15 +13,34 @@
         <ul>
           <% @event.activities.each do |activity| %>
             <li>
-              <%= activity.event_to_actable %> <%= link_to activity.actable.default_name, [:zensus, activity.actable] %><br>
+              <%= link_to activity.event_to_actable, zensus_event_activity_path(@event, activity) %> 
+              <%= link_to activity.actable.default_name, [:zensus, activity.actable] %>
+              <%= content_tag :span, activity.note, class: 'text-muted text-small' if activity.note %>
             </li>
           <% end %>
+        </ul>
+
+        <h4 class="subhead --spacious">Relations</h4>
+        <ul class="list-unstyled">
+        <% @event.inverse_event_relations.each do |ievent| %>
+          <%= content_tag :li do %>
+            <%= content_tag :strong, ievent.title %> 
+            <%= link_to("#{ievent.event.description}".html_safe, [:zensus, ievent.event]) %>
+          <% end %>
+        <% end %>
+        <% @event.event_relations.each do |event| %>
+          <%= content_tag :li do %>
+            <%= content_tag :strong, event.inverse_title %> 
+            <%= link_to(event.related_event.description, [:zensus, event.related_event]) %>
+          <% end %>
+        <% end %>
         </ul>
       </div>
       <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
         <div class="list-group">
-          <%= link_to fa_icon('edit', text: 'Edit'), edit_zensus_event_path(@event), class: 'list-group-item' %>
-          <%= link_to fa_icon('trash', text: 'Delete'), zensus_event_path(@event), method: :delete, data: { confirm: 'Are you sure?' }, class: 'list-group-item' %>
+          <%= link_to fa_icon('edit', text: 'Edit'), edit_zensus_event_path(@event), class: 'list-group-item' if can?(:update, @event) %>
+          <%= link_to fa_icon('trash', text: 'Delete'), zensus_event_path(@event), method: :delete, data: { confirm: 'Are you sure?' }, class: 'list-group-item' if can?(:destroy, @event) %>
+          <%= link_to fa_icon('angle-double-right', text: 'Activities'), zensus_event_activities_path(@event), class: 'list-group-item' %>
         </div>
       <% end %>
     </div>

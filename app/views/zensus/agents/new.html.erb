@@ -1,3 +1,8 @@
 <% title 'New agent' %>
 
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, link_to('Agents', zensus_agents_path) %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
+<% end %>
+
 <%= render 'form', agent: @agent %>

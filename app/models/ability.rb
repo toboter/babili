@@ -67,5 +67,6 @@ class Ability
       p.user == user
     end
 
+    cannot :manage, [Zensus::Agent, Zensus::Event, Zensus::Activity] unless user
   end
 end
