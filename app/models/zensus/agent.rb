@@ -4,6 +4,7 @@
 # t.text      :address
 
 class Zensus::Agent < ApplicationRecord
+  searchkick inheritance: true
   extend FriendlyId
   friendly_id :default_name, use: :slugged
 
@@ -30,8 +31,21 @@ class Zensus::Agent < ApplicationRecord
     %w[Person Group]
   end
 
+  def search_data
+    {
+      name: default_name,
+      appellations: appellations.map{ |a| a.name(prefix: true, suffix: true, preferred: false) }.join(' '),
+      events: events.map{ |e| e.description }.join(' '),
+      activities: activities.map{ |a| a.title }.join(' ')
+    }
+  end
+
 end
 
+# Suche
+# API
+# datepicker
+# media-links - polymorphic, create in / upload to commons.b-o, local link
 
 
 # Actor (< PersistentItem)

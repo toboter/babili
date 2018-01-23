@@ -4,6 +4,7 @@
 # t.boolean   :circa
 # t.integer   :place_id
 # t.integer   :period_id
+require 'chronic'
 
 class Zensus::Event < ApplicationRecord
   self.inheritance_column = :_type_disabled
@@ -24,20 +25,30 @@ class Zensus::Event < ApplicationRecord
 
   validates :type, :beginn, presence: true
 
+  before_validation :parse_date
+
   def self.types
     ['Activity', 'Acquisition', 'Move', 'Transfer of Custody', 'Beginning of Existence', 'Formation', 'Birth', 'Transformation', 'Joining', 'End of Existence', 'Dissolution', 'Death', 'Leaving']
   end
 
   def default_date
-    "#{'~ ' if circa?}#{beginn}#{' - '+ended if ended?}"
+    "#{'~ ' if circa?}#{beginn_text}#{' - '+ended if ended?}"
   end
 
-  def description(gid=nil)
-    actor = GlobalID::Locator.locate gid
+  def description
     #raise actor.activities.where(event_id: id).inspect #.where(actable_id: agent.id, actable_type: agent.class.base_class)
     "#{type} #{'on ' + default_date} #{'('+activities.map{|a| a.description }.join(', ')+')' if activities.any?}"
   end
-  
+
+  def parse_date
+    self.beginn_at = Chronic.parse(beginn, guess: !circa) if beginn
+    self.ended_at = Chronic.parse(ended, guess: !circa) if ended
+  end
+
+  def beginn_text
+    beginn_at.try(:to_date) || beginn
+  end
+
 end
 
 # Entity

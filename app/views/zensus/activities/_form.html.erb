@@ -3,23 +3,21 @@
     <div class="col-sm-12 col-md-8 main">
       <%= simple_form_for [:zensus, @event, @activity], as: :zensus_activity do |f| %>
         <div class="activity-form">
-          <%= content_tag :p, @activity.actable.default_name, class: 'text-strong' %>
+          <%= content_tag :p, @activity.event.description, class: 'text-strong' %>
           <%= f.input :property_id, 
-            collection: (Zensus::Activity.properties.collect {|p| [ p[:property].last, p[:id] ] }), 
+            collection: (Zensus::Activity.properties.select{|p| p[:event_scopes].include?(@event.type)  }.collect {|p| [ p[:property].last, p[:id] ] }), 
             label: false,
             input_html: {
               class: 'zensus_activity_property'
             } %>
-          <%= f.input :event_id, 
-            collection: Zensus::Event.all, 
-            value_method: :id, 
-            label_method: :description,
-            label: "Event",
-            input_html: {
-              class: 'zensus_activity_event',
-              id: 'zensus_activity_event_id'
-            },
-            hint: @activity.new_record? ? '' : ('or ' + link_to('edit event', zensus_event_path(@activity.event))).html_safe %>
+          <%= f.input :actable_gid, 
+          collection: Zensus::Agent.all, 
+          value_method: :to_global_id, 
+          label_method: :default_name,
+          label: false,
+          input_html: {
+            class: 'zensus_activity_actable'
+          } %>
           <%= f.input :note %>
         </div>
         

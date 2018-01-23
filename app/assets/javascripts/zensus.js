@@ -62,7 +62,8 @@ $(document).on('turbolinks:load', function(){
   });
 
   $('.zensus_activity_actable').selectize({
-    sortField: 'text'
+    sortField: 'text',
+    placeholder: 'Click to select actor...'
   });
 
   $('.zensus_activity_property').selectize({

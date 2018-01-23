@@ -19,6 +19,7 @@
       </div>
       <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
         <div class="list-group">
+          <%= render 'zensus/search/box' %>
           <%= link_to fa_icon('plus', text: 'New person'), new_zensus_person_path, class: 'list-group-item' if can?(:create, Zensus::Agent) %>
           <%= link_to fa_icon('plus', text: 'New group'), new_zensus_group_path, class: 'list-group-item' if can?(:create, Zensus::Agent) %>
           <%= link_to fa_icon('angle-double-right', text: 'Events'), zensus_events_path, class: 'list-group-item' %>

@@ -18,7 +18,8 @@
       input_html: {
         class: 'zensus_activity_event',
         id: 'zensus_activity_event_id'
-      } %>
+      },
+      hint: f.object.new_record? ? '' : ('or ' + link_to('edit event', zensus_event_path(f.object.event))).html_safe %>
   </div>
   <%= f.input :note %>
 </div>
