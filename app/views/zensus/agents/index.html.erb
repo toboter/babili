@@ -1,6 +1,7 @@
 <% title "Agents" %>
 
 <% content_for :breadcrumbs do %>
+  <%= content_tag :li, link_to('Zensus', zensus_path) %>
   <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
 
@@ -9,12 +10,7 @@
     <div class="row --spacious">
       <div class="col-sm-12 col-md-8 main">
         <div class="list-group">
-          <% @agents.sort_by(&:default_name).each do |agent|%>
-            <%= link_to zensus_agent_path(agent), class: 'list-group-item' do %>
-              <%= content_tag :span, fa_icon(agent.type == 'Zensus::Person' ? 'user' : 'group'), style: 'float: left; width: 30px;' %>
-              <%= content_tag :span, agent.default_name, class: 'text-strong', style: '' %>
-            <% end %>
-          <% end %>
+          <%= render @agents.sort_by(&:default_name) %>
         </div>
       </div>
       <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>

@@ -8,6 +8,7 @@ require 'chronic'
 
 class Zensus::Event < ApplicationRecord
   self.inheritance_column = :_type_disabled
+  searchkick
   
   has_many    :notes, as: :issueable
   has_many    :event_relations, dependent: :destroy
@@ -23,7 +24,7 @@ class Zensus::Event < ApplicationRecord
   accepts_nested_attributes_for :activities, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :event_relations, reject_if: :all_blank, allow_destroy: true
 
-  validates :type, :beginn, presence: true
+  validates :type, :begins_at_string, presence: true
 
   before_validation :parse_date
 
@@ -32,7 +33,11 @@ class Zensus::Event < ApplicationRecord
   end
 
   def default_date
-    "#{'~ ' if circa?}#{beginn_text}#{' - '+ended if ended?}"
+    "#{'~ ' if circa?}#{begins_at}#{' - '+ends_at if ends_at.present?}"
+  end
+
+  def title
+    "#{type} #{'on ' + default_date}"
   end
 
   def description
@@ -41,12 +46,24 @@ class Zensus::Event < ApplicationRecord
   end
 
   def parse_date
-    self.beginn_at = Chronic.parse(beginn, guess: !circa) if beginn
-    self.ended_at = Chronic.parse(ended, guess: !circa) if ended
+    self.begins_at_date = Chronic.parse(begins_at_string, guess: !circa) if begins_at_string
+    self.ends_at_date = Chronic.parse(ends_at_string, guess: !circa) if ends_at_string
   end
 
-  def beginn_text
-    beginn_at.try(:to_date) || beginn
+  def begins_at
+    begins_at_date.try(:to_date).try(:to_s) || begins_at_string || nil
+  end
+
+  def ends_at
+    ends_at_date.try(:to_date).try(:to_s) || ends_at_string || nil
+  end
+
+  def search_data
+    {
+      description: description,
+      date: default_date,
+      related_events: related_events.map(&:description).join(' ')
+    }
   end
 
 end

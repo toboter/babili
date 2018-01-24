@@ -35,7 +35,6 @@ class Zensus::Agent < ApplicationRecord
     {
       name: default_name,
       appellations: appellations.map{ |a| a.name(prefix: true, suffix: true, preferred: false) }.join(' '),
-      events: events.map{ |e| e.description }.join(' '),
       activities: activities.map{ |a| a.title }.join(' ')
     }
   end

@@ -5,6 +5,8 @@
 # t.string     :note_type
 
 class Zensus::Activity < ApplicationRecord
+  after_commit :reindex_event_and_actable
+  
   belongs_to :actable, polymorphic: true
   belongs_to :event
 
@@ -78,4 +80,8 @@ class Zensus::Activity < ApplicationRecord
   end
 
 
+  def reindex_event_and_actable
+    event.reindex
+    actable.reindex
+  end
 end

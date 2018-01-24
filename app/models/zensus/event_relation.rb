@@ -3,6 +3,8 @@
 # t.integer   :related_event_id
 
 class Zensus::EventRelation < ApplicationRecord
+  after_commit :reindex_event
+
   belongs_to :event
   belongs_to :related_event, class_name: 'Zensus::Event'
 
@@ -36,4 +38,8 @@ class Zensus::EventRelation < ApplicationRecord
     Zensus::EventRelation.properties.select {|p| p[:id] == property_id }.first[:property].last
   end
 
+  def reindex_event
+    event.reindex
+    related_event.reindex
+  end
 end

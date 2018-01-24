@@ -59,8 +59,8 @@ class Zensus::ActivitiesController < ApplicationController
       event_attributes: [
         :id,
         :type,
-        :beginn,
-        :end,
+        :begins_at_string,
+        :ends_at_string,
         :circa,
         :_destroy,
         event_relations_attributes: [

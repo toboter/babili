@@ -9,6 +9,7 @@ class Zensus::AppellationPart < ApplicationRecord
   belongs_to :appellation, touch: true
   acts_as_list scope: :appellation
 
+  after_commit :reindex_agent
   after_create :set_position
 
   validates :body, :type, presence: true
@@ -43,5 +44,9 @@ class Zensus::AppellationPart < ApplicationRecord
 
   def self.types
     %w[Descriptor Prefix Forename Surname Birthname Suffix]
+  end
+
+  def reindex_agent
+    appellation.agent.reindex
   end
 end

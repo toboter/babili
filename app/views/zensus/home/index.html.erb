@@ -1,0 +1,25 @@
+<% title "Zensus" %>
+
+<% content_for :container do %>
+  <div class="zensus">
+    <div class="row --spacious">
+      <div class="col-sm-12 col-md-8 col-centered">
+        <div class="page-header text-center borderless">
+          <h2>Phonebook / Zensus</h2>
+          <p class="text-muted lead">
+            The babylon-online research framework helps you with some specific central services. With zensus, 
+            you can lookup any type of people or institutions as agents. From recent team members, participating 
+            institutions, to historic families or individuals, together with their affiliations or professions.
+            Agents connect each other through activities forming events.
+          </p>
+        </div>
+        <%= render 'zensus/search/box' %>
+        <div class="list-group">
+          <%= link_to fa_icon('angle-double-right', text: 'Agents'), zensus_agents_path, class: 'list-group-item' %>
+          <%= link_to fa_icon('angle-double-right', text: 'Events'), zensus_events_path, class: 'list-group-item' %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+<% end %>

@@ -2,7 +2,6 @@ class Zensus::EventsController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @events = @events.order(beginn: :desc)
     respond_to do |format|
       format.html
       format.json  { render json: @events, include: :activities, methods: [:description, :default_date] }
@@ -58,8 +57,8 @@ class Zensus::EventsController < ApplicationController
   def event_params
     params.require(:zensus_event).permit(
       :type, 
-      :beginn,
-      :ended,
+      :begins_at_string,
+      :ends_at_string,
       :circa,
       :place_id,
       :period_id,

@@ -1,0 +1,4 @@
+<%= link_to zensus_event_path(event), class: 'list-group-item' do %>
+  <%= content_tag :span, event.title, class: 'text-strong' %>
+  <%= content_tag :p, "#{event.activities.map{|a| a.description }.join(', ')}", class: 'text-small; text-muted' if event.activities.any? %>
+<% end %>

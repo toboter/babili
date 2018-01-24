@@ -1,0 +1,4 @@
+<%= link_to zensus_agent_path(group), class: 'list-group-item' do %>
+  <%= content_tag :span, fa_icon('group'), style: 'float: left; width: 30px;' %>
+  <%= content_tag :span, group.default_name, class: 'text-strong', style: '' %>
+<% end %>
