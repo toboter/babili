@@ -82,7 +82,8 @@ gem 'sinatra', git: 'https://github.com/sinatra/sinatra.git'
 gem "jsonb_accessor", "~> 1.0.0"
 gem 'sparql-client'
 gem 'linkeddata'
-gem 'acts_as_dag', git: 'https://github.com/rrn/acts_as_dag.git'
+gem 'acts_as_dag', git: 'https://github.com/toboter/acts_as_dag.git'
+# gem 'acts_as_dag', path: '/home/tschmidt/dev/gem_dev/acts_as_dag'
 gem 'language_list'
 
 ruby '2.3.1'
