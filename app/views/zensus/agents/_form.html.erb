@@ -1,11 +1,11 @@
 <% content_for :container do %>
   <div class="row --spacious zensus">
-    <div class="col-sm-12 col-md-8 main">
+    <div class="col-sm-12 col-md-9 main">
       <%= simple_form_for [:zensus, @agent], as: :zensus_agent do |f| %>
         <%= f.error_notification %>
         <%= f.input :type, as: :hidden %>
 
-        <h4>Appellations</h4>
+        <h3 class="subhead">Appellations</h3>
         <div id="appellations">
           <%= f.simple_fields_for :appellations do |a| %>
             <%= render 'appellation_fields', f: a %>
@@ -15,7 +15,7 @@
           </div>
         </div>
 
-        <h4 class="subhead --spacious">Activity statements</h4>
+        <h3 class="subhead --spacious">Activity statements</h3>
         <div id="activities">
           <%= f.simple_fields_for :activities do |a| %>
             <%= render 'activity_fields', f: a %>
@@ -25,11 +25,18 @@
           </div>
         </div>
 
-        <h4 class="subhead --spacious">Other</h4>
-        <%= f.input :address %>
+        <h3 class="subhead --spacious">Other</h3>
+        <h4>Address</h4>
+        <div class="row">
+          <div class="col-md-11 col-md-offset-1">
+            <%= f.input :address, label: false %>
+          </div>
+        </div>
+
+        <hr>
 
         <div id="links --spacious">
-          <strong>Uri's on the web</strong>
+          <h4>Uri's on the web</h4>
           <%= f.simple_fields_for :links do |a| %>
             <%= render 'link_fields', f: a %>
           <% end %>
@@ -38,8 +45,10 @@
           </div>
         </div>
 
+        <hr>
+
         <div id="links --spacious">
-          <strong>Media objects</strong>
+          <h4>Media objects</h4>
           <%= f.simple_fields_for :links do |a| %>
             <%= render 'link_fields', f: a %>
           <% end %>
@@ -54,9 +63,11 @@
         </div>
       <% end %>
 
-      <% content_for :modals do %>
-        <%= render 'zensus/events/new_modal' %>
-      <% end %>
     </div>
   </div>
+<% end %>
+
+
+<% content_for :modals do %>
+  <%= render 'zensus/events/new_modal' %>
 <% end %>

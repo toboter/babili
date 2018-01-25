@@ -1,7 +1,6 @@
-<div class="nested-fields appellation-part-fields">
+<div class="nested-fields appellation-part-fields form-inline">
   <%= f.input :type, collection: Zensus::AppellationPart.types, label: false %>
-  <%= f.input :body, label: false %>
+  <%= f.input :body, label: false, placeholder: 'Name element' %>
   <%= f.input :preferred, :input_html => { :checked => true } %>
-  pos
-  <%= link_to_remove_association fa_icon('trash'), f %>
+  <%= link_to_remove_association fa_icon('trash', text: 'Remove'), f, class: 'btn btn-default btn-sm' %>
 </div>

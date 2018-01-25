@@ -1,14 +1,27 @@
-<div class="nested-fields appellation-fields well">
-  <%= f.input :language %>
-  <%= f.input :period %>
-  <%= f.input :trans, collection: Zensus::Appellation.transis %>
-  <div class="parts form-inline">
-    <%= f.simple_fields_for :appellation_parts do |p| %>
-      <%= render 'appellation_part_fields', f: p %>
-    <% end %>
-    <div class="links">
-      <%= link_to_add_association fa_icon('plus', text: 'Element'), f, :appellation_parts, class: 'btn btn-default btn-sm' %>
+<div class="row nested-fields appellation-fields">
+  <div class="col-md-1">
+  </div>
+  <div class="col-md-11">
+    <div class="row border-left">
+      <div class="appellation-parts col-md-8">
+        <%= f.simple_fields_for :appellation_parts do |p| %>
+          <%= render 'appellation_part_fields', f: p %>
+        <% end %>
+        <div class="links">
+          <%= link_to_add_association fa_icon('plus', text: 'Name element'), f, :appellation_parts, class: 'btn btn-default btn-sm' %>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <%= f.input :language %>
+        <%= f.input :period %>
+        <%= f.input :trans, collection: Zensus::Appellation.transis %>
+      </div>
+      <div class="col-md-12">
+        <%= link_to_remove_association fa_icon('trash', text: 'Delete'), f, class: 'pull-right btn btn-sm btn-default' %>
+      </div>
+      <div class="col-md-12">
+        <hr>
+      </div>
     </div>
   </div>
-  <%= link_to_remove_association "remove appellation", f %>
 </div>

@@ -31,4 +31,13 @@ li.pllve {
       margin-bottom: 10px;
     }
   }
+  .appellation-parts {
+    margin-top: 20px;
+    .appellation-part-fields {
+      margin-top: 5px;
+      a.remove_fields {
+        margin-left: 20px;
+      }
+    }
+  }
 }

@@ -1,25 +1,38 @@
-<div class="nested-fields activity-fields well">
-  <div class="activity-form">
-    <%= content_tag :p do %>
-      <%= content_tag :span, @agent.default_name, class: 'text-strong' %>
-      <%= content_tag :span, link_to_remove_association(fa_icon('trash'), f), class: 'pull-right' %>
-    <% end %>
-    <%= f.input :property_id, 
-      collection: (Zensus::Activity.properties.collect {|p| [ p[:property].first, p[:id] ] }), 
-      label: false,
-      input_html: {
-        class: 'zensus_activity_property'
-      } %>
-    <%= f.input :event_id, 
-      collection: Zensus::Event.all, 
-      value_method: :id, 
-      label_method: :description,
-      label: "Event",
-      input_html: {
-        class: 'zensus_activity_event',
-        id: 'zensus_activity_event_id'
-      },
-      hint: f.object.new_record? ? '' : ('or ' + link_to('edit event', zensus_event_path(f.object.event))).html_safe %>
+<div class="row nested-fields activity-fields">
+  <div class="col-md-1">
   </div>
-  <%= f.input :note %>
+  <div class="col-md-11">
+    <div class="row border-left">
+      <div class="col-md-6">
+        <%= content_tag :p do %>
+          <%= content_tag :span, @agent.default_name, class: 'text-strong' %>
+        <% end %>
+        <%= f.input :property_id, 
+          collection: (Zensus::Activity.properties.collect {|p| [ p[:property].first, p[:id] ] }), 
+          label: false,
+          input_html: {
+            class: 'zensus_activity_property'
+          } %>
+      </div>
+      <div class="col-md-6">
+        <%= f.input :event_id, 
+          collection: Zensus::Event.all, 
+          value_method: :id, 
+          label_method: :description,
+          label: "Event",
+          input_html: {
+            class: 'zensus_activity_event',
+            id: 'zensus_activity_event_id'
+          } %>
+      </div>
+      <div class="col-md-12">
+        <%= f.input :note, label: false, placeholder: 'Name' %>
+        <%= content_tag :span, ('or ' + link_to('edit event', zensus_event_path(f.object.event))).html_safe if !f.object.new_record? %>
+        <%= content_tag :span, link_to_remove_association(fa_icon('trash', text: 'Delete'), f, class: 'btn btn-default btn-sm'), class: 'pull-right' %>
+      </div>
+      <div class="col-md-12">
+        <hr>
+      </div>
+    </div>
+  </div>  
 </div>

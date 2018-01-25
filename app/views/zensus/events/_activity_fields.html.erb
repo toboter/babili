@@ -1,6 +1,8 @@
-<div class="nested-fields activity-fields well">
-  <div class="activity-form">
-    <div class="form-inline row">
+<div class="row nested-fields activity-fields">
+  <div class="col-md-1">
+  </div>
+  <div class="col-md-11">
+    <div class="row border-left">
       <div class="col-md-6">
         <%= f.input :property_id, 
           collection: (Zensus::Activity.properties.collect {|p| [ p[:property].first, p[:id] ] }), 
@@ -20,9 +22,14 @@
             class: 'zensus_activity_actable',
             style: 'width:300px;'
           } %>
-        <%= content_tag :span, link_to_remove_association(fa_icon('trash'), f), class: 'pull-right' %>
+      </div>
+      <div class="col-md-12">
+        <%= f.input :note, placeholder: 'Note', label: false %>
+        <%= content_tag :span, link_to_remove_association(fa_icon('trash', text: 'Delete'), f, class: 'btn btn-default btn-sm'), class: 'pull-right' %>
+      </div>
+      <div class="col-md-12">
+        <hr>
       </div>
     </div>
-    <%= f.input :note, placeholder: 'Add note', label: false %>
-  </div>
+  </div>  
 </div>

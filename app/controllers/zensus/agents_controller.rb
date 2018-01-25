@@ -55,6 +55,7 @@ class Zensus::AgentsController < ApplicationController
     params.require(:zensus_agent).permit(
       :address, 
       :type,
+      :default_appellation_id,
       appellations_attributes: [
         :id,
         :language, 

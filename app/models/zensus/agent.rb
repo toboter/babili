@@ -2,6 +2,7 @@
 # t.string    :slug
 # t.string    :type
 # t.text      :address
+# t.integer   :default_appellation_id
 
 class Zensus::Agent < ApplicationRecord
   searchkick inheritance: true

@@ -1,6 +1,6 @@
 <% content_for :container do %>
   <div class="row --spacious zensus">
-    <div class="col-sm-12 col-md-8 main">
+    <div class="col-sm-12 col-md-9 main">
       <%= simple_form_for [:zensus, @event], as: :zensus_event do |f| %>
         <div class="form-inline" style="margin-bottom: 10px;">
           <%= f.input :type, collection: Zensus::Event.types, label: false %>
@@ -8,14 +8,14 @@
           <%= f.input :period_id, collection: Vocab::Concept.all, label: false, prompt: 'Select period' %>
         </div>
         <div class="form-inline">
-          <%= f.input :begins_at_string, label: false, placeholder: 'Beginn' %>
+          <%= f.input :begins_at_string, label: false, placeholder: 'Begins at' %>
 
-          <%= f.input :ends_at_string, label: false, placeholder: 'End' %>
+          <%= f.input :ends_at_string, label: false, placeholder: 'Ends at' %>
 
           <%= f.input :circa, label: 'approx.' %>
         </div>
         
-        <h4 class="subhead --spacious">Activities</h4>
+        <h3 class="subhead --spacious">Activities</h3>
         <div id="activities">
           <%= f.simple_fields_for :activities do |a| %>
             <%= render 'activity_fields', f: a %>
@@ -25,7 +25,7 @@
           </div>
         </div>
 
-        <h4 class="subhead --spacious">Event relations</h4>
+        <h3 class="subhead --spacious">Event relations</h3>
         <div id="event-relations">
           <%= f.simple_fields_for :event_relations do |a| %>
             <%= render 'event_relation_fields', f: a %>

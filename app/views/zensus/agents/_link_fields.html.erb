@@ -1,6 +1,20 @@
-<div class="nested-fields link-fields">
-  <%= f.input :type, collection: Zensus::Link.types, label: false %>
-  <%= f.input :uri, label: false, placeholder: 'URI' %>
-
-  <%= link_to_remove_association fa_icon('trash'), f %>
+<div class="row nested-fields link-fields">
+  <div class="col-md-1">
+  </div>
+  <div class="col-md-11">
+    <div class="row border-left">
+      <div class="col-md-4">
+        <%= f.input :type, collection: Zensus::Link.types, label: false %>
+      </div>
+      <div class="col-md-8">
+        <%= f.input :uri, label: false, placeholder: 'URI' %>
+      </div>
+      <div class="col-md-12">
+        <%= content_tag :span, link_to_remove_association(fa_icon('trash', text: 'Delete'), f, class: 'btn btn-default btn-sm'), class: 'pull-right' %>
+      </div>
+      <div class="col-md-12">
+        <hr>
+      </div>
+    </div>
+  </div>  
 </div>

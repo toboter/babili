@@ -4,6 +4,8 @@
 # t.string    :trans
 
 class Zensus::Appellation < ApplicationRecord
+  attr_accessor :make_default
+
   belongs_to :agent, touch: true
   has_many :appellation_parts, -> { order(position: :asc) }
 
