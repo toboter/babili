@@ -54,16 +54,35 @@ class Zensus::Event < ApplicationRecord
     begins_at_date.try(:to_date).try(:to_s) || begins_at_string || nil
   end
 
-  def ends_at
-    ends_at_date.try(:to_date).try(:to_s) || ends_at_string || nil
+  def ends_at(full=false)
+    ends_at_date.try(:to_date).try(:to_s) || full ? begins_at : (ends_at_string || nil)
   end
 
+  # Searching for ranges
+  # https://github.com/ankane/searchkick/issues/973
   def search_data
     {
       description: description,
       date: default_date,
       related_events: related_events.map(&:description).join(' ')
     }
+  end
+
+  def self.sorted_by(sort_option)
+    direction = ((sort_option =~ /desc$/) ? 'desc' : 'asc').to_sym
+    case sort_option.to_s
+    when /^updated_at_/
+      { updated_at: direction }
+    else
+      raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
+    end
+  end
+
+  def self.options_for_sorted_by
+    [
+      ['Updated asc', 'updated_at_asc'],
+      ['Updated desc', 'updated_at_desc']
+    ]
   end
 
 end

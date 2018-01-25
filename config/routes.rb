@@ -165,8 +165,24 @@ Rails.application.routes.draw do
       get 'clients/:uid', to: 'applications_authorizations#client', on: :collection
     end
 
-    # Search
-    get 'search', to: 'search#index'
+    # Zensus
+    namespace :zensus do
+      resources :agents, only: [:index, :show] do
+        collection do
+          resources :people, controller: 'agents', type: 'Zensus::Person'
+          resources :groups, controller: 'agents', type: 'Zensus::Group'
+        end
+      end
+      resources :events, only: [:index, :show]
+      resources :properties, only: [:index, :show]
+    end
+
+    scope path: :search do
+      get '/', to: 'search#index'               # global
+      get :agents, to: 'zensus/agents#search'
+      get :events, to: 'zensus/events#search'
+    end
+
 
   end
 
