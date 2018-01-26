@@ -1,7 +1,8 @@
 <% title "#{@scheme.title}" %>
 
 <% content_for :breadcrumbs do %>
-  <%= content_tag :li, link_to('Vocabularies', vocab_schemes_path) %>
+  <%= content_tag :li, link_to('Vocabularies', vocab_path) %>
+  <%= content_tag :li, link_to('Schemes', vocab_schemes_path) %>
   <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
 
@@ -9,12 +10,54 @@
   <div class="vocab">
     <div class="row --spacious">
       <div class="col-sm-12 col-md-8 main">
-        <%= render @scheme, full: true %>
+        <div class="heading-block">
+          <%= content_tag :h3, class: 'clearfix' do %>
+            <%= @scheme.title %>
+            <small>[<%= @scheme.abbr %>]</small>
+            <%= link_to fa_icon('trash', text: 'Delete'), [:vocab, @scheme], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default btn-sm text-strong pull-right', style: 'margin-left:5px;' if can?(:destroy, @scheme) %>
+            <%= link_to fa_icon('edit', text: 'Edit'), [:edit, :vocab, @scheme], class: 'btn btn-default btn-sm text-strong pull-right' if can?(:update, @scheme) %>
+          <% end %>
+          <%= content_tag :p, polymorphic_url([:vocab, @scheme]) %>
+        </div>
+
+        <div class="description-block --spacious" id="scheme-description-block-<%= @scheme.id %>">
+          <table class="table table-simple">
+            <tbody>
+              <tr>
+                <td>Defintion</td>
+                <td><%= @scheme.definition %></td>
+              </tr>
+              <tr>
+                <td>Root concepts</td>
+                <td><%= @scheme.concepts.roots.map{ |concept| link_to(concept.name(@language), [:vocab, @scheme, concept]) }.join(', ').html_safe %></td>
+              </tr>
+              <tr>
+                <td>Concepts count</td>
+                <td><%= link_to @scheme.concepts.count, [:vocab, @scheme, :concepts] %></td>
+              </tr>
+              <tr>
+                <td>Abbreviation</td>
+                <td><%= @scheme.abbr %></td>
+              </tr>
+              <tr>
+                <td>Contributors</td>
+                <td><%= @scheme.contributors.map{|c| link_to(c.name, c.profile)}.join(', ').html_safe %></td>
+              </tr>
+              <%= content_tag :tr do %>
+                <td>Defined for</td>
+                <td><%= @scheme.definer_id %>, <%= @scheme.definer_type %></td>
+              <% end if @scheme.definer_id %>
+            </tbody>
+          </table>
+
+
+        </div>
       </div>
+      
       <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
         <div class="list-group">
+          <%= render 'vocab/search/box' %>
           <%= link_to fa_icon('angle-double-down', text: 'Concepts'), [:vocab, @scheme, :concepts], class: 'list-group-item' %>
-          <%= link_to fa_icon('plus', text: 'Create concept'), [:new, :vocab, @scheme, :concept], class: 'list-group-item' %>
           <%= link_to fa_icon('angle-double-up', text: 'All vocabularies'), vocab_schemes_path, class: 'list-group-item' %>
         </div>
       <% end %>

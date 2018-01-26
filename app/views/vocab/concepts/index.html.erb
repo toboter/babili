@@ -1,7 +1,8 @@
 <% title "Concepts" %>
 
 <% content_for :breadcrumbs do %>
-  <%= content_tag :li, link_to('Vocabularies', vocab_schemes_path) %>
+  <%= content_tag :li, link_to('Vocabularies', vocab_path) %>
+  <%= content_tag :li, link_to('Schemes', vocab_schemes_path) %>
   <%= content_tag :li, link_to(@scheme.title, vocab_scheme_path(@scheme)) %>
   <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
@@ -13,14 +14,14 @@
         <table class="table table-simple">
           <thead>
           </thead>
-
           <tbody>
-            <%= render partial: 'vocab/concepts/concept', collection: @concepts, locals: { depth: 1 } %>
+            <%= render partial: 'vocab/concepts/concept_tree', collection: @concepts, locals: { depth: 1 }, as: :concept %>
           </tbody>
         </table>
       </div>
       <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
         <div class="list-group">
+          <%= render 'vocab/search/box' %>
           <%= link_to fa_icon('plus', text: 'New concept'), [:new, :vocab, @scheme, :concept], class: 'list-group-item' %>
           <%= link_to fa_icon('plus', text: 'New collection'), [:new, :vocab, @scheme, :concept, type: 'Collection'], class: 'list-group-item' %>
           <%= link_to fa_icon('angle-double-up', text: @scheme.abbr.humanize), vocab_scheme_path(@scheme), class: 'list-group-item' %>

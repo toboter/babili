@@ -9,7 +9,9 @@
 class Vocab::Concept < ApplicationRecord
   include Rails.application.routes.url_helpers
   self.inheritance_column = :_type_disabled
+  searchkick
   acts_as_dag(link_table: 'vocab_links', descendant_table: 'vocab_descendants')
+
   has_many :broader_concepts, 
     through: :parent_links, 
     source: :parent  # parents
@@ -37,6 +39,16 @@ class Vocab::Concept < ApplicationRecord
 
   def self.search(q)
     joins(:labels).where('vocab_labels.body LIKE ?', "#{q}%")
+  end
+
+  def search_data
+    {
+      broader: broader_concepts.map(&:name).join(' '),
+      narrower: narrower_concepts.map(&:name).join(' '),
+      scheme: scheme.title,
+      labels: labels.map(&:body).join(' '),
+      notes: notes.map(&:body).join(' '),
+    }
   end
 
   def preferred_label(lang=nil)

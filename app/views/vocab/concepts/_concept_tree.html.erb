@@ -1,0 +1,6 @@
+<tr>
+  <%= content_tag :td, style: "padding-left: #{depth*20}px;" do %>
+    <strong> <%= link_to concept.name(@language), vocab_scheme_concept_path(concept.scheme, concept.slug), style: ('text-decoration: underline;' if concept.root?) %></strong>
+  <% end %>
+</tr>
+<%= render partial: 'vocab/concepts/concept_tree', collection: concept.children, locals: {depth: depth+1}, as: :concept %>

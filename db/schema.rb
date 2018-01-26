@@ -290,6 +290,10 @@ ActiveRecord::Schema.define(version: 20180125171204) do
     t.string "property"
     t.integer "related_concept_id"
     t.string "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["concept_id"], name: "index_vocab_associative_relations_on_concept_id"
+    t.index ["related_concept_id"], name: "index_vocab_associative_relations_on_related_concept_id"
   end
 
   create_table "vocab_concepts", id: :serial, force: :cascade do |t|
@@ -299,6 +303,13 @@ ActiveRecord::Schema.define(version: 20180125171204) do
     t.string "type"
     t.string "status"
     t.string "slug"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "index_vocab_concepts_on_creator_id"
+    t.index ["scheme_id"], name: "index_vocab_concepts_on_scheme_id"
+    t.index ["slug"], name: "index_vocab_concepts_on_slug", unique: true
+    t.index ["type"], name: "index_vocab_concepts_on_type"
+    t.index ["uuid"], name: "index_vocab_concepts_on_uuid", unique: true
   end
 
   create_table "vocab_descendants", id: :serial, force: :cascade do |t|
@@ -319,6 +330,11 @@ ActiveRecord::Schema.define(version: 20180125171204) do
     t.string "language"
     t.boolean "is_abbrevation"
     t.integer "creator_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["concept_id"], name: "index_vocab_labels_on_concept_id"
+    t.index ["creator_id"], name: "index_vocab_labels_on_creator_id"
+    t.index ["type"], name: "index_vocab_labels_on_type"
   end
 
   create_table "vocab_links", id: :serial, force: :cascade do |t|
@@ -335,6 +351,11 @@ ActiveRecord::Schema.define(version: 20180125171204) do
     t.text "body"
     t.string "language"
     t.integer "creator_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["concept_id"], name: "index_vocab_notes_on_concept_id"
+    t.index ["creator_id"], name: "index_vocab_notes_on_creator_id"
+    t.index ["type"], name: "index_vocab_notes_on_type"
   end
 
   create_table "vocab_schemes", id: :serial, force: :cascade do |t|
@@ -345,6 +366,11 @@ ActiveRecord::Schema.define(version: 20180125171204) do
     t.string "definer_type"
     t.integer "creator_id"
     t.string "slug"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["abbr"], name: "index_vocab_schemes_on_abbr"
+    t.index ["creator_id"], name: "index_vocab_schemes_on_creator_id"
+    t.index ["slug"], name: "index_vocab_schemes_on_slug", unique: true
   end
 
   create_table "zensus_activities", id: :serial, force: :cascade do |t|

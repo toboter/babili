@@ -12,7 +12,7 @@ class Vocab::Scheme < ApplicationRecord
 
   belongs_to :definer, polymorphic: true
   belongs_to :creator, class_name: 'User'
-  has_many :concepts
+  has_many :concepts, dependent: :destroy
 
   validates :abbr, presence: true
 
