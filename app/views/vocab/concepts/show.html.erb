@@ -15,6 +15,7 @@
       <div class="col-md-9 main">
         <div class="row">
           <div class="col-md-6">
+            <h4 class='subhead'>Hierarchies</h4>
             <% (@concept.root? ? [@concept] : @concept.ancestors.roots).each do |croot| %>
               <table class="table table-simple">
                 <thead>
@@ -43,9 +44,25 @@
             <div id='related-matches'>
               <div id="matches">
                 <h4 class='subhead --spacious'>Related matches</h4>
-                <% @concept.matches.each do |match| %>
-                  <%= match.property %> <%= link_to match.value, match.value %><br>
-                <% end %>
+                <div class="list-group">
+                  <% @concept.matches.each do |match| %>
+                    <%= link_to match.associatable.uri, class: 'list-group-item' do %>
+                      <%= content_tag :span, match.property, class: 'text-small' %> 
+                      <%= content_tag :span, match.associatable.name, class: 'text-strong' %>
+                    <% end %>
+                  <% end %>
+                </div>
+                <%= content_tag :div do %>
+                  <h5 class="subhead">Backlinks</h5>
+                  <div class="list-group">
+                    <% @concept.object_matches.each do |match| %>
+                      <%= link_to match.concept.uri, class: 'list-group-item' do %>
+                        <%= content_tag :span, match.property, class: 'text-small' %> 
+                        <%= content_tag :span, match.concept.name, class: 'text-strong' %>
+                      <% end %>
+                    <% end %>
+                  </div>
+                <% end if @concept.object_matches.any? %>
               </div>
             </div>
           </div>

@@ -6,7 +6,7 @@
 class Zensus::Appellation < ApplicationRecord
   attr_accessor :make_default
 
-  belongs_to :agent, touch: true
+  belongs_to :agent, touch: true, optional: true
   has_many :appellation_parts, -> { order(position: :asc) }
 
   accepts_nested_attributes_for :appellation_parts, reject_if: :all_blank, allow_destroy: true

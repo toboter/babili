@@ -174,12 +174,22 @@ Rails.application.routes.draw do
       end
       resources :events, only: [:index, :show]
       resources :properties, only: [:index, :show]
+      # resources :names, only: [:index, :show, :create]
+    end
+
+    # vocab
+    namespace :vocab do
+      resources :schemes, only: [:index, :show] do
+        resources :concepts, only: [:index, :show]
+      end
+      get :concepts, to: 'concepts#full_index'
     end
 
     scope path: :search do
       get '/', to: 'search#index'               # global
       get :agents, to: 'zensus/agents#search'
       get :events, to: 'zensus/events#search'
+      get :concepts, to: 'vocab/concepts#search'
     end
 
 

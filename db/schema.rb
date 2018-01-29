@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180125171204) do
+ActiveRecord::Schema.define(version: 20180129111429) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -288,12 +288,12 @@ ActiveRecord::Schema.define(version: 20180125171204) do
   create_table "vocab_associative_relations", id: :serial, force: :cascade do |t|
     t.integer "concept_id"
     t.string "property"
-    t.integer "related_concept_id"
-    t.string "value"
+    t.integer "associatable_id"
+    t.string "associatable_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["associatable_id", "associatable_type"], name: "index_vocab_associative_relations_on_associatable"
     t.index ["concept_id"], name: "index_vocab_associative_relations_on_concept_id"
-    t.index ["related_concept_id"], name: "index_vocab_associative_relations_on_related_concept_id"
   end
 
   create_table "vocab_concepts", id: :serial, force: :cascade do |t|
@@ -319,6 +319,13 @@ ActiveRecord::Schema.define(version: 20180125171204) do
     t.integer "distance"
     t.index ["ancestor_id"], name: "index_vocab_descendants_on_ancestor_id"
     t.index ["descendant_id"], name: "index_vocab_descendants_on_descendant_id"
+  end
+
+  create_table "vocab_external_concepts", force: :cascade do |t|
+    t.string "uri"
+    t.string "label"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "vocab_labels", id: :serial, force: :cascade do |t|

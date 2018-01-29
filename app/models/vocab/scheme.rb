@@ -20,4 +20,20 @@ class Vocab::Scheme < ApplicationRecord
     [creator].concat(concepts.map{|c| c.contributors}).compact.flatten.uniq
   end
 
+  def self.sorted_by(sort_option)
+    direction = ((sort_option =~ /desc$/) ? 'desc' : 'asc').to_sym
+    case sort_option.to_s
+    when /^updated_at_/
+      { updated_at: direction }
+    else
+      raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
+    end
+  end
+
+  def self.options_for_sorted_by
+    [
+      ['Updated asc', 'updated_at_asc'],
+      ['Updated desc', 'updated_at_desc']
+    ]
+  end
 end

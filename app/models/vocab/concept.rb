@@ -20,6 +20,7 @@ class Vocab::Concept < ApplicationRecord
     source: :child   # children
   # Can also be a literal to anywhere
   has_many :matches, class_name: 'AssociativeRelation', foreign_key: :concept_id, dependent: :destroy
+  has_many :object_matches, as: :associatable, class_name: 'AssociativeRelation'
 
   before_validation :add_uuid, on: :create
   extend FriendlyId
@@ -27,7 +28,7 @@ class Vocab::Concept < ApplicationRecord
   # broaderTransitive -> https://www.w3.org/TR/2009/NOTE-skos-primer-20090818/#sectransitivebroader
   # paper_trail into changeNote
 
-  belongs_to :scheme
+  belongs_to :scheme, touch: true
   belongs_to :creator, class_name: 'User'
   has_many :labels, class_name: 'Vocab::Label', dependent: :destroy, inverse_of: :concept
   has_many :notes, dependent: :destroy, inverse_of: :concept
@@ -37,10 +38,6 @@ class Vocab::Concept < ApplicationRecord
   accepts_nested_attributes_for :notes, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :matches, reject_if: :all_blank, allow_destroy: true
 
-  def self.search(q)
-    joins(:labels).where('vocab_labels.body LIKE ?', "#{q}%")
-  end
-
   def search_data
     {
       broader: broader_concepts.map(&:name).join(' '),
@@ -48,6 +45,7 @@ class Vocab::Concept < ApplicationRecord
       scheme: scheme.title,
       labels: labels.map(&:body).join(' '),
       notes: notes.map(&:body).join(' '),
+      matches: matches.map{|m| [m.property, m.associatable.name] }.join(' ')
     }
   end
 
@@ -61,6 +59,10 @@ class Vocab::Concept < ApplicationRecord
 
   def uri
     url_for([:vocab, scheme, self])
+  end
+
+  def api_uri
+    url_for([:api, :vocab, scheme, self])
   end
 
   # Hierarchy, Concept, GuideTerm? -> Collections
@@ -77,12 +79,12 @@ class Vocab::Concept < ApplicationRecord
   end
 
   def contributors
-    [creator] #.concat(labels.map{|l| l.creator}).concat(notes.map{|n| n.try(:creator)}).compact.flatten.uniq
+    [creator].concat(labels.map(&:creator)).concat(notes.map(&:creator)).flatten.uniq
   end
 
   def add_uuid
     self.uuid = loop do
-      random_token = SecureRandom.hex(4)+'-'+scheme.id.to_s.rjust(4, '0')+'-'+SecureRandom.hex(2)+'-'+SecureRandom.hex(2)+'-'+SecureRandom.hex(6)
+      random_token = SecureRandom.hex(4)+'-'+scheme.id.to_s.rjust(4, '0')+'-'+SecureRandom.hex(2)+'-'+SecureRandom.hex(2)
       break random_token unless self.class.exists?(uuid: random_token)
     end 
   end
@@ -109,5 +111,22 @@ class Vocab::Concept < ApplicationRecord
     # unless self.new_record?
     #   children.empty? ? self.make_root : ActsAsDAG::HelperMethods.unlink(nil, self)
     # end
+  end
+
+  def self.sorted_by(sort_option)
+    direction = ((sort_option =~ /desc$/) ? 'desc' : 'asc').to_sym
+    case sort_option.to_s
+    when /^updated_at_/
+      { updated_at: direction }
+    else
+      raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
+    end
+  end
+
+  def self.options_for_sorted_by
+    [
+      ['Updated asc', 'updated_at_asc'],
+      ['Updated desc', 'updated_at_desc']
+    ]
   end
 end

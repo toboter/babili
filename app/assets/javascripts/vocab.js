@@ -13,7 +13,7 @@ $(document).on('turbolinks:load', function(){
   });
   
   $('#matches').on('cocoon:after-insert', function(e, addedItem){
-    $(addedItem).find('#vocab_match_string').selectize({
+    $(addedItem).find('#concept_matches_associatable').selectize({
       valueField: 'id',
       labelField: 'name',
       searchField: 'name',
