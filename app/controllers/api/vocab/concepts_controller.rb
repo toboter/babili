@@ -1,6 +1,6 @@
 class Api::Vocab::ConceptsController < Api::BaseController
-  load_and_authorize_resource :scheme, class: 'Vocab::Scheme', find_by: :slug, except: [:full_index, :search]
-  load_and_authorize_resource :concept, through: :scheme, class: 'Vocab::Concept', find_by: :slug, except: [:full_index, :search]
+  load_and_authorize_resource :scheme, class: 'Vocab::Scheme', find_by: :slug, except: [:full_index, :search, :synonyms]
+  load_and_authorize_resource :concept, through: :scheme, class: 'Vocab::Concept', find_by: :slug, except: [:full_index, :search, :synonyms]
 
   # /api/scheme/:slug/concepts
   def index
@@ -43,5 +43,9 @@ class Api::Vocab::ConceptsController < Api::BaseController
 
     authorize! :read, @concepts
     render json: @concepts, meta: pagination_dict(@concepts), each_serializer: Vocab::ConceptSerializer, adapter: :json
+  end
+
+  def synonyms
+    #to do
   end
 end

@@ -1,8 +1,21 @@
 <div class="nested-fields note-fields">
-  <%= f.input :body, label: 'Note' %>
-  <%= f.input :language, collection: LanguageList::COMMON_LANGUAGES, 
-    selected: f.object.new_record? ? LanguageList::LanguageInfo.find(browser.accept_language.first.code) : f.object.language %>
-  <%= f.input :type, collection: Vocab::Note.types, selected: 'Definition' %>
   <%= f.input :creator_id, input_html: { value: (f.object.new_record? ? current_user.id : f.object.creator_id) }, as: :hidden %>
-  <%= link_to_remove_association "remove note", f %>
+  <div class="col-md-1">
+  </div>
+    <div class="col-md-11">
+    <div class="row border-left">
+      <div class="col-md-12">
+        <%= f.input :type, collection: Vocab::Note.types, selected: (f.object.new_record? ? 'Definition' : f.object.type) %>
+        <%= f.input :body, label: 'Note' %>
+        <%= f.input :language, collection: LanguageList::COMMON_LANGUAGES, 
+          selected: f.object.new_record? ? LanguageList::LanguageInfo.find(browser.accept_language.first.code) : f.object.language %>
+      </div>
+      <div class="col-md-12">
+         <%= content_tag :span, link_to_remove_association(fa_icon('trash', text: 'Delete'), f, class: 'btn btn-default btn-sm'), class: 'pull-right' %>
+      </div>
+      <div class="col-md-12">
+        <hr>
+      </div>
+    </div>
+  </div>
 </div>

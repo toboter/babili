@@ -1,3 +1,9 @@
+<% title "#{@scheme.title} / edit" %>
 
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, link_to('Vocabularies', vocab_path) %>
+  <%= content_tag :li, link_to('Schemes', vocab_schemes_path) %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
+<% end %>
 
 <%= render 'form', scheme: @scheme %>

@@ -1,16 +1,21 @@
-<div class="nested-fields match-fields form-inline">
+<div class="nested-fields match-fields">
   <% if f.object.new_record? %>
-    <%= f.input :associated_concept, 
-      as: :select, 
-      collection: [],
-      input_html: {
-        id: 'concept_matches_associatable' }, 
-      label: false if f.object.new_record? %>
-    <%= f.input :property, label: false, collection: Vocab::AssociativeRelation.properties  %>
-    <%= link_to_remove_association fa_icon('trash'), f, class: 'btn btn-default btn-sm' %>
+    <div class="form-inline">
+      <%= f.input :associated_concept, 
+        as: :select, 
+        collection: [],
+        input_html: {
+          id: 'concept_matches_associatable' }, 
+        label: false if f.object.new_record? %>
+      <%= f.input :property, label: false, collection: Vocab::AssociativeRelation.properties  %>
+      <%= link_to_remove_association fa_icon('trash'), f, class: 'btn btn-default btn-sm' %>
+    </div>
   <% else %>
-    <%= link_to f.object.associatable.name, f.object.associatable.uri %>
-    <%= f.object.property %>
-    <%= link_to_remove_association fa_icon('trash'), f, class: '' %>
+    <div class="well" style="padding:10px;margin-bottom:10px;">
+      <%= content_tag :span, f.object.associatable.name, class: 'text-strong' %>
+      <%= link_to f.object.associatable.uri, f.object.associatable.uri %>
+      <%= content_tag :span, f.object.property, class: 'text-italic' %>
+      <%= link_to_remove_association fa_icon('trash'), f, style: 'margin-left: 20px;' %>
+    </div>
   <% end %>
 </div>

@@ -190,6 +190,7 @@ Rails.application.routes.draw do
       get :agents, to: 'zensus/agents#search'
       get :events, to: 'zensus/events#search'
       get :concepts, to: 'vocab/concepts#search'
+      get 'concepts/synonyms', to: 'vocab/concepts#synonyms'
     end
 
 
