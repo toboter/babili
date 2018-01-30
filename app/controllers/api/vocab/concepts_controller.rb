@@ -1,6 +1,6 @@
 class Api::Vocab::ConceptsController < Api::BaseController
-  load_and_authorize_resource :scheme, class: 'Vocab::Scheme', find_by: :slug, except: [:full_index, :search, :synonyms]
-  load_and_authorize_resource :concept, through: :scheme, class: 'Vocab::Concept', find_by: :slug, except: [:full_index, :search, :synonyms]
+  load_and_authorize_resource :scheme, class: 'Vocab::Scheme', find_by: :slug, except: [:full_index, :search]
+  load_and_authorize_resource :concept, through: :scheme, class: 'Vocab::Concept', find_by: :slug, except: [:full_index, :search]
 
   # /api/scheme/:slug/concepts
   def index
@@ -9,12 +9,20 @@ class Api::Vocab::ConceptsController < Api::BaseController
     @concepts = @concepts.paginate(page: params[:page], per_page: params[:per_page] || 30).order(sort_order)
 
     @concepts = @concepts.where(type: params[:type]) if params[:type]
-    render json: @concepts, meta: pagination_dict(@concepts), each_serializer: Vocab::ConceptSerializer, adapter: :json
+    if params[:synsets] == 'true'
+      render json: @concepts.map{|c| c.labels.map(&:body)}
+    else
+      render json: @concepts, meta: pagination_dict(@concepts), each_serializer: Vocab::ConceptSerializer, adapter: :json
+    end
   end
 
   # /api/scheme/:slug/concepts/:slug
   def show
-    render json: @concept, serializer: Vocab::ConceptSerializer, adapter: :json
+    if params[:synsets] == 'true'
+      render json: @concept.labels.map(&:body)
+    else
+      render json: @concept, serializer: Vocab::ConceptSerializer, adapter: :json
+    end
   end
 
   # /api/vocab/concepts
@@ -27,7 +35,11 @@ class Api::Vocab::ConceptsController < Api::BaseController
 
     @concepts = @concepts.where(type: params[:type]) if params[:type]
     authorize! :read, @concepts
-    render json: @concepts, meta: pagination_dict(@concepts), each_serializer: Vocab::ConceptSerializer, adapter: :json
+    if params[:synsets] == 'true'
+      render json: @concepts.map{|c| c.labels.map(&:body)}
+    else
+      render json: @concepts, meta: pagination_dict(@concepts), each_serializer: Vocab::ConceptSerializer, adapter: :json
+    end
   end
 
   # /api/search/concepts
@@ -42,10 +54,11 @@ class Api::Vocab::ConceptsController < Api::BaseController
       per_page: params[:per_page] || 30)
 
     authorize! :read, @concepts
-    render json: @concepts, meta: pagination_dict(@concepts), each_serializer: Vocab::ConceptSerializer, adapter: :json
-  end
-
-  def synonyms
-    #to do
+    if params[:synsets] == 'true'
+      @concepts = @concepts.take(params[:limit].to_i) if params[:limit]
+      render json: @concepts.map{|c| c.labels.map(&:body)}
+    else
+      render json: @concepts, meta: pagination_dict(@concepts), each_serializer: Vocab::ConceptSerializer, adapter: :json
+    end
   end
 end
