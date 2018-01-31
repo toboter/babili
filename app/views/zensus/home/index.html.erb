@@ -8,7 +8,7 @@
           <h2>Phonebook / Zensus</h2>
           <p class="text-muted lead">
             The babylon-online research framework helps you with some specific central services. With zensus, 
-            you can lookup any type of people or institutions as agents. From recent team members, participating 
+            you can lookup any type of people or institutions as agents or even only unassigned names. From recent team members, participating 
             institutions, to historic families or individuals, together with their affiliations or professions.
             Agents connect each other through activities forming events.
           </p>
@@ -17,6 +17,7 @@
         <div class="list-group">
           <%= link_to fa_icon('angle-double-right', text: 'Agents'), zensus_agents_path, class: 'list-group-item' %>
           <%= link_to fa_icon('angle-double-right', text: 'Events'), zensus_events_path, class: 'list-group-item' %>
+          <%= link_to fa_icon('angle-double-right', text: 'Names'), zensus_names_path, class: 'list-group-item' %>
         </div>
       </div>
 

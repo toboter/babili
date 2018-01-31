@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   namespace :zensus do
     get '/', to: 'home#index'
     get :search, to: 'search#index'
+    resources :names, controller: 'appellations'
     resources :agents do
       collection do
         resources :people, controller: 'agents', type: 'Zensus::Person'

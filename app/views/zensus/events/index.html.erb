@@ -18,6 +18,7 @@
           <%= render 'zensus/search/box' %>
           <%= link_to fa_icon('plus', text: 'New event'), new_zensus_event_path, class: 'list-group-item' if can?(:create, Zensus::Event) %>
           <%= link_to fa_icon('angle-double-right', text: 'Agents'), zensus_agents_path, class: 'list-group-item' %>
+          <%= link_to fa_icon('angle-double-right', text: 'Names'), zensus_names_path, class: 'list-group-item' %>
         </div>
       <% end %>
     </div>

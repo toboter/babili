@@ -1,0 +1,30 @@
+<% content_for :container do %>
+  <div class="row --spacious zensus">
+    <div class="col-sm-12 col-md-9 main">
+      <%= simple_form_for @appellation, url: (@appellation.new_record? ? zensus_names_path : zensus_name_path(@appellation)), as: :zensus_name do |f| %>
+        <div class="row">
+          <div class="appellation-parts col-md-8">
+            <%= f.simple_fields_for :appellation_parts do |p| %>
+              <%= render partial: 'zensus/agents/appellation_part_fields', locals: {f: p} %>
+            <% end %>
+            <div class="links">
+              <%= link_to_add_association fa_icon('plus', text: 'Name element'), f, :appellation_parts, class: 'btn btn-default btn-sm', partial: 'zensus/agents/appellation_part_fields' %>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <%= f.input :language %>
+            <%= f.input :period %>
+            <%= f.input :trans, collection: Zensus::Appellation.transis %>
+          </div>
+          <div class="col-md-12">
+            <%= f.input :agent_id, collection: Zensus::Agent.all, selected: f.object.agent_id, label_method: :default_name, value_method: :id, :include_blank => true %>
+          </div>
+          <div class="col-md-12 actions --spacious">
+            <%= f.submit class: 'btn btn-primary' %>
+            <%= link_to 'Cancel', @appellation.new_record? ? zensus_names_path : zensus_name_path(@appellation), class: "btn btn-default" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

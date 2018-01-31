@@ -45,7 +45,7 @@ class Zensus::AgentsController < ApplicationController
   def destroy
     @agent.destroy
     respond_to do |format|
-      format.html { redirect_to zensus_agents_path, notice: 'Agent was successfully destroyed.' }
+      format.html { redirect_to zensus_agents_path, notice: 'Agent was successfully removed.' }
       format.json { head :no_content }
     end
   end

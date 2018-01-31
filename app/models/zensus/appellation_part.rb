@@ -47,6 +47,6 @@ class Zensus::AppellationPart < ApplicationRecord
   end
 
   def reindex_agent
-    appellation.agent.reindex
+    appellation.agent.reindex if appellation.agent
   end
 end

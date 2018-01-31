@@ -1,0 +1,4 @@
+<%= link_to zensus_name_path(appellation), class: 'list-group-item' do %>
+  <%= content_tag :span, appellation.name, class: 'text-strong', style: '' %>
+  <%= content_tag :span, fa_icon('check-circle-o'), class: 'text-small text-muted' if appellation.agent %>
+<% end %>
