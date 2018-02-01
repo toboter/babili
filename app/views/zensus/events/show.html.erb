@@ -14,8 +14,12 @@
         <ul>
           <% @event.activities.each do |activity| %>
             <li>
-              <%= link_to activity.event_to_actable, zensus_event_activity_path(@event, activity) %> 
-              <%= link_to activity.actable.default_name, [:zensus, activity.actable] %>
+              <%= link_to activity.event_to_actable, zensus_event_activity_path(@event, activity) %>
+              <% if activity.actable.class.name.deconstantize == 'Zensus' %>
+                <%= link_to activity.actable.default_name, [:zensus, activity.actable] %>
+              <% elsif activity.actable.class.name.deconstantize == 'Vocab' %>
+                <%= link_to activity.actable.default_name, [:vocab, activity.actable.scheme, activity.actable] %>
+              <% end %>
               <%= content_tag :span, activity.note, class: 'text-muted text-small' if activity.note %>
             </li>
           <% end %>

@@ -9,19 +9,20 @@ class Zensus::Agent < ApplicationRecord
   extend FriendlyId
   friendly_id :default_name, use: :slugged
 
-  has_many :appellations, dependent: :destroy
+  has_many :appellations, dependent: :nullify
   has_many :links, dependent: :destroy
   has_many :activities, as: :actable, dependent: :destroy
   has_many :events, through: :activities
   has_many :places, through: :events
   has_many :notes, as: :issueable
 
-  accepts_nested_attributes_for :appellations, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :activities, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :links, reject_if: :all_blank, allow_destroy: true
 
+  validates :appellations, presence: :true
+
   def default_name
-    appellations.first.name
+    appellations.first.try(:name)
   end
 
   def should_generate_new_friendly_id?

@@ -11,7 +11,17 @@ $(document).on('turbolinks:load', function(){
     $("#new_zensus_event").trigger("reset");
     $.rails.enableFormElements($("#new_zensus_event"));
   });
- 
+
+  $(".name-modal").on("hide.bs.modal", function(e) {
+    if (selectizeCallback != null) {
+      selectizeCallback();
+      selecitzeCallback = null;
+    }
+
+    $("#new_zensus_name").trigger("reset");
+    $.rails.enableFormElements($("#new_zensus_name"));
+  });
+
   $("#new_zensus_event").on("submit", function(e) {
     e.preventDefault();
     $.ajax({
@@ -26,7 +36,21 @@ $(document).on('turbolinks:load', function(){
       }
     });
   });
-  
+
+  $("#new_zensus_name").on("submit", function(e) {
+    e.preventDefault();
+    $.ajax({
+      method: "POST",
+      url: $(this).attr("action") + '.json',
+      data: $(this).serialize(),
+      success: function(response) {
+        selectizeCallback({value: response.id, text: response.name});
+        selectizeCallback = null;
+
+        $(".name-modal").modal('toggle');
+      }
+    });
+  });
     
   $('#activities').on('cocoon:after-insert', function(e, addedItem){
     $(addedItem).find('.zensus_activity_event').selectize({
@@ -59,6 +83,17 @@ $(document).on('turbolinks:load', function(){
       $("#zensus_event_type").val(input);
     },
     placeholder: 'Click to select event, type to add...'
+  });
+
+  $('.zensus_appellation').selectize({
+    sortField: 'text',
+    create: function(input, callback) {
+      selectizeCallback = callback;
+
+      $(".name-modal").modal();
+      $("#zensus_name").val(input);
+    },
+    placeholder: 'Type to select or add appellations...'
   });
 
   $('.zensus_activity_actable').selectize({

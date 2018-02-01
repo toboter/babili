@@ -56,20 +56,7 @@ class Zensus::AgentsController < ApplicationController
       :address, 
       :type,
       :default_appellation_id,
-      appellations_attributes: [
-        :id,
-        :language, 
-        :period, 
-        :trans, 
-        :_destroy,
-        appellation_parts_attributes: [
-          :id,
-          :type,
-          :body,
-          :preferred,
-          :_destroy
-        ]
-      ],
+      appellation_ids: [],
       activities_attributes: [
         :id,
         :property_id,

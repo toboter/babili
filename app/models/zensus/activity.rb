@@ -43,6 +43,9 @@ class Zensus::Activity < ApplicationRecord
       {id: 28, event_scopes: ['End of Existence'], property: ['took out of existence', 'was taken out of existence by'], actable_scopes: ['Zensus::Actor', 'Aggregation']},
       {id: 29, event_scopes: ['Dissolution'], property: ['dissolved', 'was dissolved by'], actable_scopes: ['Zensus::Group']},
       {id: 30, event_scopes: ['Death'], property: ['was death of', 'died in'], actable_scopes: ['Zensus::Person']},
+      {id: 31, event_scopes: ['GenderAssignment'], property: ['sex assigned to', 'has assigned sex'], actable_scopes: ['Zensus::Person']},
+      {id: 32, event_scopes: ['GenderAssignment'], property: ['assigned by', 'was assigned by'], actable_scopes: ['Zensus::Person']},
+      {id: 33, event_scopes: ['GenderAssignment'], property: ['assigned sex is', 'was assigned to'], actable_scopes: ['Vocab::Concept']}
     ]
   end
 
@@ -67,7 +70,7 @@ class Zensus::Activity < ApplicationRecord
   end
 
   def description
-    "#{actable.default_name} #{actable_to_event} #{[event.activities-[self]].flatten.map{|a| [a.event_to_actable, a.actable.default_name].join(' ') }.join(', ')} on #{event.default_date}"
+    "#{actable.default_name} #{actable_to_event} #{[event.activities-[self]].flatten.map{|a| [a.event_to_actable, a.actable.default_name].join(' ') }.join(', ')}#{' on ' + event.default_date if event.begins_at.present?}"
     #  #{event.type} #{[event.activities-[self]].flatten.map{|a| a.actable.default_name}.join(', ')}
   end
 

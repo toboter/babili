@@ -24,12 +24,12 @@ class Zensus::Event < ApplicationRecord
   accepts_nested_attributes_for :activities, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :event_relations, reject_if: :all_blank, allow_destroy: true
 
-  validates :type, :begins_at_string, presence: true
+  validates :type, presence: true
 
   before_validation :parse_date
 
   def self.types
-    ['Activity', 'Acquisition', 'Move', 'Transfer of Custody', 'Beginning of Existence', 'Formation', 'Birth', 'Transformation', 'Joining', 'End of Existence', 'Dissolution', 'Death', 'Leaving']
+    ['Activity', 'Acquisition', 'Move', 'Transfer of Custody', 'Beginning of Existence', 'Formation', 'Birth', 'Transformation', 'Joining', 'End of Existence', 'Dissolution', 'Death', 'Leaving', 'GenderAssignment']
   end
 
   def default_date
@@ -37,12 +37,12 @@ class Zensus::Event < ApplicationRecord
   end
 
   def title
-    "#{type} #{'on ' + default_date}"
+    "#{type} #{'on ' + default_date if begins_at.present?}"
   end
 
   def description
     #raise actor.activities.where(event_id: id).inspect #.where(actable_id: agent.id, actable_type: agent.class.base_class)
-    "#{type} #{'on ' + default_date} #{'('+activities.map{|a| a.description }.join(', ')+')' if activities.any?}"
+    "#{title} #{'('+activities.map{|a| a.description }.join(', ')+')' if activities.any?}"
   end
 
   def parse_date

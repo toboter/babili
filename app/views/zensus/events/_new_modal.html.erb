@@ -7,6 +7,7 @@
         </div>
         <div class="modal-body zensus">
           <%= simple_form_for [:zensus, Zensus::Event.new], as: :zensus_event do |f| %>
+            <%= f.error_notification %>
             <div class="form-inline" style="margin-bottom: 10px;">
               <%= f.input :type, collection: Zensus::Event.types, label: false %>
               <%= f.input :place_id, collection: Vocab::Concept.all, label: false, prompt: 'Select place' %>

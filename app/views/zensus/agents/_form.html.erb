@@ -7,12 +7,16 @@
 
         <h3 class="subhead">Appellations</h3>
         <div id="appellations">
-          <%= f.simple_fields_for :appellations do |a| %>
-            <%= render 'appellation_fields', f: a %>
-          <% end %>
-          <div class="links">
-            <%= link_to_add_association fa_icon('plus', text: 'Appellation'), f, :appellations, class: 'btn btn-default btn-sm' %>
-          </div>
+          <%= f.input :appellation_ids, 
+          collection: f.object.appellations+Zensus::Appellation.where(agent_id: nil), 
+          value_method: :id, 
+          label_method: :name,
+          label: false,
+          input_html: {
+            multiple: true,
+            class: 'zensus_appellation',
+            id: 'zensus_appellation_id'
+          } %>
         </div>
 
         <h3 class="subhead --spacious">Activity statements</h3>
@@ -70,4 +74,5 @@
 
 <% content_for :modals do %>
   <%= render 'zensus/events/new_modal' %>
+  <%= render 'zensus/appellations/new_modal' %>
 <% end %>

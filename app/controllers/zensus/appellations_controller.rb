@@ -8,6 +8,7 @@ class Zensus::AppellationsController < ApplicationController
   end
 
   def new
+    @appellation.appellation_parts.build
   end
 
   def edit
@@ -17,7 +18,7 @@ class Zensus::AppellationsController < ApplicationController
     respond_to do |format|
       if @appellation.save
         format.html { redirect_to zensus_name_url(@appellation), notice: 'Name was successfully created.' }
-        format.json { render :show, status: :created, location: @appellation }
+        format.json { render json: @appellation, methods: [:name] }
       else
         format.html { render :new }
         format.json { render json: @appellation.errors, status: :unprocessable_entity }
@@ -29,7 +30,7 @@ class Zensus::AppellationsController < ApplicationController
     respond_to do |format|
       if @appellation.update(appellation_params)
         format.html { redirect_to zensus_name_url(@appellation), notice: "Name was successfully updated." }
-        format.json { render :show, status: :ok, location: @appellation }
+        format.json { render :show, status: :ok, location: @appellation  }
       else
         format.html { render :edit }
         format.json { render json: @appellation.errors, status: :unprocessable_entity }

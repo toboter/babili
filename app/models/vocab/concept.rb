@@ -57,6 +57,10 @@ class Vocab::Concept < ApplicationRecord
     type == 'Collection' ? "<#{preferred_label(lang).try(:body)}>" : preferred_label(lang).try(:body)
   end
 
+  def default_name
+    name
+  end
+
   def uri
     url_for([:vocab, scheme, self])
   end

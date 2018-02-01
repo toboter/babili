@@ -41,7 +41,7 @@
                 <ul class="list-unstyled">
                   <% @agent.appellations.each do |appellation| %>
                     <li>
-                      <%= appellation.name(prefix: true, suffix: true, preferred: false) %>
+                      <%= link_to appellation.name(prefix: true, suffix: true, preferred: false), zensus_name_path(appellation) %>
                     </li>
                   <% end %>
                 </ul>

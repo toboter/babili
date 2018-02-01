@@ -175,7 +175,7 @@ Rails.application.routes.draw do
       end
       resources :events, only: [:index, :show]
       resources :properties, only: [:index, :show]
-      # resources :names, only: [:index, :show, :create]
+      resources :names, controller: 'appellations', only: [:index, :show, :create]
     end
 
     # vocab
@@ -190,6 +190,7 @@ Rails.application.routes.draw do
       get '/', to: 'search#index'               # global
       get :agents, to: 'zensus/agents#search'
       get :events, to: 'zensus/events#search'
+      get :names, to: 'zensus/appellations#search'
       get :concepts, to: 'vocab/concepts#search'
     end
 

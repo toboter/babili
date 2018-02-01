@@ -16,7 +16,12 @@
         <ul>
           <% @activity.event.activities.each do |activity| %>
             <li>
-              <%= activity.event_to_actable %> <%= link_to activity.actable.default_name, [:zensus, activity.actable] %><br>
+              <%= activity.event_to_actable %> 
+              <% if activity.actable.class.name.deconstantize == 'Zensus' %>
+                <%= link_to activity.actable.default_name, [:zensus, activity.actable] %>
+              <% elsif activity.actable.class.name.deconstantize == 'Vocab' %>
+                <%= link_to activity.actable.default_name, [:vocab, activity.actable.scheme, activity.actable] %>
+              <% end %><br>
             </li>
           <% end %>
         </ul>

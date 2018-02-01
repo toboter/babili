@@ -4,7 +4,7 @@
 # t.string    :trans
 
 class Zensus::Appellation < ApplicationRecord
-  attr_accessor :make_default
+  searchkick
 
   belongs_to :agent, touch: true, optional: true
   has_many :appellation_parts, -> { order(position: :asc) }
@@ -36,6 +36,30 @@ class Zensus::Appellation < ApplicationRecord
 
   def self.transis
     %w[Transcription Transliteration]
+  end
+
+  def search_data
+    {
+      name: name(prefix: true, suffix: true, preferred: false),
+      agent: (agent.default_name if agent)
+    }
+  end
+
+  def self.sorted_by(sort_option)
+    direction = ((sort_option =~ /desc$/) ? 'desc' : 'asc').to_sym
+    case sort_option.to_s
+    when /^updated_at_/
+      { updated_at: direction }
+    else
+      raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
+    end
+  end
+
+  def self.options_for_sorted_by
+    [
+      ['Updated asc', 'updated_at_asc'],
+      ['Updated desc', 'updated_at_desc']
+    ]
   end
 
 end

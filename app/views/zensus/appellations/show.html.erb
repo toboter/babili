@@ -28,7 +28,7 @@
             <tbody>
               <tr>
                 <td>Agent</td>
-                <td><%= link_to @appellation.name, zensus_agent_path(@appellation.agent) if @appellation.agent %></td>
+                <td><%= link_to @appellation.agent.default_name, zensus_agent_path(@appellation.agent) if @appellation.agent %></td>
               </tr>
               <tr>
                 <td>Language</td>

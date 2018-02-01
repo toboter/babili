@@ -14,7 +14,7 @@
       </div>
       <div class="col-md-6">
         <%= f.input :actable_gid, 
-          collection: Zensus::Agent.all, 
+          collection: Zensus::Agent.all+Vocab::Concept.all, 
           value_method: :to_global_id, 
           label_method: :default_name,
           label: false,
