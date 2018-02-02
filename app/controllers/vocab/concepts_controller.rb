@@ -1,6 +1,6 @@
 class Vocab::ConceptsController < ApplicationController
   before_action :set_language
-  load_and_authorize_resource :scheme, find_by: :slug
+  load_and_authorize_resource :scheme
   load_and_authorize_resource through: :scheme, find_by: :slug
 
   def index
@@ -65,6 +65,7 @@ class Vocab::ConceptsController < ApplicationController
   def set_language
     @language = LanguageList::LanguageInfo.find(browser.accept_language.first.part.split('-').first).to_s
   end
+  
   # Never trust parameters from the scary internet, only allow the white list through.
   def concept_params
     params.require(:concept).permit(

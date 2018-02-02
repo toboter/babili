@@ -1,5 +1,5 @@
 class Api::Vocab::ConceptsController < Api::BaseController
-  load_and_authorize_resource :scheme, class: 'Vocab::Scheme', find_by: :slug, except: [:full_index, :search]
+  load_and_authorize_resource :scheme, class: 'Vocab::Scheme', except: [:full_index, :search]
   load_and_authorize_resource :concept, through: :scheme, class: 'Vocab::Concept', find_by: :slug, except: [:full_index, :search]
 
   # /api/scheme/:slug/concepts

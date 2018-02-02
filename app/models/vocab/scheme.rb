@@ -8,13 +8,17 @@
 
 class Vocab::Scheme < ApplicationRecord
   extend FriendlyId
-  friendly_id :abbr, use: :slugged
+  friendly_id :abbr, use: [:slugged, :history]
 
   belongs_to :definer, polymorphic: true
   belongs_to :creator, class_name: 'User'
   has_many :concepts, dependent: :destroy
 
   validates :abbr, presence: true
+
+  def should_generate_new_friendly_id?
+    abbr_changed? || super
+  end
 
   def contributors
     [creator].concat(concepts.map{|c| c.contributors}).compact.flatten.uniq

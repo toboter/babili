@@ -21,22 +21,8 @@
                 <thead>
                 </thead>
                 <tbody>
-                  <% (croot.subtree).each do |concept| %>
-                    <tr>
-                      <%= content_tag :td, style: "padding-left: #{concept.indent}px;" do %>
-                        <strong>
-                          <% if concept == @concept %>
-                            <%= concept.name(@language) %>
-                          <% else %>
-                            <%= link_to concept.name(@language), [:vocab, concept.scheme, concept] %>
-                          <% end %>
-                        </strong>
-                      <% end %>
-                      <td>
-                        <%= content_tag :span, concept.descendants.count, class: 'pull-right' %>
-                      </td>
-                    </tr>
-                  <% end %>
+                  <%= render partial: 'vocab/concepts/concept_tree', collection: [croot], locals: { depth: 1 }, as: :concept %>
+            
 
                 </tbody>
               </table>
@@ -58,7 +44,7 @@
                   <div class="list-group">
                     <% @concept.object_matches.each do |match| %>
                       <%= link_to match.concept.uri, class: 'list-group-item' do %>
-                      <%= content_tag :span, match.associatable.name, class: 'text-strong' %>
+                      <%= content_tag :span, match.concept.name, class: 'text-strong' %>
                       <%= content_tag :span, "(#{match.associatable.uri})", class: 'text-small' %>
                       <%= content_tag :span, match.property, class: 'text-italic' %> 
                       <% end %>
@@ -69,7 +55,10 @@
             </div>
           </div>
           <div class="col-md-6">
-            <h4>ID: <%= @concept.uuid %></h4>
+            <h4>
+              Label: <%= content_tag :strong, @concept.name %><br>
+              <small>ID: <%= @concept.uuid %></small>
+            </h4>
             <p><span class="text-strong">Typ: </span><%= @concept.type %></p>
             <div id='definition'>
               <h4 class='subhead --spacious'>Definition</h4>

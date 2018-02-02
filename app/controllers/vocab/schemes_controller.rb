@@ -1,6 +1,7 @@
 class Vocab::SchemesController < ApplicationController
   before_action :set_language
-  load_and_authorize_resource find_by: :slug
+  load_and_authorize_resource
+  before_action :check_resource_location, only: :show
   
   def index
     # Vocab::Scheme.new(abbr: 'aat', title: 'Art and Architecture Thesaurus', slug: 'aat')
@@ -57,6 +58,12 @@ class Vocab::SchemesController < ApplicationController
   private
   def set_language
     @language = LanguageList::LanguageInfo.find(browser.accept_language.first.part.split('-').first).to_s
+  end
+
+  def check_resource_location
+    if request.path != vocab_scheme_path(@scheme)
+      return redirect_to vocab_scheme_path(@scheme), :status => :moved_permanently
+    end
   end
   # Never trust parameters from the scary internet, only allow the white list through.
   def scheme_params

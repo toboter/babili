@@ -55,26 +55,40 @@
       <%= link_to 'View all.', collections_path, class: 'col-md-12' %>
     </div>
 
-    <div class="page-header text-center borderless">
-      <h2>Phonebook / Zensus</h2>
-      <p class="text-muted lead">
-        The babylon-online research framework helps you with some specific central services. With zensus, 
-        you can lookup any type of people or institutions as agents. From recent team members, participating 
-        institutions, to historic families or individuals, together with their affiliations or professions.
-      </p>
-      <%= link_to 'Zensus', zensus_path, class: 'text-center' %>
-    </div>
-
 
     <div class="page-header text-center borderless">
-      <h2>Babylonian confusion / Vocabularies</h2>
+      <h2>Babylonian confusion ::vocabularies</h2>
       <p class="text-muted lead">
-        Having 100 years of research history means having multiple naming conventions. Vocabularies shall 
+        Having 100 years of research history means having multiple naming conventions. <%= link_to 'Vocabularies', vocab_path, class: 'text-strong' %> shall 
         assist each researcher with an idea of a common wording and term translations as well as giving 
         anyone the possibility to name things in a heterogenus way, while still acting with a common idea.
       </p>
-      <%= link_to 'Vocabularies', vocab_path, class: 'text-center' %>
     </div>
+
+    <div class="page-header text-center borderless">
+      <h2>Phonebook ::zensus</h2>
+      <p class="text-muted lead">
+        The babylon-online research framework helps you with some specific central services. With <%= link_to 'zensus', zensus_path, class: 'text-strong' %>, 
+        you can lookup any type of people or institutions as agents. From recent team members, participating 
+        institutions, to historic families or individuals, together with their affiliations or professions.
+      </p>
+    </div>
+
+    <div class="page-header text-center borderless">
+      <h2>Locate ::places</h2>
+      <p class="text-muted lead">
+        <%= link_to 'Locate', locate_path, class: 'text-strong' %> is a thesaurus service which guides you through places 
+        and locations mentioned and used in the Babylon-Universe.
+      </p>
+    </div>
+
+    <div class="page-header text-center borderless hidden">
+      <h2>Epoc ::periods</h2>
+      <p class="text-muted lead">
+        
+      </p>
+    </div>
+
 
     <div class="page-header text-center --spacious-80">
       <h1>Babylon Research Team</h1>

@@ -1,5 +1,5 @@
 class Api::Vocab::SchemesController < Api::BaseController
-  load_and_authorize_resource class: 'Vocab::Scheme', find_by: :slug
+  load_and_authorize_resource class: 'Vocab::Scheme'
 
   def index
     sort_order = Vocab::Scheme.sorted_by(params[:sort].presence || 'updated_at_desc')
