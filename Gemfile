@@ -85,5 +85,6 @@ gem 'linkeddata'
 gem 'acts_as_dag', git: 'https://github.com/toboter/acts_as_dag.git'
 # gem 'acts_as_dag', path: '/home/tschmidt/dev/gem_dev/acts_as_dag'
 gem 'language_list'
+gem 'hashie'
 
 ruby '2.3.1'

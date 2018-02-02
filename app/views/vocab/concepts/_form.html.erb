@@ -12,7 +12,7 @@
           <div class="col-md-12">
             <h3 class="subhead">Properties</h3>
             <%= f.input :status, collection: Vocab::Concept.statuses %>
-            <%= f.input :type, collection: Vocab::Concept.types, include_blank: false, selected: @concept.type, as: :hidden %>
+            <%= f.input :type, collection: Vocab::Concept.types, include_blank: false, selected: @concept.type %>
           </div>
 
           <div class="col-md-12">

@@ -16,12 +16,35 @@
       </thead>
       <tbody>
         <% @results.each do |result| %>
-          <tr>
-            <td>
-              <small><%= result %></small>
-            </td>
-          </tr>
-        <% end %>
+          <% result.each do |r| %>
+            <% if r.is_a?(Array) %>
+              <% r.last.each do |o| %>
+                <% if r.first == 'ExcavatedObjects' %>
+                  <tr>
+                    <td>
+                      <%= o["bab_rel"] %><br>
+                      <%= link_to o["links"]["html_url"], o["links"]["html_url"], class: 'text-small' %>
+                    </td>
+                  </tr>
+                <% elsif r.first == 'DocumentationObjects' %>
+                  <tr>
+                    <td>
+                      <%= o["identifier_stable"] %><br>
+                      <%= link_to o["links"]["html_url"], o["links"]["html_url"], class: 'text-small' %>
+                    </td>
+                  </tr>
+                <% end %>
+              <% end %>
+            <% else %>
+              <tr>
+                <td>
+                  <%= r["full_entry"] %><br>
+                  <%= link_to r["links"]["human"], r["links"]["human"], class: 'text-small' %>
+                </td>
+              </tr>
+            <% end %>
+          <% end %>
+        <% end if @results %>
       </tbody>
     </table>
 

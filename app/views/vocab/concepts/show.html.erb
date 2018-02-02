@@ -92,9 +92,9 @@
       </div>
       <%= content_tag :div, class: 'col-md-3 sidebar' do %>
         <div class="list-group" id="actions">
-          <%= link_to fa_icon('edit', text: 'Edit'), edit_vocab_scheme_concept_path(@concept.scheme, @concept), class: 'list-group-item' %>
-          <%= link_to fa_icon('trash', text: 'Delete'), [:vocab, @concept.scheme, @concept], method: :delete, data: { confirm: 'Are you sure?' }, class: 'list-group-item' %>
-          <%= link_to fa_icon('plus', text: 'Create narrower concept'), new_vocab_scheme_concept_path(@concept.scheme, broader_concept: @concept), class: 'list-group-item' %>
+          <%= link_to fa_icon('edit', text: 'Edit'), edit_vocab_scheme_concept_path(@concept.scheme, @concept), class: 'list-group-item' if can?(:update, @concept) %>
+          <%= link_to fa_icon('trash', text: 'Delete'), [:vocab, @concept.scheme, @concept], method: :delete, data: { confirm: 'Are you sure?' }, class: 'list-group-item' if can?(:destroy, @concept) %>
+          <%= link_to fa_icon('plus', text: 'Create narrower concept'), new_vocab_scheme_concept_path(@concept.scheme, broader_concept: @concept), class: 'list-group-item' if can?(:create, Vocab::Concept) %>
           <%= link_to fa_icon('angle-double-up', text: 'All concepts'), vocab_scheme_concepts_path(@concept.scheme), class: 'list-group-item' %>
         </div>
         <div class="list-group" id="representations">

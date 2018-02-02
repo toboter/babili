@@ -445,6 +445,7 @@ DEPENDENCIES
   font-awesome-rails
   friendly_id
   geo_pattern
+  hashie
   image_processing
   inline_svg
   jbuilder (~> 2.5)
