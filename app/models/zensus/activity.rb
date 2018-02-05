@@ -1,5 +1,6 @@
 # t.integer    :event_id
 # t.integer    :property_id
+#   -> vocab::instance_relation.id => property / inverse_property
 # t.references :actable
 # t.text       :note
 # t.string     :note_type
@@ -8,6 +9,7 @@ class Zensus::Activity < ApplicationRecord
   after_commit :reindex_event_and_actable
   
   belongs_to :actable, polymorphic: true
+  # belongs_to property, class_name: 'Vocab::InstanceRelation'
   belongs_to :event
 
   def self.properties

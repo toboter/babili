@@ -7,6 +7,24 @@
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <script>
+      window.addEventListener("load", function(){
+      window.cookieconsent.initialise({
+        "palette": {
+          "popup": {
+            "background": "#252e39",
+            "text": "#fff"
+          },
+          "button": {
+            "background": "#0366d6"
+          }
+        },
+        "theme": "classic",
+        "content": {
+          "href": '<%= cms_help_category_url('site') %>'
+        }
+      })});
+    </script>
   </head>
 
   <body id="page-top">

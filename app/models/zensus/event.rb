@@ -1,4 +1,5 @@
 # t.string    :type
+#   ->out of vocab::concept.where(label: ['Person', 'Group']).narrower_concepts
 # t.string    :beginn
 # t.string    :ended
 # t.boolean   :circa
