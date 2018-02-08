@@ -5,7 +5,7 @@
     <div class="row border-left">
       <div class="col-md-6">
         <%= f.input :property_id, 
-          collection: (Zensus::Activity.properties.collect {|p| [ p[:property].first, p[:id] ] }), 
+          collection: (Zensus::Activity.properties.collect {|p| [ p[:name], p[:id] ] }), 
           label: false,
           input_html: {
             class: 'zensus_activity_property',

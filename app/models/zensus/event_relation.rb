@@ -3,7 +3,7 @@
 # t.integer   :related_event_id
 
 class Zensus::EventRelation < ApplicationRecord
-  after_commit :reindex_event
+  after_commit :reindex_event, on: [:create, :update]
 
   belongs_to :event
   belongs_to :related_event, class_name: 'Zensus::Event'

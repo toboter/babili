@@ -8,7 +8,7 @@
           <%= content_tag :span, @agent.default_name, class: 'text-strong' %>
         <% end %>
         <%= f.input :property_id, 
-          collection: (Zensus::Activity.properties.collect {|p| [ p[:property].first, p[:id] ] }), 
+          collection: (Zensus::Activity.properties.collect {|p| [ p[:inverse_name], p[:id] ] }), 
           label: false,
           input_html: {
             class: 'zensus_activity_property'

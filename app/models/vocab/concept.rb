@@ -110,11 +110,12 @@ class Vocab::Concept < ApplicationRecord
     children = Vocab::Concept.find(ids)
     (self.children - children).each do |child_to_remove|
       remove_child(child_to_remove)
+      child_to_remove.parents.empty? ? child_to_remove.make_root : ActsAsDAG::HelperMethods.unlink(nil, child_to_remove)
     end
     self.children = children
-    # unless self.new_record?
-    #   children.empty? ? self.make_root : ActsAsDAG::HelperMethods.unlink(nil, self)
-    # end
+    children.each do |child|
+      ActsAsDAG::HelperMethods.unlink(nil, child)
+    end
   end
 
   def self.sorted_by(sort_option)

@@ -36,7 +36,6 @@
               <% end if @agent.members %>
             </ul>
           <% end %>
-
           <h4 class="subhead --spacious">Appellations</h4>
                 <ul class="list-unstyled">
                   <% @agent.appellations.each do |appellation| %>
@@ -45,7 +44,7 @@
                     </li>
                   <% end %>
                 </ul>
-          <h4 class="subhead --spacious">Activities</h4>
+          <h4 class="subhead --spacious">Livetime events</h4>
                 <ul>
                   <% @agent.activities.each do |activity| %>
                     <li>

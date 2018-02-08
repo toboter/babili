@@ -9,7 +9,7 @@ class Zensus::AgentsController < ApplicationController
   end
 
   def new
-    @agent.type = params[:type]
+    @agent = Zensus::Agent.new(type: params[:type])
     @agent.appellations.build do |a|
       a.appellation_parts.build
     end

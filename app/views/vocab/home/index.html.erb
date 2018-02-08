@@ -47,6 +47,8 @@
           <% end if can?(:create, Vocab::Scheme)%>
           <div class="col-md-12">
             <%= link_to "View all #{content_tag :span, @schemes.count, class: 'badge'}".html_safe, vocab_schemes_path %>
+
+            <%= content_tag :p, 'Complies to ISO 25964.', class: '--spacious text-muted text-small'%>
           </div>
         </div>
       </div>

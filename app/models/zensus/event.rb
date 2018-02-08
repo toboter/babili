@@ -30,7 +30,7 @@ class Zensus::Event < ApplicationRecord
   before_validation :parse_date
 
   def self.types
-    ['Activity', 'Acquisition', 'Move', 'Transfer of Custody', 'Beginning of Existence', 'Formation', 'Birth', 'Transformation', 'Joining', 'End of Existence', 'Dissolution', 'Death', 'Leaving', 'GenderAssignment']
+    ['Activity', 'BeginningOfExistence', 'Formation', 'Birth', 'Transformation', 'Joining', 'EndOfExistence', 'Dissolution', 'Death', 'Leaving', 'GenderAssignment', 'Marriage']
   end
 
   def default_date

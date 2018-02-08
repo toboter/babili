@@ -5,7 +5,7 @@
         <div class="activity-form">
           <%= content_tag :p, @activity.event.description, class: 'text-strong' %>
           <%= f.input :property_id, 
-            collection: (Zensus::Activity.properties.select{|p| p[:event_scopes].include?(@event.type)  }.collect {|p| [ p[:property].last, p[:id] ] }), 
+            collection: (Zensus::Activity.properties.select{|p| p[:domain].include?(@event.type)  }.collect {|p| [ p[:inverse_name], p[:id] ] }), 
             label: false,
             input_html: {
               class: 'zensus_activity_property'

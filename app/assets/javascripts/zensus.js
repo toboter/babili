@@ -29,7 +29,7 @@ $(document).on('turbolinks:load', function(){
       url: $(this).attr("action") + '.json',
       data: $(this).serialize(),
       success: function(response) {
-        selectizeCallback({value: response.id, text: response.description});
+        selectizeCallback({value: response.id, text: response.title});
         selectizeCallback = null;
 
         $(".event-modal").modal('toggle');

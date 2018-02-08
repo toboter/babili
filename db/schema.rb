@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180129111429) do
+ActiveRecord::Schema.define(version: 20180208115136) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -312,10 +312,10 @@ ActiveRecord::Schema.define(version: 20180129111429) do
     t.index ["uuid"], name: "index_vocab_concepts_on_uuid", unique: true
   end
 
-  create_table "vocab_descendants", id: :serial, force: :cascade do |t|
+  create_table "vocab_descendants", force: :cascade do |t|
     t.string "category_type"
-    t.integer "ancestor_id"
-    t.integer "descendant_id"
+    t.bigint "ancestor_id"
+    t.bigint "descendant_id"
     t.integer "distance"
     t.index ["ancestor_id"], name: "index_vocab_descendants_on_ancestor_id"
     t.index ["descendant_id"], name: "index_vocab_descendants_on_descendant_id"
@@ -344,10 +344,10 @@ ActiveRecord::Schema.define(version: 20180129111429) do
     t.index ["type"], name: "index_vocab_labels_on_type"
   end
 
-  create_table "vocab_links", id: :serial, force: :cascade do |t|
+  create_table "vocab_links", force: :cascade do |t|
     t.string "category_type"
-    t.integer "parent_id"
-    t.integer "child_id"
+    t.bigint "parent_id"
+    t.bigint "child_id"
     t.index ["child_id"], name: "index_vocab_links_on_child_id"
     t.index ["parent_id"], name: "index_vocab_links_on_parent_id"
   end

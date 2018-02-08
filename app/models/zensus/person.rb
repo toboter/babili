@@ -1,10 +1,10 @@
 class Zensus::Person < Zensus::Agent
-  has_many :joining_activities, -> { where(property_id: 16) }, as: :actable, class_name: 'Zensus::Activity'
+  has_many :joining_activities, -> { where(property_id: 143) }, as: :actable, class_name: 'Zensus::Activity'
   has_many :joining_events, through: :joining_activities, source: :event
 
-  has_one :parent_activity, -> { where(property_id: 25).limit(1) }, as: :actable, class_name: 'Zensus::Activity'
+  has_one :parent_activity, -> { where(property_id: 98).limit(1) }, as: :actable, class_name: 'Zensus::Activity'
   has_one :parent_event, -> { distinct }, through: :parent_activity, source: :event
-  has_many :child_activities, -> { where(property_id: [23,24]) }, as: :actable, class_name: 'Zensus::Activity'
+  has_many :child_activities, -> { where(property_id: [96,97]) }, as: :actable, class_name: 'Zensus::Activity'
   has_many :child_events, -> { distinct }, through: :child_activities, source: :event
 
   def parents
@@ -32,7 +32,7 @@ class Zensus::Person < Zensus::Agent
   end
 
   def children
-    child_activities.any? ? child_events.map{|e| e.activities.where(property_id: 25).map(&:actable)}.flatten : nil
+    child_activities.any? ? child_events.map{|e| e.activities.where(property_id: 98).map(&:actable)}.flatten : nil
   end
 
   def siblings
@@ -40,7 +40,7 @@ class Zensus::Person < Zensus::Agent
   end
 
   def groups
-    joining_events.any? ? joining_events.map{ |j| j.activities.where(property_id: 17).map(&:actable) }.flatten : nil
+    joining_events.any? ? joining_events.map{ |j| j.activities.where(property_id: 144).map(&:actable) }.flatten : nil
   end
 
 end
