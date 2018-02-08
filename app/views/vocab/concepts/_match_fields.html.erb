@@ -12,8 +12,8 @@
     </div>
   <% else %>
     <div class="well" style="padding:10px;margin-bottom:10px;">
-      <%= content_tag :span, f.object.associatable.name, class: 'text-strong' %>
-      <%= link_to f.object.associatable.uri, f.object.associatable.uri %>
+      <%= content_tag :span, f.object.associatable.try(:name), class: 'text-strong' %>
+      <%= link_to f.object.associatable.try(:uri), f.object.associatable.try(:uri) %>
       <%= content_tag :span, f.object.property, class: 'text-italic' %>
       <%= link_to_remove_association fa_icon('trash'), f, style: 'margin-left: 20px;' %>
     </div>
