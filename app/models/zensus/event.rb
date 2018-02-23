@@ -19,7 +19,7 @@ class Zensus::Event < ApplicationRecord
   has_many    :activities, dependent: :destroy
   has_many    :agents, through: :activities, source_type: 'Zensus::Agent', source: :actable
   has_many    :notes, as: :issueable
-  belongs_to  :place, class_name: 'Vocab::Concept'
+  belongs_to  :place, class_name: 'Locate::Place'
   belongs_to  :period, class_name: 'Vocab::Concept'
 
   accepts_nested_attributes_for :activities, reject_if: :all_blank, allow_destroy: true
@@ -30,7 +30,7 @@ class Zensus::Event < ApplicationRecord
   before_validation :parse_date
 
   def self.types
-    ['Activity', 'BeginningOfExistence', 'Formation', 'Birth', 'Transformation', 'Joining', 'EndOfExistence', 'Dissolution', 'Death', 'Leaving', 'GenderAssignment', 'Marriage']
+    ['Activity', 'BeginningOfExistence', 'Formation', 'Birth', 'Transformation', 'Joining', 'EndOfExistence', 'Dissolution', 'Death', 'Leaving', 'GenderAssignment', 'Marriage', 'Survey', 'Excavation']
   end
 
   def default_date

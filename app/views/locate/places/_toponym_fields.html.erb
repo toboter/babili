@@ -1,0 +1,22 @@
+<div class="row nested-fields toponym-fields">
+  <div class="col-md-1">
+  </div>
+  <div class="col-md-11">
+    <div class="row border-left">
+      <div class="col-md-8">
+        <%= f.input :descriptor %>
+        <%= f.input :type, collection: Locate::Toponym::TYPES %>
+      </div>
+      <div class="col-md-4">
+        <%= f.input :denomination, collection: Locate::Toponym::DENOMINATIONS %>
+        <%= f.input :language, collection: LanguageList::COMMON_LANGUAGES %>
+      </div>
+      <div class="col-md-12">
+        <%= link_to_remove_association fa_icon('trash', text: 'Delete'), f, class: 'pull-right btn btn-sm btn-default' %>
+      </div>
+      <div class="col-md-12">
+        <hr>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,5 @@
+<div class="locate-search --spacing-20">
+  <%= form_tag locate_search_path, method: :get, class: "" do %>
+    <%= search_field_tag 'q', params[:q], placeholder: "Search for places ...", class: "form-control", autofocus: true %>
+  <% end %>
+</div>

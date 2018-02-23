@@ -5,6 +5,7 @@ source 'https://rubygems.org'
 gem 'rails', '~> 5.1'
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.18'
+gem 'activerecord-postgis-adapter'
 # Use Puma as the app server
 gem 'puma', '~> 3.10'
 # Use SCSS for stylesheets
@@ -71,6 +72,8 @@ gem "selectize-rails"
 gem 'chronic'
 # gem 'goldiloader'
 gem 'searchkick'
+gem "rgeo"
+gem "rgeo-proj4"
 
 gem 'devise'
 gem 'doorkeeper'

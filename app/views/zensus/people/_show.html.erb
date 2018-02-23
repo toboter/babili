@@ -1,0 +1,52 @@
+        <%= content_tag :div, class: "agent", id: "agent-#{@agent.id}", itemscope: "itemscope", itemtype: "http://schema.org/Person" do %>
+          <%= link_to fa_icon("trash", text: 'Remove'), [:zensus, @agent], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default btn-sm text-strong text-danger pull-right' if can?(:destroy, @agent) %>
+          <%= link_to fa_icon("edit", text: 'Edit'), [:edit, :zensus, @agent], class: 'btn btn-default btn-sm text-strong pull-right', style: 'margin-right:10px;' if can?(:update, @agent) %>
+          <%= content_tag :h2, link_to(content_tag(:span, @agent.default_name, itemprop: "name"), [:zensus, @agent]), class: 'agent-title h-condensed' %>
+
+            <h4 class="subhead --spacious">Family</h4>
+            <ul class="list-unstyled">
+              <%= content_tag :li, ('Parents: ' + @agent.parents.map{ |g| link_to(content_tag(:span, g.default_name, itemprop: "name"), [:zensus, g]) }.join(', ')).html_safe, itemprop: "parents", itemscope: "itemscope", itemtype: "http://schema.org/Person" if @agent.parents.present? %>
+              <%= content_tag :li, ('Children: ' + @agent.children.map{ |g| link_to(content_tag(:span, g.default_name, itemprop: "name"), [:zensus, g]) }.join(', ')).html_safe, itemprop: "children", itemscope: "itemscope", itemtype: "http://schema.org/Person" if @agent.children.present? %>
+              <%= content_tag :li, ('Siblings: ' + @agent.siblings.map{ |g| link_to(g.default_name, [:zensus, g]) }.join(', ')).html_safe if @agent.siblings.present? %>
+            </ul>
+            <h4 class="subhead --spacious">Affiliations</h4>
+            <ul class="list-unstyled">
+              <% @agent.groups.each do |group| %>
+                <%= content_tag :li, link_to(group.default_name, [:zensus, group]) %>
+              <% end if @agent.groups %>
+            </ul>
+          <h4 class="subhead --spacious">Appellations</h4>
+                <ul class="list-unstyled">
+                  <% @agent.appellations.each do |appellation| %>
+                    <li>
+                      <%= link_to appellation.name(prefix: true, suffix: true, preferred: false), zensus_name_path(appellation) %>
+                    </li>
+                  <% end %>
+                </ul>
+          <h4 class="subhead --spacious">Timeline</h4>
+                <ul class="list-group">
+                  <% @agent.activities.joins(:event).order('zensus_events.begins_at_date DESC').each do |activity| %>
+                    <li class="list-group-item">
+                      <%= content_tag :span, activity.actable.default_name, class: 'text-muted' %><br>
+                      <%= link_to activity.actable_to_event, zensus_event_activity_path(activity.event, activity), class: 'text-strong' %>
+                      <% unless Zensus::Activity.properties.select {|p| p[:id] == activity.property_id  }.first[:ditransitive] %>
+                        <% actable = activity.event.activities.where.not(id: activity.id).first.actable %>
+                        <%= link_to actable.default_name, zensus_agent_path(actable) %>
+                      <% end %>
+                      <%= content_tag :span, class: 'text-italic' do %>
+                        <%= link_to(' on ' + activity.event.default_date, zensus_event_path(activity.event)).html_safe %>
+                        <%= link_to(' in ' + activity.event.place.default_name, activity.event.place).html_safe if activity.event.place.present? %>
+                      <% end %>
+                    </li>
+                  <% end %>
+                </ul>
+
+          <h4 class="subhead --spacious">Other representations</h4>
+                <ul>
+                  <% @agent.links.each do |link| %>
+                    <li>
+                      <%= link_to(link.uri, link.uri, target: :blank) %>
+                    </li>
+                  <% end %>
+                </ul>
+        <% end %>

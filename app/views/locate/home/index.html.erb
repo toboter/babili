@@ -1,7 +1,7 @@
 <% title "Locate" %>
 
 <% content_for :container do %>
-  <div class="zensus">
+  <div class="locate">
     <div class="row --spacious">
       <div class="col-sm-12 col-md-8 col-centered">
         <div class="page-header text-center borderless">
@@ -11,8 +11,9 @@
         and locations.
           </p>
         </div>
-
+        <%= render 'locate/search/box' %>
         <div class="list-group">
+          <%= link_to fa_icon('angle-double-right', text: 'Places'), locate_places_path, class: 'list-group-item' %>
 
         </div>
       </div>

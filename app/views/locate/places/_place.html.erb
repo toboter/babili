@@ -1,0 +1,4 @@
+<%= link_to locate_place_path(place), class: 'list-group-item' do %>
+  <%= content_tag :span, place.type, style: 'float: left; width: 100px;' %>
+  <%= content_tag :span, place.default_name, class: 'text-strong', style: '' %>
+<% end %>

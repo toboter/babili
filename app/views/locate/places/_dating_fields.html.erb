@@ -1,0 +1,27 @@
+<div class="row nested-fields dating-fields">
+  <div class="col-md-1">
+  </div>
+  <div class="col-md-11">
+    <div class="row border-left">
+      <div class="col-md-12">
+        <%= f.input :dating_id, collection: Vocab::Concept.all, label_method: :default_name, value_method: :id %>
+
+        <h4 class="subhead">Toponyms</h4>
+        <div id="place-<%= @place.id %>-dating-<%= f.object.id %>-toponyms">
+          <%= f.simple_fields_for :toponyms do |m| %>
+            <%= render 'toponym_fields', f: m %>
+          <% end %>
+          <div class="links">
+            <%= link_to_add_association fa_icon('plus', text: 'Toponym'), f, :toponyms, class: 'btn btn-default btn-sm' %>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <%= link_to_remove_association fa_icon('trash', text: 'Delete dating'), f, class: 'pull-right btn btn-sm btn-default' %>
+      </div>
+      <div class="col-md-12">
+        <hr>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+<% title "Search results" %>
+
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, link_to('Locate', locate_path) %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
+<% end %>
+
+<% content_for :container do %>
+  <div class="locate">
+    <div class="row --spacious">
+      <div class="col-sm-12 col-md-8 main">
+        <div class="list-group">
+          <%= render @results %>
+        </div>
+      </div>
+      <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
+        <div class="list-group">
+          <%= render 'locate/search/box' %>
+          <%= link_to fa_icon('angle-double-up', text: 'All places'), locate_places_path, class: 'list-group-item' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

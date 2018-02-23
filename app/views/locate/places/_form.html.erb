@@ -1,0 +1,33 @@
+<% content_for :container do %>
+  <div class="row locate">
+    <div class="col-sm-12 col-md-9 main">
+      <%= simple_form_for(place) do |f| %>
+        <%= f.error_notification %>
+
+        <h3 class="subhead">Properties</h3>
+        <%= f.input :type, collection: Locate::Place::TYPES %>
+        <%= f.input :description %>
+        default_name, default_location
+
+        <h3 class="subhead --spacious">Datings</h3>
+        <div id="datings">
+          <%= f.simple_fields_for :datings do |m| %>
+            <%= render 'dating_fields', f: m %>
+          <% end %>
+          <div class="links">
+            <%= link_to_add_association fa_icon('plus', text: 'Dating'), f, :datings, class: 'btn btn-default btn-sm' %>
+          </div>
+        </div>
+
+        <div class="actions --spacious">
+          <%= f.submit class: 'btn btn-primary' %>
+          <%= link_to 'Cancel', (f.object.new_record? ? locate_places_path : place), class: "btn btn-default" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<% content_for :modals do %>
+  <%= render 'zensus/events/new_modal' %>
+<% end %>

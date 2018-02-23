@@ -27,6 +27,10 @@ Rails.application.routes.draw do
 
   namespace :locate do
     get '/', to: 'home#index'
+    get '/search', to: 'search#index'
+    resources :places do
+      resources :locations
+    end
   end
 
   get '/search', to: 'search#index'

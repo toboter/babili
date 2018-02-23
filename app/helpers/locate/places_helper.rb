@@ -1,0 +1,2 @@
+module Locate::PlacesHelper
+end

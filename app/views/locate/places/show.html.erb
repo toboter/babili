@@ -1,0 +1,55 @@
+<% title @place.default_name %>
+
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, link_to('Locate', locate_path) %>
+  <%= content_tag :li, link_to('Places', locate_places_path) %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
+<% end %>
+
+<% content_for :container do %>
+  <div class="locate">
+    <div class="row --spacious">
+      <div class="col-sm-12 col-md-8 main">
+        <%= content_tag :div, class: "place", id: "place-#{@place.id}", itemscope: "itemscope", itemtype: "http://schema.org/Place" do %>
+          <%= link_to fa_icon("trash", text: 'Remove'), @place, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default btn-sm text-strong text-danger pull-right' if can?(:destroy, @place) %>
+          <%= link_to fa_icon("edit", text: 'Edit'), [:edit,  @place], class: 'btn btn-default btn-sm text-strong pull-right', style: 'margin-right:10px;' if can?(:update, @place) %>
+
+          <%= content_tag :h2, link_to(content_tag(:span, @place.default_name, itemprop: "name"), @place), class: 'place-title h-condensed' %>
+          <%= content_tag :p, @place.description, class: 'text-muted' %>
+        
+
+          <% @place.datings.each do |dating| %>
+            <%= dating.concept.default_name %>
+            <%= dating.toponyms.map(&:descriptor).join(', ') %>
+          <% end %>
+
+          <br>
+          <% @place.locations.each do |location| %>
+            <%= location.inspect %>
+          <% end %>
+
+          <br>
+          <ul class="list-group">
+            <% @place.events.each do |event| %>
+              <li class="list-group-item">
+                <% event.activities.each_with_index do |activity,index| %>
+                  <%= link_to activity.description, [:zensus, event, activity], class: "#{'text-small' if index > 0}" %><br>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+
+
+        <% end %>
+
+
+      </div>
+      <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
+        <div class="list-group">
+          <%= link_to fa_icon('angle-double-up', text: 'All places'), locate_places_path, class: 'list-group-item' %>
+          <%= link_to fa_icon('angle-double-right', text: 'Locations'), locate_place_locations_path(@place), class: 'list-group-item' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

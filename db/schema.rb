@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180208115136) do
+ActiveRecord::Schema.define(version: 20180208181031) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "postgis"
 
   create_table "audits", id: :serial, force: :cascade do |t|
     t.integer "user_id"
@@ -84,6 +85,58 @@ ActiveRecord::Schema.define(version: 20180208115136) do
     t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
     t.index ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id"
     t.index ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type"
+  end
+
+  create_table "locate_datings", force: :cascade do |t|
+    t.integer "place_id"
+    t.integer "dating_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["dating_id"], name: "index_locate_datings_on_dating_id"
+    t.index ["place_id"], name: "index_locate_datings_on_place_id"
+  end
+
+  create_table "locate_datings_locations", id: false, force: :cascade do |t|
+    t.integer "dating_id"
+    t.integer "location_id"
+    t.index ["dating_id"], name: "index_locate_datings_locations_on_dating_id"
+    t.index ["location_id"], name: "index_locate_datings_locations_on_location_id"
+  end
+
+  create_table "locate_locations", force: :cascade do |t|
+    t.integer "place_id"
+    t.geometry "loc", limit: {:srid=>3785, :type=>"geometry"}
+    t.float "fuzzyness"
+    t.integer "creator_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "index_locate_locations_on_creator_id"
+    t.index ["loc"], name: "index_locate_locations_on_loc", using: :gist
+    t.index ["place_id"], name: "index_locate_locations_on_place_id"
+  end
+
+  create_table "locate_places", force: :cascade do |t|
+    t.string "type"
+    t.text "description"
+    t.integer "creator_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "index_locate_places_on_creator_id"
+    t.index ["type"], name: "index_locate_places_on_type"
+  end
+
+  create_table "locate_toponyms", force: :cascade do |t|
+    t.integer "dating_id"
+    t.string "type"
+    t.string "denomination"
+    t.string "descriptor"
+    t.string "language"
+    t.integer "creator_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "index_locate_toponyms_on_creator_id"
+    t.index ["dating_id"], name: "index_locate_toponyms_on_dating_id"
+    t.index ["type"], name: "index_locate_toponyms_on_type"
   end
 
   create_table "memberships", id: :serial, force: :cascade do |t|

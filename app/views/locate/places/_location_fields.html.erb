@@ -1,0 +1,5 @@
+<div class="nested-fields location-fields">
+  <%= f.input :loc, as: :string %>
+  <%= f.input :fuzzyness %>
+  <%= content_tag :span, link_to_remove_association(fa_icon('trash', text: 'Delete'), f, class: 'btn btn-default btn-sm'), class: 'pull-right' %>
+</div>
