@@ -17,6 +17,7 @@ $(document).on('turbolinks:load', function(){
       valueField: 'id',
       labelField: 'name',
       searchField: 'name',
+      placeholder: 'Type to search AAT & local concepts...',
       create: true,
       load: function(query, callback) {
         console.log(query);

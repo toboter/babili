@@ -74,9 +74,32 @@ class Vocab::ConceptsController < ApplicationController
       :type,
       broader_concepts: [],
       narrower_concepts: [],
-      matches_attributes: [:id, :associated_concept, :property, :_destroy],
-      labels_attributes: [:id, :type, :creator_id, :body, :language, :vernacular, :historical, :is_abbrevation, :_destroy],
-      notes_attributes: [:id, :type, :creator_id, :body, :language, :_destroy])
+      matches_attributes: [
+        :id, 
+        :associated_concept, 
+        :property, 
+        :_destroy
+      ],
+      labels_attributes: [
+        :id, 
+        :type, 
+        :creator_id, 
+        :body, 
+        :language, 
+        :vernacular, 
+        :historical, 
+        :is_abbrevation, 
+        :_destroy
+      ],
+      notes_attributes: [
+        :id, 
+        :type, 
+        :creator_id, 
+        :body, 
+        :language, 
+        :_destroy
+      ]
+    )
   end
   
 end

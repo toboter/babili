@@ -17,7 +17,9 @@ class Vocab::Label < ApplicationRecord
   validates :body, uniqueness: { scope: [:language, :concept_id], 
     message: "should only exist once per concept and language" }
 
-    def self.types
+  after_commit :reindex_concept, on: [:create, :update]
+  
+  def self.types
     %w(Preferred Alternative Hidden)
   end
 
@@ -29,4 +31,7 @@ class Vocab::Label < ApplicationRecord
     %w(Current Historical Both Unknown NotApplicable)
   end
 
+  def reindex_concept
+    concept.reindex
+  end
 end

@@ -53,7 +53,7 @@ class Vocab::AATConcept
 
   def self.search(q)
     query = "select ?Subject ?Term ?Parents ?ScopeNote {
-      ?Subject a skos:Concept; luc:term \"#{q}*\"; skos:inScheme aat: ;
+      ?Subject luc:term \"#{q}*\"; skos:inScheme aat: ;
          gvp:prefLabelGVP [xl:literalForm ?Term].
       optional {?Subject gvp:parentStringAbbrev ?Parents}
       optional {?Subject skos:scopeNote [dct:language gvp_lang:en; rdf:value ?ScopeNote]}

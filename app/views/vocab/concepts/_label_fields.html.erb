@@ -11,8 +11,8 @@
           selected: f.object.new_record? ? LanguageList::LanguageInfo.find(browser.accept_language.first.code) : f.object.language %>
       </div>
       <div class="col-md-6">
-        <%= f.input :vernacular, collection: Vocab::Label.vernaculars, selected: 'Undetermined' %>
-        <%= f.input :historical, collection: Vocab::Label.historicals, selected: 'Current' %>
+        <%= f.input :vernacular, collection: Vocab::Label.vernaculars, selected: (f.object.new_record? ? 'Undetermined' : f.object.vernacular) %>
+        <%= f.input :historical, collection: Vocab::Label.historicals, selected: (f.object.new_record? ? 'Current' : f.object.historical) %>
         <%= f.input :is_abbrevation, as: :boolean, label: 'Abbrev.' %>
       </div>
       <div class="col-md-12">
