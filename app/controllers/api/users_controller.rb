@@ -10,9 +10,9 @@ class Api::UsersController < Api::BaseController
     render json: @user
   end
 
-  def projects
-    projects = @user.projects.order(id: :asc)
-    render json: projects
+  def organizations
+    organizations = @user.organizations.order(id: :asc)
+    render json: organizations
   end
 
   def repositories
@@ -43,17 +43,17 @@ class Api::UsersController < Api::BaseController
       render json: obj, each_serializer: OauthAccessibilitySerializer
     end
 
-    # /api/my/accessibilities/search
+    # /api/my/accessibilities/searchable
     def my_search_abilities #user/repositories
       oread_applications = current_user.oread_token_applications.distinct
       render json: oread_applications, each_serializer: OreadApplicationSerializer
     end
 
     # /api/my/accessibilities/projects/:uid
-    def my_app_projects #applications_authorizations_client_url(uid)(project_accessors)
+    def my_app_organizations #applications_authorizations_client_url(uid)(organization_accessors)
       application = Doorkeeper::Application.find_by_uid(params[:uid])
-      projects = current_user.projects.joins(:oauth_applications).where(oauth_applications: {id: application.id})
-      render json: projects
+      organizations = current_user.organizations.joins(:oauth_applications).where(oauth_applications: {id: application.id})
+      render json: organizations
     end
   # end
 

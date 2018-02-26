@@ -1,0 +1,65 @@
+<% unless local_assigns[:banner] %>
+
+  <%= content_tag :div, class: 'media list-group-item', style: 'margin-bottom: 20px;' do %>
+    <div class="media-left" style="max-width: 80px;">
+      <%= link_to organization_path(organization) do %>
+        <%= background_image_div(organization, :small_thumb, {class: 'media-object', style: 'height:70px;width:70px; background-position:center;'}) %>
+      <% end %>
+    </div>
+    <div class="media-body">
+      <%= content_tag :div, class: 'membership-actions pull-right' do %>
+        <% if !organization.members.include?(current_user) %>
+          <%= form_for Membership.new, url: settings_organization_memberships_path(organization), remote: true, html: {id: "new_organization_membership_#{organization.id}", style: "display:inline!important;"} do |f| %>
+            <%= f.submit 'Apply', class: 'btn btn-sm btn-default text-strong' %>
+          <% end %>
+        <% elsif organization.members.joins(:memberships).where(memberships: {verified: false}).include?(current_user) %>
+          <%= link_to fa_icon('user', text: 'Awaiting confirmation'), settings_organizations_path, class: 'btn btn-default btn-sm text-strong' %>
+        <% else %>
+          <%= link_to fa_icon('group', text: 'In your organizations'), settings_organizations_path, class: 'btn btn-default btn-sm text-strong' %>
+        <% end %>
+      <% end if user_signed_in? && local_assigns[:actions] %>
+      <h4 class="media-heading">
+        <%= link_to organization.name, organization_path(organization) %>
+      </h4>
+      <p class="small text-muted">
+        Created on <%= organization.created_at.to_date.to_formatted_s(:long_ordinal) %>. <br>
+        <%= link_to pluralize( organization.memberships.where(verified: true).count, 'member' ), 'javascript:void(0)', 
+          rel: 'popover',
+          data: { 
+            toggle: "popover", 
+            placement: "left",
+            trigger: 'focus',
+            container: 'body',
+            html: true,
+            title: 'Members',
+            content: content_tag(:ul, organization.memberships.where(verified: true).map{ |m| content_tag(:li, m.user.name) }.join, class: 'list-unstyled') }
+        %>
+      </p>
+      <%= link_to truncate(organization.description, length: 180, separator: ' '), organization_path(organization), class: 'no-link' %>
+    </div>
+  <% end %>
+
+<% else %>
+
+  <%= content_tag :div, class: 'panel panel-default' do %>
+    <%= background_image_div(organization, :small_banner, {class: '', style: 'height:200px;width:100%; background-position:center;'}) %>
+
+    <div class="panel-body text-center">
+      <h4><%= organization.name %></h4>
+      <p class="small text-muted">Created on <%= organization.created_at.to_date.to_formatted_s(:long_ordinal) %>. <%= pluralize( organization.memberships.count, 'member' ) %></p>
+
+      <%= content_tag :div, class: 'membership-actions' do %>
+        <% if !organization.members.include?(current_user) %>
+          <%= form_for Membership.new, url: settings_organization_memberships_path(organization), remote: true, html: {id: "new_organization_membership_#{organization.id}", style: "display:inline!important;"} do |f| %>
+            <%= f.submit 'Apply', class: 'btn btn-sm btn-default text-strong' %>
+          <% end %>
+        <% elsif organization.members.joins(:memberships).where(memberships: {verified: false}).include?(current_user) %>
+          <%= link_to fa_icon('user', text: 'Awaiting confirmation'), settings_organizations_path, class: 'btn btn-default btn-sm text-strong' %>
+        <% else %>
+          <%= link_to fa_icon('group', text: 'In your organizations'), settings_organizations_path, class: 'btn btn-default btn-sm text-strong' %>
+        <% end %>
+      <% end if user_signed_in? && local_assigns[:actions] %>
+    </div>
+  <% end  %>
+
+<% end %>

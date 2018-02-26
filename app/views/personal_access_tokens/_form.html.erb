@@ -37,12 +37,12 @@
               <p class="text-muted">Access notifications.</p>
             </td>
         <% end %>
-        <%= content_tag :tr, id: 'projects' do %>
+        <%= content_tag :tr, id: 'organizations' do %>
             <td class="scope-input">
-              <%= f.input :projects, as: :boolean %>
+              <%= f.input :organizations, as: :boolean %>
             </td>
             <td class="scope-description">
-              <p class="text-muted">Read your projects.</p>
+              <p class="text-muted">Read your organizations.</p>
             </td>
         <% end %>
         <%= content_tag :tr, id: 'user' do %>

@@ -1,15 +1,15 @@
 class Membership < ApplicationRecord
   belongs_to :user
-  belongs_to :project
+  belongs_to :organization
 
   after_create :send_admin_mail
   after_update :send_confirmation_mail, if: :is_verified?
   
   validates :role, presence: true
-  validates :user_id, uniqueness: { scope: :project_id, message: "is already on the list" }
+  validates :user_id, uniqueness: { scope: :organization_id, message: "is already on the list" }
   
-  def is_owner?
-    role == 'Owner'
+  def is_admin?
+    role == 'Admin'
   end
 
   def send_admin_mail

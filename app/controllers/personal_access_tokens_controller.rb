@@ -68,6 +68,6 @@ class PersonalAccessTokensController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def personal_access_token_params
       params.require(:personal_access_token).permit(
-        :description, :collections, :search, :notifications, :projects, :user_profile, :user_email)
+        :description, :collections, :search, :notifications, :organizations, :user_profile, :user_email)
     end
 end

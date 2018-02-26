@@ -10,9 +10,9 @@ class Api::UserController < Api::BaseController
     render json: repositories, each_serializer: RepositorySerializer
   end
 
-  def projects
-    projects = current_user.projects.where(private: false).order(id: :asc)
-    render json: projects, each_serializer: ProjectSerializer
+  def organizations
+    organizations = current_user.organizations.where(private: false).order(id: :asc)
+    render json: organizations, each_serializer: OrganizationSerializer
   end
 
 end

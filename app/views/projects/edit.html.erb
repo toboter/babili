@@ -1,8 +1,0 @@
-<% title @project.name %>
-
-<% content_for :breadcrumbs do %>
-  <%= content_tag :li, link_to('Your projects', settings_projects_path) %>  
-  <%= content_tag :li, yield(:title), class: 'active' %>
-<% end %>
-
-<%= render 'form', project: @project %>

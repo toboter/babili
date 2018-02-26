@@ -16,8 +16,8 @@ class HomeController < ApplicationController
   def contact
   end
 
-  def projects
-    @projects = Project.where(private: false).order(name: :asc)
+  def organizations
+    @organizations = Organization.where(private: false).order(name: :asc)
   end
 
   def collections
@@ -26,7 +26,7 @@ class HomeController < ApplicationController
   
   def explore
     @oread_applications = Oread::Application.order("RANDOM()")
-    @projects = Project.where(private: false).order("RANDOM()")
+    @organizations = Organization.where(private: false).order("RANDOM()")
     @users = User.order("RANDOM()")
     @showcased = Oread::Application.order("RANDOM()").first
   end

@@ -1,30 +1,29 @@
-<% title @project.name, false %>
+<% title @organization.name, false %>
 
 <% content_for :breadcrumbs do %>
   <%= content_tag :li, link_to('Home', root_url) %>
   <%= content_tag :li, link_to('Explore', explore_url) %>
-  <%= content_tag :li, link_to('Projects', projects_url) %>
+  <%= content_tag :li, link_to('Organizations', organizations_url) %>
   <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
 
 <% content_for :container do %>
   <div class="row">
     <div class="col-md-5">
-      <%= render 'project', project: @project, banner: true, actions: true, no_description: true %> 
+      <%= render 'organization', organization: @organization, banner: true, actions: true, no_description: true %> 
 
-      <%= content_tag :div, id: "project-#{@project.id}-oauth_accessibilities", class: '--spacious' do %>
+      <%= content_tag :div, id: "organization-#{@organization.id}-oauth_accessibilities", class: '--spacious' do %>
         <h4 class="subhead --spacious">
           Applications
-          <%= content_tag :span, @project.oauth_accessibilities.count, class: 'badge' %>
+          <%= content_tag :span, @organization.oauth_accessibilities.count, class: 'badge' %>
         </h4>
         <p class="text-muted">
-          The members of this project can <strong>read &amp; edit</strong> data in the following babili-authenticated-applications marked with this project/group.
+          The members of this team can <strong>read &amp; edit</strong> data in the following babili-authenticated-applications marked with this team.
         </p>
-        <% for accessibility in @project.oauth_accessibilities do %>
+        <% for accessibility in @organization.oauth_accessibilities do %>
           <%=  render accessibility.oauth_application %>
-
         <% end %>
-      <% end if @project.oauth_accessibilities.any? %>
+      <% end if @organization.oauth_accessibilities.any? %>
 
     </div>
 
@@ -34,11 +33,11 @@
         <%= content_tag :div, class: 'col-md-12' do %>
           <h4 class="subhead">
             Memberships
-            <%= content_tag :span, @project.memberships.count, class: 'badge' %>
+            <%= content_tag :span, @organization.memberships.count, class: 'badge' %>
           </h4>
         <% end %>
         <div class="list-group">
-          <% for membership in @project.memberships do %>
+          <% for membership in @organization.memberships do %>
             <div class="col-md-6" style="margin-bottom: 20px;">
               <%= content_tag :div, id: "user-#{membership.user.id}", class: 'media' do %>
                 <%= link_to membership.user.profile, class: 'list-group-item' do %>
@@ -50,14 +49,14 @@
                     <span class="text-muted"><%= membership.role %></span>
                   </div>
                   <div class="media-right">
-                    <%= content_tag :span, fa_icon('universal-access'), data: {toggle: "tooltip", placement: "left"}, title: "Project administrator" if membership.role.in?(['Admin', 'Owner']) %>
+                    <%= content_tag :span, fa_icon('universal-access'), data: {toggle: "tooltip", placement: "left"}, title: "Team administrator" if membership.role == 'Admin' %>
                   </div>
                 <% end %>      
               <% end %>
             </div>
           <% end %>
         </div>
-      <% end if @project.memberships.any? %>
+      <% end if @organization.memberships.any? %>
 
       <h4 class="subhead --spacious">
         About
@@ -70,12 +69,12 @@
             trigger: 'focus',
             container: 'body',
             html: true,
-            title: 'Was ist ein Projekt?',
-            content: "Projekte sind Gruppen von Personen, die sich durch ein gemeinsames Interesse auszeichen. Weitere Informationen
-              finden Sie unter #{link_to 'settings projects', settings_projects_path}" }
+            title: 'Was ist eine Organization?',
+            content: "Oranisationen oder Teams zeichnen sich durch ein gemeinsames Interesse aus. Weitere Informationen
+              finden Sie unter #{link_to 'settings organizations', settings_organizations_path}" }
         %>
       </h4>
-      <%= content_tag :div, markdown(@project.description), id: 'projects-description' %>
+      <%= content_tag :div, markdown(@organization.description), id: 'organizations-description' %>
 
 
 

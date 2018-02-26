@@ -30,9 +30,9 @@ class User < ApplicationRecord
   has_many :personal_access_tokens, foreign_key: :resource_owner_id
 
   has_many :memberships, dependent: :destroy
-  has_many :projects, through: :memberships
-  has_many :project_oauth_applications, through: :projects, source: :oauth_applications
-  has_many :project_oauth_accessibilities, through: :projects, source: :oauth_accessibilities
+  has_many :organizations, through: :memberships
+  has_many :organization_oauth_applications, through: :organizations, source: :oauth_applications
+  has_many :organization_oauth_accessibilities, through: :organizations, source: :oauth_accessibilities
   has_one :profile, dependent: :destroy
   has_many :blog_pages, class_name: 'CMS::BlogPage', foreign_key: :author_id
   has_many :audits, dependent: :destroy, foreign_key: :user_id
@@ -49,7 +49,7 @@ class User < ApplicationRecord
   end
 
   def all_oauth_accessibilities
-    OauthAccessibility.where(accessor_id: self.id, accessor_type: self.class.name).or(OauthAccessibility.where(accessor_id: self.project_ids, accessor_type: 'Project')).distinct
+    OauthAccessibility.where(accessor_id: self.id, accessor_type: self.class.name).or(OauthAccessibility.where(accessor_id: self.organization_ids, accessor_type: 'Organization')).distinct
   end
 
   def all_combined_oauth_accessibility_grants

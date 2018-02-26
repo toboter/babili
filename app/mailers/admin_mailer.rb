@@ -11,10 +11,10 @@ class AdminMailer < ApplicationMailer
 
   def new_membership_awaiting_verification(membership)
     @applicant = membership.user
-    @project = membership.project
-    @url  = edit_settings_project_url(@project)
-    @recipients = @project.members.joins(:memberships).where(memberships: {role: ['Owner', 'Admin']}).uniq
+    @organization = membership.organization
+    @url  = edit_settings_organization_url(@organization)
+    @recipients = @organization.members.joins(:memberships).where(memberships: {role: 'Admin'}).uniq
     emails = @recipients.collect(&:email).join(",")
-    mail(to: emails, subject: "[babylon-online.org][Project: #{@project.name}] User is awaiting membership verification.")
+    mail(to: emails, subject: "[babylon-online.org][Team: #{@organization.name}] User is awaiting membership verification.")
   end
 end

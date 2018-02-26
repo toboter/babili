@@ -1,4 +1,4 @@
-class ProjectSerializer < ActiveModel::Serializer
+class OrganizationSerializer < ActiveModel::Serializer
   attributes :id, :name, :member_ids, :oauth_application_uids
 
   def member_ids

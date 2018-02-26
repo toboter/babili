@@ -26,14 +26,14 @@ class Ability
         user == post.author
       end
 
-      cannot :manage, Project unless user.is_admin?
+      cannot :manage, Organization unless user.is_admin?
       # in folgendes noch Memberships aufnehmen?
-      can [:update, :destroy], Project do |project| 
-        user.in?(project.members) && project.memberships.where(user_id: user.id).first.role.in?(['Owner', 'Admin'])
+      can [:update, :destroy], Organization do |organization| 
+        user.in?(organization.members) && organization.memberships.where(user_id: user.id).first.role == 'Admin'
       end
-      can [:create], Project
-      can [:read], Project do |project|
-        !project.private? || user.in?(project.members)
+      can [:create], Organization
+      can [:read], Organization do |organization|
+        !organization.private? || user.in?(organization.members)
       end
 
       cannot :manage, Oread::Application unless user.is_admin?

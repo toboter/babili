@@ -37,7 +37,7 @@ Rails.application.routes.draw do
   get '/about', to: 'home#about'
   get '/contact', to: 'home#contact'
   get '/explore', to: 'home#explore'
-  get '/projects', to: 'home#projects'
+  get '/organizations', to: 'home#organizations'
   get '/collections/applications', to: 'home#collections', as: :collections
 
   namespace :oread, path: 'collections' do
@@ -46,7 +46,7 @@ Rails.application.routes.draw do
 
   get '/settings', to: redirect("/settings/profile")
   scope path: '/settings' do
-    resources :projects, only: [:index, :new, :create, :edit, :update, :destroy], as: :settings_projects do
+    resources :organizations, only: [:index, :new, :create, :edit, :update, :destroy], as: :settings_organizations do
       resources :memberships, only: [:create, :destroy]
     end
     get 'profile', to: 'profiles#edit', as: 'edit_current_profile'
@@ -101,7 +101,7 @@ Rails.application.routes.draw do
 
   devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}, :controllers => { :registrations => :registrations }
   resources :profiles, only: [:index, :show]
-  resources :projects, only: [:show]
+  resources :organizations, only: [:show]
 
   namespace :cms, path: nil do
     resources :blog_pages, path: :blog, only: :index
@@ -132,7 +132,7 @@ Rails.application.routes.draw do
         scope :accessibilities do
           get 'searchable', to: 'users#my_search_abilities'
           get 'crud/:uid', to: 'users#my_crud_abilities'
-          get 'projects/:uid', to: 'users#my_app_projects'
+          get 'projects/:uid', to: 'users#my_app_organizations'
         end
       end
       resources :oread_applications, only: [] do
@@ -142,16 +142,16 @@ Rails.application.routes.draw do
 
     # Users
     resources :users, only: [:index, :show] do
-      get 'projects', on: :member
+      get 'organizations', on: :member
       get 'repositories', on: :member
     end
     resource :user, only: [:show], controller: 'user' do      # was get 'me', to: 'users#me'
       get 'repositories', on: :member                          # was get 'searchable', to: 'users#my_search_abilities'
-      get 'projects', on: :member
+      get 'organizations', on: :member
     end
 
-    # Projects
-    resources :projects, only: [:index, :show] do
+    # Organizations
+    resources :organizations, only: [:index, :show] do
       resources :members, only: [:index, :show]
       resources :memberships, only: :show
       get :search, on: :collection

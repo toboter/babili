@@ -10,9 +10,9 @@ class UserMailer < ApplicationMailer
 
   def membership_confirmed(membership)
     @applicant = membership.user
-    @project = membership.project
-    @url  = settings_projects_url
+    @organization = membership.organization
+    @url  = settings_organizations_url
     email = @applicant.email
-    mail(to: email, subject: "[babylon-online.org][Project: #{@project.name}] Your membership has been confirmed.")
+    mail(to: email, subject: "[babylon-online.org][Team: #{@organization.name}] Your membership has been confirmed.")
   end
 end

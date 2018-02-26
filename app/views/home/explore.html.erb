@@ -38,8 +38,8 @@
 
     <div class="page-header text-center borderless">
       <p class="text-muted lead">
-        Babylon-Online is organized by a number of different decentralized interconnected data pools 
-        (repositories). From different materials and techniques to objects (like figurines) and culture. 
+        Babylon-Online integrates different data pools (repositories). From different materials 
+        and techniques to objects (like figurines), culture or excavation documentations and publications. 
         Learn more on the <%= link_to 'settings page', settings_oread_enrollments_path %>.
       </p>
     </div>
@@ -107,24 +107,24 @@
 
     <div class="page-header text-center borderless">
       <h2>
-        Projects
-        <span class="badge"><%= @projects.count %></span>
+        Teams
+        <span class="badge"><%= @organizations.count %></span>
       </h2>
       <p class="text-muted lead">
-        On babylon-online, you can join projects, which are groups of people with a shared research interest. 
-        These projects can be authorized together as one. Learn more on your personal 
-        <%= link_to 'projects settings page', settings_projects_path %>.
+        On babylon-online, you can join teams, which are groups of people with a shared research interest. 
+        These teams can be authorized together as one. Learn more on your personal 
+        <%= link_to 'teams settings page', settings_organizations_path %>.
       </p>
     </div>
     <div class="row">
-      <% for project in @projects.limit(4) do %>
+      <% for organization in @organizations.limit(4) do %>
         <div class="col-md-6">
-          <%= render project, full: false, actions: true %>
+          <%= render organization, full: false, actions: true %>
         </div>
       <% end %>
     </div>
     <div class="row">
-      <%= link_to 'View all.', projects_path, class: 'col-md-12' %>
+      <%= link_to 'View all.', organizations_path, class: 'col-md-12' %>
     </div>
     
     <div class="page-header text-center borderless">

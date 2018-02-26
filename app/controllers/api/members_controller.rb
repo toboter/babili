@@ -1,6 +1,6 @@
 class Api::MembersController < Api::BaseController
-  load_and_authorize_resource :project
-  load_and_authorize_resource through: :project, class: 'User', find_by: :username
+  load_and_authorize_resource :organization
+  load_and_authorize_resource through: :organization, class: 'User', find_by: :username
 
   def index
     members = @members.joins(:memberships).where(memberships: {verified: true}).uniq.order(id: :asc)

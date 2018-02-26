@@ -1,4 +1,4 @@
-class Project < ApplicationRecord
+class Organization < ApplicationRecord
   include ImageUploader[:image]
   extend FriendlyId
   friendly_id :name, use: :slugged
@@ -14,12 +14,12 @@ class Project < ApplicationRecord
 
   accepts_nested_attributes_for :memberships, reject_if: :all_blank, allow_destroy: true
 
-  def has_owner?
-    memberships.where(role: 'Owner').any?
+  def has_admin?
+    memberships.where(role: 'Admin').any?
   end
   
-  def owner
-    members.where(memberships: {role: 'Owner'})
+  def admins
+    members.where(memberships: {role: 'Admin'})
   end
 
   def accessible

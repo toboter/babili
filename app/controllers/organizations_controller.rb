@@ -1,0 +1,89 @@
+class OrganizationsController < ApplicationController
+  before_action :authenticate_user!, except: :show
+  load_and_authorize_resource
+  layout "settings", except: :show
+
+  # GET /organizations
+  # GET /organizations.json
+  def index
+    @applyments = current_user.memberships.joins(:organization).where(verified: false).order('organizations.name ASC')
+    @memberships = current_user.memberships.joins(:organization).where(verified: true).order('organizations.name ASC')
+  end
+
+  # GET /organizations/1
+  # GET /organizations/1.json
+  def show
+  end
+
+  # GET /organizations/new
+  def new
+    @organization = Organization.new
+    @users = User.all
+    @roles = ['Member', 'Admin']
+    @organization.memberships.build(user: current_user, role: 'Admin', verified: true)
+  end
+
+  # GET /organizations/1/edit
+  def edit
+    @users = User.all
+    @roles = ['Member', 'Admin']
+  end
+
+  # POST /organizations
+  # POST /organizations.json
+  def create
+    @organization = Organization.new(organization_params)
+
+    respond_to do |format|
+      if @organization.save
+        format.html { redirect_to settings_organizations_path, notice: 'Organization was successfully created.' }
+        format.json { render :show, status: :created, location: @organization }
+      else
+        format.html { render :new }
+        format.json { render json: @organization.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PATCH/PUT /organizations/1
+  # PATCH/PUT /organizations/1.json
+  def update
+    old_ids = @organization.member_ids.dup
+    respond_to do |format|
+      if @organization.update(organization_params)
+        new_ids = Organization.find(@organization.id).member_ids
+        changed_ids = (old_ids-new_ids) + (new_ids-old_ids)
+        @organization.oauth_applications.each do |app|
+          UpdateClientAppUserAccessibilitiesJob.perform_later(app.id, changed_ids)
+        end
+        format.html { redirect_to settings_organizations_path, notice: "Organization was successfully updated." }
+        format.json { render :show, status: :ok, location: @organization }
+      else
+        format.html { render :edit }
+        format.json { render json: @organization.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /organizations/1
+  # DELETE /organizations/1.json
+  def destroy
+    @organization.destroy
+    respond_to do |format|
+      format.html { redirect_to settings_organizations_url, notice: 'Organization was successfully deleted.' }
+      format.json { head :no_content }
+    end
+  end
+
+  private
+    def organization_params
+      params.require(:organization).permit(
+        :name, 
+        :image, 
+        :cached_image_data, 
+        :private, 
+        :description, 
+        memberships_attributes: [:id, :user_id, :role, :verified, :_destroy])
+    end
+    
+end

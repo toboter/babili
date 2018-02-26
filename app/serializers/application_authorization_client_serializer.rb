@@ -33,7 +33,7 @@ class ApplicationAuthorizationClientSerializer < ActiveModel::Serializer
     }
   end
 
-  has_many :project_accessors, each_serializer: ProjectSerializer
+  has_many :organization_accessors, each_serializer: OrganizationSerializer
   has_many :user_accessors, each_serializer: UserSerializer
 
   private

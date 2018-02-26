@@ -5,7 +5,7 @@ class PersonalAccessToken < ApplicationRecord
     collections: :boolean,
     search: :boolean,
     notifications: :boolean,
-    projects: :boolean,
+    organizations: :boolean,
     user_profile: :boolean,
     user_email: :boolean
 

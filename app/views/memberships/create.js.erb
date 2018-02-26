@@ -1,2 +1,2 @@
-toastr["success"]("Successfully applied for <%= @applyment.project.name %>.");
-$("#new_project_membership_<%= @applyment.project.id %>").replaceWith("<%= escape_javascript(link_to fa_icon('user', text: 'Awaiting confirmation'), settings_projects_path, class: 'btn btn-default btn-sm text-strong') %>");
+toastr["success"]("Successfully applied for <%= @applyment.organization.name %>.");
+$("#new_organization_membership_<%= @applyment.organization.id %>").replaceWith("<%= escape_javascript(link_to fa_icon('user', text: 'Awaiting confirmation'), settings_organizations_path, class: 'btn btn-default btn-sm text-strong') %>");

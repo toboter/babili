@@ -25,8 +25,8 @@
           <% end %>
           <ul class="pllv">
             <li class="pllve">
-              Projects<br>
-              <strong><%= @profile.user.projects.count %></strong>
+              Teams<br>
+              <strong><%= @profile.user.organizations.count %></strong>
             </li>
             <li class="pllve">
               Authorizations<br>
@@ -55,7 +55,7 @@
             <% end %>
             <div class="panel-footer small">
               <strong>Grants through: </strong>
-              <%= accessibility.oauth_application.accessibilities.where(id: @profile.user.all_oauth_accessibilities.ids).map{ |acc| "#{fa_icon(acc.accessor.class.name == 'Project' ? 'group' : acc.accessor.class.name.downcase)} #{link_to(acc.accessor.name, acc.accessor)}" }.join(' ').html_safe %>
+              <%= accessibility.oauth_application.accessibilities.where(id: @profile.user.all_oauth_accessibilities.ids).map{ |acc| "#{fa_icon(acc.accessor.class.name == 'Organization' ? 'group' : acc.accessor.class.name.downcase)} #{link_to(acc.accessor.name, acc.accessor)}" }.join(' ').html_safe %>
             </div>
           </div>
         <% end %>
@@ -68,13 +68,13 @@
 
     <div class="col-md-7">
       <h4 class="subhead">
-        Project memberships
+        Team memberships
       </h4>
-      <% if @profile.user.projects.any? %>
-        <%= render @profile.user.projects %>
+      <% if @profile.user.organizations.any? %>
+        <%= render @profile.user.organizations %>
       <% else %>
         <p class="text-muted">
-          none &mdash; Find projects on the <%= link_to 'explore page', explore_path %>.
+          none &mdash; Find teams on the <%= link_to 'explore page', explore_path %>.
         </p>
       <% end %>
 

@@ -1,6 +1,5 @@
 class OauthAccessibilitiesController < ApplicationController
   before_action :set_oauth_application
-  # before_action :set_oauth_accessibility, only: [:edit, :update, :destroy]
   before_action :authenticate_user!
   load_and_authorize_resource :oauth_accessibility, except: :new
   require 'uri'
@@ -15,7 +14,7 @@ class OauthAccessibilitiesController < ApplicationController
 
   def new
     authorize! :create_accessibility, @oauth_application
-    @accessors = Project.where.not(id: @oauth_application.project_accessor_ids) + User.where.not(id: @oauth_application.user_accessor_ids)
+    @accessors = Organization.where.not(id: @oauth_application.organization_accessor_ids) + User.where.not(id: @oauth_application.user_accessor_ids)
     @oauth_accessibility = @oauth_application.accessibilities.new
   end
 
@@ -25,7 +24,7 @@ class OauthAccessibilitiesController < ApplicationController
   def create
     @oauth_accessibility = @oauth_application.accessibilities.new(oauth_accessibility_params)
     @oauth_accessibility.creator_id = current_user.id
-    accessor_user_ids = @oauth_accessibility.accessor.class.name == 'Project' ? @oauth_accessibility.accessor.member_ids : [@oauth_accessibility.accessor_id]
+    accessor_user_ids = @oauth_accessibility.accessor.class.name == 'Organization' ? @oauth_accessibility.accessor.member_ids : [@oauth_accessibility.accessor_id]
     
     respond_to do |format|
       if @oauth_accessibility.save
@@ -40,7 +39,7 @@ class OauthAccessibilitiesController < ApplicationController
   end
 
   def update
-    accessor_user_ids = @oauth_accessibility.accessor.class.name == 'Project' ? @oauth_accessibility.accessor.member_ids : [@oauth_accessibility.accessor_id]
+    accessor_user_ids = @oauth_accessibility.accessor.class.name == 'Organization' ? @oauth_accessibility.accessor.member_ids : [@oauth_accessibility.accessor_id]
     respond_to do |format|
       if @oauth_accessibility.update(oauth_accessibility_params)
         UpdateClientAppUserAccessibilitiesJob.perform_later(@oauth_application.id, accessor_user_ids)
@@ -56,7 +55,7 @@ class OauthAccessibilitiesController < ApplicationController
   def send_all_accessibilities_to_clients
     accessor_user_ids = []
     @oauth_application.accessibilities.each do |acc|
-      accessor_user_ids << (acc.accessor.class.name == 'Project' ? acc.accessor.member_ids : [acc.accessor_id])
+      accessor_user_ids << (acc.accessor.class.name == 'Organization' ? acc.accessor.member_ids : [acc.accessor_id])
     end
     respond_to do |format|
       if accessor_user_ids.flatten.uniq
@@ -71,7 +70,7 @@ class OauthAccessibilitiesController < ApplicationController
   end
 
   def destroy
-    accessor_user_ids = @oauth_accessibility.accessor.class.name == 'Project' ? @oauth_accessibility.accessor.member_ids : [@oauth_accessibility.accessor_id]
+    accessor_user_ids = @oauth_accessibility.accessor.class.name == 'Organization' ? @oauth_accessibility.accessor.member_ids : [@oauth_accessibility.accessor_id]
     @oauth_accessibility.destroy
     UpdateClientAppUserAccessibilitiesJob.perform_later(@oauth_application.id, accessor_user_ids)
     respond_to do |format|
@@ -85,25 +84,11 @@ class OauthAccessibilitiesController < ApplicationController
     def set_oauth_application
       @oauth_application = Doorkeeper::Application.find(params[:oauth_application_id])
     end
-    
-    def set_oauth_accessibility
-      @oauth_accessibility = @oauth_application.accessibilities.find(params[:id])
-    end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def oauth_accessibility_params
       params.require(:oauth_accessibility).permit(:accessor, :application_id, :creator_id, 
         :can_manage, :can_create, :can_read, :can_update, :can_destroy, :can_comment, :can_publish)
     end
-
-    # def project_hook(oauth_accessibility)
-    #   uri = URI(oauth_accessibility.oauth_application.redirect_uri)
-    #   api_url = uri.scheme + "://" + uri.host + ":" + uri.port.to_s + "/api/projects/update_access"
-    #   RestClient.post(api_url, {
-    #     project_id: oauth_accessibility.project.id, 
-    #     project_name: oauth_accessibility.project.name,
-    #     project_member_ids: oauth_accessibility.project.member_ids
-    #   }.to_json, content_type: 'application/json', accept: :json)
-    # end
     
 end

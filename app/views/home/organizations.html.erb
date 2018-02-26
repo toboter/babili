@@ -1,4 +1,4 @@
-<% title 'Projects' %>
+<% title 'Organizations' %>
 
 <% content_for :breadcrumbs do %>
   <%= content_tag :li, link_to('Home', root_url) %>
@@ -7,9 +7,9 @@
 <% end %>
 
 <div class="row">
-  <% @projects.each do |project| %>
+  <% @organizations.each do |organization| %>
     <div class="col-md-12">
-      <%= render project, full: true, actions: true %>
+      <%= render organization, full: true, actions: true %>
     </div>
   <% end %>
 </div>

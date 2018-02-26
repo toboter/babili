@@ -1,13 +1,13 @@
 class MembershipsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_project
+  before_action :set_organization
 
   def create #apply
-    @applyment = current_user.memberships.new(project: @project, verified: false, role: 'Member')
+    @applyment = current_user.memberships.new(organization: @organization, verified: false, role: 'Member')
 
     respond_to do |format|
       if @applyment.save
-        format.html { redirect_to settings_projects_path, notice: "Successfully applied for #{@project.name}." }
+        format.html { redirect_to settings_organizations_path, notice: "Successfully applied for #{@organization.name}." }
         format.json { render :show, status: :created, location: @applyment }
         format.js
       else
@@ -19,20 +19,20 @@ class MembershipsController < ApplicationController
   end
 
   def destroy #leave
-    @membership = @project.memberships.find(params[:id])
-    @membership.destroy unless @membership.role == 'Owner'
+    @membership = @organization.memberships.find(params[:id])
+    @membership.destroy unless @membership.role == 'Admin'
     respond_to do |format|
-      format.html { redirect_to settings_projects_path, notice: "Project #{@membership.verified? ? 'membership' : 'application' } was successfully removed." }
+      format.html { redirect_to settings_organizations_path, notice: "Organization #{@membership.verified? ? 'membership' : 'application' } was successfully removed." }
     end
   end
 
   private
-  def set_project
-    @project = Project.friendly.find(params[:settings_project_id])
+  def set_organization
+    @organization = Organization.friendly.find(params[:settings_organization_id])
   end
 
   def membership_params
-    params.require(:membership).permit(:_delete, :user_id, :project_id)
+    params.require(:membership).permit(:_delete, :user_id, :organization_id)
   end
 
 

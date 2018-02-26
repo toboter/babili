@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180208181031) do
+ActiveRecord::Schema.define(version: 20180226171546) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -141,12 +141,12 @@ ActiveRecord::Schema.define(version: 20180208181031) do
 
   create_table "memberships", id: :serial, force: :cascade do |t|
     t.integer "user_id"
-    t.integer "project_id"
+    t.integer "organization_id"
     t.string "role"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "verified", default: false, null: false
-    t.index ["project_id"], name: "index_memberships_on_project_id"
+    t.index ["organization_id"], name: "index_memberships_on_organization_id"
     t.index ["user_id"], name: "index_memberships_on_user_id"
   end
 
@@ -253,6 +253,17 @@ ActiveRecord::Schema.define(version: 20180208181031) do
     t.index ["owner_id", "owner_type"], name: "index_oread_applications_on_owner_id_and_owner_type"
   end
 
+  create_table "organizations", id: :serial, force: :cascade do |t|
+    t.string "name"
+    t.text "image_data"
+    t.text "description"
+    t.string "slug"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "private", default: false, null: false
+    t.index ["slug"], name: "index_organizations_on_slug", unique: true
+  end
+
   create_table "personal_access_tokens", id: :serial, force: :cascade do |t|
     t.integer "resource_owner_id"
     t.string "access_token"
@@ -281,17 +292,6 @@ ActiveRecord::Schema.define(version: 20180208181031) do
     t.string "location"
     t.index ["slug"], name: "index_profiles_on_slug", unique: true
     t.index ["user_id"], name: "index_profiles_on_user_id"
-  end
-
-  create_table "projects", id: :serial, force: :cascade do |t|
-    t.string "name"
-    t.text "image_data"
-    t.text "description"
-    t.string "slug"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "private", default: false, null: false
-    t.index ["slug"], name: "index_projects_on_slug", unique: true
   end
 
   create_table "repository_classes", id: :serial, force: :cascade do |t|
@@ -516,7 +516,7 @@ ActiveRecord::Schema.define(version: 20180208181031) do
   end
 
   add_foreign_key "audits", "users"
-  add_foreign_key "memberships", "projects"
+  add_foreign_key "memberships", "organizations"
   add_foreign_key "memberships", "users"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
