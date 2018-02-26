@@ -5,7 +5,7 @@
         <%= f.error_notification %>
         <div class="form-inline" style="margin-bottom: 10px;">
           <%= f.input :type, collection: Zensus::Event.types, label: false %>
-          <%= f.input :place_id, collection: Locate::Place.all, label: false, prompt: 'Select place', label_method: :default_name, value_method: :id %>
+          <%= f.input :place_id, collection: Locate::Place.all, label: false, prompt: 'Select place', label_method: :default_name, value_method: :id, include_blank: true %>
           <%= f.input :period_id, collection: Vocab::Concept.all, label: false, prompt: 'Select period' %>
         </div>
         <div class="form-inline">

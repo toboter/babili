@@ -30,8 +30,8 @@
                       <%= content_tag :span, activity.actable.default_name, class: 'text-muted' %><br>
                       <%= link_to activity.actable_to_event, zensus_event_activity_path(activity.event, activity), class: 'text-strong' %>
                       <% unless Zensus::Activity.properties.select {|p| p[:id] == activity.property_id  }.first[:ditransitive] %>
-                        <% actable = activity.event.activities.where.not(id: activity.id).first.actable %>
-                        <%= link_to actable.default_name, zensus_agent_path(actable) %>
+                        <% actable = activity.event.activities.where.not(id: activity.id).first.try(:actable) %>
+                        <%= link_to actable.default_name, zensus_agent_path(actable) if actable %>
                       <% end %>
                       <%= content_tag :span, class: 'text-italic' do %>
                         <%= link_to(' on ' + activity.event.default_date, zensus_event_path(activity.event)).html_safe %>
