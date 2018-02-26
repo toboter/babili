@@ -35,7 +35,7 @@ class Zensus::Event < ApplicationRecord
   end
 
   def default_date
-    "#{'~ ' if circa?}#{begins_at}#{' - '+ends_at if ends_at.present?}"
+    "#{'~ ' if circa?}#{begins_at}#{' - '+ends_at_string if ends_at_string.present?}"
   end
 
   def title
