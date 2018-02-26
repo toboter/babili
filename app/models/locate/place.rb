@@ -25,8 +25,12 @@ class Locate::Place < ApplicationRecord
   end
 
   def search_data
-    attributes.merge name: default_name
-    attributes.merge datings: datings.map{ |d| d.concept.default_name }
+    { 
+      type: type,
+      description: description,
+      name: default_name,
+      datings: datings.map{ |d| d.concept.default_name }
+    }
   end
 
 #   def center

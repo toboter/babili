@@ -2,7 +2,7 @@ class Locate::SearchController < ApplicationController
 
   def index
     @results = Searchkick.search(params[:q], 
-      fields: [:name, :type, :description, :datings], 
+      fields: [:type, :description, :name, :datings], 
       index_name: [Locate::Place],
       indices_boost: {Locate::Place => 2})
 
