@@ -30,14 +30,13 @@
   <div class="container" style="padding-bottom:50px;">
 
     <div class="page-header text-center">
-      <h1>babylon-online Research Framework</h1>
+      <h1>
+        Repositories
+        <span class="badge"><%= @oread_applications.count %></span>
+      </h1>
     </div>
 
     <div class="page-header text-center borderless">
-      <h2>
-        Repositories
-        <span class="badge"><%= @oread_applications.count %></span>
-      </h2>
       <p class="text-muted lead">
         Babylon-Online is organized by a number of different decentralized interconnected data pools 
         (repositories). From different materials and techniques to objects (like figurines) and culture. 
@@ -55,6 +54,18 @@
       <%= link_to 'View all.', collections_path, class: 'col-md-12' %>
     </div>
 
+
+    <div class="page-header text-center --spacious-80">
+      <h1>Services</h1>
+    </div>
+
+    <div class="page-header text-center borderless">
+      <h2>Commons ::files</h2>
+      <p class="text-muted lead">
+        <%= link_to 'Commons', 'http://commons.babylon-online.org', class: 'text-strong' %> is a file storage service for images, documents 
+          and any binary file you need to reference in your data. From there it will get shared to the intendet audience.
+      </p>
+    </div>
 
     <div class="page-header text-center borderless">
       <h2>Babylonian confusion ::vocabularies</h2>
@@ -91,7 +102,7 @@
 
 
     <div class="page-header text-center --spacious-80">
-      <h1>Babylon Research Team</h1>
+      <h1>Research Team</h1>
     </div>
 
     <div class="page-header text-center borderless">
