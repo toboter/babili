@@ -69,8 +69,8 @@ class Zensus::Event < ApplicationRecord
   def search_data
     {
       description: description,
-      begins_at: begins_at,
-      ends_at: ends_at,
+      begins_at: begins_at_date,
+      ends_at: ends_at_date,
       related_events: related_events.map(&:description).join(' '),
       place: place.try(:names)
     }
