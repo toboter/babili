@@ -35,7 +35,7 @@ class Zensus::Event < ApplicationRecord
   end
 
   def default_date
-    "#{'~ ' if circa?}#{begins_at}#{' - '+ends_at_string if ends_at_string.present?}"
+    "#{'~ ' if circa?}#{begins_at}#{' - '+ends_at if ends_at.present?}"
   end
 
   def title
@@ -69,9 +69,10 @@ class Zensus::Event < ApplicationRecord
   def search_data
     {
       description: description,
-      date: default_date,
+      begins_at: begins_at,
+      ends_at: ends_at,
       related_events: related_events.map(&:description).join(' '),
-      place: place.names
+      place: place.try(:names)
     }
   end
 
