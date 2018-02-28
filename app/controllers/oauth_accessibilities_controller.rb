@@ -2,9 +2,6 @@ class OauthAccessibilitiesController < ApplicationController
   before_action :set_oauth_application
   before_action :authenticate_user!
   load_and_authorize_resource :oauth_accessibility, except: :new
-  require 'uri'
-  require 'rest-client'
-  require 'json'
   layout 'developer'
 
   # after_action :send_client_hook
@@ -14,7 +11,7 @@ class OauthAccessibilitiesController < ApplicationController
 
   def new
     authorize! :create_accessibility, @oauth_application
-    @accessors = Organization.where.not(id: @oauth_application.organization_accessor_ids) + User.where.not(id: @oauth_application.user_accessor_ids)
+    @accessors = Organization.where.not(id: @oauth_application.organization_accessor_ids) + Person.where.not(id: @oauth_application.person_accessor_ids)
     @oauth_accessibility = @oauth_application.accessibilities.new
   end
 
@@ -23,12 +20,12 @@ class OauthAccessibilitiesController < ApplicationController
   
   def create
     @oauth_accessibility = @oauth_application.accessibilities.new(oauth_accessibility_params)
-    @oauth_accessibility.creator_id = current_user.id
-    accessor_user_ids = @oauth_accessibility.accessor.class.name == 'Organization' ? @oauth_accessibility.accessor.member_ids : [@oauth_accessibility.accessor_id]
+    @oauth_accessibility.creator = current_person
+    person_ids = @oauth_accessibility.accessor.class.name == 'Organization' ? @oauth_accessibility.accessor.member_ids : [@oauth_accessibility.accessor_id]
     
     respond_to do |format|
       if @oauth_accessibility.save
-        UpdateClientAppUserAccessibilitiesJob.perform_later(@oauth_application.id, accessor_user_ids)
+        UpdateAppAccessorsJob.perform_later(@oauth_application.id, person_ids)
         format.html { redirect_to edit_oauth_application_path(@oauth_application), notice: 'Accessibility was successfully created.' }
         format.json { render :show, status: :created, location: @oauth_application }
       else
@@ -39,10 +36,10 @@ class OauthAccessibilitiesController < ApplicationController
   end
 
   def update
-    accessor_user_ids = @oauth_accessibility.accessor.class.name == 'Organization' ? @oauth_accessibility.accessor.member_ids : [@oauth_accessibility.accessor_id]
+    person_ids = @oauth_accessibility.accessor.class.name == 'Organization' ? @oauth_accessibility.accessor.member_ids : [@oauth_accessibility.accessor_id]
     respond_to do |format|
       if @oauth_accessibility.update(oauth_accessibility_params)
-        UpdateClientAppUserAccessibilitiesJob.perform_later(@oauth_application.id, accessor_user_ids)
+        UpdateAppAccessorsJob.perform_later(@oauth_application.id, person_ids)
         format.html { redirect_to edit_oauth_application_path(@oauth_application), flash: { success: "Accessibility was successfully updated." } }
         format.json { render :show, status: :ok, location: @oauth_application }
       else
@@ -52,14 +49,14 @@ class OauthAccessibilitiesController < ApplicationController
     end
   end
 
-  def send_all_accessibilities_to_clients
-    accessor_user_ids = []
+  def send_accessibilities_to_app
+    person_ids = []
     @oauth_application.accessibilities.each do |acc|
-      accessor_user_ids << (acc.accessor.class.name == 'Organization' ? acc.accessor.member_ids : [acc.accessor_id])
+      person_ids << (acc.accessor.class.name == 'Organization' ? acc.accessor.member_ids : [acc.accessor_id])
     end
     respond_to do |format|
-      if accessor_user_ids.flatten.uniq
-        UpdateClientAppUserAccessibilitiesJob.perform_later(@oauth_application.id, accessor_user_ids.flatten.uniq)
+      if person_ids.flatten.uniq
+        UpdateAppAccessorsJob.perform_later(@oauth_application.id, person_ids.flatten.uniq)
         format.html { redirect_to edit_oauth_application_path(@oauth_application), flash: { success: "Updating accessibilities." } }
         format.js { render js: "toastr.info('Updating');", status: :ok }
       else
@@ -70,11 +67,11 @@ class OauthAccessibilitiesController < ApplicationController
   end
 
   def destroy
-    accessor_user_ids = @oauth_accessibility.accessor.class.name == 'Organization' ? @oauth_accessibility.accessor.member_ids : [@oauth_accessibility.accessor_id]
+    person_ids = @oauth_accessibility.accessor.class.name == 'Organization' ? @oauth_accessibility.accessor.member_ids : [@oauth_accessibility.accessor_id]
     @oauth_accessibility.destroy
-    UpdateClientAppUserAccessibilitiesJob.perform_later(@oauth_application.id, accessor_user_ids)
+    UpdateAppAccessorsJob.perform_later(@oauth_application.id, person_ids)
     respond_to do |format|
-      format.html { redirect_to edit_oauth_application_path(@oauth_application), notice: 'Accessibility was successfully destroyed.' }
+      format.html { redirect_to edit_oauth_application_path(@oauth_application), notice: 'Accessibility was successfully removed.' }
       format.json { head :no_content }
     end
   end
@@ -87,7 +84,7 @@ class OauthAccessibilitiesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def oauth_accessibility_params
-      params.require(:oauth_accessibility).permit(:accessor, :application_id, :creator_id, 
+      params.require(:oauth_accessibility).permit(:accessor_gid, :application_id, 
         :can_manage, :can_create, :can_read, :can_update, :can_destroy, :can_comment, :can_publish)
     end
     

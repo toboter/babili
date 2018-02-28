@@ -10,7 +10,7 @@ class AdminMailer < ApplicationMailer
   end
 
   def new_membership_awaiting_verification(membership)
-    @applicant = membership.user
+    @applicant = membership.person
     @organization = membership.organization
     @url  = edit_settings_organization_url(@organization)
     @recipients = @organization.members.joins(:memberships).where(memberships: {role: 'Admin'}).uniq

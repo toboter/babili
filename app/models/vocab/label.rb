@@ -11,7 +11,7 @@
 class Vocab::Label < ApplicationRecord
   self.inheritance_column = :_type_disabled
   belongs_to :concept, class_name: 'Vocab::Concept'
-  belongs_to :creator, class_name: 'User'
+  belongs_to :creator, class_name: 'Person'
 
   validates :body, :language, :type, :vernacular, :historical, presence: true
   validates :body, uniqueness: { scope: [:language, :concept_id], 

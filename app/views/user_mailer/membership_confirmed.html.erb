@@ -1,4 +1,11 @@
-<h4>Hi <%= @applicant.name %>! Your membership has been confirmed!</h4>
 <p>
-  It should now be visible in the teams settings <%= @url %>.
+  <strong>Hallo <%= @applicant.name %>!</strong><br>
+  Dies ist eine automatisch generierte E-Mail von babylon-online.org. Du erhälst sie, da du 
+  eine Anfrage auf Mitgliedschaft im Team <%= @organization.name %> gestellt hattest. 
+  Dieser Anfrage wurde entsprochen.
+</p>
+
+<p>
+  Hilfreiche Links:<br>
+  Teams settings <%= @url %>.
 </p>

@@ -20,10 +20,10 @@ class Ability
       cannot :manage, CMS::BlogPage unless user.is_admin?
       can :create, CMS::BlogPage
       can :read, CMS::BlogPage do |page|
-        page.published_at.present? || page.author == user
+        page.published_at.present? || page.author == user.person
       end
       can [:update, :destroy], CMS::BlogPage do |post|
-        user == post.author
+        user.person == post.author
       end
 
       cannot :manage, Organization unless user.is_admin?
@@ -46,13 +46,13 @@ class Ability
   
       cannot :manage, Doorkeeper::Application unless user.is_admin?
       can [:update, :destroy, :create_accessibility, :update_accessibility, :destroy_accessibility], Doorkeeper::Application do |app|
-        app.in?(user.all_oauth_applications) && user.all_oauth_accessibilities.where(oauth_application: app).map{|a| a.can_manage }.include?(true)
+        app.in?(user.person.oauth_applications) && user.person.oauth_accessibilities.where(oauth_application: app).map{|a| a.can_manage }.include?(true)
       end
       can [:read, :create], Doorkeeper::Application
 
       cannot :manage, OauthAccessibility unless user.is_admin?
       can [:update, :destroy], OauthAccessibility do |acc|
-        acc.in?(user.all_oauth_accessibilities) && user.all_oauth_accessibilities.where(oauth_application: acc.oauth_application).map{|a| a.can_manage }.include?(true)
+        acc.in?(user.person.oauth_accessibilities) && user.person.oauth_accessibilities.where(oauth_application: acc.oauth_application).map{|a| a.can_manage }.include?(true)
       end
       can [:read], OauthAccessibility
       
@@ -63,7 +63,7 @@ class Ability
     can [:show, :create, :update, :destroy], User do |u|
       u == user
     end
-    can [:create, :update, :edit, :new], Profile do |p|
+    can [:update, :edit], Person do |p|
       p.user == user
     end
 

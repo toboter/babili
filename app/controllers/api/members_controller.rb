@@ -1,9 +1,9 @@
 class Api::MembersController < Api::BaseController
   load_and_authorize_resource :organization
-  load_and_authorize_resource through: :organization, class: 'User', find_by: :username
+  load_and_authorize_resource through: :organization, class: 'Person'
 
   def index
-    members = @members.joins(:memberships).where(memberships: {verified: true}).uniq.order(id: :asc)
+    members = @members.order(id: :asc).joins(:memberships).where(memberships: {verified: true}).uniq
     render json: members
   end
 

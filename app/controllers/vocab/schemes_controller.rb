@@ -19,7 +19,7 @@ class Vocab::SchemesController < ApplicationController
   # POST /vocabularies
   # POST /vocabularies.json
   def create
-    @scheme.creator = current_user
+    @scheme.creator = current_person
     respond_to do |format|
       if @scheme.save
         format.html { redirect_to [:vocab, @scheme], notice: 'Vocabulary was successfully created.' }

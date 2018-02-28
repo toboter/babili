@@ -1,9 +1,0 @@
-<% title "New #{@type}", false %>
-
-<% content_for :breadcrumbs do %>
-  <%= content_tag :li, link_to('home', root_url) %>
-  <%= content_tag :li, link_to(@type.pluralize, sti_blog_path(@type)) %>
-  <%= content_tag :li, 'new', class: 'active' %>
-<% end %>
-
-<%= render 'form', blog: @blog %>

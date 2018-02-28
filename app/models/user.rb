@@ -1,4 +1,11 @@
+# Account
+
 class User < ApplicationRecord
+  has_many :oread_access_tokens, class_name: 'Oread::AccessToken', foreign_key: 'resource_owner_id', dependent: :destroy
+  has_many :oread_access_enrollments, class_name: 'Oread::AccessEnrollment', foreign_key: 'enrollee_id', dependent: :destroy
+  has_many :oread_token_applications, through: :oread_access_tokens, source: :application
+  has_many :oread_enrolled_applications, through: :oread_access_enrollments, source: :application
+  has_many :oread_application_ownerships, class_name: 'Oread::Application', as: :owner
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable, :confirmable,
@@ -7,7 +14,19 @@ class User < ApplicationRecord
   
   attr_accessor :login
 
-  validates :username, presence: true, on: :create
+  has_many :access_grants, class_name: "Doorkeeper::AccessGrant",
+    foreign_key: :resource_owner_id,
+    dependent: :delete_all
+  has_many :access_tokens, class_name: "Doorkeeper::AccessToken",
+    foreign_key: :resource_owner_id,
+    dependent: :delete_all
+  has_many :applications, class_name: 'Doorkeeper::Application', as: :owner
+  has_many :personal_access_tokens, foreign_key: :resource_owner_id
+  has_many :audits, dependent: :destroy, foreign_key: :user_id
+  has_many :user_sessions, class_name: 'UserSession', dependent: :destroy
+  belongs_to :person
+
+  validates :username, :person_id, presence: true
   validates :username,
     uniqueness: {
       case_sensitive: false,
@@ -15,60 +34,15 @@ class User < ApplicationRecord
     }
   validates_format_of :username, with: /^[a-zA-Z0-9_\.]*$/, multiline: true
 
-  has_many :oauth_accessibilities, as: :accessor, dependent: :destroy
-  has_many :oauth_applications, through: :oauth_accessibilities
-  has_many :oauth_application_ownerships, class_name: 'Doorkeeper::Application', as: :owner
-
-  has_many :oread_access_tokens, class_name: 'Oread::AccessToken', foreign_key: 'resource_owner_id', dependent: :destroy
-  has_many :oread_access_enrollments, class_name: 'Oread::AccessEnrollment', foreign_key: 'enrollee_id', dependent: :destroy
-
-  has_many :oread_token_applications, through: :oread_access_tokens, source: :application
-  has_many :oread_enrolled_applications, through: :oread_access_enrollments, source: :application
-
-  has_many :oread_application_ownerships, class_name: 'Oread::Application', as: :owner
-
-  has_many :personal_access_tokens, foreign_key: :resource_owner_id
-
-  has_many :memberships, dependent: :destroy
-  has_many :organizations, through: :memberships
-  has_many :organization_oauth_applications, through: :organizations, source: :oauth_applications
-  has_many :organization_oauth_accessibilities, through: :organizations, source: :oauth_accessibilities
-  has_one :profile, dependent: :destroy
-  has_many :blog_pages, class_name: 'CMS::BlogPage', foreign_key: :author_id
-  has_many :audits, dependent: :destroy, foreign_key: :user_id
-  has_many :user_sessions, class_name: 'UserSession', dependent: :destroy
-
-  before_create :build_profile
+  before_validation(on: :create) do
+    self.person = Person.create
+  end
   after_update :enroll_to_default_oread_apps, if: :is_approved?
   after_update :audit_password_change, if: :needs_password_change_audit?
   after_update :send_approval_mail, if: :is_approved?
   after_create :send_admin_mail
 
-  def all_oauth_applications
-    Doorkeeper::Application.joins(:accessibilities).where('oauth_accessibilities.id IN (?)', all_oauth_accessibilities.ids).order(id: :asc)
-  end
-
-  def all_oauth_accessibilities
-    OauthAccessibility.where(accessor_id: self.id, accessor_type: self.class.name).or(OauthAccessibility.where(accessor_id: self.organization_ids, accessor_type: 'Organization')).distinct
-  end
-
-  def all_combined_oauth_accessibility_grants
-    acc=[]
-    for u_application in all_oauth_applications.distinct do
-      obj = OauthAccessibility.new(oauth_application_id: u_application.id)
-      u_application.accessibilities.where(id: all_oauth_accessibilities.ids).each do |a|
-        obj.can_manage = true if a.can_manage == true
-        obj.can_create = true if a.can_create == true
-        obj.can_read = true if a.can_read == true
-        obj.can_update = true if a.can_update == true
-        obj.can_destroy = true if a.can_destroy == true
-        obj.can_comment = true if a.can_comment == true
-        obj.can_publish = true if a.can_publish == true
-      end
-      acc << obj
-    end
-    acc
-  end
+  delegate :name, to: :person
 
   def self.find_for_database_authentication(warden_conditions)
     conditions = warden_conditions.dup
@@ -78,20 +52,6 @@ class User < ApplicationRecord
       where(conditions.to_hash).first
     end
   end
-
-  
-  def name
-    if profile && profile.display_name.present?
-      profile.display_name
-    else
-      username.presence || email
-    end
-  end
-
-  def accessible
-    [id, self.class.name].join(",")
-  end
-
 
   def active_for_authentication? 
     super && approved? 

@@ -25,7 +25,7 @@ class Vocab::ConceptsController < ApplicationController
   # POST /vocabularies/:id/concepts
   # POST /vocabularies/:id/concepts.json
   def create
-    @concept.creator = current_user
+    @concept.creator = current_person
     respond_to do |format|
       if @concept.save
         format.html { redirect_to vocab_scheme_concept_path(@scheme, @concept), notice: 'Concept was successfully created.' }

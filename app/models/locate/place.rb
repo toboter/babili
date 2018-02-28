@@ -12,12 +12,11 @@ class Locate::Place < ApplicationRecord
 
   has_many :datings, dependent: :destroy
   has_many :toponyms, through: :datings
-  has_many :investigations, dependent: :destroy
   has_many :events, class_name: 'Zensus::Event'
   has_many :locations, dependent: :destroy
+  belongs_to :creator, class_name: "Person"
 
   accepts_nested_attributes_for :datings, reject_if: :all_blank, allow_destroy: true
-  accepts_nested_attributes_for :investigations, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :events, reject_if: :all_blank, allow_destroy: true
 
   def default_name
@@ -36,6 +35,26 @@ class Locate::Place < ApplicationRecord
       datings: datings.map{ |d| d.concept.default_name }
     }
   end
+
+  def self.sorted_by(sort_option)
+    direction = ((sort_option =~ /desc$/) ? 'desc' : 'asc').to_sym
+    case sort_option.to_s
+    when /^updated_at_/
+      { updated_at: direction }
+    else
+      raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
+    end
+  end
+
+  def self.options_for_sorted_by
+    [
+      ['Updated asc', 'updated_at_asc'],
+      ['Updated desc', 'updated_at_desc']
+    ]
+  end
+
+end
+
 
 #   def center
 #     points = []
@@ -61,5 +80,3 @@ class Locate::Place < ApplicationRecord
 #   def within
 #     # if [] nearby end
 #   end
-
-end

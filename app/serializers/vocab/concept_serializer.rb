@@ -18,8 +18,8 @@ class Vocab::ConceptSerializer < ActiveModel::Serializer
   attribute :creator do
     {
       name: object.creator.name,
-      url: api_user_url(object.creator),
-      html_url: profile_url(object.creator.profile)
+      url: api_person_url(object.creator.person),
+      html_url: person_url(object.creator.person)
     }
   end
 
@@ -27,8 +27,8 @@ class Vocab::ConceptSerializer < ActiveModel::Serializer
     object.contributors.map do |contrib|
       {
         name: contrib.name,
-        url: api_user_url(contrib),
-        html_url: profile_url(contrib.profile)
+        url: api_person_url(contrib.person),
+        html_url: person_url(contrib.person)
       }
     end
   end

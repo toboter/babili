@@ -34,21 +34,10 @@ class ApplicationAuthorizationClientSerializer < ActiveModel::Serializer
   end
 
   has_many :organization_accessors, each_serializer: OrganizationSerializer
-  has_many :user_accessors, each_serializer: UserSerializer
+  has_many :person_accessors, each_serializer: PersonSerializer
 
   private
   def permissions
-    obj = object.accessibilities.new
-    object.accessibilities.where(id: current_user.all_oauth_accessibilities.ids).each do |a|
-      obj.can_manage = true if a.can_manage?
-      obj.can_create = true if a.can_create? || a.can_manage?
-      obj.can_read = true if a.can_read? || a.can_manage?
-      obj.can_update = true if a.can_update? || a.can_manage?
-      obj.can_destroy = true if a.can_destroy? || a.can_manage?
-      obj.can_comment = true if a.can_comment? || a.can_manage?
-      obj.can_publish = true if a.can_publish? || a.can_manage?
-    end
-    # oauth_accessibilities = current_user.all_combined_oauth_accessibility_grants
-    obj
+    object.grants(current_user.person)
   end
 end

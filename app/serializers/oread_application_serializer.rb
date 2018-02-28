@@ -16,7 +16,7 @@ class OreadApplicationSerializer < ActiveModel::Serializer
   attribute :owner do
     {
       name: object.owner.try(:name),
-      profile_human: url_for([object.owner.profile, {only_path: Rails.env.test?}])
+      human: url_for([object.owner.person, {only_path: Rails.env.test?}])
     }
   end
 

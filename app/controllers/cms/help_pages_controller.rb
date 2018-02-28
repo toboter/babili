@@ -27,7 +27,7 @@ class CMS::HelpPagesController < ApplicationController
   # POST /help_pages.json
   def create
     @page = CMS::HelpPage.new(help_page_params)
-    @page.author = current_user
+    @page.author = current_person
 
     respond_to do |format|
       if @page.save

@@ -21,6 +21,7 @@ class Zensus::Event < ApplicationRecord
   has_many    :notes, as: :issueable
   belongs_to  :place, class_name: 'Locate::Place'
   belongs_to  :period, class_name: 'Vocab::Concept'
+  belongs_to  :creator, class_name: "Person"
 
   accepts_nested_attributes_for :activities, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :event_relations, reject_if: :all_blank, allow_destroy: true

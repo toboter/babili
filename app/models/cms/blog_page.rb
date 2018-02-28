@@ -18,4 +18,14 @@ class CMS::BlogPage < CMS::Content
     title_changed? || super
   end
 
+  def has_author?(person)
+    author == person
+  end
+
+  def published?
+    published_at.present?
+  end
+
+
+
 end

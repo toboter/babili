@@ -15,6 +15,7 @@ class Zensus::Agent < ApplicationRecord
   has_many :events, through: :activities
   has_many :places, through: :events
   has_many :notes, as: :issueable
+  belongs_to :creator, class_name: "Person"
 
   accepts_nested_attributes_for :activities, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :links, reject_if: :all_blank, allow_destroy: true

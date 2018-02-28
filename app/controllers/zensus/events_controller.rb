@@ -22,6 +22,7 @@ class Zensus::EventsController < ApplicationController
   end
 
   def create
+    @event.creator = current_person
     respond_to do |format|
       if @event.save
         format.html { redirect_to zensus_event_url(@event), notice: 'Event was successfully created.' }

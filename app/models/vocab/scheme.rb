@@ -11,7 +11,7 @@ class Vocab::Scheme < ApplicationRecord
   friendly_id :abbr, use: [:slugged, :history]
 
   belongs_to :definer, polymorphic: true
-  belongs_to :creator, class_name: 'User'
+  belongs_to :creator, class_name: 'Person'
   has_many :concepts, dependent: :destroy
 
   validates :abbr, presence: true

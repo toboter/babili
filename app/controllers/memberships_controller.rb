@@ -3,7 +3,7 @@ class MembershipsController < ApplicationController
   before_action :set_organization
 
   def create #apply
-    @applyment = current_user.memberships.new(organization: @organization, verified: false, role: 'Member')
+    @applyment = current_person.memberships.new(organization: @organization, verified: false, role: 'Member')
 
     respond_to do |format|
       if @applyment.save
@@ -32,7 +32,7 @@ class MembershipsController < ApplicationController
   end
 
   def membership_params
-    params.require(:membership).permit(:_delete, :user_id, :organization_id)
+    params.require(:membership).permit(:_delete, :person_id, :organization_id)
   end
 
 

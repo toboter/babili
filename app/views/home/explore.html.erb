@@ -117,7 +117,7 @@
       </p>
     </div>
     <div class="row">
-      <% for organization in @organizations.limit(4) do %>
+      <% @organizations.limit(4).each do |organization| %>
         <div class="col-md-6">
           <%= render organization, full: false, actions: true %>
         </div>
@@ -130,21 +130,21 @@
     <div class="page-header text-center borderless">
       <h2>
         People
-        <span class="badge"><%= @users.count %></span>
+        <span class="badge"><%= @people.count %></span>
       </h2>
       <p class="text-muted lead">
         Some people of the babylon-online.org team.
       </p>
     </div>
     <div class="row">
-      <% for user in @users.limit(6) do %>
+      <% @people.limit(6).each do |person| %>
         <div class="col-md-4 col-sm-6" style="margin-bottom:20px;">
-          <%= render user %>
+          <%= render person %>
         </div>
       <% end %>
     </div>
     <div class="row">
-      <%= link_to 'Meet more.', profiles_path, class: 'col-md-12' %>
+      <%= link_to 'Meet more.', people_path, class: 'col-md-12' %>
     </div>
   </div>
 <% end %>

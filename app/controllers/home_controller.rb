@@ -27,7 +27,7 @@ class HomeController < ApplicationController
   def explore
     @oread_applications = Oread::Application.order("RANDOM()")
     @organizations = Organization.where(private: false).order("RANDOM()")
-    @users = User.order("RANDOM()")
+    @people = Person.order("RANDOM()")
     @showcased = Oread::Application.order("RANDOM()").first
   end
   

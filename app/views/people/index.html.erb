@@ -1,4 +1,4 @@
-<% title 'User profiles' %>
+<% title 'People' %>
 
 <% content_for :breadcrumbs do %>
   <%= content_tag :li, link_to('Home', root_url) %>
@@ -7,9 +7,9 @@
 <% end %>
 
 <div class="list-group">
-  <% @profiles.each do |profile| %>
+  <% @people.each do |person| %>
     <div class="col-md-6" style="margin-bottom:20px;">
-      <%= render profile.user %>
+      <%= render person %>
     </div>
   <% end %>
 </div>

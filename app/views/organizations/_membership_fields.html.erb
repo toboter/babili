@@ -1,26 +1,26 @@
 <tr class="nested-fields">
   <td>
-    <%= f.input :user_id, 
-      collection: @users, 
+    <%= f.input :person_id, 
+      collection: @people, 
       label_method: :name, 
       value_method: :id, 
       include_blank: true,
       label: false,
-      disabled: (f.object.user == current_user || !f.object.new_record?) %>
-    <%= f.hidden_field :user_id, value: f.object.user_id if (f.object.user == current_user || !f.object.new_record?) %>
+      disabled: (f.object.person == current_person || !f.object.new_record?) %>
+    <%= f.hidden_field :person_id, value: f.object.person_id if (f.object.person == current_person || !f.object.new_record?) %>
   </td>
   <td>
     <%= f.input :role, 
       collection: @roles, 
       include_blank: true,
       label: false,
-      disabled: f.object.user == current_user %>
-      <%= f.hidden_field :role, value: f.object.role if f.object.user == current_user %>
+      disabled: f.object.person == current_person %>
+      <%= f.hidden_field :role, value: f.object.role if f.object.person == current_person %>
   </td>
   <td>
     <%= f.input :verified %>
   </td>
   <td>
-    <%= link_to_remove_association fa_icon('remove', text: 'remove'), f unless f.object.user == current_user %>
+    <%= link_to_remove_association fa_icon('remove', text: 'remove'), f unless f.object.person == current_person %>
   </td>
 </tr>

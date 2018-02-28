@@ -29,7 +29,7 @@ class Vocab::Concept < ApplicationRecord
   # paper_trail into changeNote
 
   belongs_to :scheme, touch: true
-  belongs_to :creator, class_name: 'User'
+  belongs_to :creator, class_name: 'Person'
   has_many :labels, class_name: 'Vocab::Label', dependent: :destroy, inverse_of: :concept
   has_many :notes, dependent: :destroy, inverse_of: :concept
   has_many :definitions, -> { where type: 'Definition' }, class_name: 'Note'

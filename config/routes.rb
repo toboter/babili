@@ -44,13 +44,13 @@ Rails.application.routes.draw do
     resources :applications, only: :show
   end
 
-  get '/settings', to: redirect("/settings/profile")
+  get '/settings', to: redirect("/settings/person")
   scope path: '/settings' do
     resources :organizations, only: [:index, :new, :create, :edit, :update, :destroy], as: :settings_organizations do
       resources :memberships, only: [:create, :destroy]
     end
-    get 'profile', to: 'profiles#edit', as: 'edit_current_profile'
-    resources :profiles, only: [:update], as: :settings_profiles
+    get 'person', to: 'people#edit', as: 'edit_current_person'
+    resources :people, only: [:update], as: :settings_people
     
     devise_scope :user do
       get "/account" => "devise/registrations#edit"
@@ -100,7 +100,7 @@ Rails.application.routes.draw do
   end
 
   devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}, :controllers => { :registrations => :registrations }
-  resources :profiles, only: [:index, :show]
+  resources :people, only: [:index, :show]
   resources :organizations, only: [:show]
 
   namespace :cms, path: nil do
@@ -127,12 +127,12 @@ Rails.application.routes.draw do
 
   namespace :api do
     # deprecated start
-      get 'me', to: 'users#me'
+      get 'me', to: 'user#me'
       scope :my do
         scope :accessibilities do
-          get 'searchable', to: 'users#my_search_abilities'
-          get 'crud/:uid', to: 'users#my_crud_abilities'
-          get 'projects/:uid', to: 'users#my_app_organizations'
+          get 'searchable', to: 'user#my_search_abilities'
+          get 'crud/:uid', to: 'user#my_crud_abilities'
+          get 'projects/:uid', to: 'user#my_app_organizations'
         end
       end
       resources :oread_applications, only: [] do
@@ -140,13 +140,13 @@ Rails.application.routes.draw do
       end
     # deprecated end
 
-    # Users
-    resources :users, only: [:index, :show] do
+    # People
+    resources :people, only: [:index, :show] do
       get 'organizations', on: :member
       get 'repositories', on: :member
     end
-    resource :user, only: [:show], controller: 'user' do      # was get 'me', to: 'users#me'
-      get 'repositories', on: :member                          # was get 'searchable', to: 'users#my_search_abilities'
+    resource :user, only: [:show], controller: 'user' do     # was get 'me', to: 'users#me'
+      get 'repositories', on: :member                        # was get 'searchable', to: 'users#my_search_abilities'
       get 'organizations', on: :member
     end
 
@@ -194,6 +194,11 @@ Rails.application.routes.draw do
       get :concepts, to: 'concepts#full_index'
     end
 
+    # locate
+    namespace :locate do
+      resources :places, only: [:index, :show]
+    end
+
     scope path: :search do
       get '/', to: 'search#index'               # global
       get :agents, to: 'zensus/agents#search'
@@ -226,7 +231,7 @@ Rails.application.routes.draw do
             except: :show, 
             as: :accessibilities, 
             path: 'accessibilities'
-          get 'send_accessibilities_to_clients', to: 'oauth_accessibilities#send_all_accessibilities_to_clients'
+          get 'send_accessibilities_to_clients', to: 'oauth_accessibilities#send_accessibilities_to_app'
         end
       end
     end

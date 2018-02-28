@@ -13,5 +13,6 @@ class Handler < ApplicationRecord
   friendly_id :name, use: :slugged
 
   belongs_to :extension, polymorphic: true
+  # -> Org/Person: has_one :handler, as: :profile, dependent: :destroy
   validates :name, presence: true
 end

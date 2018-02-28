@@ -9,7 +9,7 @@ class UserMailer < ApplicationMailer
   end
 
   def membership_confirmed(membership)
-    @applicant = membership.user
+    @applicant = membership.person
     @organization = membership.organization
     @url  = settings_organizations_url
     email = @applicant.email

@@ -16,7 +16,7 @@ class Vocab::SchemeSerializer < ActiveModel::Serializer
   attribute :creator do
     {
       name: object.creator.name,
-      html_url: profile_url(object.creator.profile)
+      html_url: person_url(object.creator.person)
     }
   end
 

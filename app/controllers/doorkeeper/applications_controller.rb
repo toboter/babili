@@ -1,11 +1,11 @@
 module Doorkeeper
-  class ApplicationsController < ActionController::Base
+  class ApplicationsController < Doorkeeper::ApplicationController
     before_action :authenticate_user!
     # Added authorization
     load_and_authorize_resource :application, class: 'Doorkeeper::Application'
-    
+
     def index
-      @applications = current_user.oauth_application_ownerships.order(name: :asc)
+      @applications = current_user.applications.order(name: :asc)
     end
 
     def show

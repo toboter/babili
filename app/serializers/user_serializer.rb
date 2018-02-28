@@ -10,7 +10,7 @@ class UserSerializer < ActiveModel::Serializer
   def image_thumb_50
     "http://#{Rails.application.routes.default_url_options[:host]}
     #{':'+Rails.application.routes.default_url_options[:port].to_s if Rails.application.routes.default_url_options[:port]}
-    #{object.profile.image_url(:small_thumb)}".squish.gsub(/\s+/, "") if object.profile
+    #{object.person.image_url(:small_thumb)}".squish.gsub(/\s+/, "") if object.person
   end
 
   def is_current_user?

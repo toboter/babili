@@ -6,8 +6,8 @@ class OrganizationsController < ApplicationController
   # GET /organizations
   # GET /organizations.json
   def index
-    @applyments = current_user.memberships.joins(:organization).where(verified: false).order('organizations.name ASC')
-    @memberships = current_user.memberships.joins(:organization).where(verified: true).order('organizations.name ASC')
+    @applyments = current_person.memberships.joins(:organization).where(verified: false).order('organizations.name ASC')
+    @memberships = current_person.memberships.joins(:organization).where(verified: true).order('organizations.name ASC')
   end
 
   # GET /organizations/1
@@ -18,14 +18,14 @@ class OrganizationsController < ApplicationController
   # GET /organizations/new
   def new
     @organization = Organization.new
-    @users = User.all
+    @people = Person.all
     @roles = ['Member', 'Admin']
-    @organization.memberships.build(user: current_user, role: 'Admin', verified: true)
+    @organization.memberships.build(person: current_person, role: 'Admin', verified: true)
   end
 
   # GET /organizations/1/edit
   def edit
-    @users = User.all
+    @people = Person.all
     @roles = ['Member', 'Admin']
   end
 
@@ -53,8 +53,8 @@ class OrganizationsController < ApplicationController
       if @organization.update(organization_params)
         new_ids = Organization.find(@organization.id).member_ids
         changed_ids = (old_ids-new_ids) + (new_ids-old_ids)
-        @organization.oauth_applications.each do |app|
-          UpdateClientAppUserAccessibilitiesJob.perform_later(app.id, changed_ids)
+        @organization.accessible_oauth_apps.each do |app|
+          UpdateAppAccessorsJob.perform_later(app.id, changed_ids)
         end
         format.html { redirect_to settings_organizations_path, notice: "Organization was successfully updated." }
         format.json { render :show, status: :ok, location: @organization }
@@ -83,7 +83,7 @@ class OrganizationsController < ApplicationController
         :cached_image_data, 
         :private, 
         :description, 
-        memberships_attributes: [:id, :user_id, :role, :verified, :_destroy])
+        memberships_attributes: [:id, :person_id, :role, :verified, :_destroy])
     end
     
 end

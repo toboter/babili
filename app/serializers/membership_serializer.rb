@@ -1,9 +1,9 @@
 class MembershipSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
-  attributes :url, :state, :role, :organization_url, :organization, :user
+  attributes :url, :state, :role, :organization_url, :organization, :person
 
   def url
-    api_organization_membership_url(object.organization, object)
+    api_organization_membership_url(object.organization, object.person_id)
   end
 
   def state
@@ -25,14 +25,14 @@ class MembershipSerializer < ActiveModel::Serializer
     }
   end
 
-  attribute :user do
+  attribute :person do
     {
-      username: object.user.try(:username),
-      url: url_for([:api, object.user]),
-      html_url: profile_url(object.user.profile),
-      id: object.user.try(:id),
-      avatar_url: object.user.profile.image_url(:original),
-      type: 'User'
+      username: object.person.try(:username),
+      url: url_for([:api, object.person]),
+      html_url: person_url(object.person),
+      id: object.person.try(:id),
+      avatar_url: object.person.image_url(:original),
+      type: 'Person'
     }
   end
 end

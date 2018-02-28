@@ -6,7 +6,7 @@ class OrganizationSerializer < ActiveModel::Serializer
   end
 
   def oauth_application_uids
-    object.oauth_applications.map(&:uid) if object.oauth_applications.any?
+    object.accessible_oauth_apps.map(&:uid) if object.accessible_oauth_apps.any?
   end
 
 end

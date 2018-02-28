@@ -1,5 +1,5 @@
 <div class="nested-fields note-fields">
-  <%= f.input :creator_id, input_html: { value: (f.object.new_record? ? current_user.id : f.object.creator_id) }, as: :hidden %>
+  <%= f.input :creator_id, input_html: { value: (f.object.new_record? ? current_person.id : f.object.creator_id) }, as: :hidden %>
   <div class="col-md-1">
   </div>
     <div class="col-md-11">

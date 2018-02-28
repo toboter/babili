@@ -1,6 +1,6 @@
 class Locate::LocationsController < ApplicationController
   load_and_authorize_resource :place
-  load_and_authorize_resource trough: :place
+  load_and_authorize_resource through: :place
 
   def index
   end

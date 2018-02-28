@@ -19,6 +19,7 @@ class Zensus::AgentsController < ApplicationController
   end
 
   def create
+    @agent.creator = current_person
     respond_to do |format|
       if @agent.save
         format.html { redirect_to zensus_agent_url(@agent), notice: 'Agent was successfully created.' }

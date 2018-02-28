@@ -8,7 +8,7 @@
 class Vocab::Note < ApplicationRecord
   self.inheritance_column = :_type_disabled
   belongs_to :concept
-  belongs_to :creator, class_name: 'User'
+  belongs_to :creator, class_name: 'Person'
 
   validates :type, :body, :language, presence: true
 

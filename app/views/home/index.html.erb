@@ -61,15 +61,15 @@
                   <%= content_tag :ul, class: 'blog-post-meta' do %>
                     <%= content_tag :li, fa_icon('calendar', text: "#{blog_page.published_at.present? ? blog_page.published_at.to_date.to_formatted_s(:long_ordinal) : 'unpublished'}"), class: 'meta-item' %>
                     <%= content_tag :li, class: 'meta-item mid' do %>
-                      <%= background_image_div(blog_page.author.profile, :small_thumb, {class: 'author-avatar'}) %>
-                      <%= link_to blog_page.author.name, blog_page.author.try(:profile) %>
+                      <%= background_image_div(blog_page.author, :small_thumb, {class: 'author-avatar'}) %>
+                      <%= link_to blog_page.author.name, blog_page.author %>
                     <% end %>
                     <%= content_tag :li, fa_icon('archive', text: link_to(blog_page.category.try(:name), blog_page.category)), class: 'meta-item' %>
                   <% end %>
                   <%= content_tag :div, class: "blog-post-body markdown-body --spacious" do %>
                     <%= link_to(truncate(teaser(blog_page.content), length: 280, separator: ' ', escape: false), blog_page, class: 'no-link text-gray') %>
                   <% end %>
-                <% end if blog_page.published_at.present? || blog_page.author == current_user %>
+                <% end if blog_page.published_at.present? || blog_page.author == current_person %>
               <% end %>
             <% end %>
           </div>

@@ -1,5 +1,5 @@
-module Repo
+module Aggregation
   def self.table_name_prefix
-    'repo_'
+    'aggregation_'
   end
 end

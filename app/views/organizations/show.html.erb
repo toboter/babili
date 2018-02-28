@@ -37,15 +37,15 @@
           </h4>
         <% end %>
         <div class="list-group">
-          <% for membership in @organization.memberships do %>
+          <% @organization.memberships.each do |membership| %>
             <div class="col-md-6" style="margin-bottom: 20px;">
-              <%= content_tag :div, id: "user-#{membership.user.id}", class: 'media' do %>
-                <%= link_to membership.user.profile, class: 'list-group-item' do %>
+              <%= content_tag :div, id: "person-#{membership.person.id}", class: 'media' do %>
+                <%= link_to membership.person, class: 'list-group-item' do %>
                   <div class="media-left">
-                    <%= background_image_div(membership.user.profile, :small_thumb, {class: 'media-object img-circle', style: 'height:50px;width:50px; background-position:center;'}) %>
+                    <%= background_image_div(membership.person, :small_thumb, {class: 'media-object img-circle', style: 'height:50px;width:50px; background-position:center;'}) %>
                   </div>
                   <div class="media-body">
-                    <h5 class="media-heading"><%= membership.user.name %></h5>
+                    <h5 class="media-heading"><%= membership.person.name %></h5>
                     <span class="text-muted"><%= membership.role %></span>
                   </div>
                   <div class="media-right">

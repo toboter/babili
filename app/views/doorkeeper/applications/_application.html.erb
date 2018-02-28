@@ -7,7 +7,7 @@
       <p class="small text-muted">
         Created on 
         <%= application.created_at.to_date.to_formatted_s(:long_ordinal) %>. 
-        <%= 'Accessible by ' + pluralize((application.organization_accessors.map{|p|p.members.ids} + application.user_accessors.ids).flatten.uniq.count, 'user' ) %>.
+        <%= 'Accessible by ' + pluralize((application.organization_accessors.map{|p|p.members.ids} + application.person_accessors.ids).flatten.uniq.count, 'user' ) %>.
       </p>
     </div>
     <div class="media-right">

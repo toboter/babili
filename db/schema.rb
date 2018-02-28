@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180226171546) do
+ActiveRecord::Schema.define(version: 20180228134310) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -140,14 +140,14 @@ ActiveRecord::Schema.define(version: 20180226171546) do
   end
 
   create_table "memberships", id: :serial, force: :cascade do |t|
-    t.integer "user_id"
     t.integer "organization_id"
     t.string "role"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "verified", default: false, null: false
+    t.integer "person_id"
     t.index ["organization_id"], name: "index_memberships_on_organization_id"
-    t.index ["user_id"], name: "index_memberships_on_user_id"
+    t.index ["person_id"], name: "index_memberships_on_person_id"
   end
 
   create_table "oauth_access_grants", id: :serial, force: :cascade do |t|
@@ -264,19 +264,7 @@ ActiveRecord::Schema.define(version: 20180226171546) do
     t.index ["slug"], name: "index_organizations_on_slug", unique: true
   end
 
-  create_table "personal_access_tokens", id: :serial, force: :cascade do |t|
-    t.integer "resource_owner_id"
-    t.string "access_token"
-    t.string "description"
-    t.jsonb "scope"
-    t.boolean "revoked", default: false, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["access_token"], name: "index_personal_access_tokens_on_access_token", unique: true
-    t.index ["resource_owner_id"], name: "index_personal_access_tokens_on_resource_owner_id"
-  end
-
-  create_table "profiles", id: :serial, force: :cascade do |t|
+  create_table "people", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.text "about_me"
     t.string "family_name"
@@ -290,8 +278,20 @@ ActiveRecord::Schema.define(version: 20180226171546) do
     t.string "url"
     t.string "institution"
     t.string "location"
-    t.index ["slug"], name: "index_profiles_on_slug", unique: true
-    t.index ["user_id"], name: "index_profiles_on_user_id"
+    t.index ["slug"], name: "index_people_on_slug", unique: true
+    t.index ["user_id"], name: "index_people_on_user_id"
+  end
+
+  create_table "personal_access_tokens", id: :serial, force: :cascade do |t|
+    t.integer "resource_owner_id"
+    t.string "access_token"
+    t.string "description"
+    t.jsonb "scope"
+    t.boolean "revoked", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["access_token"], name: "index_personal_access_tokens_on_access_token", unique: true
+    t.index ["resource_owner_id"], name: "index_personal_access_tokens_on_resource_owner_id"
   end
 
   create_table "repository_classes", id: :serial, force: :cascade do |t|
@@ -332,9 +332,11 @@ ActiveRecord::Schema.define(version: 20180226171546) do
     t.datetime "updated_at", null: false
     t.boolean "is_admin", default: false, null: false
     t.boolean "approved", default: false, null: false
+    t.integer "person_id"
     t.index ["approved"], name: "index_users_on_approved"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["person_id"], name: "index_users_on_person_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
@@ -454,6 +456,8 @@ ActiveRecord::Schema.define(version: 20180226171546) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "default_appellation_id"
+    t.integer "creator_id"
+    t.index ["creator_id"], name: "index_zensus_agents_on_creator_id"
     t.index ["slug"], name: "index_zensus_agents_on_slug", unique: true
     t.index ["type"], name: "index_zensus_agents_on_type"
   end
@@ -503,6 +507,8 @@ ActiveRecord::Schema.define(version: 20180226171546) do
     t.datetime "updated_at", null: false
     t.datetime "begins_at_date"
     t.datetime "ends_at_date"
+    t.integer "creator_id"
+    t.index ["creator_id"], name: "index_zensus_events_on_creator_id"
     t.index ["type"], name: "index_zensus_events_on_type"
   end
 
@@ -517,12 +523,11 @@ ActiveRecord::Schema.define(version: 20180226171546) do
 
   add_foreign_key "audits", "users"
   add_foreign_key "memberships", "organizations"
-  add_foreign_key "memberships", "users"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_accessibilities", "oauth_applications"
   add_foreign_key "oread_access_enrollments", "oread_applications", column: "application_id"
   add_foreign_key "oread_access_enrollments", "users", column: "creator_id"
   add_foreign_key "oread_access_enrollments", "users", column: "enrollee_id"
-  add_foreign_key "profiles", "users"
+  add_foreign_key "people", "users"
 end

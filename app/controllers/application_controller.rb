@@ -8,6 +8,11 @@ class ApplicationController < ActionController::Base
       format.html { redirect_back(fallback_location: root_path, flash: { error: exception.message } ) }
     end
   end
+
+  def current_person
+    current_user.person if current_user
+  end
+  helper_method :current_person
   
   protected
 

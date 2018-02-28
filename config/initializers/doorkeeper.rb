@@ -25,7 +25,7 @@ Doorkeeper.configure do
   #   # Put your admin authentication logic here.
   #   # Example implementation:
   #   Admin.find_by_id(session[:admin_id]) || redirect_to(new_admin_session_url)
-  #    user_signed_in? && current_user.oauth_application_ownerships.any? || redirect_to(root_url, notice: 'Not allowed. You need to be signed in and admin.')
+  #    user_signed_in? && current_user.applications.any? || redirect_to(root_url, notice: 'Not allowed. You need to be signed in and admin.')
   # end
 
   # Authorization Code expiration time (default 10 minutes).
@@ -47,7 +47,7 @@ Doorkeeper.configure do
   # The controller Doorkeeper::ApplicationController inherits from.
   # Defaults to ActionController::Base.
   # https://github.com/doorkeeper-gem/doorkeeper#custom-base-controller
-  # base_controller 'ApplicationController'
+  base_controller 'ApplicationController'
 
   # Reuse access token for the same resource owner within an application (disabled by default)
   # Rationale: https://github.com/doorkeeper-gem/doorkeeper/issues/383

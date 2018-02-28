@@ -1,0 +1,86 @@
+<% title(@person.name, false) %>
+
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, link_to('Home', root_url) %>
+  <%= content_tag :li, link_to('Explore', explore_url) %>
+  <%= content_tag :li, link_to('People', people_url) %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
+<% end %>
+
+<% content_for :container do %>
+  <div class="row">
+    <div class="col-md-5">
+      <div class='panel panel-default'>
+        <%= background_image_div(@person, 'false', {class: '', style: 'height:200px;width:100%;'}) %>
+        <%= background_image_div(@person, :thumb, {class: 'img-responsive img-circle', style: 'width:120px; height:120px;border: solid white 2px; margin: -60px auto 0 auto;'}) %>
+        <div style="padding: 10px;" class="text-center">
+          <%= content_tag :p do %>
+            <%= "<strong>#{@person.name}</strong>".html_safe %>
+            <%= content_tag :span, fa_icon('universal-access'), data: {toggle: "tooltip", placement: "right"}, title: "Administrator" if @person.is_admin? %><br>
+            <%= "(#{@person.username})" %>
+            <%= content_tag :span, "<br>#{@person.institution}".html_safe, class: '' if @person.institution %>
+            <%= content_tag :span, "<br>#{@person.location}".html_safe, class: '' if @person.location %>
+            <%= content_tag :p, @person.about_me, class: '' if @person.about_me %>
+            <%= content_tag :span, link_to(@person.url, @person.url), class: '' if @person.url %>
+          <% end %>
+          <ul class="pllv">
+            <li class="pllve">
+              Teams<br>
+              <strong><%= @person.organizations.count %></strong>
+            </li>
+            <li class="pllve">
+              Authorizations<br>
+              <strong><%= @person.oauth_applications.count %></strong>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <%= link_to fa_icon('edit', text: 'Edit your profile'), edit_current_person_path, class: 'btn btn-sm btn-default text-strong' if @person.is?(current_person) %>
+
+      <h4 class="subhead --spacious">
+        Grants to oauth applications
+      </h4>
+      
+      <% if @person.oauth_applications.any? %>
+        <% @person.oauth_grants.each do |grant| %>
+          <%= render grant.application %>
+          <%= render partial: 'oauth_accessibilities/grant_panel', locals: {grant: grant} %>
+        <% end %>
+      <% else %>
+        <p class="text-muted">
+          none assigned
+        </p>
+      <% end %>
+    </div>
+
+    <div class="col-md-7">
+      <h4 class="subhead">
+        Team memberships
+      </h4>
+      <% if @person.organizations.any? %>
+        <%= render @person.organizations %>
+      <% else %>
+        <p class="text-muted">
+          none &mdash; Find teams on the <%= link_to 'explore page', explore_path %>.
+        </p>
+      <% end %>
+
+      <h4 class="subhead --spacious">
+        Collection enrollments
+      </h4>
+      <% if @person.oread_enrolled_applications.any? %>
+        <div class="row">
+          <% @person.oread_enrolled_applications.each do |enrollment| %>
+            <div class="col-md-6">
+              <%= render enrollment, full: true %>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="text-muted">
+          none &mdash; Find collections on the <%= link_to 'explore page', explore_path %>.
+        </p>
+      <% end %>
+    </div>
+  </div>
+<% end %>

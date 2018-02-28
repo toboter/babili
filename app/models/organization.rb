@@ -3,16 +3,15 @@ class Organization < ApplicationRecord
   extend FriendlyId
   friendly_id :name, use: :slugged
   
-  validates :name, :description, presence: true
-  
   has_many :memberships, dependent: :destroy
-  has_many :members, through: :memberships, class_name: 'User', source: :user
-
+  has_many :members, through: :memberships, class_name: 'Person', source: :person
   has_many :oauth_accessibilities, as: :accessor, dependent: :delete_all
-  has_many :oauth_applications, through: :oauth_accessibilities
-  has_many :oauth_application_ownerships, class_name: 'Doorkeeper::Application', as: :owner
-
+  has_many :accessible_oauth_apps, through: :oauth_accessibilities, source: :oauth_application
+  has_many :users, through: :members
+  
   accepts_nested_attributes_for :memberships, reject_if: :all_blank, allow_destroy: true
+
+  validates :name, :description, presence: true
 
   def has_admin?
     memberships.where(role: 'Admin').any?
@@ -22,8 +21,8 @@ class Organization < ApplicationRecord
     members.where(memberships: {role: 'Admin'})
   end
 
-  def accessible
-    [id, self.class.name].join(",")
+  def has_admin?(person)
+    members.where(memberships: {role: 'Admin'}).include?(person)
   end
 
 end

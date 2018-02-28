@@ -1,7 +1,16 @@
-<h4>Someone is awaiting membership verification!</h4>
 <p>
-  User <%= @applicant.name %> for Team <%= @organization.name %>.<br>
+  <strong>Hallo Administratoren des Teams <%= @organization.name %>!</strong><br>
+  Dies ist eine automatisch generierte E-Mail des Systems. Du erhälst sie, da du 
+  als Administrator eines Teams gekennzeichnet bist und die notwendigen Rechte zum Erledigen 
+  der Anfrage die mit dieser E-Mail verbunden ist hast.
 </p>
+
 <p>
-  Check the memberships list: <%= @url %>.
+  <strong><%= @applicant.name %></strong> wartet auf seine Verifizierung zur Mitgliedschaft in
+  <strong><%= @organization.name %></strong>.
+</p>
+
+<p>
+  Zur Erledigung dieser Anfrage sind folgende Links hilfreich:<br>
+  Membership-list: <%= @url %>.
 </p>

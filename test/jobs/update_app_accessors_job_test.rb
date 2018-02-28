@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class UpdateClientAppUserAccessibilitiesJobTest < ActiveJob::TestCase
+class UpdateAppAccessorsJobTest < ActiveJob::TestCase
   # test "the truth" do
   #   assert true
   # end

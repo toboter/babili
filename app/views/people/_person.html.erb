@@ -1,0 +1,16 @@
+<%= content_tag :div, id: "person-#{person.id}", class: 'media list-group-item' do %>
+  <div class="media-left">
+    <%= link_to person do %>
+      <%= background_image_div(person, :small_thumb, {class: 'media-object img-circle', style: 'height:50px;width:50px; background-position:center;'}) %>
+    <% end %>
+  </div>
+  <div class="media-body">
+    <h4 class="media-heading"><%= link_to person.name, person %></h4>
+    <p class="text-small text-muted" style="min-height:55px;">
+      <%= link_to truncate(person.about_me, length: 75, seperator: ' '), person, class: 'no-link' if person.about_me %>
+    </p>
+  </div>
+  <div class="media-right">
+    <%= content_tag :span, fa_icon('universal-access'), data: {toggle: "tooltip", placement: "left"}, title: "Administrator" if person.is_admin? %>
+  </div>
+<% end %>

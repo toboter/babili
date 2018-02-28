@@ -22,6 +22,8 @@ class Locate::PlacesController < ApplicationController
   # POST /locate/places
   # POST /locate/places.json
   def create
+    @place.creator = current_person
+    
     respond_to do |format|
       if @place.save
         format.html { redirect_to @place, notice: 'Place was successfully created.' }

@@ -8,11 +8,11 @@
     </div>
     <div class="media-body">
       <%= content_tag :div, class: 'membership-actions pull-right' do %>
-        <% if !organization.members.include?(current_user) %>
+        <% if !organization.members.include?(current_person) %>
           <%= form_for Membership.new, url: settings_organization_memberships_path(organization), remote: true, html: {id: "new_organization_membership_#{organization.id}", style: "display:inline!important;"} do |f| %>
             <%= f.submit 'Apply', class: 'btn btn-sm btn-default text-strong' %>
           <% end %>
-        <% elsif organization.members.joins(:memberships).where(memberships: {verified: false}).include?(current_user) %>
+        <% elsif organization.members.joins(:memberships).where(memberships: {verified: false}).include?(current_person) %>
           <%= link_to fa_icon('user', text: 'Awaiting confirmation'), settings_organizations_path, class: 'btn btn-default btn-sm text-strong' %>
         <% else %>
           <%= link_to fa_icon('group', text: 'In your organizations'), settings_organizations_path, class: 'btn btn-default btn-sm text-strong' %>
@@ -32,7 +32,7 @@
             container: 'body',
             html: true,
             title: 'Members',
-            content: content_tag(:ul, organization.memberships.where(verified: true).map{ |m| content_tag(:li, m.user.name) }.join, class: 'list-unstyled') }
+            content: content_tag(:ul, organization.memberships.where(verified: true).map{ |m| content_tag(:li, m.person.name) }.join, class: 'list-unstyled') }
         %>
       </p>
       <%= link_to truncate(organization.description, length: 180, separator: ' '), organization_path(organization), class: 'no-link' %>
@@ -49,11 +49,11 @@
       <p class="small text-muted">Created on <%= organization.created_at.to_date.to_formatted_s(:long_ordinal) %>. <%= pluralize( organization.memberships.count, 'member' ) %></p>
 
       <%= content_tag :div, class: 'membership-actions' do %>
-        <% if !organization.members.include?(current_user) %>
+        <% if !organization.members.include?(current_person) %>
           <%= form_for Membership.new, url: settings_organization_memberships_path(organization), remote: true, html: {id: "new_organization_membership_#{organization.id}", style: "display:inline!important;"} do |f| %>
             <%= f.submit 'Apply', class: 'btn btn-sm btn-default text-strong' %>
           <% end %>
-        <% elsif organization.members.joins(:memberships).where(memberships: {verified: false}).include?(current_user) %>
+        <% elsif organization.members.joins(:memberships).where(memberships: {verified: false}).include?(current_person) %>
           <%= link_to fa_icon('user', text: 'Awaiting confirmation'), settings_organizations_path, class: 'btn btn-default btn-sm text-strong' %>
         <% else %>
           <%= link_to fa_icon('group', text: 'In your organizations'), settings_organizations_path, class: 'btn btn-default btn-sm text-strong' %>
