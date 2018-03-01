@@ -307,9 +307,9 @@ header {
     .container {
         min-height: 60vh;
         margin-top: 50px;
-        padding-top: 6vh;
+        padding-top: 4vh;
         .heading {
-            margin-bottom: 7vh;
+            margin-bottom: 5vh;
             h1 {
                 margin: 0 auto .3em auto;
                 font-size: 4em;
@@ -322,16 +322,28 @@ header {
             margin-top: 0;
             margin-bottom: 7vh;
         }
-        .infobox {
-            margin-bottom: 5vh;
+    }
+    div.info-box {
+        div.info-box-bg {
+            position: relative;
+            border: 1px solid rgba(34, 34, 34, 0.5);
+            border-radius: 5px;
+            background-color: rgba(34, 34, 34, 0.5);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 15px;
+            margin-bottom: 5px;
         }
-        .about-line {
-            margin-bottom: 5vh;
-            .about-link {
-                color: #F05F40;
-                font-size: 1em;
-                font-weight: 700;
-            }
+        text-align: left;
+        position: absolute;
+        bottom: 20px;
+        left: 0px;
+        margin-left: 20px;
+        margin-right: 20px;
+
+        a.about-link {
+            font-size: 1em;
+            font-weight: 700;
+            color: #0366d6;
         }
     }
 }
@@ -345,17 +357,38 @@ header {
             background-color: rgba(34, 34, 34, 0.5);
             padding: 8px;
             position: absolute;
-            bottom: 20px;
+            bottom: 45px;
             right: 20px;
             color: rgba(255, 255, 255, 0.7);
             &:hover {
                 background-color: rgba(34, 34, 34, 0.7);
             }
         }
+        div.info-box {
+            div.info-box-bg {
+                position: relative;
+                border: 1px solid rgba(34, 34, 34, 0.5);
+                border-radius: 5px;
+                background-color: rgba(34, 34, 34, 0.5);
+                color: rgba(255, 255, 255, 0.7);
+                padding: 15px;
+                margin-bottom: 5px;
+            }
+            position: absolute;
+            bottom: 20px;
+            left: 0px;
+            width: 50%;
+            text-align: left;
+            a.about-link {
+                font-size: 1em;
+                font-weight: 700;
+                color: #0366d6;
+            }
+        }
         min-height: 100%;
         .container {
             margin-top: 0;
-            padding-top: 20vh;
+            padding-top: 17vh;
             .heading {
                 margin-bottom: 7vh;
                 h1 {
@@ -368,21 +401,7 @@ header {
             }
             .searchbox {
                 margin-top: 0;
-                margin-bottom: 8vh;
-            }
-            .infobox {
-                margin-bottom: 15vh;
-            }
-            .about-line {
-                margin-bottom: 5vh;
-                a.about-link {
-                    font-size: 1.3em;
-                    font-weight: 700;
-                    &:hover {
-                        font-size: 1.5em;
-                        text-decoration: none;
-                    }
-                }
+                margin-bottom: 12vh;
             }
         }
     }

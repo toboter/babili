@@ -1,7 +1,21 @@
 <%= content_for(:content) do %>
 
   <%= content_tag :header do %>
-    <%= link_to fa_icon('chevron-down 2x'), "javascript:scrollToAnchor('features');", class: 'chevron-about page-scroll', id: '', style: '' %>
+    <%= link_to fa_icon('chevron-down 2x'), "javascript:scrollToAnchor('featured');", class: 'chevron-about page-scroll', id: '', style: '' %>
+    <div class="info-box">
+      <div class="info-box-bg">
+        <p class="text-strong">
+          <%= content_tag :span, fa_icon('exclamation-triangle 2x'), class: 'pull-left', style: 'margin-right: 20px;' %>
+          babylon-online.org and its content is work in progress. Data may be incomplete or even not existing.
+        </p>
+        <p class="text-small">
+          Entwürfe für die Prozessionsstraße in Berlin - Blick zum Syrischen Saal. 
+          Aquarell / Wasserfarben (1927) von Walter Andrae [1875 - 1956].
+          &copy; bpk / Staatsbibliothek zu Berlin / Ruth Schacht
+        </p>
+      </div>
+      <p><%= link_to 'About babylon-online.org', about_path, class: 'about-link pull-left' %></p>
+    </div>
     <div class="container">
       <div class="row heading">
         <div class="col-md-8 col-centered">
@@ -12,19 +26,6 @@
       <div class="row searchbox">
         <div class="col-md-6 col-sm-8 col-xs-10 col-centered">
           <%= render 'shared/search' %>
-        </div>
-      </div>
-      <div class="row infobox">
-        <div class="col-md-6 col-sm-8 col-xs-12 col-centered alert alert-info">
-          <p>
-            <%= content_tag :span, fa_icon('exclamation-triangle 2x'), class: 'pull-left', style: 'margin: 10px 20px 0 10px;' %>
-            babylon-online.org and its content is work in progress. <br>Data may be incomplete or even not existing.
-          </p>
-        </div>
-      </div>
-      <div class="row about-line">
-        <div class="col-md-6 col-centered">
-          <p><%= link_to 'About', about_path, class: 'about-link' %></p>
         </div>
       </div>
     </div>
@@ -46,7 +47,7 @@
     </div>
   </aside>
 
-  <section class="featured-blog-entries --spacious" id="features">
+  <section class="featured-blog-entries --spacious" id="featured">
     <div class="container">
       <div class="posts">
         <div class="page-header">
