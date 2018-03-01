@@ -1,8 +1,9 @@
 class Person < ApplicationRecord
   include ImageUploader[:image]
   extend FriendlyId
-  friendly_id :name, use: :slugged ### diser slug muss on create gesetzt werden. sonst gibt es keine person_page
+  friendly_id :name, use: :slugged
 
+  has_one :agent, as: :subclass, dependent: :destroy
   has_one :user
   has_many :blog_pages, class_name: 'CMS::BlogPage', foreign_key: :author_id
   has_many :memberships, dependent: :destroy
@@ -12,22 +13,28 @@ class Person < ApplicationRecord
   has_many :organization_accessible_oauth_apps, -> { distinct }, through: :organizations, source: :accessible_oauth_apps
   has_many :organization_oauth_accessibilities, -> { distinct }, through: :organizations, source: :oauth_accessibilities
 
-  validates :user, presence: true
+  accepts_nested_attributes_for :agent, reject_if: :all_blank, allow_destroy: false
 
-  delegate :username, :is_admin?, :oread_enrolled_applications, :email, to: :user
+  def oread_enrolled_applications # deprecated
+    user ? user.oread_enrolled_applications : []
+  end
+
+  def email
+    user ? user.email : false
+  end
 
   def is?(person)
     self == person
+  end
+
+  def is_admin?
+    user ? user.is_admin? : false
   end
 
   def name
     [honorific_prefix, given_name, family_name, honorific_suffix].join(' ').strip.presence || username
   end
 
-  def should_generate_new_friendly_id?
-    changed?
-  end
-  
   def oauth_accessibilities
     accessibilities = person_oauth_accessibility_ids.concat(organization_oauth_accessibility_ids).uniq
     OauthAccessibility.where(id: accessibilities)
@@ -47,6 +54,10 @@ class Person < ApplicationRecord
       grants << application.grants(self)
     end
     grants.flatten
+  end
+
+  def username
+    slug
   end
 
 

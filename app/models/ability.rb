@@ -6,9 +6,12 @@ class Ability
 
     cannot :manage, :all
     can :read, :all
-    cannot :read, [CMS::HelpCategory, CMS::BlogCategory, CMS::BlogPage]
-    can :read, CMS::BlogPage do |page|
-      page.published_at.present?
+    cannot :read, [CMS::HelpCategory, CMS::BlogCategory]
+    cannot :read, CMS::BlogPage do |page|
+      !page.published?
+    end
+    cannot :read, Organization do |organization|
+      organization.private?
     end
 
     if user.approved?
@@ -29,11 +32,11 @@ class Ability
       cannot :manage, Organization unless user.is_admin?
       # in folgendes noch Memberships aufnehmen?
       can [:update, :destroy], Organization do |organization| 
-        user.in?(organization.members) && organization.memberships.where(user_id: user.id).first.role == 'Admin'
+        user.person.in?(organization.members) && organization.memberships.where(person_id: user.person.id).first.role == 'Admin'
       end
       can [:create], Organization
       can [:read], Organization do |organization|
-        !organization.private? || user.in?(organization.members)
+        !organization.private? || user.person.in?(organization.members)
       end
 
       cannot :manage, Oread::Application unless user.is_admin?

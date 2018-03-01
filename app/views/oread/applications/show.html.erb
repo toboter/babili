@@ -34,7 +34,7 @@
       <%= content_tag :div, class: 'list-group --spacious' do %>
         <h4>Enrollees <%= content_tag :span, @application.enrollees.count, class: 'badge' %></h4>
         <% for enrollee in @application.enrollees.limit(5) do %>
-          <%= render partial: "/#{enrollee.to_partial_path}", object: enrollee %>    
+          <%= render partial: "/#{enrollee.person.to_partial_path}", object: enrollee.person %>    
         <% end %>
       <% end if @application.enrollees.any? %>
     </div>

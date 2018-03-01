@@ -6,13 +6,11 @@ class User < ApplicationRecord
   has_many :oread_token_applications, through: :oread_access_tokens, source: :application
   has_many :oread_enrolled_applications, through: :oread_access_enrollments, source: :application
   has_many :oread_application_ownerships, class_name: 'Oread::Application', as: :owner
-  # Include default devise modules. Others available are:
-  # :lockable, :timeoutable and :omniauthable
+
   devise :database_authenticatable, :registerable, :confirmable,
-         :recoverable, :rememberable, :trackable, :validatable, 
-         authentication_keys: [:login]
+         :recoverable, :rememberable, :trackable, :validatable
   
-  attr_accessor :login
+  attr_accessor :slug
 
   has_many :access_grants, class_name: "Doorkeeper::AccessGrant",
     foreign_key: :resource_owner_id,
@@ -26,36 +24,28 @@ class User < ApplicationRecord
   has_many :user_sessions, class_name: 'UserSession', dependent: :destroy
   belongs_to :person
 
-  validates :username, :person_id, presence: true
-  validates :username,
-    uniqueness: {
-      case_sensitive: false,
-      allow_blank: true
-    }
-  validates_format_of :username, with: /^[a-zA-Z0-9_\.]*$/, multiline: true
-
   before_validation(on: :create) do
-    self.person = Person.create
+    hero = Person.create(family_name: slug)
+    self.person = hero # Handler.create(name: slug)
   end
   after_update :enroll_to_default_oread_apps, if: :is_approved?
   after_update :audit_password_change, if: :needs_password_change_audit?
   after_update :send_approval_mail, if: :is_approved?
   after_create :send_admin_mail
 
+  validates :slug, :person, presence: true, on: :create
   delegate :name, to: :person
-
-  def self.find_for_database_authentication(warden_conditions)
-    conditions = warden_conditions.dup
-    if login = conditions.delete(:login)
-      where(conditions.to_hash).where(["lower(username) = :value OR lower(email) = :value", { :value => login.downcase }]).first
-    elsif conditions.has_key?(:username) || conditions.has_key?(:email)
-      where(conditions.to_hash).first
-    end
-  end
 
   def active_for_authentication? 
     super && approved? 
   end 
+
+  def enroll_to_default_oread_apps
+    Oread::Application.where(enroll_users_default: true).each do |app|
+      self.oread_access_enrollments << Oread::AccessEnrollment.new(application: app, creator: self)
+    end
+    return true
+  end  
   
   def inactive_message 
     if !approved? 
@@ -71,23 +61,6 @@ class User < ApplicationRecord
 
   def send_approval_mail
     UserMailer.account_approved(self).deliver
-  end
-
-  def self.send_reset_password_instructions(attributes={})
-    recoverable = find_or_initialize_with_errors(reset_password_keys, attributes, :not_found)
-    if !recoverable.approved?
-      recoverable.errors[:base] << I18n.t("devise.failure.not_approved")
-    elsif recoverable.persisted?
-      recoverable.send_reset_password_instructions
-    end
-    recoverable
-  end
-
-  def enroll_to_default_oread_apps
-    Oread::Application.where(enroll_users_default: true).each do |app|
-      self.oread_access_enrollments << Oread::AccessEnrollment.new(application: app, creator: self)
-    end
-    return true
   end
 
   def activate_session(options = {})
@@ -114,6 +87,7 @@ class User < ApplicationRecord
   end
 
   private
+
     def is_approved?
       approved_changed? && approved?
     end

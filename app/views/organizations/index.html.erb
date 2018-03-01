@@ -1,75 +1,15 @@
-<% title 'Your organizations' %>
+<% title 'Organizations' %>
 
 <% content_for :breadcrumbs do %>
+  <%= content_tag :li, link_to('Home', root_url) %>
+  <%= content_tag :li, link_to('Explore', explore_url) %>
   <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
-<% content_for :buttons do %>
-  <%= link_to 'Create a new team', new_settings_organization_path, class: 'btn btn-default text-strong' %>
-<% end if can?(:create, Organization) %>
 
-
-<main role="main">
-  <%= content_tag :div, id: 'organizations-by-applications' do %>
-    <table class="table table-simple">
-      <thead>
-      <tr>
-        <th style="width:60%;">Team awaiting confirmation</th>
-        <th></th>
-      </tr>
-      </thead>
-      <tbody>
-      <% @applyments.each do |applyment| %>
-        <tr>
-          <td>
-            <p class="text-strong"><%= link_to applyment.organization.name, organization_path(applyment.organization) %></p>
-            <%= content_tag :p, class: 'text-muted text-small' do %>
-              <%= "Current admins: #{applyment.organization.admins.map(&:name).join(', ')}" %><br>
-              <%= "Created at: #{applyment.organization.created_at.to_date.to_formatted_s(:long)}" %>
-            <% end %>
-          </td>
-          <td>
-            <%= content_tag :p, link_to('Leave', settings_organization_membership_path(applyment.organization, applyment), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default btn-sm text-strong pull-right') %>
-          </td>
-        </tr>
-      <% end %>
-      </tbody>
-    </table>
-  <% end if @applyments.any? %>
-
-  <%= content_tag :div, id: 'organizations-by-memberships' do %>
-    <table class="table table-simple">
-      <thead>
-      <tr>
-        <th style="width:60%;">Team</th>
-        <th>Your role</th>
-        <th></th>
-      </tr>
-      </thead>
-      <tbody>
-      <% @memberships.each do |membership| %>
-        <tr>
-          <td>
-            <p class="text-strong"><%= link_to membership.organization.name, organization_path(membership.organization) %></p>
-            <%= content_tag :p, truncate(membership.organization.description, length: 200), class: 'text-small' if membership.organization.description? %>
-            <%= content_tag :p, class: 'text-muted text-small' do %>
-              <%= "Current admin: #{membership.organization.admins.map(&:name).join(', ')}" %><br>
-              <%= "Created at: #{membership.organization.created_at.to_date.to_formatted_s(:long)}" %>
-            <% end %>
-          </td>
-          <td>
-            <%= content_tag :p, class: 'text-muted text-small' do %>
-              <%= content_tag :span, "#{membership.role}", class: 'text-strong' %><br>
-              <%= "Since: #{membership.updated_at.to_date.to_formatted_s(:long)}" %>
-            <% end %>
-          </td>
-          <td>
-            <%= content_tag :p, link_to('Leave', settings_organization_membership_path(membership.organization, membership), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default btn-sm text-strong') unless membership.role == 'Admin' %>
-            <p><%= link_to 'Edit', edit_settings_organization_path(membership.organization), class: 'btn btn-default btn-sm text-strong' if can?(:update, membership.organization) %></p>
-            <p><%= link_to 'Remove', [:settings, membership.organization], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm text-strong' if can?(:destroy, membership.organization) %></p>
-          </td>
-        </tr>
-      <% end %>
-      </tbody>
-    </table>
-  <% end if @memberships.any? %>
-</main>
+<div class="row">
+  <% @organizations.each do |organization| %>
+    <div class="col-md-12">
+      <%= render organization, full: true, actions: true %>
+    </div>
+  <% end %>
+</div>

@@ -16,10 +16,6 @@ class HomeController < ApplicationController
   def contact
   end
 
-  def organizations
-    @organizations = Organization.where(private: false).order(name: :asc)
-  end
-
   def collections
     @collection_apps = Oread::Application.order(name: :asc)
   end

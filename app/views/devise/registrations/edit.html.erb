@@ -15,10 +15,9 @@
     <%= f.input :password_confirmation, required: false %>
 
     <div class="subhead --spacious">
-      <h4>Change email or username</h4>
+      <h4>Change email</h4>
     </div>
     <%= f.input :email, required: true %>
-    <%= f.input :username, required: true %>
 
     <br><br>
     <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>

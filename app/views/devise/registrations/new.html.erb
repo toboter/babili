@@ -1,18 +1,29 @@
-<h2>Sign up</h2>
+<% title 'Sign up' %>
 
-<%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= f.error_notification %>
+<% content_for :container do %>
+  <div class="row --spacious">
+    <div class="col-lg-5 col-md-7 col-sm-9 col-xs-12 col-centered">
+      <div class="panel panel-default">
+        <div class="panel-heading text-strong"><%= yield(:title) %></div>
+        <div class="panel-body">
+          <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+            <%= f.error_notification %>
 
-  <div class="form-inputs">
-    <%= f.input :email, required: true, autofocus: true %>
-    <%= f.input :username, required: true %>
-    <%= f.input :password, required: true, hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length) %>
-    <%= f.input :password_confirmation, required: true %>
-  </div>
+            <div class="form-inputs">
+              <%= f.input :email, required: true, autofocus: true %>
+              <%= f.input :slug, label: 'Username', required: true, hint: 'This will be the namespace-url for your profile.' %>
+              <%= f.input :password, required: true, hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length) %>
+              <%= f.input :password_confirmation, required: true %>
+            </div>
 
-  <div class="form-actions">
-    <%= f.button :submit, "Sign up" %>
+            <div class="form-actions">
+              <%= f.button :submit, "Sign up" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <%= render "devise/shared/links" %>
+    </div>
   </div>
 <% end %>
-
-<%= render "devise/shared/links" %>

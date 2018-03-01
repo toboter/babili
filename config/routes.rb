@@ -33,25 +33,30 @@ Rails.application.routes.draw do
     end
   end
 
+  devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}, :controllers => { :registrations => :registrations }
+  resources :people, only: [:index, :show]
+  resources :organizations, only: [:index, :show]
+
   get '/search', to: 'search#index'
   get '/about', to: 'home#about'
   get '/contact', to: 'home#contact'
   get '/explore', to: 'home#explore'
-  get '/organizations', to: 'home#organizations'
   get '/collections/applications', to: 'home#collections', as: :collections
 
   namespace :oread, path: 'collections' do
     resources :applications, only: :show
   end
 
-  get '/settings', to: redirect("/settings/person")
-  scope path: '/settings' do
-    resources :organizations, only: [:index, :new, :create, :edit, :update, :destroy], as: :settings_organizations do
+  namespace :settings do
+    get '/', to: redirect("/settings/person")
+    resources :organizations, only: [:index, :new, :create, :edit, :update, :destroy] do
       resources :memberships, only: [:create, :destroy]
     end
-    get 'person', to: 'people#edit', as: 'edit_current_person'
-    resources :people, only: [:update], as: :settings_people
-    
+    resources :people, only: [:update]
+  end
+
+  scope path: '/settings' do
+    get 'person', to: 'settings/people#edit', as: 'edit_current_person'
     devise_scope :user do
       get "/account" => "devise/registrations#edit"
     end
@@ -99,9 +104,7 @@ Rails.application.routes.draw do
     end
   end
 
-  devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}, :controllers => { :registrations => :registrations }
-  resources :people, only: [:index, :show]
-  resources :organizations, only: [:show]
+
 
   namespace :cms, path: nil do
     resources :blog_pages, path: :blog, only: :index

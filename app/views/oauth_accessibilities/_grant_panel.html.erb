@@ -1,11 +1,11 @@
 <div class="panel panel-default panel-attach">
   <%= content_tag :ul, class: "panel-body list-inline" do %>
-    <%= content_tag :li, fa_icon('universal-access'), data: {toggle: "tooltip", placement: "right"}, title: "Can manage everything. Granted by #{grant.can_manage_through.map(&:name).join(', ')}" if grant.can_manage %>
-    <%= content_tag :li, fa_icon('plus'), data: {toggle: "tooltip", placement: "right"}, title: "Can create records. Granted by #{grant.can_create_through.map(&:name).join(', ')}" if grant.can_create %>
-    <%= content_tag :li, fa_icon('info'), data: {toggle: "tooltip", placement: "right"}, title: "Can read records. Granted by #{grant.can_read_through.map(&:name).join(', ')}" if grant.can_read %>
-    <%= content_tag :li, fa_icon('edit'), data: {toggle: "tooltip", placement: "right"}, title: "Can edit records. Granted by #{grant.can_update_through.map(&:name).join(', ')}" if grant.can_update %>
-    <%= content_tag :li, fa_icon('remove'), data: {toggle: "tooltip", placement: "right"}, title: "Can remove records. Granted by #{grant.can_destroy_through.map(&:name).join(', ')}" if grant.can_destroy %>
-    <%= content_tag :li, fa_icon('comment-o'), data: {toggle: "tooltip", placement: "right"}, title: "Can comment on records. Granted by #{grant.can_comment_through.map(&:name).join(', ')}" if grant.can_comment %>
-    <%= content_tag :li, fa_icon('eye'), data: {toggle: "tooltip", placement: "right"}, title: "Can comment on records. Granted by #{grant.can_publish_through.map(&:name).join(', ')}" if grant.can_publish %>
+    <%= content_tag :li, fa_icon('universal-access'), data: {toggle: "tooltip", placement: "right"}, title: "Can manage everything. Granted to #{grant.can_manage_through.map(&:name).join(', ')}" if grant.can_manage %>
+    <%= content_tag :li, fa_icon('plus'), data: {toggle: "tooltip", placement: "right"}, title: "Can create records. Granted to #{grant.can_create_through.map(&:name).join(', ')}" if grant.can_create %>
+    <%= content_tag :li, fa_icon('info'), data: {toggle: "tooltip", placement: "right"}, title: "Can read records. Granted to #{grant.can_read_through.map(&:name).join(', ')}" if grant.can_read %>
+    <%= content_tag :li, fa_icon('edit'), data: {toggle: "tooltip", placement: "right"}, title: "Can edit records. Granted to #{grant.can_update_through.map(&:name).join(', ')}" if grant.can_update %>
+    <%= content_tag :li, fa_icon('remove'), data: {toggle: "tooltip", placement: "right"}, title: "Can remove records. Granted to #{grant.can_destroy_through.map(&:name).join(', ')}" if grant.can_destroy %>
+    <%= content_tag :li, fa_icon('comment-o'), data: {toggle: "tooltip", placement: "right"}, title: "Can comment on records. Granted to #{grant.can_comment_through.map(&:name).join(', ')}" if grant.can_comment %>
+    <%= content_tag :li, fa_icon('eye'), data: {toggle: "tooltip", placement: "right"}, title: "Can comment on records. Granted to #{grant.can_publish_through.map(&:name).join(', ')}" if grant.can_publish %>
   <% end %>
 </div>

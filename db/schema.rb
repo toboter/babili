@@ -10,11 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180228134310) do
+ActiveRecord::Schema.define(version: 20180301140346) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
+
+  create_table "agents", force: :cascade do |t|
+    t.integer "subclass_id"
+    t.string "subclass_type"
+    t.string "name"
+    t.string "slug"
+    t.index ["slug"], name: "index_agents_on_slug", unique: true
+    t.index ["subclass_id", "subclass_type"], name: "index_agents_on_subclass_id_and_subclass_type"
+  end
 
   create_table "audits", id: :serial, force: :cascade do |t|
     t.integer "user_id"
