@@ -1,6 +1,5 @@
 class Settings::PeopleController < ApplicationController
   before_action :authenticate_user!
-  load_and_authorize_resource
   layout "settings"
 
   def edit
@@ -8,9 +7,10 @@ class Settings::PeopleController < ApplicationController
   end
 
   def update
+    @person = current_person
     respond_to do |format|
       if @person.update(person_params)
-        format.html { redirect_to edit_current_person_path, flash: { notice: 'Profile was updated successfully.' } }
+        format.html { redirect_to edit_settings_person_path, flash: { notice: 'Profile was updated successfully.' } }
         format.json { render :show, status: :ok, location: @person }
       else
         format.html { render :edit }

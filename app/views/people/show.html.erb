@@ -35,7 +35,7 @@
           </ul>
         </div>
       </div>
-      <%= link_to fa_icon('edit', text: 'Edit your profile'), edit_current_person_path, class: 'btn btn-sm btn-default text-strong' if @person.is?(current_person) %>
+      <%= link_to fa_icon('edit', text: 'Edit your profile'), edit_settings_person_path, class: 'btn btn-sm btn-default text-strong' if @person.is?(current_person) %>
 
       <h4 class="subhead --spacious">
         Grants to oauth applications

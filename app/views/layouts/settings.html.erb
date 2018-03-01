@@ -9,12 +9,12 @@
         <div class="panel panel-default">
           <div class="panel-heading text-strong"><span class="text-muted">Personal Settings</span></div>
           <div class="list-group">
-            <%= link_to 'Profile', edit_current_person_path, class: "list-group-item #{'active text-strong' if current_page?(edit_current_person_path)}" %>
+            <%= link_to 'Profile', edit_settings_person_path, class: "list-group-item #{'active text-strong' if current_page?(edit_settings_person_path)}" %>
             <%= link_to 'Acccount', account_path, class: "list-group-item #{'active text-strong' if current_page?(account_path)}" %>
             <%= link_to 'Notifications', account_path, class: "list-group-item disabled" %>
             <%= link_to 'Repositories', settings_oread_enrollments_path, class: "list-group-item #{'active text-strong' if current_page?(settings_oread_enrollments_path)}" %>
             <%= link_to 'Teams', settings_organizations_path, class: "list-group-item #{'active text-strong' if current_page?(settings_organizations_path)}" %>
-            <%= link_to 'Security', security_settings_path, class: "list-group-item  #{'active text-strong' if current_page?(security_settings_path)}" %>
+            <%= link_to 'Security', settings_security_path, class: "list-group-item  #{'active text-strong' if current_page?(settings_security_path)}" %>
             <%= link_to 'Applications', oauth_authorized_applications_path, class: "list-group-item #{'active text-strong' if current_page?(oauth_authorized_applications_path)}" %>
           </div>
         </div>

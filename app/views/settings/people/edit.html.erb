@@ -4,7 +4,7 @@
   <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
 
-<%= simple_form_for [:settings, @person], method: :put do |f| %>
+<%= simple_form_for @person, url: settings_person_path, method: :put do |f| %>
 
   <div class="row">
       <div class="col-md-12">
@@ -41,7 +41,7 @@
       <div class="row --spacious">
         <div class="col-md-12">
           <%= f.submit 'Update', class: 'btn btn-primary text-strong' %>
-          <%= link_to 'Cancel', edit_current_person_path, class: "btn btn-default" %>
+          <%= link_to 'Cancel', edit_settings_person_path, class: "btn btn-default" %>
           <%= link_to 'View profile', @person, class: "btn btn-default" %>
         </div>
       </div>

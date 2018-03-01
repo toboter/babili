@@ -51,18 +51,20 @@ Rails.application.routes.draw do
     get '/', to: redirect("/settings/person")
     resources :organizations, only: [:index, :new, :create, :edit, :update, :destroy] do
       resources :memberships, only: [:create, :destroy]
+      resource :namespace, only: [:edit, :update], type: 'Organization', path_names: { edit: 'change' }
     end
-    resources :people, only: [:update]
+    resource :person, only: [:edit, :update], path_names: { edit: '' } do
+      resource :namespace, only: [:edit, :update], type: 'Person', path_names: { edit: 'change' }
+    end
+    resource :security, only: :show do
+      resources :user_sessions, only: :destroy
+    end
   end
 
   scope path: '/settings' do
-    get 'person', to: 'settings/people#edit', as: 'edit_current_person'
+    
     devise_scope :user do
       get "/account" => "devise/registrations#edit"
-    end
-
-    resource :security, only: :show, as: :security_settings do
-      resources :user_sessions, only: :destroy
     end
 
     # '/security/revoke_user_session/', to: 'security#revoke_user_session', as: :settings_security_user_session_revoke

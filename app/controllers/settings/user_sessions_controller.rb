@@ -1,4 +1,4 @@
-class UserSessionsController < ApplicationController
+class Settings::UserSessionsController < ApplicationController
   before_action :authenticate_user!
 
   def destroy

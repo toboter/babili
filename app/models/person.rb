@@ -3,7 +3,7 @@ class Person < ApplicationRecord
   extend FriendlyId
   friendly_id :name, use: :slugged
 
-  has_one :agent, as: :subclass, dependent: :destroy
+  has_one :namespace, as: :subclass, dependent: :destroy
   has_one :user
   has_many :blog_pages, class_name: 'CMS::BlogPage', foreign_key: :author_id
   has_many :memberships, dependent: :destroy
@@ -13,7 +13,7 @@ class Person < ApplicationRecord
   has_many :organization_accessible_oauth_apps, -> { distinct }, through: :organizations, source: :accessible_oauth_apps
   has_many :organization_oauth_accessibilities, -> { distinct }, through: :organizations, source: :oauth_accessibilities
 
-  accepts_nested_attributes_for :agent, reject_if: :all_blank, allow_destroy: false
+  accepts_nested_attributes_for :namespace, reject_if: :all_blank, allow_destroy: false
 
   def oread_enrolled_applications # deprecated
     user ? user.oread_enrolled_applications : []

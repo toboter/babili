@@ -1,13 +1,11 @@
 # t.integer   :subclass_id
 # t.string    :subclass_type
 # t.string    :name
-# t.text      :image_data
-# t.text      :about
 # t.string    :slug
 
 # t.timestamps
 
-class Agent < ApplicationRecord
+class Namespace < ApplicationRecord
   include ImageUploader[:image]
   extend FriendlyId
   friendly_id :name, use: :slugged

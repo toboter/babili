@@ -1,4 +1,4 @@
-class SecuritiesController < ApplicationController
+class Settings::SecuritiesController < ApplicationController
   before_action :authenticate_user!
   layout "settings"
 

@@ -34,7 +34,7 @@
           </div>
         </td>
         <td class="session-actions">
-          <%= form_for recent_session, url: security_settings_user_session_path(recent_session), method: :delete, remote: true do |f| %>
+          <%= form_for recent_session, url: settings_security_user_session_path(recent_session), method: :delete, remote: true do |f| %>
             <%= f.submit 'Revoke', class: 'btn btn-sm btn-default text-strong pull-right' %>
           <% end unless recent_session.session_id == session[:auth_id] %>
         </td>

@@ -10,9 +10,7 @@ class Ability
     cannot :read, CMS::BlogPage do |page|
       !page.published?
     end
-    cannot :read, Organization do |organization|
-      organization.private?
-    end
+    cannot :read, Organization, private: true
 
     if user.approved?
       can :manage, :all
@@ -35,9 +33,7 @@ class Ability
         user.person.in?(organization.members) && organization.memberships.where(person_id: user.person.id).first.role == 'Admin'
       end
       can [:create], Organization
-      can [:read], Organization do |organization|
-        !organization.private? || user.person.in?(organization.members)
-      end
+      can :read, Organization, members: { id: user.person.id }
 
       cannot :manage, Oread::Application unless user.is_admin?
       can [:update, :destroy], Oread::Application do |app|

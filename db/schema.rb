@@ -16,15 +16,6 @@ ActiveRecord::Schema.define(version: 20180301140346) do
   enable_extension "plpgsql"
   enable_extension "postgis"
 
-  create_table "agents", force: :cascade do |t|
-    t.integer "subclass_id"
-    t.string "subclass_type"
-    t.string "name"
-    t.string "slug"
-    t.index ["slug"], name: "index_agents_on_slug", unique: true
-    t.index ["subclass_id", "subclass_type"], name: "index_agents_on_subclass_id_and_subclass_type"
-  end
-
   create_table "audits", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.integer "actor_id"
@@ -157,6 +148,17 @@ ActiveRecord::Schema.define(version: 20180301140346) do
     t.integer "person_id"
     t.index ["organization_id"], name: "index_memberships_on_organization_id"
     t.index ["person_id"], name: "index_memberships_on_person_id"
+  end
+
+  create_table "namespaces", force: :cascade do |t|
+    t.integer "subclass_id"
+    t.string "subclass_type"
+    t.string "name"
+    t.string "slug"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_namespaces_on_slug", unique: true
+    t.index ["subclass_id", "subclass_type"], name: "index_namespaces_on_subclass_id_and_subclass_type"
   end
 
   create_table "oauth_access_grants", id: :serial, force: :cascade do |t|

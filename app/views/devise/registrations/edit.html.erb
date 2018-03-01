@@ -33,6 +33,13 @@
   </div>
 <% end %>
 
+<div class="row">
+  <div class="col-md-4 col-md-offset-1" style="border-left: solid 1px #c5c5c5;">
+    <%= content_tag :span, 'Change namespace url', class: 'text-strong', style: 'margin-bottom:5px;' %>
+    <%= content_tag :p, 'Changing the namespace url can have unintended side effects.', class: 'text-small text-muted' %>
+    <%= link_to 'Change namespace url', edit_settings_person_namespace_path, class: 'btn btn-default text-strong' %>   
+  </div>
+</div>
 <div class="subhead --spacious">
   <h4>Delete account</h4>
 </div>
