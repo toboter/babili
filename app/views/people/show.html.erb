@@ -17,7 +17,7 @@
           <%= content_tag :p do %>
             <%= "<strong>#{@person.name}</strong>".html_safe %>
             <%= content_tag :span, fa_icon('universal-access'), data: {toggle: "tooltip", placement: "right"}, title: "Administrator" if @person.is_admin? %><br>
-            <%= "(#{@person.username})" %>
+            <%= "(#{@person.namespace.slug})" %>
             <%= content_tag :span, "<br>#{@person.institution}".html_safe, class: '' if @person.institution %>
             <%= content_tag :span, "<br>#{@person.location}".html_safe, class: '' if @person.location %>
             <%= content_tag :p, @person.about_me, class: '' if @person.about_me %>
@@ -33,6 +33,7 @@
               <strong><%= @person.oauth_applications.count %></strong>
             </li>
           </ul>
+          <%= content_tag :p, 'Inactive (Account has been deleted).', class: 'text-italic text-strong text-gray' if !@person.user %>
         </div>
       </div>
       <%= link_to fa_icon('edit', text: 'Edit your profile'), edit_settings_person_path, class: 'btn btn-sm btn-default text-strong' if @person.is?(current_person) %>

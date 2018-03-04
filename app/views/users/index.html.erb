@@ -21,7 +21,7 @@
     <% @users.each do |user| %>
       <%= content_tag :tr, id: "edit_user_#{user.id}" do %>
         <td>
-          <%= content_tag :strong, user.username %>
+          <%= content_tag :strong, user.try(:person).try(:namespace).try(:slug) %>
         </td>
         <td>
           <%= user.email %>

@@ -49,7 +49,7 @@
       <% @memberships.each do |membership| %>
         <tr>
           <td>
-            <p class="text-strong"><%= link_to membership.organization.name, organization_path(membership.organization) %></p>
+            <p class="text-strong"><%= link_to membership.organization.name, membership.organization.namespace %></p>
             <%= content_tag :p, truncate(membership.organization.description, length: 200), class: 'text-small' if membership.organization.description? %>
             <%= content_tag :p, class: 'text-muted text-small' do %>
               <%= "Current admin: #{membership.organization.admins.map(&:name).join(', ')}" %><br>

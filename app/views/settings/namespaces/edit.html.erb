@@ -1,1 +1,30 @@
-ns edit
+<% title 'Change namespace?' %>
+
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, link_to("#{@namespace.subclass.class.name}", [:settings, @namespace.subclass]) %>  
+  <%= content_tag :li, yield(:title), class: 'active' %>
+<% end %>
+
+<%= simple_form_for @namespace, url: [:settings, (@namespace.subclass.class.name == 'Person' ? :person : @namespace.subclass), :namespace], method: :put do |f| %>
+  
+  <div class="row">
+    <div class="col-md-12">
+      <%= f.error_notification %>
+      <div class="row">
+        <div class="col-md-10">
+          <p class="bg-warning --spacing" style="padding:20px;"><strong>Really change the namespace name?</strong><br>
+            Bad things might happen!<br>
+            There will be no redirects for your old pages or repositories.
+          <%= f.input :name, label: 'Namespace', hint: "This is the namespace-url. It must be unique, only allows downcased letters, numbers and '-'. The first character needs to be a letter and it should be at least 3 chars long." %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <hr>
+          <%= f.submit class: 'btn btn-warning' %>
+          <%= link_to 'Cancel', [:edit, :settings, @namespace.subclass], class: "btn btn-default" %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -1,7 +1,5 @@
 class Person < ApplicationRecord
   include ImageUploader[:image]
-  extend FriendlyId
-  friendly_id :name, use: :slugged
 
   has_one :namespace, as: :subclass, dependent: :destroy
   has_one :user
@@ -13,7 +11,15 @@ class Person < ApplicationRecord
   has_many :organization_accessible_oauth_apps, -> { distinct }, through: :organizations, source: :accessible_oauth_apps
   has_many :organization_oauth_accessibilities, -> { distinct }, through: :organizations, source: :oauth_accessibilities
 
-  accepts_nested_attributes_for :namespace, reject_if: :all_blank, allow_destroy: false
+  validates :namespace, presence: true
+  
+  def to_param
+    namespace.slug if namespace
+  end
+
+  def self.find(input)
+    input.to_i == 0 ? Namespace.friendly.find(input).subclass : super
+  end
 
   def oread_enrolled_applications # deprecated
     user ? user.oread_enrolled_applications : []
@@ -32,7 +38,7 @@ class Person < ApplicationRecord
   end
 
   def name
-    [honorific_prefix, given_name, family_name, honorific_suffix].join(' ').strip.presence || username
+    [honorific_prefix, given_name, family_name, honorific_suffix].join(' ').strip.presence || namespace.slug
   end
 
   def oauth_accessibilities
@@ -55,10 +61,5 @@ class Person < ApplicationRecord
     end
     grants.flatten
   end
-
-  def username
-    slug
-  end
-
 
 end

@@ -1,7 +1,5 @@
 class Organization < ApplicationRecord
   include ImageUploader[:image]
-  extend FriendlyId
-  friendly_id :name, use: :slugged
   
   has_one :namespace, as: :subclass, dependent: :destroy
   has_many :memberships, dependent: :destroy
@@ -10,11 +8,18 @@ class Organization < ApplicationRecord
   has_many :accessible_oauth_apps, through: :oauth_accessibilities, source: :oauth_application
   has_many :users, through: :members
   
-  accepts_nested_attributes_for :namespace, reject_if: :all_blank, allow_destroy: false
   accepts_nested_attributes_for :memberships, reject_if: :all_blank, allow_destroy: true
 
   validates :name, :description, presence: true
 
+  def to_param
+    namespace.slug if namespace
+  end
+
+  def self.find(input)
+    input.to_i == 0 ? Namespace.friendly.find(input).subclass : super
+  end
+  
   def has_admin?
     memberships.where(role: 'Admin').any?
   end

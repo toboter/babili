@@ -41,7 +41,7 @@
               </tr>
               <tr>
                 <td>Contributors</td>
-                <td><%= @scheme.contributors.map{|c| link_to(c.name, c)}.join(', ').html_safe %></td>
+                <td><%= @scheme.contributors.map{|c| link_to(c.name, c.namespace)}.join(', ').html_safe %></td>
               </tr>
               <%= content_tag :tr do %>
                 <td>Defined for</td>

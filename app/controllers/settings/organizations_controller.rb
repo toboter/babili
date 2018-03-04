@@ -28,6 +28,7 @@ class Settings::OrganizationsController < ApplicationController
   # POST /settings/organizations.json
   def create
     @organization = Organization.new(organization_params)
+    @organization.build_namespace(name: @organization.name)
 
     respond_to do |format|
       if @organization.save

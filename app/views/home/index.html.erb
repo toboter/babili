@@ -63,7 +63,7 @@
                     <%= content_tag :li, fa_icon('calendar', text: "#{blog_page.published_at.present? ? blog_page.published_at.to_date.to_formatted_s(:long_ordinal) : 'unpublished'}"), class: 'meta-item' %>
                     <%= content_tag :li, class: 'meta-item mid' do %>
                       <%= background_image_div(blog_page.author, :small_thumb, {class: 'author-avatar'}) %>
-                      <%= link_to blog_page.author.name, blog_page.author %>
+                      <%= link_to blog_page.author.name, blog_page.author.namespace %>
                     <% end %>
                     <%= content_tag :li, fa_icon('archive', text: link_to(blog_page.category.try(:name), blog_page.category)), class: 'meta-item' %>
                   <% end %>

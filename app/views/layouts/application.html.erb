@@ -60,7 +60,7 @@
                 <ul class="dropdown-menu">
                   <%= content_tag :li, "Signed in as <strong>#{current_person.name}</strong>".html_safe, class: 'text-muted dropdown-header' %>
                   <li role="separator" class="divider"></li>
-                  <%= content_tag :li, link_to("Your profile", current_person), class: "" %>
+                  <%= content_tag :li, link_to("Your profile", namespace_path(current_person.namespace)), class: "" %>
                   <li role="separator" class="divider"></li>
                   <%= content_tag :li, link_to("Help", cms_help_pages_path), class: "" %>
                   <%= content_tag :li, link_to("Settings", settings_path), class: "" if can?(:show, current_user) %>

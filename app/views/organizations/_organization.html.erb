@@ -2,7 +2,7 @@
 
   <%= content_tag :div, class: 'media list-group-item', style: 'margin-bottom: 20px;' do %>
     <div class="media-left" style="max-width: 80px;">
-      <%= link_to organization_path(organization) do %>
+      <%= link_to organization.namespace do %>
         <%= background_image_div(organization, :small_thumb, {class: 'media-object', style: 'height:70px;width:70px; background-position:center;'}) %>
       <% end %>
     </div>
@@ -19,7 +19,7 @@
         <% end %>
       <% end if user_signed_in? && local_assigns[:actions] %>
       <h4 class="media-heading">
-        <%= link_to organization.name, organization_path(organization) %>
+        <%= link_to organization.name, organization.namespace %>
       </h4>
       <p class="small text-muted">
         Created on <%= organization.created_at.to_date.to_formatted_s(:long_ordinal) %>. <br>
@@ -35,7 +35,7 @@
             content: content_tag(:ul, organization.memberships.where(verified: true).map{ |m| content_tag(:li, m.person.name) }.join, class: 'list-unstyled') }
         %>
       </p>
-      <%= link_to truncate(organization.description, length: 180, separator: ' '), organization_path(organization), class: 'no-link' %>
+      <%= link_to truncate(organization.description, length: 180, separator: ' '), organization.namespace, class: 'no-link' %>
     </div>
   <% end %>
 

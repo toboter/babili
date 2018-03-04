@@ -24,16 +24,31 @@ class User < ApplicationRecord
   has_many :user_sessions, class_name: 'UserSession', dependent: :destroy
   belongs_to :person
 
-  before_validation(on: :create) do
-    hero = Person.create(family_name: slug)
-    self.person = hero # Handler.create(name: slug)
+  before_validation(on: :create) { self.slug = self.slug.downcase.to_param }
+
+  validates :slug, presence: true, on: :create
+  validates :slug, exclusion: { in: %w(vocabularies zensus locate users people organizations search about contact explore collections settings blog help news sidekiq api oauth),
+    message: "%{value} is reserved." }, on: :create
+  validates :slug, format: { without: /^\d/, multiline: true}, on: :create
+  validates :slug, length: { minimum: 3 }, on: :create
+  validates :slug, format: { with: /\A[a-zA-Z0-9-]+\z/, message: "only allows letters, numbers and '-'." }, on: :create
+  validate :unique_namespace, on: :create
+
+  after_validation(on: :create) do
+    self.person = self.build_person
+    self.person.build_namespace(name: slug)
   end
   after_update :enroll_to_default_oread_apps, if: :is_approved?
   after_update :audit_password_change, if: :needs_password_change_audit?
   after_update :send_approval_mail, if: :is_approved?
   after_create :send_admin_mail
 
-  validates :slug, :person, presence: true, on: :create
+  def unique_namespace
+    if Namespace.find_by_slug(self.slug) && !self.person
+      errors.add(:slug, "is already taken")
+    end
+  end
+
   delegate :name, to: :person
 
   def active_for_authentication? 

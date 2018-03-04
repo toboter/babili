@@ -34,8 +34,9 @@ Rails.application.routes.draw do
   end
 
   devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}, :controllers => { :registrations => :registrations }
-  resources :people, only: [:index, :show]
-  resources :organizations, only: [:index, :show]
+  
+  resources :people, only: [:index]
+  resources :organizations, only: [:index]
 
   get '/search', to: 'search#index'
   get '/about', to: 'home#about'
@@ -244,5 +245,5 @@ Rails.application.routes.draw do
   # end doorkeeper paths
 
   root to: "home#index"
-
+  resources :namespaces, only: :show, path: ''
 end
