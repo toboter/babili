@@ -14,7 +14,7 @@ class Namespace < ApplicationRecord
   before_validation { self.name = self.name.downcase }
 
   validates :name, presence: true
-  validates :name, exclusion: { in: %w(vocabularies zensus locate users people organizations search about contact explore collections settings blog help news sidekiq api oauth),
+  validates :name, exclusion: { in: %w(vocabularies zensus locate users people organizations search about contact explore collections settings blog help news sidekiq api oauth research),
     message: "%{value} is reserved." }
   validates :name, format: { without: /^\d/, multiline: true}
   validates :name, length: { minimum: 3 }

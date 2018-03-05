@@ -246,5 +246,7 @@ Rails.application.routes.draw do
   # end doorkeeper paths
 
   root to: "home#index"
-  resources :namespaces, only: :show, path: ''
+  resources :namespaces, only: :show, path: ''# do
+#    resources :repositories
+#  end
 end

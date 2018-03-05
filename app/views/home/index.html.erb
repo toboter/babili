@@ -49,14 +49,14 @@
 
   <section class="featured-blog-entries --spacious" id="featured">
     <div class="container">
-      <div class="posts">
-        <div class="page-header">
-          <%= content_tag :h1, link_to('Featured blogs', cms_blog_pages_path) %>
-        </div>
-        <% @blog_pages.each_slice(2) do |slice| %>
+      <div class="row">
+        <div class="posts col-md-7">
+          <div class="page-header">
+            <%= content_tag :h1, link_to('Featured blogs', cms_blog_pages_path) %>
+          </div>
           <div class="row">
-            <% slice.each_with_index do |blog_page, index| %>
-              <%= content_tag :div, class: "col-md-6" do %>
+            <% @blog_pages.each do |blog_page| %>
+              <%= content_tag :div, class: "col-md-12" do %>
                 <%= content_tag :div, class: "blog-post", id: "blog-post-#{blog_page.id}" do %>
                   <%= content_tag :h2, link_to(blog_page.title, blog_page), class: 'blog-post-title h-condensed' %>
                   <%= content_tag :ul, class: 'blog-post-meta' do %>
@@ -74,7 +74,13 @@
               <% end %>
             <% end %>
           </div>
-        <% end %>
+        </div>
+        <div class="col-md-4 col-md-offset-1">
+          <div class="page-header">
+            <%= content_tag :h1, link_to('Explore', explore_path) %>
+            
+          </div>
+        </div>
       </div>
     </div>
   </section>

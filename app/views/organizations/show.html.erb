@@ -1,8 +1,6 @@
 <% title @organization.name, false %>
 
 <% content_for :breadcrumbs do %>
-  <%= content_tag :li, link_to('Home', root_url) %>
-  <%= content_tag :li, link_to('Explore', explore_url) %>
   <%= content_tag :li, link_to('Organizations', organizations_url) %>
   <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
