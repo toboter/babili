@@ -10,6 +10,7 @@ class Namespace < ApplicationRecord
   friendly_id :name, use: :slugged
 
   belongs_to :subclass, polymorphic: true
+  has_many :repositories, dependent: :destroy
 
   before_validation { self.name = self.name.downcase }
 
