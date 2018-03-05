@@ -16,6 +16,11 @@ class HomeController < ApplicationController
   def contact
   end
 
+  def research
+    @people = Person.limit(12).sort_by {|p| p.name}
+    @organizations = Organization.limit(8).sort_by {|p| p.name}
+  end
+
   def collections
     @collection_apps = Oread::Application.order(name: :asc)
   end

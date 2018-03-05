@@ -28,123 +28,81 @@
   </div>
 
   <div class="container" style="padding-bottom:50px;">
-
-    <div class="page-header text-center">
-      <h1>
-        Repositories
-        <span class="badge"><%= @oread_applications.count %></span>
-      </h1>
-    </div>
-
-    <div class="page-header text-center borderless">
-      <p class="text-muted lead">
-        Babylon-Online integrates different data pools (repositories). From different materials 
-        and techniques to objects (like figurines), culture or excavation documentations and publications. 
-        Learn more on the <%= link_to 'settings page', settings_oread_enrollments_path %>.
-      </p>
-    </div>
     <div class="row">
-      <% for application in @oread_applications.limit(3) do %>
-        <div class="col-md-4">
-          <%= render application, full: true, actions: true %>
+      <div class="col-md-7">
+        <div class="page-header">
+          <h1>
+            Repositories
+            <span class="badge"><%= @oread_applications.count %></span>
+          </h1>
         </div>
-      <% end if can? :read, Oread::Application %>
-    </div>
-    <div class="row">
-      <%= link_to 'View all.', collections_path, class: 'col-md-12' %>
-    </div>
 
-
-    <div class="page-header text-center --spacious-80">
-      <h1>Services</h1>
-    </div>
-
-    <div class="page-header text-center borderless">
-      <h2>Commons ::files</h2>
-      <p class="text-muted lead">
-        <%= link_to 'Commons', 'http://commons.babylon-online.org', class: 'text-strong' %> is a file storage service for images, documents 
-          and any binary file you need to reference in your data. From there it will get shared to the intendet audience.
-      </p>
-    </div>
-
-    <div class="page-header text-center borderless">
-      <h2>Babylonian confusion ::vocabularies</h2>
-      <p class="text-muted lead">
-        Having 100 years of research history means having multiple naming conventions. <%= link_to 'Vocabularies', vocab_path, class: 'text-strong' %> shall 
-        assist each researcher with an idea of a common wording and term translations as well as giving 
-        anyone the possibility to name things in a heterogenus way, while still acting with a common idea.
-      </p>
-    </div>
-
-    <div class="page-header text-center borderless">
-      <h2>Phonebook ::zensus</h2>
-      <p class="text-muted lead">
-        The babylon-online research framework helps you with some specific central services. With <%= link_to 'zensus', zensus_path, class: 'text-strong' %>, 
-        you can lookup any type of people or institutions as agents. From recent team members, participating 
-        institutions, to historic families or individuals, together with their affiliations or professions.
-      </p>
-    </div>
-
-    <div class="page-header text-center borderless">
-      <h2>Locate ::places</h2>
-      <p class="text-muted lead">
-        <%= link_to 'Locate', locate_path, class: 'text-strong' %> is a geographic lookup service which guides you through places 
-        and locations.
-      </p>
-    </div>
-
-    <div class="page-header text-center borderless hidden">
-      <h2>Epoc ::periods</h2>
-      <p class="text-muted lead">
-        
-      </p>
-    </div>
-
-
-    <div class="page-header text-center --spacious-80">
-      <h1>Research Team</h1>
-    </div>
-
-    <div class="page-header text-center borderless">
-      <h2>
-        Teams
-        <span class="badge"><%= @organizations.count %></span>
-      </h2>
-      <p class="text-muted lead">
-        On babylon-online, you can join teams, which are groups of people with a shared research interest. 
-        These teams can be authorized together as one. Learn more on your personal 
-        <%= link_to 'teams settings page', settings_organizations_path %>.
-      </p>
-    </div>
-    <div class="row">
-      <% @organizations.limit(4).each do |organization| %>
-        <div class="col-md-6">
-          <%= render organization, full: false, actions: true %>
+        <div class="page-header borderless">
+          <p class="text-muted">
+            Babylon-Online integrates different data pools (repositories). From different materials 
+            and techniques to objects (like figurines), culture or excavation documentations and publications. 
+            Learn more on the <%= link_to 'settings page', settings_oread_enrollments_path %>.
+          </p>
         </div>
-      <% end %>
-    </div>
-    <div class="row">
-      <%= link_to 'View all.', organizations_path, class: 'col-md-12' %>
-    </div>
-    
-    <div class="page-header text-center borderless">
-      <h2>
-        Researchers
-        <span class="badge"><%= @people.count %></span>
-      </h2>
-      <p class="text-muted lead">
-        Some people of the babylon-online.org team.
-      </p>
-    </div>
-    <div class="row">
-      <% @people.limit(6).each do |person| %>
-        <div class="col-md-4 col-sm-6" style="margin-bottom:20px;">
-          <%= render person %>
+        <div class="row">
+          <% for application in @oread_applications.limit(3) do %>
+            <div class="col-md-12">
+              <%= render application, full: true, actions: true %>
+            </div>
+          <% end if can? :read, Oread::Application %>
         </div>
-      <% end %>
-    </div>
-    <div class="row">
-      <%= link_to 'Meet more.', people_path, class: 'col-md-12' %>
+        <div class="row">
+          <%= link_to 'View all.', collections_path, class: 'col-md-12' %>
+        </div>
+      </div>
+
+      <div class="col-md-4 col-md-offset-1">
+
+        <div class="page-header">
+          <h1>Services</h1>
+        </div>
+
+        <div class="page-header borderless">
+          <h2>Commons ::files</h2>
+          <p class="text-muted ">
+            <%= link_to 'Commons', 'http://commons.babylon-online.org', class: 'text-strong' %> is a file storage service for images, documents 
+              and any binary file you need to reference in your data. From there it will get shared to the intendet audience.
+          </p>
+        </div>
+
+        <div class="page-header borderless">
+          <h2>Locate ::places</h2>
+          <p class="text-muted ">
+            <%= link_to 'Locate', locate_path, class: 'text-strong' %> is a geographic lookup service which guides you through places 
+            and locations.
+          </p>
+        </div>
+
+        <div class="page-header borderless">
+          <h2>Babylonian confusion ::vocabularies</h2>
+          <p class="text-muted ">
+            Having 100 years of research history means having multiple naming conventions. <%= link_to 'Vocabularies', vocab_path, class: 'text-strong' %> shall 
+            assist each researcher with an idea of a common wording and term translations as well as giving 
+            anyone the possibility to name things in a heterogenus way, while still acting with a common idea.
+          </p>
+        </div>
+
+        <div class="page-header borderless">
+          <h2>Phonebook ::zensus</h2>
+          <p class="text-muted ">
+            The babylon-online research framework helps you with some specific central services. With <%= link_to 'zensus', zensus_path, class: 'text-strong' %>, 
+            you can lookup any type of people or institutions as agents. From recent team members, participating 
+            institutions, to historic families or individuals, together with their affiliations or professions.
+          </p>
+        </div>
+
+        <div class="page-header borderless hidden">
+          <h2>Epoc ::periods</h2>
+          <p class="text-muted ">
+            
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 <% end %>

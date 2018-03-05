@@ -35,13 +35,14 @@ Rails.application.routes.draw do
 
   devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}, :controllers => { :registrations => :registrations }
   
-  resources :people, only: [:index]
-  resources :organizations, only: [:index]
+  resources :people, only: [:index]         # remove
+  resources :organizations, only: [:index]  # remove
 
   get '/search', to: 'search#index'
   get '/about', to: 'home#about'
   get '/contact', to: 'home#contact'
   get '/explore', to: 'home#explore'
+  get '/research', to: 'home#research'
   get '/collections/applications', to: 'home#collections', as: :collections
 
   namespace :oread, path: 'collections' do

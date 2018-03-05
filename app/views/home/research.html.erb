@@ -1,0 +1,50 @@
+<% title "Research", false %>
+
+<%= content_for(:container) do %>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="page-header borderless">
+        <h2>
+          Research Teams
+          <span class="badge"><%= @organizations.count %></span>
+        </h2>
+        <p class="text-muted">
+          On babylon-online, you can join teams, which are groups of people with a shared research interest. 
+          These teams can be authorized together as one. Learn more on your personal 
+          <%= link_to 'teams settings page', settings_organizations_path %>.
+        </p>
+      </div>
+      <div class="row">
+        <% @organizations.each do |organization| %>
+          <div class="col-md-12">
+            <%= render organization, full: false, actions: true %>
+          </div>
+        <% end %>
+      </div>
+      <div class="row">
+        <%= link_to 'View all.', organizations_path, class: 'col-md-12' %>
+      </div>
+    </div>
+    <div class="col-md-5 col-md-offset-1">
+      <div class="page-header borderless">
+        <h2>
+          Researchers
+          <span class="badge"><%= @people.count %></span>
+        </h2>
+        <p class="text-muted">
+          Some people of the babylon-online.org team.
+        </p>
+      </div>
+      <div class="row">
+        <% @people.each do |person| %>
+          <div class="col-md-12" style="margin-bottom:20px;">
+            <%= render person %>
+          </div>
+        <% end %>
+      </div>
+      <div class="row">
+        <%= link_to 'Meet more.', people_path, class: 'col-md-12' %>
+      </div>
+    </div>
+  </div>
+<% end %>
