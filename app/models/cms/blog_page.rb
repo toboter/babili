@@ -1,7 +1,7 @@
 class CMS::BlogPage < CMS::Content
   # evtl gibt es einen Fehler in CanCan, der verhindert, dass die history durchsucht werden kann.
   extend FriendlyId
-  friendly_id :identifier_and_title, use: [:slugged, :scoped, :history], scope: :type
+  friendly_id :date_with_title, use: [:slugged, :scoped, :history], scope: :type
 
   belongs_to :category, class_name: 'BlogCategory'
   
@@ -10,7 +10,10 @@ class CMS::BlogPage < CMS::Content
 
   validates :title, :author_id, :content, :category_id, presence: true
 
-  def identifier_and_title
+  scope :featured, -> { type_details_where(featured: true) }
+  scope :unpublished, -> { where(published_at: nil) }
+
+  def date_with_title
     "#{self.new_record? ? Date.today.to_s : created_at.to_date.to_s}-#{title}"
   end
 
@@ -24,6 +27,10 @@ class CMS::BlogPage < CMS::Content
 
   def published?
     published_at.present?
+  end
+
+  def featured?
+    type_details_where(featured: true)
   end
 
 

@@ -19,9 +19,9 @@
         <div class="row">
           <div class="col-md-6">
             <hr>
-            <%= content_tag :p, fa_icon('check', text: 'Published'), class: 'text-success' if @blog.published_at.present? %>
-            <%= f.button :submit, @blog.published_at.present? ? 'Save changes' : 'Publish now', class: "btn btn-default text-success text-strong" %>
-            <%= f.button :submit, 'Save / publish later', class: "btn btn-default text-success text-strong" if !blog.published_at.present? %>
+            <%= content_tag :p, fa_icon('check', text: 'Published'), class: 'text-success' if @blog.published? %>
+            <%= f.button :submit, @blog.published? ? 'Save changes' : 'Publish now', class: "btn btn-default text-success text-strong" %>
+            <%= f.button :submit, 'Save / publish later', class: "btn btn-default text-success text-strong" if !blog.published? %>
             <%= link_to 'Cancel', @blog.new_record? ? cms_blog_pages_path : @blog, class: "btn btn-default" %>
           </div>
         </div>

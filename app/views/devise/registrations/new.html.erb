@@ -12,7 +12,7 @@
             <div class="form-inputs">
               <%= f.input :email, required: true, autofocus: true %>
               <%= f.input :slug, label: 'Namespace', required: true, 
-                hint: "This will be the namespace-url for your profile. It must be unique, only allows downcased letters, numbers and '-'. The first character needs to be a letter and it should be at least 3 chars long." %>
+                hint: "This will be the namespace-url for your profile aka your username. It must be unique, only allows downcased letters, numbers and '-'. The first character needs to be a letter and it should be at least 3 chars long." %>
               <%= f.input :password, required: true, hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length) %>
               <%= f.input :password_confirmation, required: true %>
             </div>

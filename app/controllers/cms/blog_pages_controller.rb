@@ -1,14 +1,14 @@
 class CMS::BlogPagesController < ApplicationController
-  before_action :set_blog_page, only: [:show, :edit, :update, :destroy, :move]
   before_action :authenticate_user!, except: [:index, :show]
-  load_and_authorize_resource find_by: :slug
+  load_and_authorize_resource instance_name: :blog, class: 'CMS::BlogPage', find_by: :slug
   
   # GET /blogs
   # GET /blogs.json
   def index
-    @blogs = CMS::BlogPage.type_details_where(featured: true).order(created_at: :desc)
+    @blogs = CMS::BlogPage.featured.order(created_at: :desc)
     @categories = CMS::BlogCategory.order(name: :asc)
-    @unpublished_blogs = current_person.blog_pages.where(published_at: nil) if user_signed_in?
+    @unpublished_blogs = current_person.blog_pages.unpublished if user_signed_in?
+    authorize! :read, [@blogs, @categories, @unpublished_blogs]
   end
 
   # GET /blogs/1
@@ -20,7 +20,6 @@ class CMS::BlogPagesController < ApplicationController
 
   # GET /blogs/new
   def new
-    @blog = CMS::BlogPage.new
   end
 
   # GET /blogs/1/edit
@@ -30,7 +29,6 @@ class CMS::BlogPagesController < ApplicationController
   # POST /blogs
   # POST /blogs.json
   def create
-    @blog = CMS::BlogPage.new(blog_page_params)
     @blog.author = current_person
     @blog.published_at = Time.now if params[:commit] == 'Publish now'
     
@@ -92,12 +90,6 @@ class CMS::BlogPagesController < ApplicationController
   end
 
   private
-   
-    # Use callbacks to share common setup or constraints between actions.
-    def set_blog_page
-      @blog = CMS::BlogPage.friendly.find(params[:id])
-    end
-
     # Never trust parameters from the scary internet, only allow the white list through.
     def blog_page_params
       params.require(:cms_blog_page).permit(:type, :category_id, :featured, :title, :content, further_reading: [])

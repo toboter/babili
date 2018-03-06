@@ -7,9 +7,7 @@ class Ability
     cannot :manage, :all
     can :read, :all
     cannot :read, [CMS::HelpCategory, CMS::BlogCategory]
-    cannot :read, CMS::BlogPage do |page|
-      !page.published?
-    end
+    cannot :read, CMS::BlogPage, published_at: nil
     cannot :read, Organization, private: true
 
     if user.approved?
