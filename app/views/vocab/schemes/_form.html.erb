@@ -1,14 +1,14 @@
 <% content_for :container do %>
   <div class="row vocab">
     <div class="col-sm-12 col-md-9 main">
-      <%= simple_form_for [:vocab, @scheme] do |f| %>
+      <%= simple_form_for [@namespace, :vocab, @scheme] do |f| %>
         <%= f.error_notification %>
         <%= f.input :abbr %>
         <%= f.input :title %>
         <%= f.input :definition %>
 
         <%= f.submit class: 'btn btn-primary' %>
-        <%= link_to 'Cancel', vocab_schemes_path, class: "btn btn-default" %>
+        <%= link_to 'Cancel', (f.object.new_record? ? @namespace : namespace_vocab_scheme_path(@namespace, @scheme)), class: "btn btn-default" %>
       <% end %>
     </div>
   </div>

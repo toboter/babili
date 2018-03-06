@@ -1,8 +1,9 @@
 class Vocab::SchemesController < ApplicationController
-  before_action :set_language
-  load_and_authorize_resource
+  load_and_authorize_resource :namespace
+  load_and_authorize_resource :scheme, through: :namespace
   before_action :check_resource_location, only: :show
-  
+  before_action :set_language
+
   def index
     # Vocab::Scheme.new(abbr: 'aat', title: 'Art and Architecture Thesaurus', slug: 'aat')
   end
@@ -22,7 +23,7 @@ class Vocab::SchemesController < ApplicationController
     @scheme.creator = current_person
     respond_to do |format|
       if @scheme.save
-        format.html { redirect_to [:vocab, @scheme], notice: 'Vocabulary was successfully created.' }
+        format.html { redirect_to [@namespace, :vocab, @scheme], notice: 'Vocabulary was successfully created.' }
         format.json { render :show, status: :created, location: @scheme }
       else
         format.html { render :new }
@@ -36,7 +37,7 @@ class Vocab::SchemesController < ApplicationController
   def update
     respond_to do |format|
       if @scheme.update(scheme_params)
-        format.html { redirect_to [:vocab, @scheme], notice: "Vocabulary was successfully updated." }
+        format.html { redirect_to [@namespace, :vocab, @scheme], notice: "Vocabulary was successfully updated." }
         format.json { render :show, status: :ok, location: @scheme }
       else
         format.html { render :edit }
@@ -50,7 +51,7 @@ class Vocab::SchemesController < ApplicationController
   def destroy
     @scheme.destroy
     respond_to do |format|
-      format.html { redirect_to vocab_schemes_path, notice: 'Vocabulary was successfully destroyed.' }
+      format.html { redirect_to namespace_vocab_schemes_path(@namespace), notice: 'Vocabulary was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -61,8 +62,8 @@ class Vocab::SchemesController < ApplicationController
   end
 
   def check_resource_location
-    if request.path != vocab_scheme_path(@scheme)
-      return redirect_to vocab_scheme_path(@scheme), :status => :moved_permanently
+    if request.path != namespace_vocab_scheme_path(@namespace, @scheme)
+      return redirect_to namespace_vocab_scheme_path(@namespace, @scheme), :status => :moved_permanently
     end
   end
   # Never trust parameters from the scary internet, only allow the white list through.

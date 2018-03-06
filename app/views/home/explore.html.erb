@@ -30,13 +30,27 @@
   <div class="container" style="padding-bottom:50px;">
     <div class="row">
       <div class="col-md-7">
+
         <div class="page-header">
-          <h1>
-            Repositories
-            <span class="badge"><%= @oread_applications.count %></span>
-          </h1>
+          <h2>
+            Vocabularies
+            <span class="badge"><%= @vocabularies.count %></span>
+          </h2>
+        </div>
+        <div class="page-header borderless">
+          <p class="text-muted ">
+            Having 100 years of research history means having multiple naming conventions. <%= link_to 'Vocabularies', vocab_path, class: 'text-strong' %> shall 
+            assist each researcher or team with an idea of a common wording and term translations as well as giving 
+            anyone the possibility to name things in a heterogenus way, while still acting with a common idea.
+          </p>
         </div>
 
+        <div class="page-header">
+          <h2>
+            Repositories
+            <span class="badge"><%= @oread_applications.count %></span>
+          </h2>
+        </div>
         <div class="page-header borderless">
           <p class="text-muted">
             Babylon-Online integrates different data pools (repositories). From different materials 
@@ -54,16 +68,17 @@
         <div class="row">
           <%= link_to 'View all.', collections_path, class: 'col-md-12' %>
         </div>
+
       </div>
 
       <div class="col-md-4 col-md-offset-1">
 
         <div class="page-header">
-          <h1>Services</h1>
+          <h2>Services</h2>
         </div>
 
         <div class="page-header borderless">
-          <h2>Commons ::files</h2>
+          <h3>Commons ::files</h3>
           <p class="text-muted ">
             <%= link_to 'Commons', 'http://commons.babylon-online.org', class: 'text-strong' %> is a file storage service for images, documents 
               and any binary file you need to reference in your data. From there it will get shared to the intendet audience.
@@ -71,7 +86,7 @@
         </div>
 
         <div class="page-header borderless">
-          <h2>Locate ::places</h2>
+          <h3>Locate ::places</h3>
           <p class="text-muted ">
             <%= link_to 'Locate', locate_path, class: 'text-strong' %> is a geographic lookup service which guides you through places 
             and locations.
@@ -79,16 +94,7 @@
         </div>
 
         <div class="page-header borderless">
-          <h2>Babylonian confusion ::vocabularies</h2>
-          <p class="text-muted ">
-            Having 100 years of research history means having multiple naming conventions. <%= link_to 'Vocabularies', vocab_path, class: 'text-strong' %> shall 
-            assist each researcher with an idea of a common wording and term translations as well as giving 
-            anyone the possibility to name things in a heterogenus way, while still acting with a common idea.
-          </p>
-        </div>
-
-        <div class="page-header borderless">
-          <h2>Phonebook ::zensus</h2>
+          <h3>Phonebook ::zensus</h3>
           <p class="text-muted ">
             The babylon-online research framework helps you with some specific central services. With <%= link_to 'zensus', zensus_path, class: 'text-strong' %>, 
             you can lookup any type of people or institutions as agents. From recent team members, participating 
@@ -97,7 +103,7 @@
         </div>
 
         <div class="page-header borderless hidden">
-          <h2>Epoc ::periods</h2>
+          <h3>Epoc ::periods</h3>
           <p class="text-muted ">
             
           </p>

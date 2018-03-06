@@ -10,9 +10,9 @@ class Vocab::Scheme < ApplicationRecord
   extend FriendlyId
   friendly_id :abbr, use: [:slugged, :history]
 
-  belongs_to :definer, polymorphic: true
+  belongs_to :namespace
   belongs_to :creator, class_name: 'Person'
-  has_many :concepts, dependent: :destroy
+  has_many :concepts, dependent: :destroy, class_name: 'Vocab::Concept'
 
   validates :abbr, presence: true
 

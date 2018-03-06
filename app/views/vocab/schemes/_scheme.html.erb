@@ -1,4 +1,4 @@
-<%= link_to vocab_scheme_path(scheme), class: 'list-group-item' do %>
+<%= link_to namespace_vocab_scheme_path(scheme.namespace, scheme), class: 'list-group-item' do %>
   <%= content_tag :p, scheme.title, class: 'text-strong' %>
-  <%= content_tag :span, polymorphic_url([:vocab, scheme]), class: 'text-small no-link' %>
+  <%= content_tag :span, polymorphic_url([scheme.namespace, :vocab, scheme]), class: 'text-small no-link' %>
 <% end %>

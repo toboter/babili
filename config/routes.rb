@@ -5,9 +5,6 @@ Rails.application.routes.draw do
     get '/', to: 'home#index'
     get '/search', to: 'search#index'
     get '/search/terms', to: 'search#terms'
-    resources :schemes do
-      resources :concepts
-    end
   end
 
   namespace :zensus do
@@ -193,14 +190,6 @@ Rails.application.routes.draw do
       resources :names, controller: 'appellations', only: [:index, :show, :create]
     end
 
-    # vocab
-    namespace :vocab do
-      resources :schemes, only: [:index, :show] do
-        resources :concepts, only: [:index, :show]
-      end
-      get :concepts, to: 'concepts#full_index'
-    end
-
     # locate
     namespace :locate do
       resources :places, only: [:index, :show]
@@ -214,6 +203,15 @@ Rails.application.routes.draw do
       get :concepts, to: 'vocab/concepts#search'
     end
 
+    # vocab
+    resources :namespaces, only: [:index, :show], path: '' do
+      namespace :vocab do
+        resources :schemes, only: [:index, :show] do
+          resources :concepts, only: [:index, :show]
+        end
+        get :concepts, to: 'concepts#full_index'
+      end
+    end
 
   end
 
@@ -246,7 +244,13 @@ Rails.application.routes.draw do
   # end doorkeeper paths
 
   root to: "home#index"
+  
   resources :namespaces, only: :show, path: '' do
     resources :repositories
+    namespace :vocab, path: 'vocabularies' do
+      resources :schemes, path: '' do
+        resources :concepts
+      end
+    end
   end
 end

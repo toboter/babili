@@ -1,8 +1,8 @@
 <% title "#{@scheme.title}" %>
 
 <% content_for :breadcrumbs do %>
-  <%= content_tag :li, link_to('Vocabularies', vocab_path) %>
-  <%= content_tag :li, link_to('Schemes', vocab_schemes_path) %>
+  <%= content_tag :li, link_to(@namespace.name, @namespace) %>
+  <%= content_tag :li, link_to('Vocabularies', namespace_vocab_schemes_path(@namespace)) %>
   <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
 
@@ -14,10 +14,10 @@
           <%= content_tag :h3, class: 'clearfix' do %>
             <%= @scheme.title %>
             <small>[<%= @scheme.abbr %>]</small>
-            <%= link_to fa_icon('trash', text: 'Delete'), [:vocab, @scheme], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default btn-sm text-strong pull-right', style: 'margin-left:5px;' if can?(:destroy, @scheme) %>
-            <%= link_to fa_icon('edit', text: 'Edit'), [:edit, :vocab, @scheme], class: 'btn btn-default btn-sm text-strong pull-right' if can?(:update, @scheme) %>
+            <%= link_to fa_icon('trash', text: 'Delete'), [@namespace, :vocab, @scheme], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default btn-sm text-strong pull-right', style: 'margin-left:5px;' if can?(:destroy, @scheme) %>
+            <%= link_to fa_icon('edit', text: 'Edit'), [:edit, @namespace, :vocab, @scheme], class: 'btn btn-default btn-sm text-strong pull-right' if can?(:update, @scheme) %>
           <% end %>
-          <%= content_tag :p, polymorphic_url([:vocab, @scheme]) %>
+          <%= content_tag :p, polymorphic_url([@namespace, :vocab, @scheme]) %>
         </div>
 
         <div class="description-block --spacious" id="scheme-description-block-<%= @scheme.id %>">
@@ -29,11 +29,11 @@
               </tr>
               <tr>
                 <td>Root concepts</td>
-                <td><%= @scheme.concepts.roots.map{ |concept| link_to(concept.name(@language), [:vocab, @scheme, concept]) }.join(', ').html_safe %></td>
+                <td><%= @scheme.concepts.roots.map{ |concept| link_to(concept.name(@language), [@namespace, :vocab, @scheme, concept]) }.join(', ').html_safe %></td>
               </tr>
               <tr>
                 <td>Concepts count</td>
-                <td><%= link_to @scheme.concepts.count, [:vocab, @scheme, :concepts] %></td>
+                <td><%= link_to @scheme.concepts.count, [@namespace, :vocab, @scheme, :concepts] %></td>
               </tr>
               <tr>
                 <td>Abbreviation</td>
@@ -44,9 +44,9 @@
                 <td><%= @scheme.contributors.map{|c| link_to(c.name, c.namespace)}.join(', ').html_safe %></td>
               </tr>
               <%= content_tag :tr do %>
-                <td>Defined for</td>
-                <td><%= @scheme.definer_id %>, <%= @scheme.definer_type %></td>
-              <% end if @scheme.definer_id %>
+                <td>Namespace</td>
+                <td><%= link_to @scheme.namespace.name, @scheme.namespace %></td>
+              <% end %>
             </tbody>
           </table>
 
@@ -56,9 +56,9 @@
       
       <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
         <div class="list-group">
-          <%= render 'vocab/search/box' %>
-          <%= link_to fa_icon('angle-double-down', text: 'Concepts'), [:vocab, @scheme, :concepts], class: 'list-group-item' %>
-          <%= link_to fa_icon('angle-double-up', text: 'All vocabularies'), vocab_schemes_path, class: 'list-group-item' %>
+          <%= link_to fa_icon('angle-up', text: @namespace.name), [@namespace, :vocab, :schemes], class: 'list-group-item' %>
+          <%= link_to fa_icon('angle-double-down', text: 'Concepts'), [@namespace, :vocab, @scheme, :concepts], class: 'list-group-item' %>
+          
         </div>
       <% end %>
     </div>

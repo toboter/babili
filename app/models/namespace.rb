@@ -11,6 +11,7 @@ class Namespace < ApplicationRecord
 
   belongs_to :subclass, polymorphic: true
   has_many :repositories, dependent: :destroy
+  has_many :schemes, class_name: 'Vocab::Scheme'
 
   before_validation { self.name = self.name.downcase }
 
@@ -24,6 +25,10 @@ class Namespace < ApplicationRecord
 
   scope :people, -> { where(subclass_type: 'Person') } 
   scope :organizations, -> { where(subclass_type: 'Organization') } 
+
+  def accessors
+    subclass_type == 'Person' ? [subclass] : subclass.members
+  end
 
   def should_generate_new_friendly_id?
     name_changed? || super

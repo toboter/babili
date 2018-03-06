@@ -1,7 +1,7 @@
 <% content_for :container do %>
   <div class="row vocab">
     <div class="col-sm-12 col-md-9 main">
-      <%= simple_form_for [:vocab, @scheme, @concept] do |f| %>
+      <%= simple_form_for [@namespace, :vocab, @scheme, @concept] do |f| %>
         <%= content_tag :div, class: 'row' do %>
           <div class="col-md-12">
             <%= f.error_notification %>
@@ -80,7 +80,7 @@
           <div class="col-md-6">
             <hr>
             <%= f.submit class: 'btn btn-primary' %>
-            <%= link_to 'Cancel', (f.object.new_record? ? vocab_scheme_concepts_path(@scheme) : vocab_scheme_concept_path(@scheme, @concept)), class: "btn btn-default" %>
+            <%= link_to 'Cancel', (f.object.new_record? ? namespace_vocab_scheme_concepts_path(@namespace, @scheme) : namespace_vocab_scheme_concept_path(@namespace, @scheme, @concept)), class: "btn btn-default" %>
           </div>
         </div>
       <% end %>

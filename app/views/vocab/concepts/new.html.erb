@@ -1,10 +1,10 @@
 <% title "New #{@concept.type}" %>
 
 <% content_for :breadcrumbs do %>
-  <%= content_tag :li, link_to('Vocabularies', vocab_path) %>
-  <%= content_tag :li, link_to('Schemes', vocab_schemes_path) %>
-  <%= content_tag :li, link_to(@scheme.title, vocab_scheme_path(@scheme)) %>
-  <%= content_tag :li, link_to('Concepts', vocab_scheme_concepts_path(@scheme)) %>
+  <%= content_tag :li, link_to(@namespace.name, @namespace) %>
+  <%= content_tag :li, link_to('Vocabularies', namespace_vocab_schemes_path(@namespace)) %>
+  <%= content_tag :li, link_to(@scheme.title, namespace_vocab_scheme_path(@namespace, @scheme)) %>
+  <%= content_tag :li, link_to('Concepts', namespace_vocab_scheme_concepts_path(@namespace, @scheme)) %>
   <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
 

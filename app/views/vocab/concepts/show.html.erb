@@ -1,10 +1,10 @@
 <% title @concept.name(@language) %>
 
 <% content_for :breadcrumbs do %>
-  <%= content_tag :li, link_to('Vocabularies', vocab_path) %>
-  <%= content_tag :li, link_to('Schemes', vocab_schemes_path) %>
-  <%= content_tag :li, link_to(@scheme.title, vocab_scheme_path(@scheme)) %>
-  <%= content_tag :li, link_to('Concepts', vocab_scheme_concepts_path(@scheme)) %>
+  <%= content_tag :li, link_to(@namespace.name, @namespace) %>
+  <%= content_tag :li, link_to('Vocabularies', namespace_vocab_schemes_path(@namespace)) %>
+  <%= content_tag :li, link_to(@scheme.title, namespace_vocab_scheme_path(@namespace, @scheme)) %>
+  <%= content_tag :li, link_to('Concepts', namespace_vocab_scheme_concepts_path(@namespace, @scheme)) %>
   <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
 
@@ -44,9 +44,9 @@
                   <div class="list-group">
                     <% @concept.object_matches.each do |match| %>
                       <%= link_to match.concept.uri, class: 'list-group-item' do %>
-                      <%= content_tag :span, match.concept.name, class: 'text-strong' %>
-                      <%= content_tag :span, "(#{match.associatable.uri})", class: 'text-small' %>
-                      <%= content_tag :span, match.property, class: 'text-italic' %> 
+                        <%= content_tag :span, match.concept.name, class: 'text-strong' %>
+                        <%= content_tag :span, "(#{match.associatable.uri})", class: 'text-small' %>
+                        <%= content_tag :span, match.property, class: 'text-italic' %> 
                       <% end %>
                     <% end %>
                   </div>
@@ -92,18 +92,19 @@
       </div>
       <%= content_tag :div, class: 'col-md-3 sidebar' do %>
         <div class="list-group" id="actions">
-          <%= link_to fa_icon('edit', text: 'Edit'), edit_vocab_scheme_concept_path(@concept.scheme, @concept), class: 'list-group-item' if can?(:update, @concept) %>
-          <%= link_to fa_icon('trash', text: 'Delete'), [:vocab, @concept.scheme, @concept], method: :delete, data: { confirm: 'Are you sure?' }, class: 'list-group-item' if can?(:destroy, @concept) %>
-          <%= link_to fa_icon('plus', text: 'Create narrower concept'), new_vocab_scheme_concept_path(@concept.scheme, broader_concept: @concept), class: 'list-group-item' if can?(:create, Vocab::Concept) %>
-          <%= link_to fa_icon('angle-double-up', text: 'All concepts'), vocab_scheme_concepts_path(@concept.scheme), class: 'list-group-item' %>
+          <%= link_to fa_icon('angle-up', text: "#{@concept.scheme.title} concepts"), namespace_vocab_scheme_concepts_path(@namespace, @concept.scheme), class: 'list-group-item' %>
+          <%= link_to fa_icon('edit', text: 'Edit'), [:edit, @namespace, :vocab, @concept.scheme, @concept], class: 'list-group-item' if can?(:update, @concept) %>
+          <%= link_to fa_icon('trash', text: 'Delete'), [@namespace, :vocab, @concept.scheme, @concept], method: :delete, data: { confirm: 'Are you sure?' }, class: 'list-group-item' if can?(:destroy, @concept) %>
+          <%= link_to fa_icon('plus', text: 'Create narrower concept'), new_namespace_vocab_scheme_concept_path(@namespace, @concept.scheme, broader_concept: @concept), class: 'list-group-item' if can?(:create, @scheme.concepts.build) %>
+          
         </div>
         <div class="list-group" id="representations">
           <h4 class="--spacious">Representations</h4>
-          <%= link_to fa_icon('link', text: 'HTML'), [:vocab, @concept.scheme, @concept, format: :html], class: 'list-group-item' %>
-          <%= link_to fa_icon('link', text: 'JSON'), [:vocab, @concept.scheme, @concept, format: :json], class: 'list-group-item disabled' %>
-          <%= link_to fa_icon('link', text: 'RDF/XML'), [:vocab, @concept.scheme, @concept, format: :rdf], class: 'list-group-item disabled' %>
-          <%= link_to fa_icon('link', text: 'RDF/TURTLE'), [:vocab, @concept.scheme, @concept, format: :ttl], class: 'list-group-item disabled' %>
-          <%= link_to fa_icon('link', text: 'RDF/NTRIPLES'), [:vocab, @concept.scheme, @concept, format: :nt], class: 'list-group-item disabled' %>
+          <%= link_to fa_icon('link', text: 'HTML'), [@namespace, :vocab, @concept.scheme, @concept, format: :html], class: 'list-group-item' %>
+          <%= link_to fa_icon('link', text: 'JSON'), [@namespace, :vocab, @concept.scheme, @concept, format: :json], class: 'list-group-item disabled' %>
+          <%= link_to fa_icon('link', text: 'RDF/XML'), [@namespace, :vocab, @concept.scheme, @concept, format: :rdf], class: 'list-group-item disabled' %>
+          <%= link_to fa_icon('link', text: 'RDF/TURTLE'), [@namespace, :vocab, @concept.scheme, @concept, format: :ttl], class: 'list-group-item disabled' %>
+          <%= link_to fa_icon('link', text: 'RDF/NTRIPLES'), [@namespace, :vocab, @concept.scheme, @concept, format: :nt], class: 'list-group-item disabled' %>
         </div>
       <% end %>
     </div>

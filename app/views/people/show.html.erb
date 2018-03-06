@@ -53,6 +53,22 @@
     </div>
 
     <div class="col-md-7">
+      <div class="row">
+        <%= content_tag :div, class: 'col-md-12' do %>
+          <h4 class="subhead">
+            Vocabularies
+          </h4>
+          <div class="list-group">
+            <% @person.namespace.schemes.each do |vocab| %>
+              <%= render vocab %>
+            <% end %>
+            <div class="actions" style="margin-top:5px;">
+              <%= link_to 'Get an overview.', vocab_path, class: 'text-small' %>
+              <%= link_to fa_icon('plus', text: 'Vocabulary scheme'), new_namespace_vocab_scheme_path(@person.namespace), class: 'pull-right btn btn-sm btn-default text-strong' if can? :create, @person.namespace.schemes.build %>
+            </div>
+          </div>
+        <% end %>
+      </div>
       <h4 class="subhead">
         Team memberships
       </h4>

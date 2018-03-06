@@ -8,4 +8,8 @@ class PersonSerializer < ActiveModel::Serializer
     #{object.image_url(:small_thumb)}".squish.gsub(/\s+/, "")
   end
 
+  def username
+    object.namespace.name
+  end
+
 end

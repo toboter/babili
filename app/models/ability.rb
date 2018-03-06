@@ -13,6 +13,19 @@ class Ability
     if user.approved?
       can :manage, :all
 
+      cannot :manage, Namespace do |ns|
+        !ns.accessors.include?(user.person)
+      end
+      can :read, Namespace
+      cannot [:new, :edit, :create, :update, :destroy], Vocab::Scheme do |vs|
+        !vs.namespace.accessors.include?(user.person)
+      end
+      can :read, Vocab::Scheme
+      cannot [:new, :edit, :create, :update, :destroy], Vocab::Concept do |vc|
+        !vc.scheme.namespace.accessors.include?(user.person)
+      end
+      can :read, Vocab::Concept
+
       cannot :manage, [CMS::Novelity, CMS::HelpPage, CMS::HelpCategory, CMS::BlogCategory] unless user.is_admin?
       cannot :read, [CMS::HelpCategory, CMS::BlogCategory] unless user.is_admin?
       can :read, [CMS::Novelity, CMS::HelpPage]
@@ -31,7 +44,7 @@ class Ability
         user.person.in?(organization.members) && organization.memberships.where(person_id: user.person.id).first.role == 'Admin'
       end
       can [:create], Organization
-      can :read, Organization, members: { id: user.person.id }
+      can :read, Organization
 
       cannot :manage, Oread::Application unless user.is_admin?
       can [:update, :destroy], Oread::Application do |app|

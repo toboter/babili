@@ -6,20 +6,26 @@ class Vocab::SchemeSerializer < ActiveModel::Serializer
   attributes :abbr, :title, :definition
 
   attribute :url do
-    api_vocab_scheme_url(object)
+    api_namespace_vocab_scheme_url(object.namespace, object)
   end
 
   attribute :html_url do
-    vocab_scheme_url(object)
+    namespace_vocab_scheme_url(object.namespace, object)
   end
 
   attribute :creator do
     {
       name: object.creator.name,
-      html_url: person_url(object.creator.person)
+      html_url: namespace_url(object.creator.namespace)
     }
   end
 
+  attribute :namespace do
+    {
+      name: object.namespace.name,
+      html_url: namespace_url(object.namespace)
+    }
+  end
 
 
 end

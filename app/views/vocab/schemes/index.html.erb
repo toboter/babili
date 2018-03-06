@@ -1,7 +1,7 @@
-<% title 'Schemes' %>
+<% title 'Vocabularies' %>
 
 <% content_for :breadcrumbs do %>
-  <%= content_tag :li, link_to('Vocabularies', vocab_path) %>
+  <%= content_tag :li, link_to(@namespace.name, @namespace) %>
   <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
 
@@ -10,14 +10,12 @@
     <div class="row --spacious">
       <div class="col-sm-12 col-md-8 main">
         <div class="list-group">
-          <%= render @schemes %>
+          <%= render @schemes if @schemes %>
         </div>
       </div>
       <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
         <div class="list-group">
-          <%= render 'vocab/search/box' %>
-          <%= link_to fa_icon('plus', text: 'Vocabulary scheme'), new_vocab_scheme_path, class: 'list-group-item' if can?(:create, Vocab::Scheme) %>
-          <%= link_to fa_icon('angle-double-up', text: 'Vocabularies'), vocab_path, class: 'list-group-item' %>
+          <%= link_to fa_icon('angle-up', text: @namespace.name), @namespace, class: 'list-group-item' %>
         </div>
       <% end %>
     </div>

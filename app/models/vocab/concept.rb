@@ -29,6 +29,7 @@ class Vocab::Concept < ApplicationRecord
   # paper_trail into changeNote
 
   belongs_to :scheme, touch: true
+  has_one :namespace, through: :scheme
   belongs_to :creator, class_name: 'Person'
   has_many :labels, class_name: 'Vocab::Label', dependent: :destroy, inverse_of: :concept
   has_many :notes, dependent: :destroy, inverse_of: :concept
@@ -62,11 +63,11 @@ class Vocab::Concept < ApplicationRecord
   end
 
   def uri
-    url_for([:vocab, scheme, self])
+    url_for([scheme.namespace, :vocab, scheme, self])
   end
 
   def api_uri
-    url_for([:api, :vocab, scheme, self])
+    url_for([:api, scheme.namespace, :vocab, scheme, self])
   end
 
   # Hierarchy, Concept, GuideTerm? -> Collections

@@ -1,7 +1,8 @@
 class Vocab::ConceptsController < ApplicationController
+  load_and_authorize_resource :namespace
+  load_and_authorize_resource :scheme, through: :namespace
+  load_and_authorize_resource :concept, through: :scheme, find_by: :slug
   before_action :set_language
-  load_and_authorize_resource :scheme
-  load_and_authorize_resource through: :scheme, find_by: :slug
 
   def index
     @concepts = @concepts.roots
@@ -28,7 +29,7 @@ class Vocab::ConceptsController < ApplicationController
     @concept.creator = current_person
     respond_to do |format|
       if @concept.save
-        format.html { redirect_to vocab_scheme_concept_path(@scheme, @concept), notice: 'Concept was successfully created.' }
+        format.html { redirect_to namespace_vocab_scheme_concept_path(@namespace, @scheme, @concept), notice: 'Concept was successfully created.' }
         format.json { render :show, status: :created, location: @concept }
       else
         format.html { render :new }
@@ -42,7 +43,7 @@ class Vocab::ConceptsController < ApplicationController
   def update
     respond_to do |format|
       if @concept.update(concept_params)
-        format.html { redirect_to vocab_scheme_concept_path(@scheme, @concept), notice: "Concept was successfully updated." }
+        format.html { redirect_to namespace_vocab_scheme_concept_path(@namespace, @scheme, @concept), notice: "Concept was successfully updated." }
         format.json { render :show, status: :ok, location: @concept }
       else
         format.html { render :edit }
@@ -56,7 +57,7 @@ class Vocab::ConceptsController < ApplicationController
   def destroy
     @concept.destroy
     respond_to do |format|
-      format.html { redirect_to vocab_scheme_concepts_path(@scheme), notice: 'Concept was successfully destroyed.' }
+      format.html { redirect_to namespace_vocab_scheme_concepts_path(@namespace, @scheme), notice: 'Concept was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

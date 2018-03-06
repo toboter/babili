@@ -6,11 +6,11 @@ class Vocab::ConceptSerializer < ActiveModel::Serializer
   attribute :status
   attribute :name, key: :default_label
   attribute :url do
-    api_vocab_scheme_concept_url(object.scheme, object)
+    api_namespace_vocab_scheme_concept_url(object.scheme.namespace, object.scheme, object)
   end
 
   attribute :html_url do
-    vocab_scheme_concept_url(object.scheme, object)
+    namespace_vocab_scheme_concept_url(object.scheme.namespace, object.scheme, object)
   end
 
   attributes :created_at, :updated_at
@@ -18,8 +18,8 @@ class Vocab::ConceptSerializer < ActiveModel::Serializer
   attribute :creator do
     {
       name: object.creator.name,
-      url: api_person_url(object.creator.person),
-      html_url: person_url(object.creator.person)
+      url: api_person_url(object.creator),
+      html_url: namespace_url(object.creator.namespace)
     }
   end
 
@@ -27,8 +27,8 @@ class Vocab::ConceptSerializer < ActiveModel::Serializer
     object.contributors.map do |contrib|
       {
         name: contrib.name,
-        url: api_person_url(contrib.person),
-        html_url: person_url(contrib.person)
+        url: api_person_url(contrib),
+        html_url: namespace_url(contrib.namespace)
       }
     end
   end
@@ -37,8 +37,8 @@ class Vocab::ConceptSerializer < ActiveModel::Serializer
     object.broader_concepts.map do |concept| 
       {
         default_label: concept.name, 
-        url: api_vocab_scheme_concept_url(concept.scheme, concept),
-        html_url: vocab_scheme_concept_url(concept.scheme, concept)
+        url: api_namespace_vocab_scheme_concept_url(concept.scheme.namespace, concept.scheme, concept),
+        html_url: namespace_vocab_scheme_concept_url(concept.scheme.namespace, concept.scheme, concept)
       }
     end
   end
@@ -47,8 +47,8 @@ class Vocab::ConceptSerializer < ActiveModel::Serializer
     object.narrower_concepts.map do |concept| 
       {
         default_label: concept.name, 
-        url: api_vocab_scheme_concept_url(concept.scheme, concept),
-        html_url: vocab_scheme_concept_url(concept.scheme, concept)
+        url: api_namespace_vocab_scheme_concept_url(concept.scheme.namespace, concept.scheme, concept),
+        html_url: namespace_vocab_scheme_concept_url(concept.scheme.namespace, concept.scheme, concept)
       }
     end
   end
