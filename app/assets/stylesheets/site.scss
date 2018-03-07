@@ -186,7 +186,7 @@ form {
 }
 
 .bg-dark {
-    background-color: #222222;
+    background-color: rgb(100,101,103);
     color: white;
 }
 
@@ -331,7 +331,7 @@ header {
         div.info-box-bg {
             position: relative;
             border: 1px solid rgba(34, 34, 34, 0.5);
-            border-radius: 5px;
+            border-radius: 3px;
             background-color: rgba(34, 34, 34, 0.5);
             color: rgba(255, 255, 255, 0.7);
             padding: 15px;
@@ -352,14 +352,18 @@ header {
     }
 }
 
+@media (max-width: 768px) {
+    header div.info-box div.info-box-bg p {font-size: .8em;}
+}
+
 
 @media (min-width: 768px) {
     header {
         a.chevron-about {
             border: 1px solid rgba(34, 34, 34, 0.5);
-            border-radius: 5px;
+            border-radius: 3px;
             background-color: rgba(34, 34, 34, 0.5);
-            padding: 8px;
+            padding: 7px;
             position: absolute;
             bottom: 45px;
             right: 20px;
@@ -372,7 +376,7 @@ header {
             div.info-box-bg {
                 position: relative;
                 border: 1px solid rgba(34, 34, 34, 0.5);
-                border-radius: 5px;
+                border-radius: 3px;
                 background-color: rgba(34, 34, 34, 0.5);
                 color: rgba(255, 255, 255, 0.7);
                 padding: 15px;
