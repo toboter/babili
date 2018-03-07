@@ -1,0 +1,28 @@
+<% title "#{@namespace.name} / #{@repository.name}: #{@repository.description}", false %>
+
+<% content_for :container do %>
+  <div class="row">
+    <div class="col-md-12">
+      <%= content_tag :h4, class: 'h-condensed --spacing-20 --spacious-20' do %>
+        <%= fa_icon('table') %>
+        <%= link_to @namespace.name, @namespace, class: '' %> / 
+        <%= link_to @repository.name, [@namespace, @repository], class: 'text-strong' %>
+      <% end %>
+
+      <ul class="nav nav-tabs" role="tablist">
+        <%= content_tag :li, link_to('Data', [@namespace, @repository]), class: "#{'active text-strong' if current_page?([@namespace, @repository])}" %>
+        <li><%= link_to 'Issues', '[@namespace, @repository]' %></li>
+      </ul>
+    </div>
+  </div>
+
+
+
+  <div class="row --spacious-20">
+    <div class="col-md-12">
+      <%= yield %>
+    </div>
+  </div>
+<% end %>
+
+<%= render template: "layouts/application" %>

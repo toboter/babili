@@ -574,3 +574,28 @@ img::-moz-selection {
     display: inline-block;
     margin-bottom: 3px;
 }
+.repositories {
+    a {
+        color: #0366d6;
+    }
+    .repo-meta {
+        @extend .list-inline;
+        @extend .text-gray;
+        @extend .text-small;
+        margin-bottom: 20px;
+        .meta-item {
+        .author-avatar {
+            vertical-align: top;
+            border-radius: 3px;
+            height:18px;
+            width:18px; 
+            background-position:center;
+            display: inline-block;
+        }
+        }
+        .mid {
+        margin-left: 15px;
+        margin-right: 15px;
+        }
+    }
+}

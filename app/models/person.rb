@@ -1,5 +1,6 @@
 class Person < ApplicationRecord
   include ImageUploader[:image]
+  acts_as_tagger
 
   has_one :namespace, as: :subclass, dependent: :destroy
   has_one :user

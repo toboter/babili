@@ -1,0 +1,9 @@
+<% title 'New repository' %>
+
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, link_to(@namespace.name, @namespace) %>
+  <%= content_tag :li, link_to('Repositories', namespace_repositories_path(@namespace)) %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
+<% end %>
+
+<%= render 'form', repository: @repository %>

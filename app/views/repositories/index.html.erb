@@ -1,1 +1,24 @@
-repos
+<% title "#{@namespace.name} repositories", false %>
+
+<% content_for :container do %>
+  <div class="wrapper repositories">
+    <div class="row">
+      <div class="col-md-12">
+        <%= content_tag :h4, class: 'h-condensed --spacing-20 --spacious-20' do %>
+          <%= link_to(background_image_div(@namespace.subclass, :small_thumb, {class: 'site-user-avatar'}), @namespace, title: @namespace.subclass.name, data: {toggle: "tooltip", placement: "bottom"}) %>
+          <%= link_to @namespace.name, @namespace, class: '' %>
+        <% end %>
+        <hr>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <% if @repositories.any? %>
+          <%= render @repositories %>
+        <% else %>
+          <%= content_tag :p, 'Nothing here', class: 'text-muted text-italic' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -74,6 +74,7 @@ gem 'chronic'
 gem 'searchkick'
 gem "rgeo"
 gem "rgeo-proj4"
+gem 'acts-as-taggable-on'
 
 gem 'devise'
 gem 'doorkeeper'

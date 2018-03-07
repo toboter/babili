@@ -246,13 +246,16 @@ Rails.application.routes.draw do
   root to: "home#index"
   
   resources :namespaces, only: :show, path: '' do
-    resources :repositories
     resources :people
     resources :applications
     namespace :vocab, path: 'vocabularies' do
       resources :schemes, path: '' do
         resources :concepts
       end
+    end
+    resources :repositories do
+      get :edit_topics, on: :member
+      put :update_topics, on: :member
     end
   end
 end

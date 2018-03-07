@@ -1,1 +1,23 @@
-repo show
+<div class="row-info" id="info-for-<%= @repository.id %>">
+  <%= link_to fa_icon('edit', text: 'Edit'), [:edit, @namespace, @repository], class: 'btn btn-sm btn-default text-strong pull-right' %>
+  <%= content_tag :p, @repository.description.present? ? @repository.description : 'No description provided', class: "lead #{'text-italic if @repository.description.blank?'}", style: 'margin-bottom:0;' %>
+  <% if @repository.topics.any? %>
+    <div id="topics_for_<%= @repository.id %>" style="display:inline;">
+      <%= render 'topic_list_labels', repository: @repository %>
+    </div>
+    <%= link_to 'Manage topics', edit_topics_namespace_repository_path(@namespace, @repository), remote: true, class: 'text-small' if can?(:edit, @repository) %>
+  <% elsif can?(:edit, @repository) %>
+    <%= link_to 'Add topics', edit_topics_namespace_repository_path(@namespace, @repository), remote: true, class: 'text-small' %>
+  <% end %>
+</div>
+<%= simple_form_for [:update_topics, @namespace, @repository], method: :put, remote: true, html: {class: 'hidden', id: "edit_repository_topics_#{@repository.id}"} do |f| %>
+  <div class="row">
+    <div class="col-xs-11">
+      <%= render 'topics_field', f: f %>
+    </div>
+    <%= f.submit 'Done', class: 'btn btn-default col-xs-1 text-strong', style: 'margin-top:25px;' %>
+  </div>
+<% end if can?(:edit, @repository) %>
+
+<hr>
+<%= @repository.inspect %>
