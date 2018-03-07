@@ -7,8 +7,19 @@
         <%= f.input :title %>
         <%= f.input :definition %>
 
+        <%= content_tag :div, class: 'bg-danger', style: 'padding: 15px;margin-bottom:20px;' do %>
+          <h4>Danger zone!</h4>
+          <%= f.input :namespace_id, 
+            label: 'Change namespace?', 
+            collection: Namespace.all, 
+            label_method: :name, 
+            value_method: :id, 
+            selected: f.object.namespace.id,
+            hint: 'If you change the namespace, you will potentially lose control over it!' %>
+        <% end if !f.object.new_record? %>
+
         <%= f.submit class: 'btn btn-primary' %>
-        <%= link_to 'Cancel', (f.object.new_record? ? @namespace : namespace_vocab_scheme_path(@namespace, @scheme)), class: "btn btn-default" %>
+        <%= link_to 'Cancel', (f.object.new_record? ? namespace_vocab_schemes_path(@namespace) : namespace_vocab_scheme_path(@namespace, @scheme)), class: "btn btn-default" %>
       <% end %>
     </div>
   </div>

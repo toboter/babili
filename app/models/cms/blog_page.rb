@@ -12,6 +12,7 @@ class CMS::BlogPage < CMS::Content
 
   scope :featured, -> { type_details_where(featured: true) }
   scope :unpublished, -> { where(published_at: nil) }
+  scope :published, -> { where.not(published_at: nil) }
 
   def date_with_title
     "#{self.new_record? ? Date.today.to_s : created_at.to_date.to_s}-#{title}"

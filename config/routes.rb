@@ -247,6 +247,8 @@ Rails.application.routes.draw do
   
   resources :namespaces, only: :show, path: '' do
     resources :repositories
+    resources :people
+    resources :applications
     namespace :vocab, path: 'vocabularies' do
       resources :schemes, path: '' do
         resources :concepts

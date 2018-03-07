@@ -1,75 +1,56 @@
 <% title @organization.name, false %>
 
-<% content_for :breadcrumbs do %>
-  <%= content_tag :li, link_to('Organizations', organizations_url) %>
-  <%= content_tag :li, yield(:title), class: 'active' %>
-<% end %>
-
 <% content_for :container do %>
   <div class="row">
-    <div class="col-md-5">
-      <%= render 'organizations/organization', organization: @organization, banner: true, actions: true, no_description: true %> 
-
-      <%= content_tag :div, id: "organization-#{@organization.id}-oauth_accessibilities", class: '--spacious' do %>
-        <h4 class="subhead --spacious">
-          Applications
+    <div class="col-md-5 --spacious">
+      <%= render 'organizations/organization', organization: @organization, banner: true, actions: true, no_description: true %>
+      <div class="list-group-menu">
+        <%= link_to namespace_repositories_path(@organization.namespace), class: 'list-group-item' do %>
+          <%= fa_icon('angle-double-right', text: 'Repositories') %>
+          <%= content_tag :span, @organization.namespace.repositories.count, class: 'badge' %>
+        <% end %>
+        <%= link_to namespace_vocab_schemes_path(@organization.namespace), class: 'list-group-item' do %>
+          <%= fa_icon('angle-double-right', text: 'Vocabularies') %>
+          <%= content_tag :span, @organization.namespace.schemes.count, class: 'badge' %>
+        <% end %>
+        <%= link_to namespace_people_path(@organization.namespace), class: 'list-group-item' do %>
+          <%= fa_icon('angle-double-right', text: 'People') %>
+          <%= content_tag :span, @organization.memberships.count, class: 'badge' %>
+        <% end %>
+        <%= link_to namespace_applications_path(@organization.namespace), class: 'list-group-item' do %>
+          <%= fa_icon('angle-double-right', text: 'Applications') %>
           <%= content_tag :span, @organization.oauth_accessibilities.count, class: 'badge' %>
-        </h4>
-        <p class="text-muted">
-          The members of this team can <strong>read &amp; edit</strong> data in the following babili-authenticated-applications marked with this team.
-        </p>
-        <% for accessibility in @organization.oauth_accessibilities do %>
-          <%=  render accessibility.oauth_application %>
         <% end %>
-      <% end if @organization.oauth_accessibilities.any? %>
-
-    </div>
-
-    <div class="col-md-7">
-
-      <%= content_tag :div, class: 'row' do %>
-        <%= content_tag :div, class: 'col-md-12' do %>
-          <h4 class="subhead">
-            Vocabularies
-          </h4>
-          <div class="list-group">
-            <% @organization.namespace.schemes.each do |vocab| %>
-              <%= render vocab %>
+      </div>
+      <div class="--spacious row">
+        <div class="col-md-8 org-top-repos">
+          <h4>
+            <%= link_to namespace_repositories_path(@organization.namespace), style: 'color: #586069;' do %>
+              Repositories
             <% end %>
-            <div class="actions" style="margin-top:5px;">
-              <%= link_to 'Get an overview.', vocab_path, class: 'text-small' %>
-              <%= link_to fa_icon('plus', text: 'Vocabulary scheme'), new_namespace_vocab_scheme_path(@organization.namespace), class: 'pull-right btn btn-sm btn-default text-strong' if can? :create, @organization.namespace.schemes.build %>
-            </div>
-          </div>
-        <% end %>
-        <%= content_tag :div, class: 'col-md-12' do %>
-          <h4 class="subhead">
-            Memberships
-            <%= content_tag :span, @organization.memberships.count, class: 'badge' %>
           </h4>
-        <% end %>
-        <div class="list-group">
-          <% @organization.memberships.each do |membership| %>
-            <div class="col-md-6" style="margin-bottom: 20px;">
-              <%= content_tag :div, id: "person-#{membership.person.id}", class: 'media' do %>
-                <%= link_to membership.person.namespace, class: 'list-group-item' do %>
-                  <div class="media-left">
-                    <%= background_image_div(membership.person, :small_thumb, {class: 'media-object img-circle', style: 'height:50px;width:50px; background-position:center;'}) %>
-                  </div>
-                  <div class="media-body">
-                    <h5 class="media-heading"><%= membership.person.name %></h5>
-                    <span class="text-muted"><%= membership.role %></span>
-                  </div>
-                  <div class="media-right">
-                    <%= content_tag :span, fa_icon('universal-access'), data: {toggle: "tooltip", placement: "left"}, title: "Team administrator" if membership.role == 'Admin' %>
-                  </div>
-                <% end %>      
-              <% end %>
-            </div>
+          <% @organization.namespace.repositories.limit(3).each do |repo| %>
+            <%= repo.name %>
+            <hr>
           <% end %>
         </div>
-      <% end if @organization.memberships.any? %>
+      </div>
+      <div class="--spacious row">
+        <div class="col-md-8 member-avatar-group">
+          <h4>
+            <%= link_to namespace_people_path(@organization.namespace), style: 'color: #586069;' do %>
+              People
+              <%= content_tag :span, @organization.memberships.count, class: 'pull-right no-link' %>
+            <% end %>
+          </h4>
+          <% @organization.members.limit(10).each do |member| %>
+            <%= link_to(background_image_div(member, :small_thumb, {class: 'organization-member-avatar'}), member.namespace, title: member.name, data: {toggle: "tooltip", placement: "bottom"}) %>
+          <% end %>
+        </div>
+      </div>
 
+    </div>
+    <div class="col-md-6 col-md-offset-1">
       <h4 class="subhead --spacious">
         About
         <%= link_to fa_icon('question-circle'), 'javascript:void(0)', 
@@ -87,11 +68,7 @@
         %>
       </h4>
       <%= content_tag :div, markdown(@organization.description), id: 'organizations-description' %>
-
-
-
-
-
+    </div>
   </div>
 </div>
 <% end %>

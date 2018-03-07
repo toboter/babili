@@ -68,6 +68,6 @@ class Vocab::SchemesController < ApplicationController
   end
   # Never trust parameters from the scary internet, only allow the white list through.
   def scheme_params
-    params.require(:scheme).permit(:abbr, :title, :definition)
+    params.require(:scheme).permit(:abbr, :title, :definition, :namespace_id)
   end
 end

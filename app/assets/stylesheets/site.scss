@@ -154,6 +154,10 @@ div.panel-attach {
 .--spacious {
     margin-top: 40px;
 }
+.--spacious-20 {
+    margin-top: 20px;
+}
+
 .--spacing {
     margin-bottom: 40px;
 }
@@ -548,3 +552,21 @@ img::-moz-selection {
       }
     }
   }
+
+.list-group-menu {
+    @extend .list-group;
+    @extend .text-strong;
+    a {
+        color: #0366d6;
+    }
+}
+
+.organization-member-avatar {
+    vertical-align: middle;
+    border-radius: 3px;
+    height:48px;
+    width:48px;
+    background-position:center;
+    display: inline-block;
+    margin-bottom: 3px;
+}

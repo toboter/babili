@@ -10,14 +10,14 @@
     <div class="row --spacious">
       <div class="col-sm-12 col-md-8 main">
         <div class="list-group">
-          <%= render @schemes if @schemes %>
+          <%= render @schemes %>
         </div>
+        <%= link_to 'Get an overview.', vocab_path, class: 'text-small' %>
       </div>
       <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
-        <div class="list-group">
-          <%= link_to fa_icon('angle-up', text: @namespace.name), @namespace, class: 'list-group-item' %>
-        </div>
+          <%= link_to fa_icon('plus', text: "Create a new vocabulary scheme".html_safe), [:new, @namespace, :vocab, :scheme], class: 'btn btn-default text-strong pull-right' %>
       <% end %>
     </div>
   </div>
 <% end %>
+
