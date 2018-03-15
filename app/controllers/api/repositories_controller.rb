@@ -1,32 +1,15 @@
 class Api::RepositoriesController < Api::BaseController
-  load_and_authorize_resource class: 'Oread::Application', except: :resource_host
-
-  # included from deprecated oread_collections_controller
-  # require 'rest-client'
-  # require 'json'
-  # include ERB::Util
-
-  # skip_before_action :doorkeeper_authorize!
-  # skip_before_action :authenticate_user_with_doorkeeper!
-  # skip_authorization_check
-
-  # before_action :authenticate_user_with_personal_token!
-  # before_action  -> { authorize_personal_api_methods(:collections) }, only: :index
+  load_and_authorize_resource :namespace
+  load_and_authorize_resource through: :namespace
   
-
   def index
-    repositories = @repositories.order(id: :asc)
-    render json: repositories, each_serializer: RepositorySerializer
+    render json: @repositories
   end
 
   def show
-    render json: @repository, serializer: RepositorySerializer
+    render json: @repository
   end
 
-  def resource_host
-    repositories = Oread::Application.where(uid: params[:uid])
-    authorize! :read, repositories
-    render json: repositories, each_serializer: RepositorySerializer
-  end
+
 
 end

@@ -10,11 +10,66 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180307112563) do
+ActiveRecord::Schema.define(version: 20180308093952) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
+
+  create_table "aggregation_commits", force: :cascade do |t|
+    t.integer "item_id"
+    t.integer "event_id"
+    t.integer "origin_commit_id"
+    t.integer "creator_id"
+    t.jsonb "data", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "index_aggregation_commits_on_creator_id"
+    t.index ["event_id"], name: "index_aggregation_commits_on_event_id"
+    t.index ["item_id"], name: "index_aggregation_commits_on_item_id"
+    t.index ["origin_commit_id"], name: "index_aggregation_commits_on_origin_commit_id"
+  end
+
+  create_table "aggregation_events", force: :cascade do |t|
+    t.integer "repository_id"
+    t.integer "creator_id"
+    t.text "note"
+    t.string "type"
+    t.jsonb "origin"
+    t.jsonb "processors"
+    t.datetime "commited_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "index_aggregation_events_on_creator_id"
+    t.index ["repository_id"], name: "index_aggregation_events_on_repository_id"
+    t.index ["type"], name: "index_aggregation_events_on_type"
+  end
+
+  create_table "aggregation_identifications", force: :cascade do |t|
+    t.integer "item_id"
+    t.integer "identifier_id"
+    t.index ["item_id", "identifier_id"], name: "index_aggregation_identifications_on_item_id_and_identifier_id"
+  end
+
+  create_table "aggregation_identifiers", force: :cascade do |t|
+    t.string "origin_id"
+    t.string "origin_type"
+    t.string "origin_agent_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["origin_id"], name: "index_aggregation_identifiers_on_origin_id"
+  end
+
+  create_table "aggregation_items", force: :cascade do |t|
+    t.integer "repository_id"
+    t.integer "pref_identifier_id"
+    t.string "type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["pref_identifier_id"], name: "index_aggregation_items_on_pref_identifier_id"
+    t.index ["repository_id"], name: "index_aggregation_items_on_repository_id"
+    t.index ["type"], name: "index_aggregation_items_on_type"
+  end
 
   create_table "audits", id: :serial, force: :cascade do |t|
     t.integer "user_id"

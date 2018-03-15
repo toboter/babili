@@ -6,6 +6,7 @@ class RepositoriesController < ApplicationController
   end
 
   def show
+    @items = @repository.items
     render layout: 'repo'
   end
 

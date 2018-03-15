@@ -7,16 +7,16 @@
         <%= fa_icon('table') %>
         <%= link_to @namespace.name, @namespace, class: '' %> / 
         <%= link_to @repository.name, [@namespace, @repository], class: 'text-strong' %>
+
+        <%= link_to 'Copy', 'copy', title: "Copy the datasets of #{@repository.name} to your account.", class: 'btn btn-default btn-sm pull-right' %>
       <% end %>
 
       <ul class="nav nav-tabs" role="tablist">
         <%= content_tag :li, link_to('Data', [@namespace, @repository]), class: "#{'active text-strong' if current_page?([@namespace, @repository])}" %>
-        <li><%= link_to 'Issues', '[@namespace, @repository]' %></li>
+        <%= content_tag :li, link_to('Issues', [@namespace, @repository, :issues]), class: "#{'active text-strong' if current_page?([@namespace, @repository, :issues])}" %>
       </ul>
     </div>
   </div>
-
-
 
   <div class="row --spacious-20">
     <div class="col-md-12">

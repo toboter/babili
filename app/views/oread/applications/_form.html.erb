@@ -13,10 +13,10 @@
             <%= f.input :port, hint: 'typically this is 80.' %>
             <%= f.input :search_path, hint: 'The API path to query and add the query params to. Like: /api/objects/search.json' %>
             <div>
-              <%= f.simple_fields_for :repository_classes do |r| %>
-                <%= render 'repository_class_fields', f: r %>
+              <%= f.simple_fields_for :collection_classes do |r| %>
+                <%= render 'collection_class_fields', f: r %>
               <% end %>
-              <%= link_to_add_association fa_icon('plus', text: 'class'), f, :repository_classes, class: 'btn btn-default btn-sm text-strong' %>
+              <%= link_to_add_association fa_icon('plus', text: 'class'), f, :collection_classes, class: 'btn btn-default btn-sm text-strong' %>
             </div>
             <%= f.input :description %>
             <%= f.input :enroll_users_default, as: :boolean %>

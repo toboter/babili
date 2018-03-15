@@ -1,4 +1,4 @@
-<% title 'New repository' %>
+<% title 'Create a new repository' %>
 
 <% content_for :breadcrumbs do %>
   <%= content_tag :li, link_to(@namespace.name, @namespace) %>
@@ -6,4 +6,33 @@
   <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
 
-<%= render 'form', repository: @repository %>
+<% content_for :container do %>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="page-header">
+        <h4><%= yield(:title) %></h4>
+        <p class="text-gray">A repository contains all your datasets.</p>
+      </div>
+      <%= simple_form_for [@namespace, @repository] do |f| %>
+        <%= f.error_notification %>
+        <div class="row">
+          <div class="col-md-5 col-sm-6 col-xs-10">
+            <%= f.input :name, label: 'Repository name' %>
+          </div>
+        </div>
+        <%= f.input :description %>
+        <hr>
+
+
+
+        <div class="actions --spacious">
+          <%= f.submit class: 'btn btn-primary' %>
+          <%= link_to 'Cancel', (f.object.new_record? ? namespace_repositories_path(@namespace) : namespace_repository_path(@namespace, @repository)), class: "btn btn-default" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<% content_for :modals do %>
+<% end %>

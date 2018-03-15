@@ -1,0 +1,11 @@
+<div class="well">
+  <%= simple_form_for [@namespace, @repository, @file_upload], 
+    multipart: true, 
+    url: namespace_repository_datum_commit_file_upload_path(@namespace, @repository) do |f| %>
+    <%= f.file_field :file %>
+    <%= f.input :identifier %>
+    <%= f.input :note %>
+
+    <%= f.submit "Upload" %>
+  <% end %>
+</div>

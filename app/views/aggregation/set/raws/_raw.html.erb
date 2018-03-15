@@ -1,0 +1,8 @@
+<tr>
+  <%= content_tag :td, link_to(raw.uid, namespace_repository_datum_set_path(raw.repository.owner, raw.repository, raw)), class: 'text-strong' %>
+  <%= content_tag :td, link_to(raw.commit.note, namespace_repository_datum_commit_path(raw.commit.repository.owner, raw.commit.repository, raw.commit)), class: '' %>
+  <%= content_tag :td, content_tag(:span, "#{time_ago_in_words(raw.commit.created_at)} ago", title: raw.commit.created_at, data: {toggle: "tooltip", placement: "bottom"}, class: 'pull-right') %>
+</tr>
+</tr> 
+  <%= content_tag :td, raw.inspect, class: 'text-small', colspan: 3 %>
+</tr>

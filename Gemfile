@@ -75,6 +75,9 @@ gem 'searchkick'
 gem "rgeo"
 gem "rgeo-proj4"
 gem 'acts-as-taggable-on'
+gem 'roo'
+gem 'activerecord-import'
+gem 'xml-to-json'
 
 gem 'devise'
 gem 'doorkeeper'

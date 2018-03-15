@@ -18,7 +18,7 @@ class Api::SearchController < Api::BaseController
       @repos.each do |repo|
         response = nil
         repo_user_token = repo.try(:access_tokens).where(resource_owner: current_user).last
-        repo.repository_classes.each do |rclass|
+        repo.collection_classes.each do |rclass|
           #instance_variable_set("#{repo.name.parameterize.underscore}_url", "#{rclass.repo_api_url}?q=#{url_encode(params[:q])}")
           url = "#{rclass.repo_api_url}?q=#{url_encode(params[:q])}"
           begin

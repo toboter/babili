@@ -9,7 +9,7 @@ class Api::UserController < Api::BaseController
 
   def repositories
     repositories = current_user.oread_enrolled_applications.order(id: :asc)
-    render json: repositories, each_serializer: RepositorySerializer
+    render json: repositories, each_serializer: CollectionSerializer
   end
 
   def organizations

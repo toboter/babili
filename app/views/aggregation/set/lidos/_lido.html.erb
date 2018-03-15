@@ -1,0 +1,12 @@
+<tr>
+  <%= content_tag :td, link_to(lido.lido_rec_id, namespace_repository_datum_set_path(lido.repository.owner, lido.repository, lido)), class: 'text-strong' %>
+  <%= content_tag :td, link_to(lido.commit.note, namespace_repository_datum_commit_path(lido.commit.repository.owner, lido.commit.repository, lido.commit)), class: '' %>
+  <%= content_tag :td, content_tag(:span, "#{time_ago_in_words(lido.commit.created_at)} ago", title: lido.commit.created_at, data: {toggle: "tooltip", placement: "bottom"}, class: 'pull-right') %>
+</tr>
+</tr>
+  <td colspan=3>
+    <%= content_tag :span, lido.original_id.inspect, class: 'text-small' %> <br><br><br>
+    <%= content_tag :span, lido.titles.inspect, class: 'text-small' %> <br><br><br>
+    <%= content_tag :span, lido.inspect, class: 'text-small' %>
+  </td>
+</tr>

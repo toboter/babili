@@ -161,10 +161,10 @@ Rails.application.routes.draw do
       get :search, on: :collection
     end
 
-    # Repositories
-    resources :repositories, only: [:index, :show] do
-      get 'resources/:uid', to: 'repositories#resource_host', on: :collection
-      resources :access_tokens, controller: 'repository_access_tokens', path: 'tokens' # was post 'set_access_token', to: 'oread_access_tokens#create'
+    # Collections
+    resources :collections, only: [:index, :show] do
+      get 'resources/:uid', to: 'collections#resource_host', on: :collection
+      resources :access_tokens, controller: 'collection_access_tokens', path: 'tokens' # was post 'set_access_token', to: 'oread_access_tokens#create'
     end
 
     # Applications
@@ -203,13 +203,21 @@ Rails.application.routes.draw do
       get :concepts, to: 'vocab/concepts#search'
     end
 
-    # vocab
+
     resources :namespaces, only: [:index, :show], path: '' do
+      # vocab
       namespace :vocab do
         resources :schemes, only: [:index, :show] do
           resources :concepts, only: [:index, :show]
         end
         get :concepts, to: 'concepts#full_index'
+      end
+      # repos
+      resources :repositories, only: [:index, :show] do
+        namespace :datum, path: 'data' do
+          resources :commits
+          resources :sets, only: [:index, :show]
+        end
       end
     end
 
@@ -256,6 +264,11 @@ Rails.application.routes.draw do
     resources :repositories do
       get :edit_topics, on: :member
       put :update_topics, on: :member
+      namespace :aggregation, path: 'data' do
+        resources :events
+        resources :items, only: :show
+      end
+      resources :issues
     end
   end
 end

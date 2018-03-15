@@ -15,9 +15,35 @@
     <div class="col-xs-11">
       <%= render 'topics_field', f: f %>
     </div>
-    <%= f.submit 'Done', class: 'btn btn-default col-xs-1 text-strong', style: 'margin-top:25px;' %>
+    <div class="col-xs-1">
+      <%= f.submit 'Done', class: 'btn btn-default text-strong pull-right', style: 'margin-top:25px;' %>
+    </div>
   </div>
 <% end if can?(:edit, @repository) %>
 
-<hr>
-<%= @repository.inspect %>
+<div id="datasets">
+  <nav class="navbar navbar-default --spacious">
+    <div class="container-fluid">
+      <ul class="nav navbar-nav navbar-left">
+        <%= content_tag :li, link_to(fa_icon('object-ungroup', text: pluralize(@items.count, 'dataset')), '') %>
+      </ul>
+      <div class="nav navbar-nav navbar-right">
+        <%= link_to fa_icon('upload', text: 'Import data'), new_namespace_repository_aggregation_event_path(@namespace, @repository), title: "Import datasets from a file.", class: 'btn btn-default btn-sm text-strong navbar-btn', style: 'margin-right: 15px;margin-left: 15px;' %>
+      </div>
+    </div>
+  </nav>
+
+  <div class="text-small" style="border: 1px solid #ddd;padding:10px;background-color: #f8f8f8;border-bottom:none;">
+    <div style="display:inline;">
+      <%= link_to (background_image_div(@repository.commit_events.last.creator, :small_thumb, {class: 'site-user-avatar'})), @repository.commit_events.last.creator.namespace if @repository.commit_events.any? %>
+      <%= link_to @repository.commit_events.last.creator.name, @repository.commit_events.last.creator.namespace, class: 'text-strong' if @repository.commit_events.any? %>
+      <%= content_tag :span, "#{link_to @repository.commit_events.last.note, namespace_repository_datum_commit_path(@namespace, @repository, @repository.commit_events.last)}".html_safe if @repository.commit_events.any? %>
+    </div>
+    <%= content_tag :span, "Last commit #{link_to @repository.commit_events.last.created_at, namespace_repository_datum_commit_path(@namespace, @repository, @repository.commit_events.last)}".html_safe, class: 'pull-right' if @repository.commit_events.any? %>
+  </div>
+  <table class="table table-simple">
+    <tbody>
+      <%= render @items.limit(5) %>
+    </tbody>
+  </table>
+</div>

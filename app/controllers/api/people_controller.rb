@@ -17,7 +17,7 @@ class Api::PeopleController < Api::BaseController
 
   def repositories
     repositories = @person.user.oread_enrolled_applications.order(id: :asc)
-    render json: repositories, each_serializer: RepositorySerializer
+    render json: repositories, each_serializer: CollectionSerializer
   end
 
 
