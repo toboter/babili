@@ -22,7 +22,7 @@
         <div id="vocabulary-scheme-<%= @scheme.id %>-concepts-<%= @concept.id %>">
           <div class="heading-block">
             <%= content_tag :h3, style: 'margin-top:0px;' do %>
-              <%= @concept.name %>
+              <%= @concept.name(@language) %>
               <%= link_to fa_icon('edit', text: 'Edit'), [:edit, @namespace, :vocab, @concept.scheme, @concept], class: 'btn btn-default btn-sm pull-right text-strong', style: 'margin-left: 5px;' if can?(:update, @concept) %>
               <%= link_to fa_icon('trash', text: 'Delete'), [@namespace, :vocab, @concept.scheme, @concept], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default btn-sm pull-right text-strong', style: 'margin-left: 5px;' if can?(:destroy, @concept) %>
               <%= link_to fa_icon('plus', text: 'Narrower concept'), new_namespace_vocab_scheme_concept_path(@namespace, @concept.scheme, broader_concept: @concept), class: 'btn btn-default btn-sm pull-right text-strong' if can?(:create, @scheme.concepts.build) %>
