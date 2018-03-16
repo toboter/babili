@@ -35,7 +35,7 @@
               <thead>
               </thead>
               <tbody>
-                <%= render partial: 'vocab/concepts/concept_tree', collection: @concepts.roots, locals: { depth: 1 }, as: :concept %>
+                <%= render partial: 'vocab/concepts/concept_tree', collection: @concepts.roots.sort_by{|r| r.name(@language)}, locals: { depth: 1 }, as: :concept %>
               </tbody>
             </table>
           <% end %>
