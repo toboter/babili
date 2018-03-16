@@ -7,4 +7,4 @@
     <% end %>
   <% end %>
 </tr>
-<%= render partial: 'vocab/concepts/concept_tree', collection: concept.children, locals: {depth: depth+1}, as: :concept %>
+<%= render partial: 'vocab/concepts/concept_tree', collection: concept.children.sort_by{|c| c.name(@language)}, locals: {depth: depth+1}, as: :concept %>
