@@ -1,112 +1,122 @@
-<% title @concept.name(@language) %>
-
-<% content_for :breadcrumbs do %>
-  <%= content_tag :li, link_to(@namespace.name, @namespace) %>
-  <%= content_tag :li, link_to('Vocabularies', namespace_vocab_schemes_path(@namespace)) %>
-  <%= content_tag :li, link_to(@scheme.title, namespace_vocab_scheme_path(@namespace, @scheme)) %>
-  <%= content_tag :li, link_to('Concepts', namespace_vocab_scheme_concepts_path(@namespace, @scheme)) %>
-  <%= content_tag :li, yield(:title), class: 'active' %>
-<% end %>
+<% title "#{@namespace.name} # #{@scheme.abbr} # #{@concept.name(@language)}" %>
 
 <% content_for :container do %>
-  <div class="vocab">
-    <div class="row --spacious">
-
-      <div class="col-md-9 main">
-        <div class="row">
-          <div class="col-md-6">
-            <h4 class='subhead'>Hierarchies</h4>
-            <% (@concept.root? ? [@concept] : @concept.ancestors.roots).each do |croot| %>
-              <table class="table table-simple">
-                <thead>
-                </thead>
-                <tbody>
-                  <%= render partial: 'vocab/concepts/concept_tree', collection: [croot], locals: { depth: 1 }, as: :concept %>
-            
-
-                </tbody>
-              </table>
+  <div class="wrapper vocab">
+    <div class="row">
+      <div class="col-md-12">
+        <%= content_tag :h4, class: 'h-condensed --spacing-20 --spacious-20' do %>
+          <%= link_to(background_image_div(@namespace.subclass, :small_thumb, {class: 'site-user-avatar'}), @namespace, title: @namespace.subclass.name, data: {toggle: "tooltip", placement: "bottom"}) %>
+          <%= link_to @namespace.name, @namespace, class: '' %>
+          <%= content_tag :span, ' # ', class: 'text-gray' %>
+          <%= content_tag :span, link_to('vocabularies', namespace_vocab_schemes_path(@namespace)) %>
+          <%= content_tag :span, ' # ', class: 'text-gray' %>
+          <%= content_tag :span, link_to(@scheme.abbr, namespace_vocab_scheme_path(@namespace, @scheme)) %>
+          <%= content_tag :span, ' # ', class: 'text-gray' %>
+          <%= content_tag :span, link_to('concepts', namespace_vocab_scheme_concepts_path(@namespace, @scheme)) %>
+        <% end %>
+        <hr>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-12">
+        <div id="vocabulary-scheme-<%= @scheme.id %>-concepts-<%= @concept.id %>">
+          <div class="heading-block">
+            <%= content_tag :h3, style: 'margin-top:0px;' do %>
+              <%= @concept.name %>
+              <%= link_to fa_icon('edit', text: 'Edit'), [:edit, @namespace, :vocab, @concept.scheme, @concept], class: 'btn btn-default btn-sm pull-right text-strong', style: 'margin-left: 5px;' if can?(:update, @concept) %>
+              <%= link_to fa_icon('trash', text: 'Delete'), [@namespace, :vocab, @concept.scheme, @concept], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default btn-sm pull-right text-strong', style: 'margin-left: 5px;' if can?(:destroy, @concept) %>
+              <%= link_to fa_icon('plus', text: 'Narrower concept'), new_namespace_vocab_scheme_concept_path(@namespace, @concept.scheme, broader_concept: @concept), class: 'btn btn-default btn-sm pull-right text-strong' if can?(:create, @scheme.concepts.build) %>
             <% end %>
-            <div id='related-matches'>
-              <div id="matches">
-                <h4 class='subhead --spacious'>Related matches</h4>
-                <div class="list-group">
-                  <% @concept.matches.each do |match| %>
-                    <%= link_to match.associatable.try(:uri), class: 'list-group-item' do %>
-                      <%= content_tag :span, match.associatable.try(:name), class: 'text-strong' %>
-                      <%= content_tag :span, "(#{match.associatable.try(:uri)})", class: 'text-small' %>
-                      <%= content_tag :span, match.property, class: 'text-italic' %> 
-                    <% end %>
-                  <% end %>
-                </div>
-                <%= content_tag :div do %>
-                  <h5 class="subhead">Backlinks</h5>
-                  <div class="list-group">
-                    <% @concept.object_matches.each do |match| %>
-                      <%= link_to match.concept.uri, class: 'list-group-item' do %>
-                        <%= content_tag :span, match.concept.name, class: 'text-strong' %>
-                        <%= content_tag :span, "(#{match.associatable.uri})", class: 'text-small' %>
-                        <%= content_tag :span, match.property, class: 'text-italic' %> 
-                      <% end %>
-                    <% end %>
-                  </div>
-                <% end if @concept.object_matches.any? %>
-              </div>
-            </div>
           </div>
-          <div class="col-md-6">
-            <h4>
-              Label: <%= content_tag :strong, @concept.name %><br>
-              <small>ID: <%= @concept.uuid %></small>
-            </h4>
-            <p><span class="text-strong">Typ: </span><%= @concept.type %></p>
-            <div id='definition'>
-              <h4 class='subhead --spacious'>Definition</h4>
-              <%= @definition.try(:body) %>
-            </div>
-          </div>
+          <ul class="list-unstyled">
+            <li><span class="text-strong">ID: </span> <%= @concept.uuid %></li>
+            <li><span class="text-strong">Type: </span><%= @concept.type %></li>
+          </ul>
         </div>
-        <div class="row --spacious">
-          <div class="col-md-12">
-            <h4 class='subhead --spacious'>Terms</h4>
-            <ul class="list-unstyled">
-              <% @concept.labels.each do |label| %>
-                <%= content_tag :li do %>
-                  <%= content_tag :span, label.body, class: 'text-strong' %>
-                  (
-                    <%= content_tag :span, 'Preferred, ' if label.type == 'Preferred' && !label.is_abbrevation?  %>
-                    <%= content_tag :span, label.language %>
-                  )
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <h4 class='subhead'>Hierarchies</h4>
+        <% (@concept.root? ? [@concept] : @concept.ancestors.roots).each do |croot| %>
+          <table class="table table-simple">
+            <thead>
+            </thead>
+            <tbody>
+              <%= render partial: 'vocab/concepts/concept_tree', collection: [croot], locals: { depth: 1 }, as: :concept %>
+            </tbody>
+          </table>
+        <% end %>
+        <div id='related-matches'>
+          <div id="matches">
+            <h4 class='subhead --spacious'>Related matches</h4>
+            <div class="list-group">
+              <% @concept.matches.each do |match| %>
+                <%= link_to match.associatable.try(:uri), class: 'list-group-item' do %>
+                  <%= content_tag :span, match.associatable.try(:name), class: 'text-strong' %>
+                  <%= content_tag :span, "(#{match.associatable.try(:uri)})", class: 'text-small' %>
+                  <%= content_tag :span, match.property, class: 'text-italic' %> 
                 <% end %>
               <% end %>
-            </ul>
-            <h4 class='subhead --spacious'>Additional notes</h4>
-            <% @other_definitions.each do |definition| %>
-              <%= content_tag :p do %>
-                <%= content_tag :span, '['+definition.language+']... ' %>
-                <%= content_tag :span, definition.body %>
-              <% end %>
-            <% end %>
+            </div>
+            <%= content_tag :div do %>
+              <h5 class="subhead">Backlinks</h5>
+              <div class="list-group">
+                <% @concept.object_matches.each do |match| %>
+                  <%= link_to match.concept.uri, class: 'list-group-item' do %>
+                    <%= content_tag :span, match.concept.name, class: 'text-strong' %>
+                    <%= content_tag :span, "(#{match.associatable.uri})", class: 'text-small' %>
+                    <%= content_tag :span, match.property, class: 'text-italic' %> 
+                  <% end %>
+                <% end %>
+              </div>
+            <% end if @concept.object_matches.any? %>
           </div>
         </div>
       </div>
-      <%= content_tag :div, class: 'col-md-3 sidebar' do %>
-        <div class="list-group" id="actions">
-          <%= link_to fa_icon('angle-up', text: "#{@concept.scheme.title} concepts"), namespace_vocab_scheme_concepts_path(@namespace, @concept.scheme), class: 'list-group-item' %>
-          <%= link_to fa_icon('edit', text: 'Edit'), [:edit, @namespace, :vocab, @concept.scheme, @concept], class: 'list-group-item' if can?(:update, @concept) %>
-          <%= link_to fa_icon('trash', text: 'Delete'), [@namespace, :vocab, @concept.scheme, @concept], method: :delete, data: { confirm: 'Are you sure?' }, class: 'list-group-item' if can?(:destroy, @concept) %>
-          <%= link_to fa_icon('plus', text: 'Create narrower concept'), new_namespace_vocab_scheme_concept_path(@namespace, @concept.scheme, broader_concept: @concept), class: 'list-group-item' if can?(:create, @scheme.concepts.build) %>
-          
+      <div class="col-md-8">
+        <div id='definition'>
+          <h4 class='subhead'>Definition</h4>
+          <%= @definition.try(:body) %>
         </div>
-        <div class="list-group" id="representations">
-          <h4 class="--spacious">Representations</h4>
-          <%= link_to fa_icon('link', text: 'HTML'), [@namespace, :vocab, @concept.scheme, @concept, format: :html], class: 'list-group-item' %>
-          <%= link_to fa_icon('link', text: 'JSON'), [@namespace, :vocab, @concept.scheme, @concept, format: :json], class: 'list-group-item disabled' %>
-          <%= link_to fa_icon('link', text: 'RDF/XML'), [@namespace, :vocab, @concept.scheme, @concept, format: :rdf], class: 'list-group-item disabled' %>
-          <%= link_to fa_icon('link', text: 'RDF/TURTLE'), [@namespace, :vocab, @concept.scheme, @concept, format: :ttl], class: 'list-group-item disabled' %>
-          <%= link_to fa_icon('link', text: 'RDF/NTRIPLES'), [@namespace, :vocab, @concept.scheme, @concept, format: :nt], class: 'list-group-item disabled' %>
+        <div class="row">
+          <div class="col-md-8">
+            <div id="terms">
+              <h4 class='subhead --spacious'>Terms</h4>
+              <ul class="list-unstyled">
+                <% @concept.labels.each do |label| %>
+                  <%= content_tag :li do %>
+                    <%= content_tag :span, label.body, class: 'text-strong' %>
+                    (
+                      <%= content_tag :span, 'Preferred, ' if label.type == 'Preferred' && !label.is_abbrevation?  %>
+                      <%= content_tag :span, label.language %>
+                    )
+                  <% end %>
+                <% end %>
+              </ul>
+            </div>
+            <div id="notes">
+              <h4 class='subhead --spacious'>Additional notes</h4>
+              <% @other_definitions.each do |definition| %>
+                <%= content_tag :p do %>
+                  <%= content_tag :span, '['+definition.language+']... ' %>
+                  <%= content_tag :span, definition.body %>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+          <%= content_tag :div, class: 'col-md-4 sidebar' do %>
+            <div class="list-group" id="representations">
+              <h4 class="--spacious">Representations</h4>
+              <%= link_to fa_icon('link', text: 'HTML'), [@namespace, :vocab, @concept.scheme, @concept, format: :html], class: 'list-group-item' %>
+              <%= link_to fa_icon('link', text: 'JSON'), [@namespace, :vocab, @concept.scheme, @concept, format: :json], class: 'list-group-item disabled' %>
+              <%= link_to fa_icon('link', text: 'RDF/XML'), [@namespace, :vocab, @concept.scheme, @concept, format: :rdf], class: 'list-group-item disabled' %>
+              <%= link_to fa_icon('link', text: 'RDF/TURTLE'), [@namespace, :vocab, @concept.scheme, @concept, format: :ttl], class: 'list-group-item disabled' %>
+              <%= link_to fa_icon('link', text: 'RDF/NTRIPLES'), [@namespace, :vocab, @concept.scheme, @concept, format: :nt], class: 'list-group-item disabled' %>
+            </div>
+          <% end %>
         </div>
-      <% end %>
+      </div>
     </div>
   </div>
 <% end %>

@@ -1,29 +1,59 @@
-<% title "Concepts" %>
-
-<% content_for :breadcrumbs do %>
-  <%= content_tag :li, link_to(@namespace.name, @namespace) %>
-  <%= content_tag :li, link_to('Vocabularies', namespace_vocab_schemes_path(@namespace)) %>
-  <%= content_tag :li, link_to(@scheme.title, namespace_vocab_scheme_path(@namespace, @scheme)) %>
-  <%= content_tag :li, yield(:title), class: 'active' %>
-<% end %>
+<% title "#{@namespace.name} # #{@scheme.abbr} # concepts" %>
 
 <% content_for :container do %>
-  <div class="vocab">
-    <div class="row --spacious">
+  <div class="wrapper vocab">
+    <div class="row">
+      <div class="col-md-12">
+        <%= content_tag :h4, class: 'h-condensed --spacing-20 --spacious-20' do %>
+          <%= link_to(background_image_div(@namespace.subclass, :small_thumb, {class: 'site-user-avatar'}), @namespace, title: @namespace.subclass.name, data: {toggle: "tooltip", placement: "bottom"}) %>
+          <%= link_to @namespace.name, @namespace, class: '' %>
+          <%= content_tag :span, ' # ', class: 'text-gray' %>
+          <%= content_tag :span, link_to('vocabularies', namespace_vocab_schemes_path(@namespace)) %>
+          <%= content_tag :span, ' # ', class: 'text-gray' %>
+          <%= content_tag :span, link_to(@scheme.abbr, namespace_vocab_scheme_path(@namespace, @scheme)) %>
+        <% end %>
+        <hr>
+      </div>
+    </div>
+    <div class="row">
       <div class="col-sm-12 col-md-8 main">
-        <table class="table table-simple">
-          <thead>
-          </thead>
-          <tbody>
-            <%= render partial: 'vocab/concepts/concept_tree', collection: @concepts, locals: { depth: 1 }, as: :concept %>
-          </tbody>
-        </table>
+        <div id="vocabulary-scheme-<%= @scheme.id %>-concepts">
+          <div class="heading-block">
+            <%= content_tag :h3, style: 'margin-top:0px;' do %>
+              Concepts
+              <%= link_to fa_icon('plus', text: 'Concept'), [:new, @namespace, :vocab, @scheme, :concept], class: 'btn btn-default btn-sm pull-right text-strong', style: 'margin-left: 5px;' if can? :create, @scheme.concepts.build %>
+              <%= link_to fa_icon('plus', text: 'Collection'), [:new, @namespace, :vocab, @scheme, :concept, type: 'Collection'], class: 'btn btn-default btn-sm pull-right text-strong' if can? :create, @scheme.concepts.build %>
+        
+            <% end %>
+          </div>
+          <% if @flat %>
+            <div class="list-group">
+              <%= render @concepts %>
+            </div>
+          <% else %>
+            <table class="table table-simple">
+              <thead>
+              </thead>
+              <tbody>
+                <%= render partial: 'vocab/concepts/concept_tree', collection: @concepts.roots, locals: { depth: 1 }, as: :concept %>
+              </tbody>
+            </table>
+          <% end %>
+        </div>
       </div>
       <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
-        <div class="list-group">
-          <%= link_to fa_icon('angle-up', text: @scheme.title), namespace_vocab_scheme_path(@namespace, @scheme), class: 'list-group-item' %>
-          <%= link_to fa_icon('plus', text: 'New concept'), [:new, @namespace, :vocab, @scheme, :concept], class: 'list-group-item' if can? :create, @scheme.concepts.build %>
-          <%= link_to fa_icon('plus', text: 'New collection'), [:new, @namespace, :vocab, @scheme, :concept, type: 'Collection'], class: 'list-group-item' if can? :create, @scheme.concepts.build %>
+        <div class="vocab-search">
+          <%= form_tag namespace_vocab_scheme_search_path(@namespace, @scheme), method: :get, class: "" do %>
+            <%= search_field_tag 'q', params[:q], placeholder: "Search in #{@scheme.abbr} concepts ...", class: "form-control", autofocus: true %>
+          <% end %>
+          <%= content_tag :div, class: 'text-small --spacious-10' do %>
+            <% if @flat %>
+              <%= pluralize(@concepts.total_count, 'result') %>. 
+              <%= link_to("View all concepts in #{@scheme.abbr}.", [@namespace, :vocab, @scheme, :concepts]) %>
+            <% else %>
+              <%= pluralize(@concepts.count, 'concept') %>.
+            <% end %>
+          <% end %>
         </div>
       <% end %>
     </div>

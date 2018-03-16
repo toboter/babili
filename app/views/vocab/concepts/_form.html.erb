@@ -80,7 +80,7 @@
           <div class="col-md-6">
             <hr>
             <%= f.submit class: 'btn btn-primary' %>
-            <%= link_to 'Cancel', (f.object.new_record? ? namespace_vocab_scheme_concepts_path(@namespace, @scheme) : namespace_vocab_scheme_concept_path(@namespace, @scheme, @concept)), class: "btn btn-default" %>
+            <%= link_to 'Cancel', (f.object.new_record? ? (params[:broader_concept] ? namespace_vocab_scheme_concept_path(@namespace, @scheme, f.object.broader_concepts.first) : namespace_vocab_scheme_concepts_path(@namespace, @scheme)) : namespace_vocab_scheme_concept_path(@namespace, @scheme, @concept)), class: "btn btn-default" %>
           </div>
         </div>
       <% end %>

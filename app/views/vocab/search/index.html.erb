@@ -14,10 +14,12 @@
         </div>
       </div>
       <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
-        <div class="list-group">
-          <%= render 'vocab/search/box' %>
-          <%= link_to fa_icon('angle-double-right', text: 'Vocabularies'), vocab_path, class: 'list-group-item' %>
+        <div class="vocab-search">
+          <%= form_tag vocab_search_path, method: :get, class: "" do %>
+            <%= search_field_tag 'q', params[:q], placeholder: "Search in all concepts ...", class: "form-control", autofocus: true %>
+          <% end %>
         </div>
+        <%= content_tag :div, link_to('Get an overview.', vocab_path, class: 'text-small'), class: 'links --spacious-10' %>
       <% end %>
     </div>
   </div>

@@ -12,13 +12,17 @@
             anyone the possibility to name things in a heterogenus way, while still acting with a common idea.
           </p>
         </div>
-        <%= render 'vocab/search/box' %>
+        <div class="vocab-search --spacing-20">
+          <%= form_tag vocab_search_path, method: :get, class: "" do %>
+            <%= search_field_tag 'q', params[:q], placeholder: "Search in all concepts ...", class: "form-control", autofocus: true %>
+          <% end %>
+        </div>
         <div class="row schemes">
           <% @schemes.order(created_at: :desc).each do |scheme| %>
             <div class="col-md-12 --spacious">
               <div class="">
                 <div class="">
-                  <%= content_tag :h3, "#{link_to(scheme.namespace.name, scheme.namespace)} / #{link_to(scheme.title, [scheme.namespace, :vocab, scheme], class: 'text-strong')}".html_safe, class: 'text-strong' %>                   
+                  <%= content_tag :h3, "#{link_to(scheme.namespace.name, scheme.namespace)} # #{link_to(scheme.title, [scheme.namespace, :vocab, scheme], class: 'text-strong')}".html_safe, class: 'text-strong' %>                   
                 </div>
                 <div class="definition">
                   <%= content_tag :p, scheme.definition, class: 'definition-text' %>

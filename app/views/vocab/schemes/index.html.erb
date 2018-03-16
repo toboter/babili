@@ -1,23 +1,30 @@
-<% title 'Vocabularies' %>
-
-<% content_for :breadcrumbs do %>
-  <%= content_tag :li, link_to(@namespace.name, @namespace) %>
-  <%= content_tag :li, yield(:title), class: 'active' %>
-<% end %>
+<% title "#{@namespace.name} vocabularies", false %>
 
 <% content_for :container do %>
-  <div class="vocab">
-    <div class="row --spacious">
+  <div class="wrapper vocab">
+    <div class="row">
+      <div class="col-md-12">
+        <%= content_tag :h4, class: 'h-condensed --spacing-20 --spacious-20' do %>
+          <%= link_to(background_image_div(@namespace.subclass, :small_thumb, {class: 'site-user-avatar'}), @namespace, title: @namespace.subclass.name, data: {toggle: "tooltip", placement: "bottom"}) %>
+          <%= link_to @namespace.name, @namespace, class: '' %> <%= content_tag :span, '# vocabularies', class: 'text-gray' %>
+        <% end %>
+        <hr>
+      </div>
+    </div>
+    <div class="row">
       <div class="col-sm-12 col-md-8 main">
-        <div class="list-group">
-          <%= render @schemes %>
+        <div id='vocabulary-schemes'>
+          <% if @schemes.any? %>
+            <%= render @schemes %>
+          <% else %>
+            <%= content_tag :p, 'Nothing here', class: 'text-muted text-italic' %>
+          <% end %>
         </div>
-        <%= link_to 'Get an overview.', vocab_path, class: 'text-small' %>
+        <%= content_tag :div, link_to('Get an overview.', vocab_path, class: 'text-small'), class: 'links --spacious-10' %>
       </div>
       <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
-          <%= link_to fa_icon('plus', text: "Create a new vocabulary scheme".html_safe), [:new, @namespace, :vocab, :scheme], class: 'btn btn-default text-strong pull-right' %>
+        <%= link_to fa_icon('plus', text: "Create a new vocabulary".html_safe), [:new, @namespace, :vocab, :scheme], class: 'btn btn-default text-strong pull-right' %>
       <% end %>
     </div>
   </div>
 <% end %>
-

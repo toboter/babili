@@ -5,7 +5,12 @@ class Vocab::ConceptsController < ApplicationController
   before_action :set_language
 
   def index
-    @concepts = @concepts.roots
+    if params[:q].present?
+      @concepts = Vocab::Concept.search(params[:q], 
+        fields: [:type, :narrower, 'labels^20', 'notes^5', :matches], 
+        where: { id: @concepts.ids })
+      @flat = true
+    end
   end
 
   def show

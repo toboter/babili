@@ -258,6 +258,7 @@ Rails.application.routes.draw do
     resources :applications
     namespace :vocab, path: 'vocabularies' do
       resources :schemes, path: '' do
+        get :search, to: 'concepts#index'
         resources :concepts
       end
     end

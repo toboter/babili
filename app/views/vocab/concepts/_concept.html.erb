@@ -1,3 +1,4 @@
 <%= link_to namespace_vocab_scheme_concept_path(concept.scheme.namespace, concept.scheme, concept), class: 'list-group-item' do %>
-  <%= content_tag :span, concept.name, class: 'text-strong', style: '' %>
+  <%= content_tag :span, concept.name(@language), class: 'text-strong', style: '' %>
+  <%= content_tag :span, '(' + concept.ancestors.reverse.map{|a| a.name(@language)}.join(', ') + ')', class: 'text-muted text-small', style: 'margin-left:5px;' if !concept.root? %>
 <% end %>
