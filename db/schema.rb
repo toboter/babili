@@ -38,10 +38,12 @@ ActiveRecord::Schema.define(version: 20180308093952) do
     t.jsonb "origin"
     t.jsonb "processors"
     t.datetime "commited_at"
+    t.string "slug"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["creator_id"], name: "index_aggregation_events_on_creator_id"
     t.index ["repository_id"], name: "index_aggregation_events_on_repository_id"
+    t.index ["slug"], name: "index_aggregation_events_on_slug"
     t.index ["type"], name: "index_aggregation_events_on_type"
   end
 
@@ -64,10 +66,12 @@ ActiveRecord::Schema.define(version: 20180308093952) do
     t.integer "repository_id"
     t.integer "pref_identifier_id"
     t.string "type"
+    t.string "slug"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["pref_identifier_id"], name: "index_aggregation_items_on_pref_identifier_id"
     t.index ["repository_id"], name: "index_aggregation_items_on_repository_id"
+    t.index ["slug"], name: "index_aggregation_items_on_slug"
     t.index ["type"], name: "index_aggregation_items_on_type"
   end
 

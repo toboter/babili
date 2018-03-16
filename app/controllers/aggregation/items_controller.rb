@@ -1,7 +1,7 @@
 class Aggregation::ItemsController < ApplicationController
   load_and_authorize_resource :namespace
   load_and_authorize_resource :repository, through: :namespace
-  load_and_authorize_resource :items, through: :repository, class: 'Aggregation::Item'
+  load_and_authorize_resource through: :repository
   layout 'repo'
 
   def index

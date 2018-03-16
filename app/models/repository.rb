@@ -12,8 +12,9 @@ class Repository < ApplicationRecord
 
   belongs_to :owner, class_name: 'Namespace', foreign_key: :namespace_id
   belongs_to :creator, class_name: 'Person'
-  has_many :items, class_name: 'Aggregation::Item', dependent: :destroy
   has_many :commit_events, class_name: 'Aggregation::Event', dependent: :destroy
+  has_many :commits, through: :commit_events, class_name: 'Aggregation::Commit'
+  has_many :items, -> { distinct }, through: :commits, class_name: 'Aggregation::Item'
 
   validates :name, 
     presence: true

@@ -12,11 +12,13 @@ class CreateAggregation < ActiveRecord::Migration[5.1]
       # saved procedures? user definded mappings?
       t.jsonb    :processors # primary_id_label || id, other_identificator_labels [], 
       t.datetime :commited_at # if present?: locked.
+      t.string   :slug
       t.timestamps
     end
     add_index :aggregation_events, :repository_id
     add_index :aggregation_events, :creator_id
     add_index :aggregation_events, :type
+    add_index :aggregation_events, :slug
 
     create_table :aggregation_commits do |t|
       t.integer  :item_id
@@ -31,15 +33,23 @@ class CreateAggregation < ActiveRecord::Migration[5.1]
     add_index :aggregation_commits, :origin_commit_id
     add_index :aggregation_commits, :creator_id
 
+
+    # Primärschlussel ist wichtig
     create_table :aggregation_items do |t|
-      t.integer  :repository_id
-      t.integer  :pref_identifier_id #()
-      t.string   :type # ArtifactResource, LiteratureResource, ArchivalResource
+      t.integer  :repository_id # das ist der index über die enthaltenen objekte
+      # items listet alle eindeutigen primärschlüssel_ids eines repo auf. 
+      # items : identifiers = m : n
+      t.integer  :pref_identifier_id # primärer schlüssel eines dokuments; 
+      # kopierte Objekte in anderen repos bekommen auch dieses element angezeigt. 
+      # das es angezeigt wird ist dem vorhandensein eines commits in einem repo geschuldet.
+      t.string   :type # CustomResource ArtifactResource, LiteratureResource, ArchivalResource
+      t.string   :slug
       t.timestamps
     end
     add_index :aggregation_items, :repository_id
     add_index :aggregation_items, :pref_identifier_id
     add_index :aggregation_items, :type
+    add_index :aggregation_items, :slug
 
     create_table :aggregation_identifications do |t|
       t.integer  :item_id
@@ -48,9 +58,9 @@ class CreateAggregation < ActiveRecord::Migration[5.1]
     add_index :aggregation_identifications, [:item_id, :identifier_id]
     
     create_table :aggregation_identifiers do |t|
-      t.string   :origin_id
-      t.string   :origin_type
-      t.string   :origin_agent_id # -> wer hat die id vergeben?
+      t.string   :origin_id       # bspw. 'VA Bab 03563', '2051455', 'Bab26764.02'; 
+      t.string   :origin_type     # _label bspw. 'Ident.Nr.', 'ISIL (ISO 15511)/Obj.ID', 'BabRel'
+      t.string   :origin_agent_id # -> wer hat die id vergeben?; bspw. 'VAM', 'DE-MUS-815718', 'Olof Pedersén'
       t.timestamps
     end
     add_index :aggregation_identifiers, :origin_id
