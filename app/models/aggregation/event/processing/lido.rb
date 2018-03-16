@@ -1,4 +1,4 @@
-module Processing::Lido
+module Lido
 
   def original_id
     data.extend(Hashie::Extensions::DeepLocate)
