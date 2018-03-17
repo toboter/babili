@@ -17,9 +17,9 @@
             <%= search_field_tag 'q', params[:q], placeholder: "Search in all concepts ...", class: "form-control", autofocus: true %>
           <% end %>
         </div>
-        <div class="row schemes">
+        <div class="row schemes --spacious">
           <% @schemes.order(created_at: :desc).each do |scheme| %>
-            <div class="col-md-12 --spacious">
+            <div class="col-md-12">
               <div class="">
                 <div class="">
                   <%= content_tag :h3, "#{link_to(scheme.namespace.name, scheme.namespace)} # #{link_to(scheme.title, [scheme.namespace, :vocab, scheme], class: 'text-strong')}".html_safe, class: 'text-strong' %>                   
@@ -27,6 +27,7 @@
                 <div class="definition">
                   <%= content_tag :p, scheme.definition, class: 'definition-text' %>
                 </div>
+                <hr>
               </div>
             </div>
           <% end %>

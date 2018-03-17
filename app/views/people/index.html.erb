@@ -1,13 +1,21 @@
-<% title 'People', false %>
+<% title "Research people", false %>
 
-<% content_for :breadcrumbs do %>
-  <%= content_tag :li, yield(:title), class: 'active' %>
-<% end %>
-
-<div class="row list-group">
-  <% @people.each do |person| %>
-    <div class="col-md-12" style="margin-bottom:20px;">
-      <%= render person %>
+<% content_for :container do %>
+  <div class="wrapper">
+    <div class="row">
+      <div class="col-md-12">
+        <%= content_tag :h4, class: 'h-condensed --spacing-20 --spacious-20' do %>
+          <%= link_to 'Research', research_path, class: '' %> <%= content_tag :span, ' ::people', class: 'text-gray' %>
+        <% end %>
+        <hr>
+      </div>
     </div>
-  <% end %>
-</div>
+    <div class="row">
+      <div class="col-sm-12 col-md-12">
+        <div id='people-list'>
+          <%= render @people %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

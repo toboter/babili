@@ -7,6 +7,7 @@
         <%= content_tag :h4, class: 'h-condensed --spacing-20 --spacious-20' do %>
           <%= link_to(background_image_div(@namespace.subclass, :small_thumb, {class: 'site-user-avatar'}), @namespace, title: @namespace.subclass.name, data: {toggle: "tooltip", placement: "bottom"}) %>
           <%= link_to @namespace.name, @namespace, class: '' %> <%= content_tag :span, '# vocabularies', class: 'text-gray' %>
+          <%= link_to fa_icon('plus', text: "Create a new vocabulary".html_safe), [:new, @namespace, :vocab, :scheme], class: 'btn btn-default btn-sm text-strong pull-right' if can?(:create, [@namespace, :vocab]) %>
         <% end %>
         <hr>
       </div>
@@ -23,7 +24,7 @@
         <%= content_tag :div, link_to('Get an overview.', vocab_path, class: 'text-small'), class: 'links --spacious-10' %>
       </div>
       <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
-        <%= link_to fa_icon('plus', text: "Create a new vocabulary".html_safe), [:new, @namespace, :vocab, :scheme], class: 'btn btn-default text-strong pull-right' %>
+        
       <% end %>
     </div>
   </div>

@@ -1,0 +1,28 @@
+<% title "#{@namespace.name} people", false %>
+
+<% content_for :container do %>
+  <div class="wrapper members">
+    <div class="row">
+      <div class="col-md-12">
+        <%= content_tag :h4, class: 'h-condensed --spacing-20 --spacious-20' do %>
+          <%= link_to(background_image_div(@namespace.subclass, :small_thumb, {class: 'site-user-avatar'}), @namespace, title: @namespace.subclass.name, data: {toggle: "tooltip", placement: "bottom"}) %>
+          <%= link_to @namespace.name, @namespace, class: '' %> <%= content_tag :span, '@ people', class: 'text-gray' %>
+          <%= link_to fa_icon('edit', text: "Manage memberships"), edit_settings_organization_path(@namespace.subclass), class: 'btn btn-default btn-sm text-strong pull-right' if can?(:edit, @namespace.subclass) %>
+        <% end %>
+        <hr>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-12">
+        <div id='vocabulary-schemes'>
+          <% if @members.any? %>
+            <%= render @members, organization: @namespace.subclass %>
+          <% else %>
+            <%= content_tag :p, 'No members yet.', class: 'text-muted text-italic' %>
+          <% end %>
+        </div>
+        <%= content_tag :div, link_to('View all people.', people_path, class: 'text-small'), class: 'links --spacious-10' %>
+      </div>
+    </div>
+  </div>
+<% end %>

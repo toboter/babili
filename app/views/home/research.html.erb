@@ -36,15 +36,13 @@
         </p>
       </div>
       <div class="row">
-        <% @people.each do |person| %>
-          <div class="col-md-12" style="margin-bottom:20px;">
-            <%= render person %>
-          </div>
-        <% end %>
+        <div class="col-md-12">
+          <%= render @people %>
+        </div>
       </div>
       <div class="row">
         <div class="col-md-12">
-          <%= link_to 'Meet more', people_path %>
+          <%= link_to 'Meet more.', people_path %>
           <%= content_tag :span, ('or ' + link_to('Sign up', new_user_registration_path)).html_safe unless user_signed_in? %>
         </div>
       </div>

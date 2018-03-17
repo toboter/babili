@@ -5,6 +5,8 @@ class Vocab::SchemesController < ApplicationController
   before_action :set_language
 
   def index
+    # Sind in Organisationen die Vokabulare der Mitglieder automatisch Teil des Organisationsvokabulars?
+    # @schemes = (@schemes + @namespace.accessors.map(&:namespace).map(&:schemes).flatten).uniq
     # Vocab::Scheme.new(abbr: 'aat', title: 'Art and Architecture Thesaurus', slug: 'aat')
   end
 

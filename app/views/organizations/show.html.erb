@@ -4,7 +4,7 @@
   <div class="row">
     <div class="col-md-5 --spacious">
       <%= render 'organizations/organization', organization: @organization, banner: true, actions: true, no_description: true %>
-      <div class="list-group-menu">
+      <div class="list-group-menu --spacious">
         <%= link_to namespace_repositories_path(@organization.namespace), class: 'list-group-item' do %>
           <%= fa_icon('angle-double-right', text: 'Repositories') %>
           <%= content_tag :span, @organization.namespace.repositories.count, class: 'badge' %>
@@ -13,7 +13,7 @@
           <%= fa_icon('angle-double-right', text: 'Vocabularies') %>
           <%= content_tag :span, @organization.namespace.schemes.count, class: 'badge' %>
         <% end %>
-        <%= link_to namespace_people_path(@organization.namespace), class: 'list-group-item' do %>
+        <%= link_to namespace_members_path(@organization.namespace), class: 'list-group-item' do %>
           <%= fa_icon('angle-double-right', text: 'People') %>
           <%= content_tag :span, @organization.memberships.count, class: 'badge' %>
         <% end %>
@@ -22,23 +22,20 @@
           <%= content_tag :span, @organization.oauth_accessibilities.count, class: 'badge' %>
         <% end %>
       </div>
-      <div class="--spacious row">
-        <div class="col-md-8 org-top-repos">
-          <h4>
+      <%= content_tag :div, class: "--spacious row" do %>
+        <div class="col-md-12 org-top-repos repositories">
+          <h4 class="--spacing-20">
             <%= link_to namespace_repositories_path(@organization.namespace), style: 'color: #586069;' do %>
               Repositories
             <% end %>
           </h4>
-          <% @organization.namespace.repositories.limit(3).each do |repo| %>
-            <%= repo.name %>
-            <hr>
-          <% end %>
+          <%= render @organization.namespace.repositories.limit(3) %>
         </div>
-      </div>
+      <% end if @organization.namespace.repositories.any? %>
       <div class="--spacious row">
         <div class="col-md-8 member-avatar-group">
           <h4>
-            <%= link_to namespace_people_path(@organization.namespace), style: 'color: #586069;' do %>
+            <%= link_to namespace_members_path(@organization.namespace), style: 'color: #586069;' do %>
               People
               <%= content_tag :span, @organization.memberships.count, class: 'pull-right no-link' %>
             <% end %>

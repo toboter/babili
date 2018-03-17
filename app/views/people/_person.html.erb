@@ -1,17 +1,19 @@
-<%= content_tag :div, id: "person-#{person.id}", class: 'media list-group-item', style: "min-height:100px;" do %>
+<%= content_tag :div, class: 'media', style: 'margin-top:0px;margin-bottom:0px;' do %>
   <div class="media-left">
     <%= link_to person.namespace do %>
-      <%= background_image_div(person, :small_thumb, {class: 'media-object img-circle', style: 'height:50px;width:50px; background-position:center;'}) %>
+      <%= background_image_div(person, :small_thumb, {class: 'media-object organization-member-avatar', style: 'height:50px;width:50px; background-position:center;'}) %>
     <% end %>
   </div>
   <div class="media-body">
-    <h4 class="media-heading"><%= link_to person.name, person.namespace %></h4>
+    <h4 class="media-heading">
+      <%= link_to person.name, person.namespace %>
+      <%= content_tag :span, fa_icon('unlock-alt'), data: {toggle: "tooltip", placement: "right"}, title: "Team admin" if local_assigns[:organization] && local_assigns[:organization].has_admin?(person) %>
+      <%= content_tag :span, fa_icon('universal-access'), data: {toggle: "tooltip", placement: "right"}, title: "Plattform admin" if person.is_admin? && !local_assigns[:organization]  %>
+    </h4>
     <p class="text-small text-muted">
-      <%= link_to truncate(person.about_me, length: 75, seperator: ' '), person.namespace, class: 'no-link' if person.about_me %>
+      <%= truncate(person.about_me, length: 75, seperator: ' ') if person.about_me %>
     </p>
     <%= content_tag :p, 'Inactive (Account has been deleted).', class: 'text-italic text-strong text-gray text-small' if !person.user %>
   </div>
-  <div class="media-right">
-    <%= content_tag :span, fa_icon('universal-access'), data: {toggle: "tooltip", placement: "left"}, title: "Administrator" if person.is_admin? %>
-  </div>
+  <hr>
 <% end %>

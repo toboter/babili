@@ -39,6 +39,8 @@ class Vocab::Concept < ApplicationRecord
   accepts_nested_attributes_for :notes, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :matches, reject_if: :all_blank, allow_destroy: true
 
+  validates :status, :type, :creator, :scheme, :uuid, presence: true
+
   def search_data
     {
       broader: broader_concepts.map(&:name).join(' '),

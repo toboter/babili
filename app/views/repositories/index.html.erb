@@ -7,6 +7,7 @@
         <%= content_tag :h4, class: 'h-condensed --spacing-20 --spacious-20' do %>
           <%= link_to(background_image_div(@namespace.subclass, :small_thumb, {class: 'site-user-avatar'}), @namespace, title: @namespace.subclass.name, data: {toggle: "tooltip", placement: "bottom"}) %>
           <%= link_to @namespace.name, @namespace, class: '' %> <%= content_tag :span, '/ repositories', class: 'text-gray' %>
+          <%= link_to fa_icon('plus', text: "Create a new repository"), [:new, @namespace, :repository], class: 'btn btn-default btn-sm text-strong pull-right' if can?(:create, [@namespace, :repository]) %>
         <% end %>
         <hr>
       </div>

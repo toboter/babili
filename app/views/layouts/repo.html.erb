@@ -1,26 +1,28 @@
 <% title "#{@namespace.name} / #{@repository.name}: #{@repository.description}", false %>
 
 <% content_for :container do %>
-  <div class="row">
-    <div class="col-md-12">
-      <%= content_tag :h4, class: 'h-condensed --spacing-20 --spacious-20' do %>
-        <%= fa_icon('table') %>
-        <%= link_to @namespace.name, @namespace, class: '' %> / 
-        <%= link_to @repository.name, [@namespace, @repository], class: 'text-strong' %>
+  <div class="wrapper repositories">
+    <div class="row">
+      <div class="col-md-12">
+        <%= content_tag :h4, class: 'h-condensed --spacing-20 --spacious-20' do %>
+          <%= fa_icon('table') %>
+          <%= link_to @namespace.name, @namespace, class: '' %> / 
+          <%= link_to @repository.name, [@namespace, @repository], class: 'text-strong' %>
 
-        <%= link_to 'Copy', 'copy', title: "Copy the datasets of #{@repository.name} to your account.", class: 'btn btn-default btn-sm pull-right' %>
-      <% end %>
+          <%= link_to 'Copy', 'copy', title: "Copy the datasets of #{@repository.name} to your account.", class: 'btn btn-default btn-sm pull-right' %>
+        <% end %>
 
-      <ul class="nav nav-tabs" role="tablist">
-        <%= content_tag :li, link_to('Data', [@namespace, @repository]), class: "#{'active text-strong' if current_page?([@namespace, @repository])}" %>
-        <%= content_tag :li, link_to('Issues', [@namespace, @repository, :issues]), class: "#{'active text-strong' if current_page?([@namespace, @repository, :issues])}" %>
-      </ul>
+        <ul class="nav nav-tabs" role="tablist">
+          <%= content_tag :li, link_to('Data', [@namespace, @repository]), class: "#{'active text-strong' if current_page?([@namespace, @repository])}" %>
+          <%= content_tag :li, link_to('Issues', [@namespace, @repository, :issues]), class: "#{'active text-strong' if current_page?([@namespace, @repository, :issues])}" %>
+        </ul>
+      </div>
     </div>
-  </div>
 
-  <div class="row --spacious-20">
-    <div class="col-md-12">
-      <%= yield %>
+    <div class="row --spacious-20">
+      <div class="col-md-12">
+        <%= yield %>
+      </div>
     </div>
   </div>
 <% end %>

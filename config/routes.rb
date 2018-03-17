@@ -254,7 +254,7 @@ Rails.application.routes.draw do
   root to: "home#index"
   
   resources :namespaces, only: :show, path: '' do
-    resources :people
+    resources :members, only: :index
     resources :applications
     namespace :vocab, path: 'vocabularies' do
       resources :schemes, path: '' do

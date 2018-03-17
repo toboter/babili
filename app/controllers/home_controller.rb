@@ -17,8 +17,8 @@ class HomeController < ApplicationController
   end
 
   def research
-    @people = Person.limit(12).sort_by {|p| p.name}
-    @organizations = Organization.limit(8).sort_by {|p| p.name}
+    @people = Person.order("RANDOM()").limit(6).sort_by {|p| p.name}
+    @organizations = Organization.order("RANDOM()").limit(4).sort_by {|p| p.name}
   end
 
   def collections
