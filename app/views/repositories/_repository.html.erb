@@ -1,8 +1,16 @@
-<%= content_tag :h4, link_to(repository.name, [repository.owner, repository]), class: 'h-condensed text-strong' %>
-<%= content_tag :p, repository.description, class: 'text-gray' %>
-<%= content_tag :ul, class: 'repo-meta' do %>
-  <%= content_tag :li, class: 'meta-item' do %>
-    Updated <%= content_tag :abbr, time_ago_in_words(repository.updated_at), title: repository.updated_at, data: {toggle: "tooltip", placement: "bottom"} %> ago
+<div class="repo">
+  <%= content_tag :h4 do %>
+    <% if local_assigns[:namespace] %>
+      <%= link_to(repository.owner.name, repository.owner) %>
+      <%= content_tag :span, ' / ', class: 'text-gray' %>
+    <% end %>
+    <%= link_to(repository.name, [repository.owner, repository], class: 'h-condensed text-strong') %>
   <% end %>
-<% end %>
-<hr>
+  <%= content_tag :p, repository.description, class: 'text-gray' %>
+  <%= content_tag :ul, class: 'repo-meta' do %>
+    <%= content_tag :li, class: 'meta-item' do %>
+      Updated <%= content_tag :abbr, time_ago_in_words(repository.updated_at), title: repository.updated_at, data: {toggle: "tooltip", placement: "bottom"} %> ago
+    <% end %>
+  <% end %>
+  <hr>
+</div>

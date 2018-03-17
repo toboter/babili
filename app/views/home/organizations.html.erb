@@ -1,0 +1,21 @@
+<% title "Research teams", false %>
+
+<% content_for :container do %>
+  <div class="wrapper">
+    <div class="row">
+      <div class="col-md-12">
+        <%= content_tag :h4, class: 'h-condensed --spacing-20 --spacious-20' do %>
+          <%= link_to 'Research', research_path, class: '' %> <%= content_tag :span, ' ::teams', class: 'text-gray' %>
+        <% end %>
+        <hr>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-12">
+        <div id='orgs-list'>
+          <%= render @organizations, full: true, actions: true %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

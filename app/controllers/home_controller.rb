@@ -28,7 +28,20 @@ class HomeController < ApplicationController
   def explore
     @oread_applications = Oread::Application.order("RANDOM()")
     @showcased = Oread::Application.order("RANDOM()").first
-    @vocabularies = Vocab::Scheme.all
+    @vocabularies = Vocab::Scheme.order(created_at: :desc)
+    @repositories = Repository.order(created_at: :desc)
+  end
+
+  def people
+    @people = Person.order(family_name: :asc)
+  end
+
+  def organizations
+    @organizations = Organization.order(created_at: :desc)
+  end
+
+  def repositories
+    @repositories = Repository.order(created_at: :desc)
   end
   
 end

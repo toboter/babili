@@ -25,6 +25,10 @@ class Ability
         !vc.scheme.namespace.accessors.include?(user.person)
       end
       can :read, Vocab::Concept
+      cannot [:new, :edit, :create, :update, :destroy], Repository do |repo|
+        !repo.owner.accessors.include?(user.person)
+      end
+      can :read, Repository
 
       cannot :manage, [CMS::Novelity, CMS::HelpPage, CMS::HelpCategory, CMS::BlogCategory] unless user.is_admin?
       cannot :read, [CMS::HelpCategory, CMS::BlogCategory] unless user.is_admin?

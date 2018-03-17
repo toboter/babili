@@ -57,6 +57,10 @@
             and techniques to objects (like figurines), culture or excavation documentations and publications. 
             Learn more on the <%= link_to 'settings page', settings_oread_enrollments_path %>.
           </p>
+          <div class="--spacious --spacing">
+            <%= render @repositories.limit(3), namespace: true %>
+            <%= link_to 'View more.', repositories_path %>
+          </div>
         </div>
         <div class="row">
           <% for application in @oread_applications.limit(3) do %>

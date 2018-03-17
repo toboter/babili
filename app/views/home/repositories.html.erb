@@ -1,0 +1,19 @@
+<% title "Repositories", false %>
+
+<% content_for :container do %>
+  <div class="wrapper">
+    <div class="row">
+      <div class="col-md-12">
+        <%= content_tag :h4, class: 'h-condensed --spacing-20 --spacious-20' do %>
+          <%= link_to 'Explore', explore_path, class: '' %> <%= content_tag :span, ' ::repositories', class: 'text-gray' %>
+        <% end %>
+        <hr>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-12">
+        <%= render @repositories, namespace: true %>
+      </div>
+    </div>
+  </div>
+<% end %>

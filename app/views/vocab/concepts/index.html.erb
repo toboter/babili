@@ -11,6 +11,8 @@
           <%= content_tag :span, link_to('vocabularies', namespace_vocab_schemes_path(@namespace)) %>
           <%= content_tag :span, ' # ', class: 'text-gray' %>
           <%= content_tag :span, link_to(@scheme.abbr, namespace_vocab_scheme_path(@namespace, @scheme)) %>
+          <%= link_to fa_icon('plus', text: 'Concept'), [:new, @namespace, :vocab, @scheme, :concept], class: 'btn btn-default btn-sm pull-right text-strong', style: 'margin-left: 5px;' if can? :create, @scheme.concepts.build %>
+          <%= link_to fa_icon('plus', text: 'Collection'), [:new, @namespace, :vocab, @scheme, :concept, type: 'Collection'], class: 'btn btn-default btn-sm pull-right text-strong' if can? :create, @scheme.concepts.build %>
         <% end %>
         <hr>
       </div>
@@ -21,9 +23,6 @@
           <div class="heading-block">
             <%= content_tag :h3, style: 'margin-top:0px;' do %>
               Concepts
-              <%= link_to fa_icon('plus', text: 'Concept'), [:new, @namespace, :vocab, @scheme, :concept], class: 'btn btn-default btn-sm pull-right text-strong', style: 'margin-left: 5px;' if can? :create, @scheme.concepts.build %>
-              <%= link_to fa_icon('plus', text: 'Collection'), [:new, @namespace, :vocab, @scheme, :concept, type: 'Collection'], class: 'btn btn-default btn-sm pull-right text-strong' if can? :create, @scheme.concepts.build %>
-        
             <% end %>
           </div>
           <% if @flat %>

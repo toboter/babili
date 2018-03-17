@@ -29,7 +29,7 @@
   }
 }
 
-.members {
+.members, .people {
   a {
     color: #0366d6;
     span.no-link { color: #444;}
@@ -39,6 +39,16 @@
   }
 }
 
+.organization-member-avatar {
+  vertical-align: middle;
+  border-radius: 3px;
+  height:48px;
+  width:48px;
+  background-position:center;
+  display: inline-block;
+  margin-bottom: 3px;
+}
+
 .repos {
   a {
     color: #0366d6;
@@ -46,5 +56,28 @@
     h1, h2, h3, h4, h5 {
       color: #0366d6;
     }
+  }
+}
+
+.repo {
+  .repo-meta {
+      @extend .list-inline;
+      @extend .text-gray;
+      @extend .text-small;
+      margin-bottom: 20px;
+      .meta-item {
+      .author-avatar {
+          vertical-align: top;
+          border-radius: 3px;
+          height:18px;
+          width:18px; 
+          background-position:center;
+          display: inline-block;
+      }
+      }
+      .mid {
+      margin-left: 15px;
+      margin-right: 15px;
+      }
   }
 }
