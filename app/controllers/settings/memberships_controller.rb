@@ -1,4 +1,4 @@
-class MembershipsController < ApplicationController
+class Settings::MembershipsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_organization
 
@@ -28,7 +28,7 @@ class MembershipsController < ApplicationController
 
   private
   def set_organization
-    @organization = Organization.friendly.find(params[:settings_organization_id])
+    @organization = Organization.find(params[:organization_id])
   end
 
   def membership_params
