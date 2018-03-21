@@ -77,6 +77,8 @@ gem "rgeo-proj4"
 gem 'acts-as-taggable-on'
 gem 'roo'
 gem 'activerecord-import'
+gem 'xml-to-json'
+gem 'hashdiff'
 
 gem 'devise'
 gem 'doorkeeper'
@@ -92,5 +94,9 @@ gem 'acts_as_dag', git: 'https://github.com/toboter/acts_as_dag.git'
 # gem 'acts_as_dag', path: '/home/tschmidt/dev/gem_dev/acts_as_dag'
 gem 'language_list'
 gem 'hashie'
+
+source 'https://rails-assets.org' do
+  gem 'rails-assets-dropzone'
+end
 
 ruby '2.3.1'

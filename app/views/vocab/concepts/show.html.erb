@@ -88,7 +88,8 @@
                   <%= content_tag :li do %>
                     <%= content_tag :span, label.body, class: 'text-strong' %>
                     (
-                      <%= content_tag :span, 'Preferred, ' if label.type == 'Preferred' && !label.is_abbrevation?  %>
+                      <%= content_tag :span, label.type %>
+                      <%= content_tag :span, "[abbr.]" if label.is_abbrevation?  %>
                       <%= content_tag :span, label.language %>
                     )
                   <% end %>

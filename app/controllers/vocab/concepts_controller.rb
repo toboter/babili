@@ -15,7 +15,7 @@ class Vocab::ConceptsController < ApplicationController
 
   def show
     @definition = @concept.definitions.where(language: @language).first || @concept.definitions.first
-    @other_definitions = @concept.definitions-[@definition]
+    @other_definitions = @concept.notes-[@definition]
   end
 
   def new

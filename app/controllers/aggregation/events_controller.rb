@@ -1,48 +1,43 @@
 class Aggregation::EventsController < ApplicationController
   load_and_authorize_resource :namespace
   load_and_authorize_resource :repository, through: :namespace
-  load_and_authorize_resource through: :repository, through_association: :commit_events
+  load_and_authorize_resource through: :repository
   layout 'repo'
   
+  # vererbt an FileUpload, ListTransfer, ApiRequest
   def index
+    @events = @events.order(updated_at: :desc)
   end
 
-  def show
-    raise @event.inspect
-  end
-
-  def new
-  end
-
-  def edit
-  end
-
-  def create
-    @event.creator = current_person
-  end
-
-  def update
+  def commit
     respond_to do |format|
-      if @event.update(event_params)
-        format.html { redirect_to [@namespace, @repository], notice: 'Commit event updated.' }
-        format.json { render :show, status: :created, location: @event }
+      if @event.locked? 
+        format.html { redirect_to [@namespace, @repository], notice: "Already processed." }
+      elsif @event.update(commited_at: Time.now) && @event.process
+        format.html { redirect_to [@namespace, @repository], notice: "Your upload was successfuly processed." }
+        format.json { render :show, status: :ok, location: [@namespace, @repository, :aggregation, @event] }
       else
-        format.html { render :new }
-        format.json { render json: @event.errors, status: :unprocessable_entity }
+        format.html { render :edit }
+        format.json { render json: @repository.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  def commit
+  def destroy
+    @event.destroy
+    redirect_to namespace_repository_aggregation_events_path(@namespace, @repository)
   end
 
   private
-  def event_params
+  def resource_params
     params.require(:aggregation_event).permit(
+      :content_type,
+      :schema,
+      :primary_id_label,
+      :other_identificator_labels,
       :note,
-      :type,
-      :origin,
-      :processors
+      :description,
+      files: []
     )
   end
 end

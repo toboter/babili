@@ -1,0 +1,11 @@
+<div class="well">
+  <%= simple_form_for [@namespace, @repository, @upload_event], 
+    multipart: true, as: :aggregation_event,
+    url: namespace_repository_aggregation_event_upload_path(@namespace, @repository, @upload_event) do |f| %>
+    <%= f.input :note %>
+
+    <%= @upload_event.uploads.inspect %>
+
+    <%= f.submit %>
+  <% end %>
+</div>

@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="col-md-12">
+    <%= content_tag :h4, "Data event: #{@upload_event.slug}" %>
+    <div class="row">
+      <div class="col-sm-3">
+        <%= link_to(background_image_div(@upload_event.creator, :small_thumb, {class: 'site-user-avatar'}), @upload_event.creator.namespace) %>
+        <%= content_tag :p, link_to(@upload_event.creator.name, @upload_event.creator.namespace, class: 'text-strong') %>
+      </div>
+      <div class="col-sm-9">
+        <p>
+          <%= @upload_event.note %>
+          <%= content_tag :span, @upload_event.description, class: 'text-small text-muted' if @upload_event.description %>
+        </p>
+
+        <% if @upload_event.locked? %>
+          <h4>Commits</h4>
+          <%= render @upload_event.commits, view: 'event' %>
+        <% else %>
+          <%= @upload_event.uploads.inspect %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= link_to 'Commit data', commit_namespace_repository_aggregation_event_path(@namespace, @repository, @upload_event), method: :put, class: 'btn btn-success text-strong' unless @upload_event.locked? %>
+<%= link_to 'remove', namespace_repository_aggregation_event_path(@namespace, @repository, @upload_event), method: :delete unless @upload_event.locked? %>

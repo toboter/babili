@@ -1,0 +1,5 @@
+<%= link_to [@namespace, @repository, event], class: "list-group-item" do %>
+  <%= content_tag :span, fa_icon('check'), class: 'pull-right' if event.locked? %>
+  <%= content_tag :strong, event.slug %><br>
+  <%= content_tag :span, event.note, class: 'text-muted' %>
+<% end %>

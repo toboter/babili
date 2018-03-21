@@ -28,22 +28,32 @@
         <%= content_tag :li, link_to(fa_icon('object-ungroup', text: pluralize(@items.count, 'dataset')), '') %>
       </ul>
       <div class="nav navbar-nav navbar-right">
-        <%= link_to fa_icon('upload', text: 'Import data'), new_namespace_repository_aggregation_event_path(@namespace, @repository), title: "Import datasets from a file.", class: 'btn btn-default btn-sm text-strong navbar-btn', style: 'margin-right: 15px;margin-left: 15px;' %>
+        <%= link_to fa_icon('upload', text: 'Import data'), new_namespace_repository_aggregation_event_upload_event_path(@namespace, @repository), title: "Import datasets from a file.", class: 'btn btn-default btn-sm text-strong navbar-btn', style: 'margin-right: 15px;margin-left: 15px;' %>
       </div>
     </div>
   </nav>
 
+  <%= content_tag :div, class: '--spacious --spacing' do %>
+    <h4>Pending commits</h4>
+    <%= render partial: 'aggregation/events/event', collection: @repository.events.pending %>
+  <% end if @repository.events.pending.any? %>
+
   <div class="text-small" style="border: 1px solid #ddd;padding:10px;background-color: #f8f8f8;border-bottom:none;">
     <div style="display:inline;">
-      <%= link_to (background_image_div(@repository.commit_events.last.creator, :small_thumb, {class: 'site-user-avatar'})), @repository.commit_events.last.creator.namespace if @repository.commit_events.any? %>
-      <%= link_to @repository.commit_events.last.creator.name, @repository.commit_events.last.creator.namespace, class: 'text-strong' if @repository.commit_events.any? %>
-      <%= content_tag :span, "#{link_to @repository.commit_events.last.note, namespace_repository_datum_commit_path(@namespace, @repository, @repository.commit_events.last)}".html_safe if @repository.commit_events.any? %>
+      <%= link_to (background_image_div(@repository.events.commited.last.creator, :small_thumb, {class: 'site-user-avatar'})), @repository.events.commited.last.creator.namespace if @repository.events.commited.any? %>
+      <%= link_to @repository.events.commited.last.creator.name, @repository.events.commited.last.creator.namespace, class: 'text-strong' if @repository.events.commited.any? %>
+      <%= content_tag :span, "#{link_to @repository.events.commited.last.note, [@namespace, @repository, @repository.events.commited.last]}".html_safe if @repository.events.commited.any? %>
     </div>
-    <%= content_tag :span, "Last commit #{link_to @repository.commit_events.last.created_at, namespace_repository_datum_commit_path(@namespace, @repository, @repository.commit_events.last)}".html_safe, class: 'pull-right' if @repository.commit_events.any? %>
+    <% if @repository.events.any? %>
+      <%= content_tag :span, "Last data event #{link_to @repository.events.last.created_at, [@namespace, @repository, :aggregation, :events]}".html_safe, class: 'pull-right' %>
+    <% else %>
+      <%= content_tag :span, link_to('Pending commits', [@namespace, @repository, :aggregation, :events]), class: 'pull-right' %>
+    <% end %>
   </div>
   <table class="table table-simple">
     <tbody>
-      <%= render @items.limit(5) %>
+      <%= render @items %>
     </tbody>
   </table>
+  
 </div>

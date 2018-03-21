@@ -12,7 +12,10 @@
 # t.timestamps
 
 class Aggregation::Event < ApplicationRecord
+  extend FriendlyId
+  friendly_id :name, :use => :scoped, :scope => :repository
   TYPES = %w(FileUpload ApiRequest ListTransform)
+  attr_accessor :files
 
   belongs_to :repository
   belongs_to :creator, class_name: "Person"
@@ -22,10 +25,38 @@ class Aggregation::Event < ApplicationRecord
   
   validates :note, :creator, :repository, presence: true
 
+  scope :pending, -> {where(commited_at: nil)}
+  scope :commited, -> {where.not(commited_at: nil)}
+
+  def commit_items(resource_type, data)
+    if !data.is_a?(Array)
+      identifier = Aggregation::Identifier.where(origin_id: data[:identifier][:id], origin_type: data[:identifier][:type], origin_agent_id: data[:identifier][:agent]).first_or_create
+      item = Aggregation::Item.where(pref_identifier_id: identifier.id, repository_id: self.repository_id, type: resource_type).first_or_create
+      item.identifiers << identifier unless item.identifiers.include?(identifier)
+      data[:changeset] = item.commits.any? ? HashDiff.diff(data[:payload], JSON.parse( item.commits.last.try(:data).try(:[], 'payload').to_json, {:symbolize_names => true} )) : []
+      commit = (data[:changeset].present? || item.commits.empty?) ? Aggregation::Commit.create(item_id: item.id, event_id: self.id, creator_id: self.creator_id, data: data) : item.commits.last
+      return commit
+    elsif data.is_a?(Array)
+      # data is a array. import through AcitveRecord.import
+      commits = []
+      data.each do |element|
+        identifier = Aggregation::Identifier.where(origin_id: element[:identifier][:id], origin_type: element[:identifier][:type], origin_agent_id: element[:identifier][:agent]).first_or_create
+        item = Aggregation::Item.where(pref_identifier: identifier, repository_id: self.repository_id, type: resource_type).first_or_create
+        item.identifiers << identifier unless item.identifiers.include?(identifier)
+        element[:changeset] = item.commits.any? ? HashDiff.diff(element[:payload], item.commits.last.try(:data).try(:[], 'payload')) : []
+        commit = Aggregation::Commit.new(item_id: item.id, event_id: self.id, creator_id: self.creator_id, data: element)
+        commits << commit if element[:changeset].present? || item.commits.empty?
+      end
+      Aggregation::Commit.import commits
+    end
+  end
 
   def locked?
     commited_at.present?
   end
 
-  
+  def name
+    Time.now.to_formatted_s(:iso8601) 
+  end
+
 end

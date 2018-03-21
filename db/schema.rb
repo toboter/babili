@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180308093952) do
+ActiveRecord::Schema.define(version: 20180319131823) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -73,6 +73,14 @@ ActiveRecord::Schema.define(version: 20180308093952) do
     t.index ["repository_id"], name: "index_aggregation_items_on_repository_id"
     t.index ["slug"], name: "index_aggregation_items_on_slug"
     t.index ["type"], name: "index_aggregation_items_on_type"
+  end
+
+  create_table "aggregation_uploads", force: :cascade do |t|
+    t.integer "event_id"
+    t.text "file_data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_aggregation_uploads_on_event_id"
   end
 
   create_table "audits", id: :serial, force: :cascade do |t|

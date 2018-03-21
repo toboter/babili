@@ -1,0 +1,16 @@
+        <div class="col-sm-1">
+          <%= link_to(background_image_div(commit.creator, :small_thumb, {class: 'site-user-avatar'}), commit.creator.namespace) %>
+        </div>
+        <div class="col-sm-11">
+          <p class="clearfix">
+            <%= link_to commit.creator.name, commit.creator.namespace, class: 'text-small pull-left' %>
+            <%= content_tag(:span, "#{time_ago_in_words(commit.created_at)} ago", title: commit.created_at, data: {toggle: "tooltip", placement: "left"}, class: 'pull-right text-small') %>
+          </p>
+          <% if view == 'event' %>
+            <%= link_to commit.item.name, namespace_repository_aggregation_item_path(@namespace, @repository, commit.item), class: 'text-small' %>
+          <% elsif view == 'item' %>  
+            <%= link_to commit.event.note, [@namespace, @repository, commit.event], class: 'text-small' %>
+          <% end %><br>
+          <%= link_to commit.data['changeset'], namespace_repository_aggregation_item_commit_path(commit.item.repository.owner, commit.item.repository, commit.item, commit) %>
+          <hr>
+        </div>

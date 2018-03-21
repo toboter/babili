@@ -266,8 +266,16 @@ Rails.application.routes.draw do
       get :edit_topics, on: :member
       put :update_topics, on: :member
       namespace :aggregation, path: 'data' do
-        resources :events
-        resources :items, only: :show
+        namespace :event, path: 'events' do
+          resources :upload_events, path: 'upload', only: [:new, :show, :create]
+          # resources :list_transforms, only: [:new, :create] # gehört an lists/:id/transform
+        end
+        resources :events, only: [:index, :destroy] do
+          put 'commit', on: :member, to: 'events#commit'
+        end
+        resources :items, only: :show do 
+          resources :commits, only: [:index, :show]
+        end
       end
       resources :issues
     end

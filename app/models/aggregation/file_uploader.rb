@@ -1,5 +1,4 @@
-class Aggregation::Event::FileUploader < Shrine
-  plugin :activerecord
+class Aggregation::FileUploader < Shrine
   plugin :determine_mime_type
   plugin :logging, logger: Rails.logger
   plugin :remove_attachment

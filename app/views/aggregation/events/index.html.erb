@@ -1,0 +1,8 @@
+<div class="row">
+  <div class="col-md-12">
+    <%= content_tag :h4, 'Data events' %>
+    <div class="list-group">
+      <%= render partial: 'event', collection: @events %>
+    </div>
+  </div>
+</div>

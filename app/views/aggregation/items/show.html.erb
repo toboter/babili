@@ -1,1 +1,34 @@
-<%= @item.inspect %>
+<div class="row">
+  <div class="col-md-12">
+    <%= content_tag :h4, class: 'h-condensed --spacing-20 --spacious-20' do %>
+      <%= link_to @repository.name, [@namespace, @repository], class: '' %> 
+      <%= content_tag :span, '/ ', class: 'text-gray' %>
+      <%= content_tag :span, @item.name, class: '' %>
+    <% end %>
+    <ul class="list-unstyled">
+      <li>Id: <%= @item.pref_identifier.origin_id %></li>
+      <li>Label/Type: <%= @item.pref_identifier.origin_type %></li>
+      <li>Originator: <%= @item.pref_identifier.origin_agent_id %></li>
+      <li>Object type: <%= @item.type %></li>
+    </ul>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+  <table class="table table-striped">
+    <tbody>
+      <% @item.commits.last.data['payload'].each do |k,v| %>
+        <%= content_tag :tr do %>
+          <%= content_tag :th, k.humanize + ':' %>
+          <%= content_tag :td, v %>
+        <% end if v.present? %>
+        <% end %>
+    </tbody>
+  </table>
+  </div>
+  <div class="col-md-5 col-md-offset-1">
+    <div class="row">
+      <%= render @item.commits, view: 'item' %>
+  </div>
+</div>

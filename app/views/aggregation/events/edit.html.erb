@@ -1,9 +1,0 @@
-<div class="well">
-  <%= simple_form_for [@namespace, @repository, @commit], 
-    url: namespace_repository_datum_commit_path(@namespace, @repository),
-    as: :datum_commit do |f| %>
-    <%= f.input :identifier %>
-
-    <%= f.submit %>
-  <% end %>
-</div>
