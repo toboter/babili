@@ -87,13 +87,14 @@ gem 'active_model_serializers', '~> 0.10.0'
 gem 'rest-client'
 gem 'sidekiq'
 gem 'sinatra', git: 'https://github.com/sinatra/sinatra.git'
-gem "jsonb_accessor", "~> 1.0.0"
 gem 'sparql-client'
 gem 'linkeddata'
 gem 'acts_as_dag', git: 'https://github.com/toboter/acts_as_dag.git'
 # gem 'acts_as_dag', path: '/home/tschmidt/dev/gem_dev/acts_as_dag'
 gem 'language_list'
 gem 'hashie'
+# gem "jsonb_accessor", "~> 1.0.0"
+gem 'json_attribute', git: 'https://github.com/jrochkind/json_attribute.git'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-dropzone'

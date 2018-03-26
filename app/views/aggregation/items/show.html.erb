@@ -18,17 +18,12 @@
   <div class="col-md-6">
   <table class="table table-striped">
     <tbody>
-      <% @item.commits.last.data['payload'].each do |k,v| %>
-        <%= content_tag :tr do %>
-          <%= content_tag :th, k.humanize + ':' %>
-          <%= content_tag :td, v %>
-        <% end if v.present? %>
-        <% end %>
+      <%= @item.commits.last.data.inspect %>
     </tbody>
   </table>
   </div>
   <div class="col-md-5 col-md-offset-1">
     <div class="row">
-      <%= render @item.commits, view: 'item' %>
+      <%= render partial: 'aggregation/commits/commit', collection: @item.commits, locals: {view: 'item'} %>
   </div>
 </div>

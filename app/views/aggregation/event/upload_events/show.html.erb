@@ -14,7 +14,7 @@
 
         <% if @upload_event.locked? %>
           <h4>Commits</h4>
-          <%= render @upload_event.commits, view: 'event' %>
+          <%= render partial: 'aggregation/commits/commit', collection: @upload_event.commits, locals: {view: 'event'} %>
         <% else %>
           <%= @upload_event.uploads.inspect %>
         <% end %>

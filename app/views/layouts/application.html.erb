@@ -45,7 +45,7 @@
             <%= content_tag :li, class: "dropdown" do %>
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Blog<span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <% CMS::BlogPage.type_details_where(featured: true).order(created_at: :desc).limit(5).pluck(:slug, :title).each do |page| %>
+                <% CMS::BlogPage.featured.order(created_at: :desc).limit(5).pluck(:slug, :title).each do |page| %>
                   <%= content_tag :li, link_to(page.last, cms_blog_page_path(page.first)) %>
                 <% end %>
                 <li role="separator" class="divider"></li>

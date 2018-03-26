@@ -1,4 +1,12 @@
 GIT
+  remote: https://github.com/jrochkind/json_attribute.git
+  revision: c78b33a62c5ec163761692ad764c99d6516e1870
+  specs:
+    json_attribute (0.1.0)
+      activerecord (>= 5.0.0, < 5.3)
+      pg (>= 0.18.1)
+
+GIT
   remote: https://github.com/sinatra/sinatra.git
   revision: e0ba389c7bf30a27b1be4ea0a82f19abebc20bc6
   specs:
@@ -179,10 +187,6 @@ GEM
       multi_json (~> 1.12)
       rdf (>= 2.2, < 4.0)
     jsonapi-renderer (0.2.0)
-    jsonb_accessor (1.0.0)
-      activerecord (>= 5.0)
-      activesupport (>= 5.0)
-      pg (>= 0.18.1)
     language_list (1.2.1)
     ld-patch (0.3.3)
       ebnf (~> 1.1)
@@ -481,7 +485,7 @@ DEPENDENCIES
   jbuilder (~> 2.5)
   jquery-rails
   jquery-turbolinks
-  jsonb_accessor (~> 1.0.0)
+  json_attribute!
   language_list
   linkeddata
   listen (~> 3.0.5)

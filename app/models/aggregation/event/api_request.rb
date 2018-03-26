@@ -1,6 +1,8 @@
 class Aggregation::Event::ApiRequest < Aggregation::Event
+  include JsonAttribute::Record
+  include JsonAttribute::Record::QueryScopes
 
-  jsonb_accessor :origin,
-    request_url: :string
+  self.default_json_container_attribute = 'origin'
+  json_attribute :request_url, :string
 
 end

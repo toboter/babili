@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180319131823) do
+ActiveRecord::Schema.define(version: 20180323131251) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,10 +24,12 @@ ActiveRecord::Schema.define(version: 20180319131823) do
     t.jsonb "data", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "type"
     t.index ["creator_id"], name: "index_aggregation_commits_on_creator_id"
     t.index ["event_id"], name: "index_aggregation_commits_on_event_id"
     t.index ["item_id"], name: "index_aggregation_commits_on_item_id"
     t.index ["origin_commit_id"], name: "index_aggregation_commits_on_origin_commit_id"
+    t.index ["type"], name: "index_aggregation_commits_on_type"
   end
 
   create_table "aggregation_events", force: :cascade do |t|

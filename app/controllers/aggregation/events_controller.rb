@@ -13,7 +13,7 @@ class Aggregation::EventsController < ApplicationController
     respond_to do |format|
       if @event.locked? 
         format.html { redirect_to [@namespace, @repository], notice: "Already processed." }
-      elsif @event.update(commited_at: Time.now) && @event.process
+      elsif @event.process #@event.update(commited_at: Time.now)
         format.html { redirect_to [@namespace, @repository], notice: "Your upload was successfuly processed." }
         format.json { render :show, status: :ok, location: [@namespace, @repository, :aggregation, @event] }
       else

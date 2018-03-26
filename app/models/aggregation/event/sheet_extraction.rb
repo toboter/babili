@@ -7,9 +7,9 @@ module Aggregation::Event::SheetExtraction
   def extract_row(data, primary_id_label)
     data = { 
       identifier: {
-        id: data['bab_rel'],
+        value: data[primary_id_label],
         type: primary_id_label,
-        agent: self.creator.name,
+        source: self.creator.name,
         label: primary_id_label.camelize
       },
       payload: data

@@ -30,21 +30,21 @@ class Aggregation::Event < ApplicationRecord
 
   def commit_items(resource_type, data)
     if !data.is_a?(Array)
-      identifier = Aggregation::Identifier.where(origin_id: data[:identifier][:id], origin_type: data[:identifier][:type], origin_agent_id: data[:identifier][:agent]).first_or_create
+      identifier = Aggregation::Identifier.where(origin_id: data[:identifier][:value], origin_type: data[:identifier][:type], origin_agent_id: data[:identifier][:source]).first_or_create
       item = Aggregation::Item.where(pref_identifier_id: identifier.id, repository_id: self.repository_id, type: resource_type).first_or_create
       item.identifiers << identifier unless item.identifiers.include?(identifier)
       data[:changeset] = item.commits.any? ? HashDiff.diff(data[:payload], JSON.parse( item.commits.last.try(:data).try(:[], 'payload').to_json, {:symbolize_names => true} )) : []
-      commit = (data[:changeset].present? || item.commits.empty?) ? Aggregation::Commit.create(item_id: item.id, event_id: self.id, creator_id: self.creator_id, data: data) : item.commits.last
+      commit = (data[:changeset].present? || item.commits.empty?) ? Aggregation::Commit.create(type: 'Aggregation::Commit::Custom', item_id: item.id, event_id: self.id, creator_id: self.creator_id, data: data) : item.commits.last
       return commit
     elsif data.is_a?(Array)
       # data is a array. import through AcitveRecord.import
       commits = []
       data.each do |element|
-        identifier = Aggregation::Identifier.where(origin_id: element[:identifier][:id], origin_type: element[:identifier][:type], origin_agent_id: element[:identifier][:agent]).first_or_create
+        identifier = Aggregation::Identifier.where(origin_id: element[:identifier][:value], origin_type: element[:identifier][:type], origin_agent_id: element[:identifier][:source]).first_or_create
         item = Aggregation::Item.where(pref_identifier: identifier, repository_id: self.repository_id, type: resource_type).first_or_create
         item.identifiers << identifier unless item.identifiers.include?(identifier)
         element[:changeset] = item.commits.any? ? HashDiff.diff(element[:payload], item.commits.last.try(:data).try(:[], 'payload')) : []
-        commit = Aggregation::Commit.new(item_id: item.id, event_id: self.id, creator_id: self.creator_id, data: element)
+        commit = Aggregation::Commit.new(type: 'Aggregation::Commit::Custom', item_id: item.id, event_id: self.id, creator_id: self.creator_id, data: element)
         commits << commit if element[:changeset].present? || item.commits.empty?
       end
       Aggregation::Commit.import commits

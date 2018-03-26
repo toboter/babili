@@ -1,16 +1,18 @@
 class CMS::BlogPage < CMS::Content
+  include JsonAttribute::Record
+  include JsonAttribute::Record::QueryScopes
   # evtl gibt es einen Fehler in CanCan, der verhindert, dass die history durchsucht werden kann.
   extend FriendlyId
   friendly_id :date_with_title, use: [:slugged, :scoped, :history], scope: :type
 
+  self.default_json_container_attribute = 'type_details'
+  json_attribute :featured, :boolean
+
   belongs_to :category, class_name: 'BlogCategory'
-  
-  jsonb_accessor :type_details,
-    featured: :boolean
 
   validates :title, :author_id, :content, :category_id, presence: true
 
-  scope :featured, -> { type_details_where(featured: true) }
+  scope :featured, -> { jsonb_contains(featured: true) }
   scope :unpublished, -> { where(published_at: nil) }
   scope :published, -> { where.not(published_at: nil) }
 

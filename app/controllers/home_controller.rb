@@ -1,7 +1,7 @@
 class HomeController < ApplicationController
   
   def index
-    @blog_pages = CMS::BlogPage.type_details_where(featured: true).order(created_at: :desc).limit(5)
+    @blog_pages = CMS::BlogPage.featured.order(created_at: :desc).limit(5)
   end
   
   def api
