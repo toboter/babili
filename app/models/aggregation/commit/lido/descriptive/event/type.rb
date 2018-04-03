@@ -7,6 +7,6 @@
 
 class Aggregation::Commit::Lido::Descriptive::Event::Type
   include JsonAttribute::Model
-  json_attribute :concept, Aggregation::Commit::Lido::Concerns::Concept.to_type
-  json_attribute :term, Aggregation::Commit::Lido::Concerns::Term.to_type
+  json_attribute :concept, Aggregation::Commit::Lido::Concerns::Types::Identifier.to_type, array: true # 0..n
+  json_attribute :term, Aggregation::Commit::Lido::Concerns::Types::Term.to_type, array: true # 0..n
 end

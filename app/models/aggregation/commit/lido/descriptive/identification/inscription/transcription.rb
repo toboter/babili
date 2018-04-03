@@ -5,5 +5,5 @@
 # class Aggregation::Commit::Lido::Descriptive::Identification::Inscription::Transcription
 #   include JsonAttribute::Model
 # 
-#   # -> Aggregation::Commit::Lido::Concerns::Note
+#   # -> Aggregation::Commit::Lido::Concerns::Types::Note
 # end

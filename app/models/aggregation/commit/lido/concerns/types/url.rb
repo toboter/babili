@@ -1,7 +1,7 @@
 # Title: Legal Body Weblink
 # General: Weblink of the institution or person referred to as legal body.
 
-class Aggregation::Commit::Lido::Concerns::Url
+class Aggregation::Commit::Lido::Concerns::Types::Url
   include JsonAttribute::Model
   json_attribute :value, :string
   json_attribute :label, :string

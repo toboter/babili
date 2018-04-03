@@ -10,7 +10,6 @@ module Aggregation::Event::LidoExtraction
   end
 
   def extract_lido(data, primary_id_label)
-    raise data.inspect
     data = { 
       identifier: identifier(data, primary_id_label),
       payload: {
@@ -18,10 +17,10 @@ module Aggregation::Event::LidoExtraction
         classification: object_classification(data),
         identification: object_identification(data),
         events: object_events(data),
-        relations: object_relations(data),
-        rights: '',
-        record: '',
-        resources: ''
+        relations: 'tbd', # object_relations(data),
+        rights: 'tbd',
+        record: 'tbd',
+        resources: 'tbd'
       }
     }
     raise data.inspect

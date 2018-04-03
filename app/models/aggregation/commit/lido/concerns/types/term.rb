@@ -1,7 +1,7 @@
 # Title: Term / Label
 # General: A name for the referred concept, used for indexing.
 
-class Aggregation::Commit::Lido::Concerns::Term
+class Aggregation::Commit::Lido::Concerns::Types::Term
   include JsonAttribute::Model
   json_attribute :value, :string
   json_attribute :label, :string

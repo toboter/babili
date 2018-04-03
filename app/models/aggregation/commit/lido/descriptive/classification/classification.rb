@@ -12,6 +12,6 @@ class Aggregation::Commit::Lido::Descriptive::Classification::Classification
   include JsonAttribute::Model
   json_attribute :type, :string
   json_attribute :sortorder, :integer
-  json_attribute :concept, Aggregation::Commit::Lido::Concerns::Concept.to_type, array: true # 0..n
-  json_attribute :term, Aggregation::Commit::Lido::Concerns::Term.to_type, array: true # 0..n
+  json_attribute :concept, Aggregation::Commit::Lido::Concerns::Types::Identifier.to_type, array: true # 0..n
+  json_attribute :term, Aggregation::Commit::Lido::Concerns::Types::Term.to_type, array: true # 0..n
 end

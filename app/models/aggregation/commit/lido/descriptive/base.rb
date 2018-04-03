@@ -11,5 +11,5 @@ class Aggregation::Commit::Lido::Descriptive::Base
   json_attribute :classification, Aggregation::Commit::Lido::Descriptive::Classification::Base.to_type # 1
   json_attribute :identification, Aggregation::Commit::Lido::Descriptive::Identification::Base.to_type # 1
   json_attribute :events, Aggregation::Commit::Lido::Descriptive::Event::Base.to_type, array: true # 0..n
-  json_attribute :relation, Aggregation::Commit::Lido::Descriptive::Relation.to_type # 0..1
+  json_attribute :relation, Aggregation::Commit::Lido::Descriptive::Relation::Base.to_type # 0..1
 end

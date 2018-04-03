@@ -5,7 +5,7 @@
 
 class Aggregation::Commit::Lido::Descriptive::Identification::Measurement::Set
   include JsonAttribute::Model
-  json_attribute :type, Aggregation::Commit::Lido::Concerns::Note.to_type, array: true # 1..n, uniq: {scope: :lang}
-  json_attribute :unit, Aggregation::Commit::Lido::Concerns::Note.to_type, array: true # 1..n, uniq: {scope: :lang}
-  json_attribute :value, Aggregation::Commit::Lido::Concerns::Note.to_type # 1
+  json_attribute :type, Aggregation::Commit::Lido::Concerns::Types::Note.to_type, array: true # 1..n, uniq: {scope: :lang}
+  json_attribute :unit, Aggregation::Commit::Lido::Concerns::Types::Note.to_type, array: true # 1..n, uniq: {scope: :lang}
+  json_attribute :value, Aggregation::Commit::Lido::Concerns::Types::Note.to_type # 1
 end

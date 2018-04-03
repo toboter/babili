@@ -3,7 +3,7 @@
 # corporation, also place name etc.
 # How to record: Repeat this element only for language variants.
 
-class Aggregation::Commit::Lido::Concerns::Appellation::Name
+class Aggregation::Commit::Lido::Concerns::Types::Name
   include JsonAttribute::Model
   json_attribute :value, :string
   json_attribute :label, :string

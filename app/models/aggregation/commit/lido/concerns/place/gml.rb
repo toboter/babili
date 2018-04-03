@@ -7,5 +7,7 @@ class Aggregation::Commit::Lido::Concerns::Place::Gml
   include JsonAttribute::Model
 
   json_attribute :lang, :string
-  # gml:Point; gml:LineString; gml:Polygon
+  json_attribute :point, :string
+  json_attribute :line_string, :string
+  json_attribute :polygon, :string
 end

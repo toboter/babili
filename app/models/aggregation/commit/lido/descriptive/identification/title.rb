@@ -8,6 +8,6 @@ class Aggregation::Commit::Lido::Descriptive::Identification::Title
   include JsonAttribute::Model
   json_attribute :type, :string
   json_attribute :sortorder, :integer
-  json_attribute :appellations, Aggregation::Commit::Lido::Concerns::Appellation::Name.to_type, array: true # 1..n uniq: {scope: lang}
-  json_attribute :sources, Aggregation::Commit::Lido::Concerns::Note.to_type, array: true # 0..n
+  json_attribute :appellations, Aggregation::Commit::Lido::Concerns::Types::Name.to_type, array: true # 1..n uniq: {scope: lang}
+  json_attribute :sources, Aggregation::Commit::Lido::Concerns::Types::Note.to_type, array: true # 0..n
 end

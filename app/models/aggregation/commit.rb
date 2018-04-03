@@ -10,7 +10,7 @@ class Aggregation::Commit < ApplicationRecord
   #json_attribute :identifier
   #json_attribute :changeset
 
-  TYPES = %w(Lido Custom)
+  TYPES = %w(Lido Custom MediaFile)
 
   belongs_to :item
   belongs_to :event
