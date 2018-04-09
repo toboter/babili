@@ -1,0 +1,97 @@
+<%= simple_form_for @entry, html: { class: 'form-horizontal' },
+  wrapper: :horizontal_form, as: :biblio_entry do |f| %>
+  <div class="col-md-12 ">
+    <%= f.error_notification %>
+
+    
+  
+      <div class="row">
+      <%= content_tag :div, class: "col-md-12" do %>
+        <% if @type.in?(Biblio::Entry.has_serie) %>
+          <%= f.input :serie_name, collection: Biblio::Serie.order(name: :asc), label_method: :name_abbr, 
+            value_method: :name_abbr, include_blank: true, label: "Serial or Journal", 
+            selected: @entry.serie.try(:name_abbr), input_html: {id: 'serie_name'}, 
+            hint: 'To add new series write abbr#full-name' %>
+          <%= f.input :volume %>
+        <% end %>
+        <% if @type.in?(Biblio::Entry.child_types) %>
+          <% if params[:parent_id] %>
+            <div class="col-md-9 col-md-offset-3">
+              <%= content_tag :h4, link_to(@entry.parent.full_entry, @entry.parent) %>
+              <%= f.hidden_field :parent_id, value: @entry.parent.id %>
+            </div>
+          <% else %>
+            <%= f.input :parent_id, collection: Biblio::Entry.where(type: @entry.has_parent), label_method: :full_entry, 
+              value_method: :id, input_html: {id: 'parent_entry_id'} %>
+          <% end %>
+        <% end %>
+        <br />
+      <% end %>
+    </div>
+  
+    <div class="row">
+      <div class="col-md-12">
+        <%= f.hidden_field :type, value: @type if @type != "Biblio::Entry" %>
+        <%= f.input :type, collection: Biblio::Entry.types.map {|t| [t, t.camelcase]}, selected: @type, 
+          disabled: @type != "Biblio::Entry" %> 
+      </div>
+      <div class="col-md-12">
+        <%= f.input :creator_list, collection: @creators, label_method: :default_name, 
+          value_method: :id, label: @entry.creator_type, selected: @entry.creators.map(&:id), 
+          input_html: {multiple: true, id: 'creator_names'}, hint: '"Last name, first name", multiple seperated by semicolon.' %>
+        <%= f.input :published_date, input_html: {value: @entry.published_date.blank? && @entry.parent ? @entry.parent.try(:published_date) : @subject.try(:published_date)} %>
+        <%= f.input :title %>
+        <%= f.input :subtitle, hint: 'Title and subtitle should end with punctuation.' %>
+        <%= f.input :tag_list, collection: ActsAsTaggableOn::Tag.order(name: :asc), label_method: :name, 
+          value_method: :name, selected: @entry.tags.map(&:name), 
+          input_html: {multiple: true, id: 'tag_names'} %>
+  
+        <div class="row">
+          <div class="col-md-6">
+            <%= f.input :publisher, collection: Zensus::Agent.all, label_method: :default_name, 
+              value_method: :id, include_blank: true, label: "Publisher", selected: @entry.publisher_id, 
+              input_html: {id: 'publisher'} %>
+          </div>
+          <div class="col-md-6">
+            <%= f.input :place, collection: Locate::Place.all, label_method: :default_name, value_method: :id, 
+              include_blank: true, label: "Place", selected: @entry.place_id, input_html: {id: 'place'} %>
+          </div>
+        </div>  
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.input :first_page %>
+        <%= f.input :last_page %>
+        <%= f.input :extra_pages %>
+        <%= f.input :page_count %>
+      </div>
+    
+      <div class="col-md-6">
+        <%= f.input :abbr %>
+        <%= f.input :edition %>
+        <%= f.input :language %>
+      </div>
+    </div>
+      
+    <did class="row">
+      <div class="col-md-12">
+        <div id="identifiers">
+          <strong>Other Identifiers: </strong>
+          <%= f.input :isbn if @entry.type == 'Biblio::Monograph' %>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <hr>
+        <%= f.submit class: 'btn btn-primary' %>
+        <%= link_to 'Cancel', (@entry.new_record? ? sti_entry_path(@type) : sti_entry_path(@type, @entry)), class: "btn btn-default" %>
+      </div>
+    </div>
+  </div>
+
+<% end %>

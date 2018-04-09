@@ -23,7 +23,7 @@ module Aggregation::Event::LidoExtraction
         resources: 'tbd'
       }
     }
-    raise data.inspect
+#     raise data.inspect
     return data
   end
 

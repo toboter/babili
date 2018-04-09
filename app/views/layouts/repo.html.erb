@@ -14,7 +14,7 @@
         <ul class="nav nav-tabs" role="tablist">
           <%= content_tag :li, link_to('Data', [@namespace, @repository]), class: "#{'active text-strong' if current_page?([@namespace, @repository]) || request.path.include?("#{url_for([@namespace, @repository])}/data")}" %>
           <%= content_tag :li, link_to('Discussions', [@namespace, @repository, :issues]), class: "#{'active text-strong' if current_page?([@namespace, @repository, :issues])}" %>
-          <%= content_tag :li, link_to('Literature', [@namespace, @repository, :issues]), class: "#{'active text-strong' if current_page?([@namespace, @repository, :issues])}" %>
+          <%= content_tag :li, link_to('Literature', [@namespace, @repository, :biblio, :entries]), class: "#{'active text-strong' if current_page?([@namespace, @repository, :biblio, :entries])}" %>
         
         </ul>
       </div>

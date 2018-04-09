@@ -1,0 +1,5 @@
+<div class="biblio-search --spacing-20">
+  <%= form_tag biblio_entries_path, method: :get, class: "" do %>
+    <%= search_field_tag 'q', params[:q], placeholder: "Search for references ...", class: "form-control", autofocus: true %>
+  <% end %>
+</div>

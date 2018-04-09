@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/jrochkind/json_attribute.git
-  revision: c78b33a62c5ec163761692ad764c99d6516e1870
+  revision: 39bc7f19a10dcf89251d203ae41abf9cca3e4609
   specs:
     json_attribute (0.1.0)
       activerecord (>= 5.0.0, < 5.3)
@@ -370,6 +370,9 @@ GEM
       elasticsearch (>= 1)
       hashie
     selectize-rails (0.12.4.1)
+    sequenced (3.1.1)
+      activerecord (>= 3.0)
+      activesupport (>= 3.0)
     shex (0.5.2)
       ebnf (~> 1.1)
       json-ld (>= 2.2, < 4.0)
@@ -503,6 +506,7 @@ DEPENDENCIES
   sass-rails (~> 5.0)
   searchkick
   selectize-rails
+  sequenced
   shrine
   sidekiq
   simple_form

@@ -1,0 +1,30 @@
+<% title "Reference entries", false %>
+
+<% content_for :container do %>
+  <div class="wrapper biblio">
+    <div class="row">
+      <div class="col-md-12">
+        <%= content_tag :h4, class: 'h-condensed --spacing-20 --spacious-20' do %>
+          <%= @type.demodulize.pluralize %>
+          <%= link_to fa_icon('plus', text: "Create a new #{@type.demodulize}"), [:new, :biblio, @type.demodulize.underscore], class: 'btn btn-default btn-sm text-strong pull-right' if can?(:create, Biblio::Entry) %>
+        <% end %>
+        <hr>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-8 main">
+        <div id='entries'>
+          <table class="table table-simple">
+            <tbody>
+              <%= render @entries %>
+            </tbody>
+          </table>
+        </div>
+        <%= content_tag :div, link_to('Get an overview.', biblio_path, class: 'text-small'), class: 'links --spacious-10' %>
+      </div>
+      <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
+        
+      <% end %>
+    </div>
+  </div>
+<% end %>

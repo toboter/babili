@@ -1,0 +1,39 @@
+# booklet entry
+# A work that is printed and bound, but without a named publisher or sponsoring institution.
+# 
+# Format:
+# 
+#      @BOOKLET{citation_key,
+#               required_fields [, optional_fields] }
+# Required fields: title
+# 
+# Optional fields: author, howpublished, address, month, year, note, key
+
+class Biblio::Booklet < Biblio::Entry
+  include JsonAttribute::Record
+  include JsonAttribute::Record::QueryScopes
+  self.default_json_container_attribute = 'data'
+
+  CREATOR_TYPES = %w(Author)
+
+  json_attribute :title, :string
+
+  has_many :creatorships, dependent: :destroy, class_name: 'Biblio::Creatorship', foreign_key: :entry_id
+  has_many :creators, through: :creatorships, source: :agent_appellation
+  json_attribute :howpublished, :string
+  json_attribute :place_ids, :integer, array: true
+  json_attribute :month, :string
+  json_attribute :year, :string
+  json_attribute :note, :string
+  json_attribute :key, :string
+
+  json_attribute :url, :string
+  json_attribute :doi, :string
+  json_attribute :abstract, :string
+
+  validates :title, presence: true
+
+  def places
+    Locate::Place.find(self.place_ids)
+  end
+end

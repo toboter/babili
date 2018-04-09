@@ -1,0 +1,36 @@
+<% title @entry.citation %>
+
+<% content_for :container do %>
+  <div class="wrapper biblio">
+    <div class="row">
+      <div class="col-md-12">
+        <%= content_tag :h4, class: 'h-condensed --spacing-20 --spacious-20' do %>
+          <%= @entry.citation %>
+        <% end %>
+        <hr>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-8 main">
+        <div id="biblio-entry-<%= @entry.id %>">
+          <div class="heading-block --spacing">
+            <%= render "#{@entry.class.name.underscore.pluralize}/show", @entry.class.name.demodulize.underscore.to_sym => @entry %>
+          </div>
+          <hr>
+        </div>
+        <div class="--spacious">
+          show defaults
+        </div>
+      </div>
+      
+      <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
+        <div class="biblio-search">
+          <%= form_tag biblio_entries_path, method: :get, class: "" do %>
+            <%= search_field_tag 'q', params[:q], placeholder: "Search for references ...", class: "form-control", autofocus: true %>
+          <% end %>
+          <%= content_tag :div, link_to('View all entries.', biblio_entries_path, class: 'text-small'), class: 'links --spacious-10' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

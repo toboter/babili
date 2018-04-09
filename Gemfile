@@ -79,6 +79,7 @@ gem 'roo'
 gem 'activerecord-import'
 gem 'xml-to-json'
 gem 'hashdiff'
+gem 'sequenced'
 
 gem 'devise'
 gem 'doorkeeper'

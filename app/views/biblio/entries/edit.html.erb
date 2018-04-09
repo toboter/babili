@@ -1,0 +1,20 @@
+<% title "#{@entry.citation}" %>
+
+<% content_for :container do %>
+  <div class="wrapper biblio">
+    <div class="row">
+      <div class="col-md-12">
+        <%= content_tag :h4, class: 'h-condensed --spacing-20 --spacious-20' do %>
+          <%= @type.demodulize.pluralize %>:
+          <%= yield :title %>
+        <% end %>
+        <hr>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-8 main">
+        <%= render "#{@entry.class.name.underscore.pluralize}/form", @entry.class.name.demodulize.underscore.to_sym => @entry %>
+      </div>
+    </div>
+  </div>
+<% end %>

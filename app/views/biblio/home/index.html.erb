@@ -1,0 +1,24 @@
+<% title "Bibliography" %>
+
+<% content_for :container do %>
+  <div class="zensus">
+    <div class="row --spacious">
+      <div class="col-sm-12 col-md-8 col-centered">
+        <div class="page-header text-center borderless">
+          <h2>Bibliography ::citations</h2>
+          <p class="text-muted lead">
+            Bibliography is a service which integrates the workflow idea of a scientific project. It will help 
+            with transparent refernces in scientists lists or repos. It complies with BibTex.
+          </p>
+        </div>
+        <%= render 'biblio/search/box' %>
+        <div class="list-group">
+          <%= link_to fa_icon('angle-double-right', text: 'All entries'), biblio_entries_path, class: 'list-group-item' %>
+          <%= link_to fa_icon('angle-double-right', text: 'Articles'), biblio_articles_path, class: 'list-group-item' %>
+          <%= link_to fa_icon('angle-double-right', text: 'Books'), biblio_books_path, class: 'list-group-item' %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+<% end %>

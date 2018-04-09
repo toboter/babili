@@ -7,6 +7,28 @@ Rails.application.routes.draw do
     get '/search/terms', to: 'search#terms'
   end
 
+  namespace :biblio, path: 'bibliography' do
+    get '/', to: 'home#index'
+    resources :entries, except: [:create, :update]
+    resources :series, controller: 'entries', type: 'Biblio::Serie'
+    resources :books, controller: 'entries', type: 'Biblio::Book'
+    resources :in_books, controller: 'entries', type: 'Biblio::InBook'
+    resources :collections, controller: 'entries', type: 'Biblio::Collection'
+    resources :in_collections, controller: 'entries', type: 'Biblio::InCollection'
+    resources :proceedings, controller: 'entries', type: 'Biblio::Proceeding'
+    resources :in_proceedings, controller: 'entries', type: 'Biblio::InProceeding'
+    resources :journals, controller: 'entries', type: 'Biblio::Journal'
+    resources :articles, controller: 'entries', type: 'Biblio::Article', except: [:create, :update]
+    resources :articles, type: 'Biblio::Article', only: [:create, :update]
+    resources :miscs, controller: 'entries', type: 'Biblio::Misc'
+    resources :manuals, controller: 'entries', type: 'Biblio::Manual'
+    resources :booklets, controller: 'entries', type: 'Biblio::Booklet'
+    resources :mastertheses, controller: 'entries', type: 'Biblio::Masterthesis'
+    resources :phdtheses, controller: 'entries', type: 'Biblio::Phdthesis'
+    resources :techreports, controller: 'entries', type: 'Biblio::Techreport'
+    resources :unpublisheds, controller: 'entries', type: 'Biblio::Unpublished'
+  end
+
   namespace :zensus do
     get '/', to: 'home#index'
     get :search, to: 'search#index'
@@ -265,6 +287,9 @@ Rails.application.routes.draw do
     resources :repositories do
       get :edit_topics, on: :member
       put :update_topics, on: :member
+      namespace :biblio, path: 'bibliography' do
+        resources :entries
+      end
       namespace :aggregation, path: 'data' do
         namespace :event, path: 'events' do
           resources :upload_events, path: 'upload', only: [:new, :show, :create]
