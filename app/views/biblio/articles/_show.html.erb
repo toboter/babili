@@ -1,14 +1,36 @@
-<h3>
-  <%= article.punctioned_title %>
-</h3>
-<h4 class="subtitle text-gray">
-  by <%= article.authors_list(nil, false) %> <%= article.year %>
-</h4>
+<div class="row">
+  <div class="col-md-8">
+    <h3>
+      <%= article.punctioned_title %><br>
+      <small>by <%= article.authors.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %> <%= article.year %> <%= '(' + article.month + ')' if article.month.present? %></small>
+    </h3>
+    <ul class="list-unstyled">
+        <%= content_tag :li, journal_for(article) %>      
+        <%= content_tag :li, article.doi.present? ? link_to(article.doi, article.doi) : (article.url.present? ? link_to(article.url, article.url) : ''), class: 'text-small' if article.doi || article.url %>
+    </ul>
+    <%= content_tag :p, class: "text-gray" do %>
+      <%= content_tag :span, 'Note: ', class: 'text-strong' %> <%= article.note %>
+    <% end if article.note.present? %>
 
-<ul class="list-unstyled">
-    <%= content_tag :li, content_tag(:span, link_to(article.journal.name, article.journal ) + ('. ' unless article.volume.present?), class: 'journal-name') %>
-    <%= content_tag :li, content_tag(:span, article.volume, class: 'journal-volume' + ', ') if article.volume.present? %>
-    <%= content_tag :li, article.number + ', ' if article.number.present? %>
-    <%= content_tag :li, article.pages + '. ' if article.pages.present? %>
-    <%= content_tag :li, article.doi.present? ? article.doi : (article.url.present? ? article.url : '') if article.doi || article.url %>
-</ul>
+    <p class="text-gray text-small --spacious-20">
+      <%= strip_tags apa(article) %>
+    </p>
+    <%= article.tag_list.map{|tag| content_tag(:span, tag, class: 'label label-default')}.join(' ').html_safe %>
+  </div>
+  <div class="col-md-4">
+    <%= render 'biblio/referencations/add_repository', entry: article %>
+    <%= article.repositories.map{|repo| content_tag(:span, link_to(repo.name, namespace_repository_biblio_references_path(repo.owner, repo), style: 'color: white;'), class: 'label label-default')}.join(' ').html_safe %>
+  </div>
+</div>
+
+<%= content_for :contents do %>
+  <div class='article-contents'>
+    <%= content_tag :p, article.abstract %>
+  </div>
+<% end %>
+
+<%= content_for :cited_by do %>
+  <div class='article-citations'>
+  cited by
+  </div>
+<% end %>

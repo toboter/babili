@@ -1,2 +1,3 @@
-<%= link_to 'edit', [:edit, entry] %>
-<%= link_to 'delete', entry, method: :delete, data: { confirm: 'Are you sure?' } %>
+<ul class="list-inline pull-right">
+  <%= content_tag :li, link_to(fa_icon('trash'), namespace_repository_biblio_reference_path(referencation.repository.owner, referencation.repository, referencation), method: :delete, data: { confirm: 'Are you sure?' }, class: 'text-gray') if local_assigns[:referencation] %>
+</ul>

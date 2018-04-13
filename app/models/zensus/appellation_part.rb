@@ -43,7 +43,7 @@ class Zensus::AppellationPart < ApplicationRecord
   end
 
   def self.types
-    %w[Descriptor Prefix Forename Surname Birthname Suffix]
+    %w[Descriptor Prefix Forename Nick Surname Birthname Suffix]
   end
 
   def reindex_agent

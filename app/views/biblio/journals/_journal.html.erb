@@ -1,11 +1,8 @@
 <tr>
   <td width="5%">
-    <%= fa_icon('book') %>
+    <%= content_tag :span, fa_icon('copy'), title: 'Journal' %>
   </td>
   <td>
-    <%= apa(journal) %>
-  </td>
-  <td>
-    <%= render 'biblio/shared/actions', entry: journal %>
+    <%= link_to apa(journal), journal %>
   </td>
 </tr>

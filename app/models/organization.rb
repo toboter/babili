@@ -12,6 +12,8 @@ class Organization < ApplicationRecord
 
   validates :name, :description, presence: true
 
+  delegate :repositories, to: :namespace
+
   def to_param
     namespace.slug if namespace
   end

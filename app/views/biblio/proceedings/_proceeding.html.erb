@@ -1,0 +1,10 @@
+<tr>
+  <td width="5%">
+    <%= content_tag :span, fa_icon('book'), title: 'Proceeding' %>
+  </td>
+  <td>
+    <%= render 'biblio/shared/actions', entry: proceeding, referencation: local_assigns[:referencation] %>
+    <%= content_tag :span, link_to(proceeding.citation, proceeding), class: 'text-strong' %><br>
+    <%= content_tag :span, apa(proceeding), class: 'text-small' %>
+  </td>
+</tr>

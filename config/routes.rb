@@ -9,24 +9,26 @@ Rails.application.routes.draw do
 
   namespace :biblio, path: 'bibliography' do
     get '/', to: 'home#index'
-    resources :entries, except: [:create, :update]
-    resources :series, controller: 'entries', type: 'Biblio::Serie'
-    resources :books, controller: 'entries', type: 'Biblio::Book'
-    resources :in_books, controller: 'entries', type: 'Biblio::InBook'
-    resources :collections, controller: 'entries', type: 'Biblio::Collection'
-    resources :in_collections, controller: 'entries', type: 'Biblio::InCollection'
-    resources :proceedings, controller: 'entries', type: 'Biblio::Proceeding'
-    resources :in_proceedings, controller: 'entries', type: 'Biblio::InProceeding'
-    resources :journals, controller: 'entries', type: 'Biblio::Journal'
-    resources :articles, controller: 'entries', type: 'Biblio::Article', except: [:create, :update]
-    resources :articles, type: 'Biblio::Article', only: [:create, :update]
-    resources :miscs, controller: 'entries', type: 'Biblio::Misc'
-    resources :manuals, controller: 'entries', type: 'Biblio::Manual'
-    resources :booklets, controller: 'entries', type: 'Biblio::Booklet'
-    resources :mastertheses, controller: 'entries', type: 'Biblio::Masterthesis'
-    resources :phdtheses, controller: 'entries', type: 'Biblio::Phdthesis'
-    resources :techreports, controller: 'entries', type: 'Biblio::Techreport'
-    resources :unpublisheds, controller: 'entries', type: 'Biblio::Unpublished'
+    resources :entries, only: :index do
+       post :add_repositories, to: 'referencations#add_repository', on: :member
+    end
+    resources :series, type: 'Biblio::Serie', except: :index
+    resources :books, type: 'Biblio::Book', except: :index
+    resources :in_books, type: 'Biblio::InBook', except: :index
+    resources :collections, type: 'Biblio::Collection', except: :index
+    resources :in_collections, type: 'Biblio::InCollection', except: :index
+    resources :proceedings, type: 'Biblio::Proceeding', except: :index
+    resources :in_proceedings, type: 'Biblio::InProceeding', except: :index
+    resources :journals, type: 'Biblio::Journal', except: :index
+    resources :articles, type: 'Biblio::Article', except: :index
+    resources :miscs, type: 'Biblio::Misc', except: :index
+    resources :manuals, type: 'Biblio::Manual', except: :index
+    resources :booklets, type: 'Biblio::Booklet', except: :index
+    resources :mastertheses, type: 'Biblio::Masterthesis', except: :index
+    resources :phdtheses, type: 'Biblio::Phdthesis', except: :index
+    resources :techreports, type: 'Biblio::Techreport', except: :index
+    resources :unpublisheds, type: 'Biblio::Unpublished', except: :index
+    resource :import
   end
 
   namespace :zensus do
@@ -287,8 +289,10 @@ Rails.application.routes.draw do
     resources :repositories do
       get :edit_topics, on: :member
       put :update_topics, on: :member
-      namespace :biblio, path: 'bibliography' do
-        resources :entries
+      namespace :biblio, path: '/bibliography' do
+        resources :references, controller: 'referencations', only: [:index, :destroy] do
+          post :add_entry, to: 'referencations#add_entry', on: :collection
+        end
       end
       namespace :aggregation, path: 'data' do
         namespace :event, path: 'events' do

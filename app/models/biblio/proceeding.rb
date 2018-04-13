@@ -15,6 +15,7 @@ class Biblio::Proceeding < Biblio::Entry
   self.default_json_container_attribute = 'data'
 
   CREATOR_TYPES = %w(Editor)
+  DESCRIPTION = 'The proceedings of a conference.'
 
   json_attribute :title, :string
   json_attribute :year, :string

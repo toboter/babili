@@ -15,6 +15,7 @@ class Biblio::Book < Biblio::Entry
   self.default_json_container_attribute = 'data'
 
   CREATOR_TYPES = %w(Author)
+  DESCRIPTION = 'A book with an author and explicit publisher.'
 
   has_many :creatorships, dependent: :destroy, class_name: 'Biblio::Creatorship', foreign_key: :entry_id
   has_many :authors, through: :creatorships, source: :agent_appellation
@@ -54,4 +55,25 @@ class Biblio::Book < Biblio::Entry
   has_many :in_books, class_name: 'Biblio::InBook', foreign_key: :parent_id
 
   accepts_nested_attributes_for :serie, reject_if: :all_blank, allow_destroy: false
+
+  def search_data
+    {
+      citation: citation,
+      entry_type: type.demodulize,
+      author: authors.map(&:name).join(' '),
+      title: title,
+      publisher: publisher.default_name,
+      serie: [serie.title, serie.abbr, serie.print_issn].join(' '),
+      year: year,
+      place: places.map(&:default_name).join(' '),
+      tag: tag_list.join(' '),
+      volume: volume,
+      note: note,
+      key: key,
+      isbn: print_isbn,
+      url: url,
+      doi: doi,
+      abstract: abstract
+    }
+  end
 end

@@ -15,6 +15,7 @@ class Biblio::Unpublished < Biblio::Entry
   self.default_json_container_attribute = 'data'
 
   CREATOR_TYPES = %w(Author)
+  DESCRIPTION = 'A document with an author and title, but not formally published.'
 
   has_many :creatorships, dependent: :destroy, class_name: 'Biblio::Creatorship', foreign_key: :entry_id
   has_many :authors, through: :creatorships, source: :agent_appellation

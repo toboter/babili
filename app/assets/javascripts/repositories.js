@@ -1,5 +1,5 @@
 $(document).on('turbolinks:load', function(){
-  $('#repo_topic_list').selectize({
+  $('#vocab_tag_list').selectize({
     valueField: 'name',
     labelField: 'name',
     searchField: ['name'],

@@ -1,11 +1,8 @@
 <tr>
   <td width="5%">
-    <%= fa_icon('folder-open') %>
+    <%= content_tag :span, fa_icon('object-group'), title: 'Serie' %>
   </td>
   <td>
-    <%= apa(serie) %>
-  </td>
-  <td>
-    <%= render 'biblio/shared/actions', entry: serie %>
+    <%= link_to apa(serie), serie %>
   </td>
 </tr>

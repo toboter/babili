@@ -1,0 +1,6 @@
+<%= form_tag add_repositories_biblio_entry_path(entry), method: :post, class: 'form-inline' do %>
+  <%= select_tag 'repository_id', options_from_collection_for_select(current_person.all_repos-entry.repositories, :id, :name), include_blank: true, 
+    class: 'form-control repo-selectize',
+    style: 'width:80%;' %>
+  <%= submit_tag 'Add', class: 'btn btn-default', style: 'margin-bottom:5px' %>
+<% end %>

@@ -1,6 +1,27 @@
-<h3>
-  <%= journal.name %>
-</h3>
-<h4 class="subtitle text-gray">
+<div class="row">
+  <div class="col-md-8">
+    <h3>
+      <%= journal.name %>
+    </h3>
+    <p class="text-gray">
+      <%= journal.note %>
+    </p>
+    <ul class="list-unstyled">
+      <%= content_tag :li, link_to(journal.url, journal.url) if journal.url.present? %>
+      <%= content_tag :li, 'Issn: ' + journal.print_issn if journal.print_issn.present? %>
+    </ul>
+  </div>
+  <div class="col-md-4">
+    <%= journal.tag_list.map{|tag| content_tag(:span, tag, class: 'label label-default')}.join(' ').html_safe %>
+  </div>
+</div>
 
-</h4>
+<%= content_for :contents do %>
+  <div class='journal-contents'>
+    <table class="table table-simple">
+      <tbody>
+        <%= render journal.articles.sort_by{|x| [x.year, x.volume, x.pages] }, show_actions: false %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

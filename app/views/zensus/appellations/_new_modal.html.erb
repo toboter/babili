@@ -16,6 +16,12 @@
                 <div class="links">
                   <%= link_to_add_association fa_icon('plus', text: 'Name element'), f, :appellation_parts, class: 'btn btn-default btn-sm', partial: 'zensus/agents/appellation_part_fields' %>
                 </div>
+                <%= f.input :agent_id, 
+                  collection: Zensus::Agent.all, 
+                  label_method: :default_name, 
+                  value_method: :id,
+                  hint: "If creating a new name for an existing agent, please choose. Otherwise choose an agent type to create." %>
+                or <%= f.input :new_agent_type, collection: Zensus::Agent.types %>
               </div>
               <div class="col-md-4">
                 <%= f.input :language %>

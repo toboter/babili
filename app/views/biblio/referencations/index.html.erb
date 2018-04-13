@@ -1,0 +1,17 @@
+    <div class="row">
+      <div class="col-sm-12 col-md-8 main">
+        <div id='entries'>
+          <table class="table table-simple">
+            <tbody>
+              <% @referencations.each do |ref| %>
+                <%= render ref.entry, referencation: ref %>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        <%= content_tag :div, link_to('Get an overview.', biblio_path, class: 'text-small'), class: 'links --spacious-10' %>
+      </div>
+      <%= content_tag :div, class: 'col-md-4 sidebar' do %>
+        <%= render 'biblio/referencations/add_entry', namespace: @namespace, repository: @repository %>
+      <% end %>
+    </div>

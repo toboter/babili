@@ -19,6 +19,9 @@ class Repository < ApplicationRecord
   has_many :commits, through: :events, class_name: 'Aggregation::Commit'
   has_many :items, class_name: 'Aggregation::Item'
 
+  has_many :referencations, class_name: 'Biblio::Referencation', dependent: :destroy
+  has_many :references, through: :referencations, class_name: 'Biblio::Entry', source: :entry
+
   validates :name, 
     presence: true
   validates :name, 

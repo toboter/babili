@@ -15,6 +15,7 @@ class Biblio::InBook < Biblio::Entry
   self.default_json_container_attribute = 'data'
 
   CREATOR_TYPES = %w(Author)
+  DESCRIPTION = 'A part of a book, which may be a chapter and/or a range of pages.'
 
   has_many :creatorships, dependent: :destroy, class_name: 'Biblio::Creatorship', foreign_key: :entry_id
   has_many :authors, through: :creatorships, source: :agent_appellation

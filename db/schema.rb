@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180403181000) do
+ActiveRecord::Schema.define(version: 20180411152540) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -130,6 +130,17 @@ ActiveRecord::Schema.define(version: 20180403181000) do
     t.integer "generations", null: false
     t.index ["ancestor_id", "descendant_id", "generations"], name: "biblio_entry_anc_desc_idx", unique: true
     t.index ["descendant_id"], name: "biblio_entry_desc_idx"
+  end
+
+  create_table "biblio_referencations", force: :cascade do |t|
+    t.integer "entry_id"
+    t.integer "repository_id"
+    t.integer "creator_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "index_biblio_referencations_on_creator_id"
+    t.index ["entry_id"], name: "index_biblio_referencations_on_entry_id"
+    t.index ["repository_id"], name: "index_biblio_referencations_on_repository_id"
   end
 
   create_table "cms_blog_categories", id: :serial, force: :cascade do |t|

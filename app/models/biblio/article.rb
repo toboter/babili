@@ -14,11 +14,13 @@ class Biblio::Article < Biblio::Entry
   include JsonAttribute::Record
   include JsonAttribute::Record::QueryScopes
   self.default_json_container_attribute = 'data'
+  
 
   CREATOR_TYPES = %w(Author)
+  DESCRIPTION = 'An article from a journal or magazine.'
 
   has_many :creatorships, dependent: :destroy, class_name: 'Biblio::Creatorship', foreign_key: :entry_id
-  has_many :authors, through: :creatorships, source: :agent_appellation
+  has_many :authors, -> { order 'biblio_creatorships.id asc' }, through: :creatorships, source: :agent_appellation
   json_attribute :title, :string
   belongs_to :journal, class_name: 'Biblio::Journal', foreign_key: :parent_id
   json_attribute :year, :string
@@ -39,4 +41,25 @@ class Biblio::Article < Biblio::Entry
   def journal=(id)
     self.parent_id = id
   end
+
+  def search_data
+    {
+      citation: citation,
+      entry_type: type.demodulize,
+      author: authors.map(&:name).join(' '),
+      title: title,
+      journal: [journal.name, journal.abbr, journal.print_issn].join(' '),
+      year: year,
+      tag: tag_list.join(' '),
+      volume: volume,
+      number: number,
+      pages: pages,
+      note: note,
+      key: key,
+      url: url,
+      doi: doi,
+      abstract: abstract
+    }
+  end
+
 end

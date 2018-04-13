@@ -1,0 +1,10 @@
+<tr>
+  <td width="5%">
+    <%= content_tag :span, fa_icon('file'), title: 'Unpublished' %>
+  </td>
+  <td>
+    <%= render 'biblio/shared/actions', entry: unpublished, referencation: local_assigns[:referencation] %>
+    <%= content_tag :span, link_to(unpublished.citation, unpublished), class: 'text-strong' %><br>
+    <%= content_tag :span, apa(unpublished), class: 'text-small' %>
+  </td>
+</tr>

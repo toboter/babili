@@ -5,13 +5,17 @@
     <div class="row">
       <div class="col-md-12">
         <%= content_tag :h4, class: 'h-condensed --spacing-20 --spacious-20' do %>
-          <%= @entry.citation %>
+          <%= link_to 'References', biblio_entries_path %><%= content_tag :span, ' / ' + @entry.citation, class: 'text-gray' %>
+          <%= content_tag :span, class: 'pull-right' do %>
+            <%= link_to fa_icon('edit', text: 'Edit'), [:edit, @entry], class: 'btn btn-default btn-sm text-strong' if can?(:update, @entry) %>
+            <%= link_to fa_icon('trash', text: 'Delete'), @entry, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default btn-sm text-strong', style: 'margin-left:5px;' if can?(:destroy, @entry) %>
+          <% end %>
         <% end %>
         <hr>
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-12 col-md-8 main">
+      <div class="col-sm-12 col-md-12">
         <div id="biblio-entry-<%= @entry.id %>">
           <div class="heading-block --spacing">
             <%= render "#{@entry.class.name.underscore.pluralize}/show", @entry.class.name.demodulize.underscore.to_sym => @entry %>
@@ -19,18 +23,12 @@
           <hr>
         </div>
         <div class="--spacious">
-          show defaults
+          <%= yield :contents if content_for?(:contents) %>
+          <%= yield :cited_by if content_for?(:cited_by) %>
+          <%= yield :referenced_by if content_for?(:referenced_by) %>
         </div>
       </div>
       
-      <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
-        <div class="biblio-search">
-          <%= form_tag biblio_entries_path, method: :get, class: "" do %>
-            <%= search_field_tag 'q', params[:q], placeholder: "Search for references ...", class: "form-control", autofocus: true %>
-          <% end %>
-          <%= content_tag :div, link_to('View all entries.', biblio_entries_path, class: 'text-small'), class: 'links --spacious-10' %>
-        </div>
-      <% end %>
     </div>
   </div>
 <% end %>

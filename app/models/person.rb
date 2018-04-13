@@ -13,6 +13,8 @@ class Person < ApplicationRecord
   has_many :organization_oauth_accessibilities, -> { distinct }, through: :organizations, source: :oauth_accessibilities
 
   validates :namespace, presence: true
+
+  delegate :repositories, to: :namespace
   
   def to_param
     namespace.slug if namespace
@@ -41,6 +43,11 @@ class Person < ApplicationRecord
   def name
     [honorific_prefix, given_name, family_name, honorific_suffix].join(' ').strip.presence || namespace.slug
   end
+
+  def all_repos
+    repositories.to_a.concat(organizations.map(&:repositories).to_a).flatten
+  end
+
 
   def oauth_accessibilities
     accessibilities = person_oauth_accessibility_ids.concat(organization_oauth_accessibility_ids).uniq

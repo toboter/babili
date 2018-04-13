@@ -1,0 +1,6 @@
+<%= form_tag add_entry_namespace_repository_biblio_references_path(namespace, repository), method: :post, class: 'form-inline' do %>
+  <%= select_tag 'entry_id', options_from_collection_for_select([], :id, :citation), include_blank: true, 
+    class: 'form-control biblio-entry-selectize',
+    style: 'width:80%;' %>
+  <%= submit_tag 'Add', class: 'btn btn-default', style: 'margin-bottom:5px' %>
+<% end %>

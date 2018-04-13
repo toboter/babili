@@ -5,20 +5,22 @@
     <div class="row --spacious">
       <div class="col-sm-12 col-md-8 col-centered">
         <div class="page-header text-center borderless">
-          <h2>Bibliography ::citations</h2>
+          <h2>Bibliography ::references</h2>
           <p class="text-muted lead">
-            Bibliography is a service which integrates the workflow idea of a scientific project. It will help 
-            with transparent refernces in scientists lists or repos. It complies with BibTex.
+            Bibliography integrates the scientific workflow idea into repositories. The entries are like vocabulary terms scoped to, not only 
+            a Person or Group but even to their repositories. And can be queried along the data. As a repository forms the discourse universe
+            of a scientific idea, refernces are an elementary service and make up a bibliography of that matter in question. 
           </p>
         </div>
         <%= render 'biblio/search/box' %>
-        <div class="list-group">
-          <%= link_to fa_icon('angle-double-right', text: 'All entries'), biblio_entries_path, class: 'list-group-item' %>
-          <%= link_to fa_icon('angle-double-right', text: 'Articles'), biblio_articles_path, class: 'list-group-item' %>
-          <%= link_to fa_icon('angle-double-right', text: 'Books'), biblio_books_path, class: 'list-group-item' %>
+        <%= link_to 'View all entries', biblio_entries_path, class: 'text-small' %>
+
+        <div class="row">
+          <div class="col-md-12 --spacious">
+            <%= content_tag :p, 'Complies to BibTex.', class: 'text-muted text-small'%>
+          </div>
         </div>
       </div>
-
     </div>
   </div>
 <% end %>

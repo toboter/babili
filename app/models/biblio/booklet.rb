@@ -15,11 +15,12 @@ class Biblio::Booklet < Biblio::Entry
   self.default_json_container_attribute = 'data'
 
   CREATOR_TYPES = %w(Author)
+  DESCRIPTION = 'A work that is printed and bound, but without a named publisher or sponsoring institution.'
 
   json_attribute :title, :string
 
   has_many :creatorships, dependent: :destroy, class_name: 'Biblio::Creatorship', foreign_key: :entry_id
-  has_many :creators, through: :creatorships, source: :agent_appellation
+  has_many :authors, through: :creatorships, source: :agent_appellation
   json_attribute :howpublished, :string
   json_attribute :place_ids, :integer, array: true
   json_attribute :month, :string
@@ -35,5 +36,22 @@ class Biblio::Booklet < Biblio::Entry
 
   def places
     Locate::Place.find(self.place_ids)
+  end
+
+  def search_data
+    {
+      citation: citation,
+      entry_type: type.demodulize,
+      author: authors.map(&:name).join(' '),
+      title: title,
+      year: year,
+      place: places.map(&:default_name),
+      tag: tag_list.join(' '),
+      note: note,
+      key: key,
+      url: url,
+      doi: doi,
+      abstract: abstract
+    }
   end
 end

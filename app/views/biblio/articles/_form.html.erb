@@ -8,10 +8,11 @@
     label_method: :name, 
     value_method: :id, 
     label: 'Authors', 
-    selected: @article.authors.map(&:id), 
+    selected: @article.creatorships.map(&:agent_appellation_id), 
     input_html: {
       multiple: true, 
-      id: 'creator_names'
+      id: 'creators_names',
+      class: 'creators-selectize'
     } %>
   
   <%= f.input :year %>
@@ -29,7 +30,8 @@
     label: "Journal", 
     selected: @article.journal.try(:id), 
     input_html: {
-      id: 'serie_name'
+      id: 'journal_name',
+      class: 'journal-selectize'
     } %>
   
   <%= f.input :volume %>
@@ -44,14 +46,28 @@
   <%= f.input :url %>
   <%= f.input :doi %>
   <%= f.input :abstract, as: :text %>
-    
+  
+  <hr>
+
+  <%= f.input :tag_list, 
+    as: :string,
+    input_html: {
+      value: f.object.tag_list.join(','),
+      id: 'vocab_tag_list' }, 
+    label: "Tags <span class='text-muted' style='font-weight:normal;'>(separate with comma)</span>".html_safe,
+    hint: 'Add tags to categorize the journal and make it more discoverable.' %>
   
     <div class="row">
       <div class="col-md-6">
         <hr>
         <%= f.submit class: 'btn btn-primary' %>
-        <%= link_to 'Cancel', (@article.new_record? ? sti_entry_path(@type) : sti_entry_path(@type, @article)), class: "btn btn-default" %>
+        <%= link_to 'Cancel', (@article.new_record? ? biblio_entries_path : @article), class: "btn btn-default" %>
       </div>
     </div>
 
+<% end %>
+
+<% content_for :modals do %>
+  <%= render 'zensus/appellations/new_modal' %>
+  <%= render 'biblio/journals/new_modal' %>
 <% end %>

@@ -2,6 +2,14 @@ class Zensus::AppellationsController < ApplicationController
   load_and_authorize_resource
 
   def index
+    if params[:q]
+      @appellations = Zensus::Appellation.search(params[:q], fields: [:name])
+    end
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @appellations }
+    end
   end
 
   def show
@@ -15,6 +23,7 @@ class Zensus::AppellationsController < ApplicationController
   end
 
   def create
+    @appellation.creator = current_person
     respond_to do |format|
       if @appellation.save
         format.html { redirect_to zensus_name_url(@appellation), notice: 'Name was successfully created.' }
@@ -53,6 +62,7 @@ class Zensus::AppellationsController < ApplicationController
       :period, 
       :trans, 
       :agent_id,
+      :new_agent_type,
       appellation_parts_attributes: [
         :id,
         :type,

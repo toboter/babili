@@ -96,6 +96,14 @@ $(document).on('turbolinks:load', function(){
     placeholder: 'Type to select or add appellations...'
   });
 
+  $(".creators-selectize").selectize({
+    create: function(input, callback) {
+      selectizeCallback = callback;
+
+      $(".name-modal").modal();
+    }
+  });
+
   $('.zensus_activity_actable').selectize({
     sortField: 'text',
     placeholder: 'Click to select actor...'

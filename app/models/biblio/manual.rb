@@ -15,6 +15,7 @@ class Biblio::Manual < Biblio::Entry
   self.default_json_container_attribute = 'data'
 
   CREATOR_TYPES = %w(Author)
+  DESCRIPTION = 'Technical documentation.'
 
   json_attribute :title, :string
 
