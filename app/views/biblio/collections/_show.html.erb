@@ -1,6 +1,47 @@
-<h3>
-  <%= collection.punctioned_title %>
-</h3>
-<h4 class="subtitle text-gray">
-  by <%= collection.editors_list(nil, false) %> <%= collection.year %>
-</h4>
+<div class="row">
+  <div class="col-md-8">
+    <h3>
+      <%= collection.punctioned_title %><br>
+      <small>Edited by: <%= collection.editors.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %> <%= collection.year %> <%= '(' + collection.month + ')' if collection.month.present? %></small>
+    </h3>
+    <ul class="list-unstyled">
+      <%= content_tag :li, "Serie: #{serie_for(collection)}".html_safe if collection.serie.present? %>      
+      <%= content_tag :li, "Publisher: #{link_to(collection.publisher.try(:default_name), [:zensus, collection.publisher])}".html_safe if collection.publisher.present? %>
+      <%= content_tag :li, "Place: #{collection.places.map{ |p| link_to p.default_name, p }.join(', ')}".html_safe if collection.places.any? %>
+      <%= content_tag :li, "Edition: #{collection.edition}" if collection.edition.present? %>
+      <%= content_tag :li, "ISBN: #{collection.print_isbn}" if collection.print_isbn.present? %>
+      <%= content_tag :li, collection.doi.present? ? link_to(collection.doi, collection.doi) : (collection.url.present? ? link_to(collection.url, collection.url) : ''), class: 'text-small' if collection.doi || collection.url %>
+      <%= content_tag :li, "Organization: #{link_to collection.organization.try(:default_name), [:zensus, collection.organization]}".html_safe if collection.organization.present? %>
+    </ul>
+    <%= content_tag :p, class: "text-gray" do %>
+      <%= content_tag :span, 'Note: ', class: 'text-strong' %> <%= collection.note %>
+    <% end if collection.note.present? %>
+
+    <%= collection.tag_list.map{|tag| content_tag(:span, tag, class: 'label label-default')}.join(' ').html_safe %>
+  </div>
+  <div class="col-md-4">
+    <%= render 'biblio/referencations/add_repository', entry: collection %>
+    <%= collection.repositories.map{|repo| content_tag(:span, link_to(repo.name, namespace_repository_biblio_references_path(repo.owner, repo), style: 'color: white;'), class: 'label label-default')}.join(' ').html_safe %>
+  </div>
+</div>
+
+<%= content_for :contents do %>
+  <div class='collection-contents'>
+    <div class="row">
+      <div class="col-md-7">
+        <p class="text-gray text-small">
+          <%= format_citation(collection) %>
+        </p>
+        <%= content_tag :p, collection.abstract %>
+        <table class="table table-simple">
+          <tbody>
+            <%= render collection.in_collections.sort_by(&:pages) %>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-4 col-md-offset-1">
+        <%= content_tag :pre, collection.to_bib, style: 'font-size:smaller;' %>
+      </div>
+    </div>
+  </div>
+<% end %>

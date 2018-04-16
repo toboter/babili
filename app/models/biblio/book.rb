@@ -56,13 +56,17 @@ class Biblio::Book < Biblio::Entry
 
   accepts_nested_attributes_for :serie, reject_if: :all_blank, allow_destroy: false
 
+  def serie=(id)
+    self.parent_id = id
+  end
+
   def search_data
     {
       citation: citation,
       entry_type: type.demodulize,
       author: authors.map(&:name).join(' '),
       title: title,
-      publisher: publisher.default_name,
+      publisher: publisher.try(:default_name),
       serie: [serie.title, serie.abbr, serie.print_issn].join(' '),
       year: year,
       place: places.map(&:default_name).join(' '),
@@ -75,5 +79,28 @@ class Biblio::Book < Biblio::Entry
       doi: doi,
       abstract: abstract
     }
+  end
+
+  def to_bib
+    BibTeX::Entry.new({
+      :bibtex_type => type.demodulize.downcase.to_sym,
+      :bibtex_key => citation,
+      :author => authors.map{ |a| a.name(reverse: true) }.join(' and '),
+      :title => title,
+      :publisher => publisher.try(:default_name),
+      :year => year,
+      :address => places.map(&:default_name).join('; '),
+      :month => month,
+      :series => serie.title,
+      :volume => volume,
+      :edition => edition,
+      :note => note,
+      :key => key,
+      :isbn => print_isbn,
+      :url => url,
+      :doi => doi,
+      :abstract => abstract,
+      :keywords => tag_list.join('; ')
+    })
   end
 end

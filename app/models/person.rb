@@ -1,6 +1,12 @@
 class Person < ApplicationRecord
   include ImageUploader[:image]
   acts_as_tagger
+  include JsonAttribute::Record
+  include JsonAttribute::Record::QueryScopes
+  self.default_json_container_attribute = 'settings'
+
+  json_attribute :csl, :string, default: 'apa'
+  json_attribute :per_page, :integer, default: 50
 
   has_one :namespace, as: :subclass, dependent: :destroy
   has_one :user

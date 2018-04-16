@@ -9,7 +9,7 @@
   <div class="row">
       <div class="col-md-12">
       <%= f.error_notification %>
-  
+
       <div class="row">
         <%= content_tag :div, class: "col-sm-8 col-md-8" do %>
           <div class="form-inputs">
@@ -48,6 +48,14 @@
             </div>
           </div>
         <% end %>
+      </div>
+
+      <div class="row">
+        <div class='col-md-8'>
+          <h4 class="subhead --spacious">General settings</h4>
+          <%= f.input :csl, hint: "Citation style language. Default is apa. Available styles: #{link_to 'Style registry by http://citationstyles.org', 'https://github.com/citation-style-language/styles'}".html_safe %>
+          <%= f.input :per_page, collection: [10, 20, 50, 100, 200], hint: 'Used for the number of results per page. Default is 50.' %>
+        </div>
       </div>
   
       <div class="row --spacious">

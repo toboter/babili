@@ -15,9 +15,19 @@ class Biblio::Serie < Biblio::Entry
   json_attribute :year, :string
   json_attribute :print_issn, :string
 
-  has_many :serials, class_name: 'Biblio::Book', foreign_key: :parent_id
-
   validates :title, presence: true
+
+  def serials
+    children.where(type: ['Biblio::Book', 'Biblio::Collection', 'Biblio::Proceeding'])
+  end
   
+  def search_data
+    {
+      name: title,
+      abbr: abbr,
+      articles: serials.map(&:citation),
+      issn: print_issn
+    }
+  end
 
 end

@@ -10,9 +10,9 @@
       <%= content_tag :li, link_to(journal.url, journal.url) if journal.url.present? %>
       <%= content_tag :li, 'Issn: ' + journal.print_issn if journal.print_issn.present? %>
     </ul>
+    <%= journal.tag_list.map{|tag| content_tag(:span, tag, class: 'label label-default')}.join(' ').html_safe %>
   </div>
   <div class="col-md-4">
-    <%= journal.tag_list.map{|tag| content_tag(:span, tag, class: 'label label-default')}.join(' ').html_safe %>
   </div>
 </div>
 

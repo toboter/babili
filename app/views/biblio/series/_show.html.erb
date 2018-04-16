@@ -1,6 +1,27 @@
-<h3>
-  <%= serie.title %>
-</h3>
-<h4 class="subtitle text-gray">
-  <%= serie.editors_list %>
-</h4>
+<div class="row">
+  <div class="col-md-8">
+    <h3>
+      <%= serie.title %> <%= '[' + serie.abbr + ']' if serie.abbr.present? %><br>
+      <%= content_tag :small, "Edited by: #{serie.editors.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ')}".html_safe %>
+    </h3>
+    <p class="text-gray">
+      <%= serie.note %>
+    </p>
+    <ul class="list-unstyled">
+      <%= content_tag :li, 'Issn: ' + serie.print_issn if serie.print_issn.present? %>
+    </ul>
+    <%= serie.tag_list.map{|tag| content_tag(:span, tag, class: 'label label-default')}.join(' ').html_safe %>
+  </div>
+  <div class="col-md-4">
+  </div>
+</div>
+
+<%= content_for :contents do %>
+  <div class='serie-contents'>
+    <table class="table table-simple">
+      <tbody>
+        <%= render serie.serials.sort_by{|x| [x.year, x.volume] }, show_actions: false %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

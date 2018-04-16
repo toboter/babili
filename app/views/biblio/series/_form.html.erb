@@ -1,0 +1,41 @@
+<%= simple_form_for @serie, 
+  html: { class: 'form-horizontal' },
+  wrapper: :horizontal_form do |f| %>
+  <%= f.error_notification %>
+  
+  <%= f.input :title %>
+  <%= f.input :abbr %>
+
+  <%= f.input :editor_ids, 
+    collection: @creators, 
+    label_method: :name, 
+    value_method: :id, 
+    label: 'Editors', 
+    selected: @serie.creatorships.map(&:agent_appellation_id), 
+    input_html: {
+      multiple: true, 
+      id: 'creators_names',
+      class: 'creators-selectize'
+    } %>
+  <hr>
+  <%= f.input :key %>
+  <%= f.input :note, as: :text %>
+  <%= f.input :print_issn %>
+  <hr>
+  <%= f.input :tag_list, 
+    as: :string,
+    input_html: {
+      value: f.object.tag_list.join(','),
+      id: 'vocab_tag_list' }, 
+    label: "Tags <span class='text-muted' style='font-weight:normal;'>(separate with comma)</span>".html_safe,
+    hint: 'Add tags to categorize the series and make it more discoverable.' %>
+  
+  <div class="row">
+    <div class="col-md-6">
+      <hr>
+      <%= f.submit class: 'btn btn-primary' %>
+      <%= link_to 'Cancel', (@serie.new_record? ? biblio_entries_path : @serie), class: "btn btn-default" %>
+    </div>
+  </div>
+
+<% end %>

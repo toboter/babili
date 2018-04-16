@@ -1,0 +1,46 @@
+<div class="row">
+  <div class="col-md-8">
+    <h3>
+      <%= proceeding.punctioned_title %><br>
+      <small>Edited by: <%= proceeding.editors.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %> <%= proceeding.year %> <%= '(' + proceeding.month + ')' if proceeding.month.present? %></small>
+    </h3>
+    <ul class="list-unstyled">
+      <%= content_tag :li, "Serie: #{serie_for(proceeding)}".html_safe if proceeding.serie.present? %>      
+      <%= content_tag :li, "Publisher: #{link_to(proceeding.publisher.try(:default_name), [:zensus, proceeding.publisher])}".html_safe if proceeding.publisher.present? %>
+      <%= content_tag :li, "Place: #{proceeding.places.map{ |p| link_to p.default_name, p }.join(', ')}".html_safe if proceeding.places.any? %>
+      <%= content_tag :li, "ISBN: #{proceeding.print_isbn}" if proceeding.print_isbn.present? %>
+      <%= content_tag :li, proceeding.doi.present? ? link_to(proceeding.doi, proceeding.doi) : (proceeding.url.present? ? link_to(proceeding.url, proceeding.url) : ''), class: 'text-small' if proceeding.doi || proceeding.url %>
+      <%= content_tag :li, "Organization: #{link_to proceeding.organization.try(:default_name), [:zensus, proceeding.organization]}".html_safe if proceeding.organization.present? %>
+    </ul>
+    <%= content_tag :p, class: "text-gray" do %>
+      <%= content_tag :span, 'Note: ', class: 'text-strong' %> <%= proceeding.note %>
+    <% end if proceeding.note.present? %>
+
+    <%= proceeding.tag_list.map{|tag| content_tag(:span, tag, class: 'label label-default')}.join(' ').html_safe %>
+  </div>
+  <div class="col-md-4">
+    <%= render 'biblio/referencations/add_repository', entry: proceeding %>
+    <%= proceeding.repositories.map{|repo| content_tag(:span, link_to(repo.name, namespace_repository_biblio_references_path(repo.owner, repo), style: 'color: white;'), class: 'label label-default')}.join(' ').html_safe %>
+  </div>
+</div>
+
+<%= content_for :contents do %>
+  <div class='proceeding-contents'>
+    <div class="row">
+      <div class="col-md-7">
+        <p class="text-gray text-small">
+          <%= format_citation(proceeding) %>
+        </p>
+        <%= content_tag :p, proceeding.abstract %>
+        <table class="table table-simple">
+          <tbody>
+            <%= render proceeding.in_proceedings.sort_by(&:pages) %>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-4 col-md-offset-1">
+        <%= content_tag :pre, proceeding.to_bib, style: 'font-size:smaller;' %>
+      </div>
+    </div>
+  </div>
+<% end %>

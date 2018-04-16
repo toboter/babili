@@ -55,4 +55,54 @@ class Biblio::Collection < Biblio::Entry
   has_many :in_collections, class_name: 'Biblio::InCollection', foreign_key: :parent_id
 
   accepts_nested_attributes_for :serie, reject_if: :all_blank, allow_destroy: false
+
+  def serie=(id)
+    self.parent_id = id
+  end
+
+  def search_data
+    {
+      citation: citation,
+      entry_type: type.demodulize,
+      author: editors.map(&:name).join(' '),
+      title: title,
+      publisher: publisher.try(:default_name),
+      serie: [serie.title, serie.abbr, serie.print_issn].join(' '),
+      year: year,
+      place: places.map(&:default_name).join(' '),
+      tag: tag_list.join(' '),
+      volume: volume,
+      note: note,
+      key: key,
+      isbn: print_isbn,
+      url: url,
+      doi: doi,
+      abstract: abstract,
+      organization: organization.try(:default_name)
+    }
+  end
+
+  def to_bib
+    BibTeX::Entry.new({
+      :bibtex_type => 'book',
+      :bibtex_key => citation,
+      :editor => editors.map{ |a| a.name(reverse: true) }.join(' and '),
+      :title => title,
+      :publisher => publisher.try(:default_name),
+      :year => year,
+      :address => places.map(&:default_name).join('; '),
+      :month => month,
+      :series => serie.try(:title),
+      :volume => volume,
+      :edition => edition,
+      :organization => organization.try(:default_name),
+      :note => note,
+      :key => key,
+      :isbn => print_isbn,
+      :url => url,
+      :doi => doi,
+      :abstract => abstract,
+      :keywords => tag_list.join('; ')
+    })
+  end
 end

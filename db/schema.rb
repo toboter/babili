@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180411152540) do
+ActiveRecord::Schema.define(version: 20180416153931) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -118,6 +118,9 @@ ActiveRecord::Schema.define(version: 20180411152540) do
     t.string "slug"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "citation_raw"
+    t.integer "sequential_id"
+    t.index ["citation_raw", "sequential_id"], name: "index_biblio_entries_on_citation_raw_and_sequential_id", unique: true
     t.index ["creator_id"], name: "index_biblio_entries_on_creator_id"
     t.index ["parent_id"], name: "index_biblio_entries_on_parent_id"
     t.index ["slug"], name: "index_biblio_entries_on_slug"
@@ -404,6 +407,7 @@ ActiveRecord::Schema.define(version: 20180411152540) do
     t.string "url"
     t.string "institution"
     t.string "location"
+    t.jsonb "settings"
     t.index ["slug"], name: "index_people_on_slug", unique: true
     t.index ["user_id"], name: "index_people_on_user_id"
   end

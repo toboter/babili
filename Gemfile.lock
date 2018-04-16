@@ -88,6 +88,8 @@ GEM
     bcp47 (0.3.3)
       i18n
     bcrypt (3.1.11)
+    bibtex-ruby (4.4.6)
+      latex-decode (~> 0.0)
     bindex (0.5.0)
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
@@ -99,6 +101,11 @@ GEM
     case_transform (0.2)
       activesupport
     chronic (0.10.2)
+    citeproc (1.0.9)
+      namae (~> 1.0)
+    citeproc-ruby (1.1.10)
+      citeproc (~> 1.0, >= 1.0.9)
+      csl (~> 1.5)
     closure_tree (6.6.0)
       activerecord (>= 4.1.0)
       with_advisory_lock (>= 3.0.0)
@@ -114,6 +121,10 @@ GEM
     concurrent-ruby (1.0.5)
     connection_pool (2.2.1)
     crass (1.0.3)
+    csl (1.5.0)
+      namae (~> 1.0)
+    csl-styles (1.0.1.8)
+      csl (~> 1.0)
     devise (4.4.0)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -188,6 +199,7 @@ GEM
       rdf (>= 2.2, < 4.0)
     jsonapi-renderer (0.2.0)
     language_list (1.2.1)
+    latex-decode (0.3.1)
     ld-patch (0.3.3)
       ebnf (~> 1.1)
       rdf (>= 2.2, < 4.0)
@@ -239,6 +251,7 @@ GEM
     multi_json (1.13.1)
     multipart-post (2.0.0)
     mustermann (1.0.1)
+    namae (1.0.1)
     net-http-persistent (3.0.0)
       connection_pool (~> 2.2)
     netrc (0.11.0)
@@ -435,6 +448,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.4)
+    unicode_utils (1.4.0)
     warden (1.2.7)
       rack (>= 1.0)
     web-console (3.5.1)
@@ -466,14 +480,17 @@ DEPENDENCIES
   acts-as-taggable-on
   acts_as_dag!
   acts_as_list
+  bibtex-ruby
   bootstrap-sass (~> 3.3.6)
   browser
   byebug
   cancancan
   chronic
+  citeproc-ruby
   closure_tree
   cocoon
   coffee-rails (~> 4.2)
+  csl-styles
   devise
   doorkeeper
   down
@@ -519,6 +536,7 @@ DEPENDENCIES
   turbolinks (~> 5)
   tzinfo-data
   uglifier (>= 1.3.0)
+  unicode_utils
   web-console
   will_paginate-bootstrap
   xml-to-json

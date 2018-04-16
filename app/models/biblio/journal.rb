@@ -22,4 +22,13 @@ class Biblio::Journal < Biblio::Entry
     "#{name} #{abbr ? '('+abbr+')' : ''}"
   end
 
+  def search_data
+    {
+      name: name,
+      abbr: abbr,
+      articles: articles.map(&:citation),
+      issn: print_issn
+    }
+  end
+
 end

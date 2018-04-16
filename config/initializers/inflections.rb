@@ -17,4 +17,5 @@
 ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym 'CMS'
   inflect.acronym 'AAT'
+  inflect.irregular('serie', 'series')
 end

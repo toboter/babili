@@ -32,6 +32,51 @@ class Biblio::InCollection < Biblio::Entry
 
   validates :authors, :title, :collection, presence: true
 
-  delegate :editors, :year, :publisher, :places, :serie, :volume, :organization, to: :collection
+  delegate :editors, :year, :month, :publisher, :places, :serie, :volume, :organization, to: :collection
 
+  def collection=(id)
+    self.parent_id = id
+  end
+
+  def search_data
+    {
+      citation: citation,
+      entry_type: type.demodulize,
+      author: authors.map(&:name).join(' '),
+      title: title,
+      book: collection.search_data,
+      year: year,
+      tag: tag_list.join(' '),
+      pages: pages,
+      note: note,
+      key: key,
+      url: url,
+      doi: doi,
+      abstract: abstract
+    }
+  end
+
+  def to_bib
+    BibTeX::Entry.new({
+      :bibtex_type => type.demodulize.downcase.to_sym,
+      :bibtex_key => citation,
+      :author => authors.map{ |a| a.name(reverse: true) }.join(' and '),
+      :title => title,
+      :pages => pages,
+      :note => note,
+      :key => key,
+      :url => url,
+      :doi => doi,
+      :abstract => abstract,
+      :keywords => tag_list.join('; '),
+      :booktitle => collection.title,
+      :editor => collection.editors.map{ |a| a.name(reverse: true) }.join(' and '),
+      :publisher => publisher.try(:default_name),
+      :year => year,
+      :address => places.map(&:default_name).join(', '),
+      :series => serie.try(:title),
+      :volume => volume,
+      :organization => organization
+    })
+  end
 end

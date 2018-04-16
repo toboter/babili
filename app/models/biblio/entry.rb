@@ -1,10 +1,12 @@
 class Biblio::Entry < ApplicationRecord
   extend FriendlyId
-  friendly_id :citation, use: :slugged
   searchkick inheritance: true
   include ActionView::Helpers::TextHelper
   has_closure_tree dependent: :destroy
   acts_as_taggable
+  before_validation :set_citation_raw
+  before_validation :set_citation_sequence
+  friendly_id :citation, use: :slugged
 
   belongs_to :creator, class_name: 'Person'
   has_many :referencations, class_name: 'Biblio::Referencation', dependent: :destroy
@@ -39,8 +41,8 @@ class Biblio::Entry < ApplicationRecord
     title.end_with?('.', '?')? title : title.concat('.') if title
   end
 
-  def authors_list(limit=nil, reverse=true)
-    authors.limit(limit).map{ |a| a.name(reverse: reverse) }.join(', ') + ' '
+  def authors_list(limit=nil, reverse=true, join_by=', ')
+    authors.limit(limit).map{ |a| a.name(reverse: reverse) }.join(join_by) + ' '
   end
 
   def editors_list(limit=nil, reverse=true)
@@ -56,21 +58,47 @@ class Biblio::Entry < ApplicationRecord
     editors.take(3).map{ |a| a.name(reverse: true).split(', ').first }.join(', ') + " (#{'Ed'.pluralize(editors.count)}.) "
   end
 
-  def citation
-    if self.respond_to?(:authors)
+
+  # set unique citation
+  def set_citation_raw
+    if self.respond_to?(:authors) && !self.type.in?(['Biblio::Serie', 'Biblio::Journal'])
       if authors.any?
-        (authors.count > 3 ? citation_authors_list.concat(' et al. ') : citation_authors_list).concat(self.respond_to?(:year) ? (year.present? ? year : '') : '')
+        self.citation_raw = (authors.count > 3 ? citation_authors_list.concat('et al. ') : citation_authors_list).concat(self.respond_to?(:year) ? (year.present? ? year : '') : '')
       else
-        key
+        self.citation_raw = key
       end
-    elsif self.respond_to?(:editors)
+    elsif self.respond_to?(:editors) && !self.type.in?(['Biblio::Serie', 'Biblio::Journal'])
       if editors.any?
-        (editors.count > 3 ? citation_editors_list.concat(' et al. ') : citation_editors_list).concat(self.respond_to?(:year) ? (year.present? ? year : '') : '')
+        self.citation_raw = (editors.count > 3 ? citation_editors_list.concat('et al. ') : citation_editors_list).concat(self.respond_to?(:year) ? (year.present? ? year : '') : '')
       else
-        key
+        self.citation_raw = key
       end
-    else
-      name
+    elsif self.type == 'Biblio::Serie'
+      self.citation_raw = key.present? ? key : title
+    elsif self.type == 'Biblio::Journal'
+      self.citation_raw = key.present? ? key : (name + "#{' [' + abbr + ']' if abbr.present?}")
     end
+  end
+
+  def set_citation_sequence
+    last_record = Biblio::Entry.where(citation_raw: self.citation_raw).order(sequential_id: :asc).last
+    new_seq_id = last_record.present? ? (last_record == self ? last_record.sequential_id : last_record.sequential_id+1) : 1
+    self.sequential_id = new_seq_id if sequential_id.blank?
+  end
+
+  def citation
+    "#{citation_raw}#{numeric_to_alph(sequential_id) if sequential_id > 1 && !self.type.in?(['Biblio::Serie', 'Biblio::Journal'])}"
+  end
+
+  Alpha26 = ("a".."z").to_a
+  def numeric_to_alph(value)
+    return "" if value.nil? || value < 1
+    s, q = "", value
+    loop do
+      q, r = (q - 1).divmod(26)
+      s.prepend(Alpha26[r]) 
+      break if q.zero?
+    end
+    s
   end
 end

@@ -45,7 +45,7 @@ class Biblio::Booklet < Biblio::Entry
       author: authors.map(&:name).join(' '),
       title: title,
       year: year,
-      place: places.map(&:default_name),
+      place: places.map(&:default_name).join(' '),
       tag: tag_list.join(' '),
       note: note,
       key: key,
@@ -53,5 +53,24 @@ class Biblio::Booklet < Biblio::Entry
       doi: doi,
       abstract: abstract
     }
+  end
+
+  def to_bib
+    BibTeX::Entry.new({
+      :bibtex_type => type.demodulize.downcase.to_sym,
+      :bibtex_key => citation,
+      :author => authors.map{ |a| a.name(reverse: true) }.join(' and '),
+      :title => title,
+      :howpublished => howpublished,
+      :year => year,
+      :address => places.map(&:default_name).join('; '),
+      :month => month,
+      :note => note,
+      :key => key,
+      :url => url,
+      :doi => doi,
+      :abstract => abstract,
+      :keywords => tag_list.join('; ')
+    })
   end
 end

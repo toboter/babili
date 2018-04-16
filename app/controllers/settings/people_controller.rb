@@ -22,7 +22,8 @@ class Settings::PeopleController < ApplicationController
   private
     # Never trust parameters from the scary internet, only allow the white list through.
     def person_params
-      params.require(:person).permit(:about_me, :family_name, :given_name, :honorific_prefix, :honorific_suffix, :image, :url, :institution, :location)
+      params.require(:person).permit(:about_me, :family_name, :given_name, :honorific_prefix, :honorific_suffix, 
+        :image, :url, :institution, :location, :per_page, :csl)
     end
 
 end

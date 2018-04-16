@@ -62,4 +62,25 @@ class Biblio::Article < Biblio::Entry
     }
   end
 
+  def to_bib
+    BibTeX::Entry.new({
+      :bibtex_type => type.demodulize.downcase.to_sym,
+      :bibtex_key => citation,
+      :author => authors.map{ |a| a.name(reverse: true) }.join(' and '),
+      :title => title,
+      :journal => journal.try(:name),
+      :year => year,
+      :month => month,
+      :volume => volume,
+      :number => number,
+      :pages => pages,
+      :note => note,
+      :key => key,
+      :url => url,
+      :doi => doi,
+      :abstract => abstract,
+      :keywords => tag_list.join('; ')
+    })
+  end
+
 end

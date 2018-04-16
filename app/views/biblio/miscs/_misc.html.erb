@@ -5,6 +5,6 @@
   <td>
     <%= render 'biblio/shared/actions', entry: misc, referencation: local_assigns[:referencation] %>
     <%= content_tag :span, link_to(misc.citation, misc), class: 'text-strong' %><br>
-    <%= content_tag :span, apa(misc), class: 'text-small' %>
+    <%= content_tag :span, format_citation(misc), class: 'text-small' %>
   </td>
 </tr>

@@ -1,6 +1,38 @@
-<h3>
-  <%= in_collection.punctioned_title %>
-</h3>
-<h4 class="subtitle text-gray">
-  by <%= in_collection.authors_list(nil, false) %> <%= in_collection.year %>
-</h4>
+<div class="row">
+  <div class="col-md-8">
+    <h3>
+      <%= in_collection.punctioned_title %><br>
+      <small>by <%= in_collection.authors.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %> <%= in_collection.year %> <%= '(' + in_collection.month + ')' if in_collection.month.present? %></small>
+    </h3>
+    <ul class="list-unstyled">
+        <%= content_tag :li, book_for(in_collection) %> 
+        <%= content_tag :li, "Pages: #{in_collection.pages}" if in_collection.pages.present? %>     
+        <%= content_tag :li, in_collection.doi.present? ? link_to(in_collection.doi, in_collection.doi) : (in_collection.url.present? ? link_to(in_collection.url, in_collection.url) : ''), class: 'text-small' if in_collection.doi || in_collection.url %>
+    </ul>
+    <%= content_tag :p, class: "text-gray" do %>
+      <%= content_tag :span, 'Note: ', class: 'text-strong' %> <%= in_collection.note %>
+    <% end if in_collection.note.present? %>
+
+    <%= in_collection.tag_list.map{|tag| content_tag(:span, tag, class: 'label label-default')}.join(' ').html_safe %>
+  </div>
+  <div class="col-md-4">
+    <%= render 'biblio/referencations/add_repository', entry: in_collection %>
+    <%= in_collection.repositories.map{|repo| content_tag(:span, link_to(repo.name, namespace_repository_biblio_references_path(repo.owner, repo), style: 'color: white;'), class: 'label label-default')}.join(' ').html_safe %>
+  </div>
+</div>
+
+<%= content_for :contents do %>
+  <div class='in_collection-contents'>
+    <div class="row">
+      <div class="col-md-7">
+        <p class="text-gray text-small">
+          <%= format_citation(in_collection) %>
+        </p>
+        <%= content_tag :p, in_collection.abstract %>
+      </div>
+      <div class="col-md-4 col-md-offset-1">
+        <%= content_tag :pre, in_collection.to_bib, style: 'font-size:smaller;' %>
+      </div>
+    </div>
+  </div>
+<% end %>

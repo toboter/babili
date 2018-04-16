@@ -9,7 +9,7 @@ class Biblio::EntrySerializer <  ActiveModel::Serializer
     object.type.demodulize
   end
   attribute :cite do
-    strip_tags apa(object).strip
+    format_citation(object).strip
   end
 
 

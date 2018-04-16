@@ -12,9 +12,6 @@
       <%= content_tag :span, 'Note: ', class: 'text-strong' %> <%= article.note %>
     <% end if article.note.present? %>
 
-    <p class="text-gray text-small --spacious-20">
-      <%= strip_tags apa(article) %>
-    </p>
     <%= article.tag_list.map{|tag| content_tag(:span, tag, class: 'label label-default')}.join(' ').html_safe %>
   </div>
   <div class="col-md-4">
@@ -25,12 +22,16 @@
 
 <%= content_for :contents do %>
   <div class='article-contents'>
-    <%= content_tag :p, article.abstract %>
-  </div>
-<% end %>
-
-<%= content_for :cited_by do %>
-  <div class='article-citations'>
-  cited by
+    <div class="row">
+      <div class="col-md-7">
+        <p class="text-gray text-small">
+          <%= format_citation(article) %>
+        </p>
+        <%= content_tag :p, article.abstract %>
+      </div>
+      <div class="col-md-4 col-md-offset-1">
+        <%= content_tag :pre, article.to_bib, style: 'font-size:smaller;' %>
+      </div>
+    </div>
   </div>
 <% end %>

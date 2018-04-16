@@ -64,7 +64,7 @@ $(document).on("turbolinks:load", function()  {
     render: {
       option: function(item, escape) {
         return '<div>' + '<strong>' + escape(item.citation) + '</strong>' +
-                  '<p class="text-small">' + '<em>' + escape(item.cite) + '</em>' + '</p>' +
+                  '<p class="text-small">' + item.cite + '</p>' +
                '</div>'
       }
     }

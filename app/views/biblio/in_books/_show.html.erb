@@ -1,6 +1,39 @@
-<h3>
-  <%= in_book.punctioned_title %>
-</h3>
-<h4 class="subtitle text-gray">
-  by <%= in_book.authors_list(nil, false) %> <%= in_book.year %>
-</h4>
+<div class="row">
+  <div class="col-md-8">
+    <h3>
+      <%= in_book.punctioned_title %><br>
+      <small>by <%= in_book.authors.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %> <%= in_book.year %> <%= '(' + in_book.month + ')' if in_book.month.present? %></small>
+    </h3>
+    <ul class="list-unstyled">
+        <%= content_tag :li, book_for(in_book) %> 
+        <%= content_tag :li, "Pages: #{in_book.pages}" if in_book.pages.present? %>
+        <%= content_tag :li, "Chapter: #{in_book.chapter}" if in_book.chapter.present? %> 
+        <%= content_tag :li, in_book.doi.present? ? link_to(in_book.doi, in_book.doi) : (in_book.url.present? ? link_to(in_book.url, in_book.url) : ''), class: 'text-small' if in_book.doi || in_book.url %>
+    </ul>
+    <%= content_tag :p, class: "text-gray" do %>
+      <%= content_tag :span, 'Note: ', class: 'text-strong' %> <%= in_book.note %>
+    <% end if in_book.note.present? %>
+
+    <%= in_book.tag_list.map{|tag| content_tag(:span, tag, class: 'label label-default')}.join(' ').html_safe %>
+  </div>
+  <div class="col-md-4">
+    <%= render 'biblio/referencations/add_repository', entry: in_book %>
+    <%= in_book.repositories.map{|repo| content_tag(:span, link_to(repo.name, namespace_repository_biblio_references_path(repo.owner, repo), style: 'color: white;'), class: 'label label-default')}.join(' ').html_safe %>
+  </div>
+</div>
+
+<%= content_for :contents do %>
+  <div class='in_book-contents'>
+    <div class="row">
+      <div class="col-md-7">
+        <p class="text-gray text-small">
+          <%= format_citation(in_book) %>
+        </p>
+        <%= content_tag :p, in_book.abstract %>
+      </div>
+      <div class="col-md-4 col-md-offset-1">
+        <%= content_tag :pre, in_book.to_bib, style: 'font-size:smaller;' %>
+      </div>
+    </div>
+  </div>
+<% end %>
