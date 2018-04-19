@@ -510,6 +510,7 @@ DEPENDENCIES
   linkeddata
   listen (~> 3.0.5)
   mini_magick
+  namae
   pg (~> 0.18)
   puma (~> 3.10)
   rails (~> 5.1)

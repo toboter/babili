@@ -1,17 +1,17 @@
 <div class="row">
   <div class="col-md-8">
     <h3>
-      <%= collection.punctioned_title %><br>
+      <%= collection.title %><br>
       <small>Edited by: <%= collection.editors.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %> <%= collection.year %> <%= '(' + collection.month + ')' if collection.month.present? %></small>
     </h3>
     <ul class="list-unstyled">
       <%= content_tag :li, "Serie: #{serie_for(collection)}".html_safe if collection.serie.present? %>      
-      <%= content_tag :li, "Publisher: #{link_to(collection.publisher.try(:default_name), [:zensus, collection.publisher])}".html_safe if collection.publisher.present? %>
+      <%= content_tag :li, "Publisher: #{link_to(collection.publisher.try(:name), zensus_name_path(collection.publisher))}".html_safe if collection.publisher.present? %>
       <%= content_tag :li, "Place: #{collection.places.map{ |p| link_to p.default_name, p }.join(', ')}".html_safe if collection.places.any? %>
       <%= content_tag :li, "Edition: #{collection.edition}" if collection.edition.present? %>
       <%= content_tag :li, "ISBN: #{collection.print_isbn}" if collection.print_isbn.present? %>
-      <%= content_tag :li, collection.doi.present? ? link_to(collection.doi, collection.doi) : (collection.url.present? ? link_to(collection.url, collection.url) : ''), class: 'text-small' if collection.doi || collection.url %>
-      <%= content_tag :li, "Organization: #{link_to collection.organization.try(:default_name), [:zensus, collection.organization]}".html_safe if collection.organization.present? %>
+      <%= content_tag :li, doi_url(collection), class: 'text-small' if collection.doi || collection.url %>
+      <%= content_tag :li, "Organization: #{link_to collection.organization.try(:name), zensus_name_path(collection.organization)}".html_safe if collection.organization.present? %>
     </ul>
     <%= content_tag :p, class: "text-gray" do %>
       <%= content_tag :span, 'Note: ', class: 'text-strong' %> <%= collection.note %>

@@ -8,6 +8,8 @@ class Biblio::Entry < ApplicationRecord
   before_validation :set_citation_sequence
   friendly_id :citation, use: :slugged
 
+  has_many :creatorships, dependent: :destroy, class_name: 'Biblio::Creatorship', foreign_key: :entry_id
+  has_many :creators, -> { order 'biblio_creatorships.id asc' }, through: :creatorships, source: :agent_appellation
   belongs_to :creator, class_name: 'Person'
   has_many :referencations, class_name: 'Biblio::Referencation', dependent: :destroy
   has_many :repositories, through: :referencations
@@ -33,15 +35,38 @@ class Biblio::Entry < ApplicationRecord
     ]
   end
 
+  scope :with_creators, lambda{ |names|
+    c_ids = creator_ids(names)
+    return [] if c_ids.include?(nil)
+    # get a reference to the join table
+    creator_assignments = Biblio::Creatorship.arel_table
+    # get a reference to the filtered table
+    entries = Biblio::Entry.arel_table
+    # let AREL generate a complex SQL query
+    c_ids.map(&:to_i).inject(self) { |rel, c_id|
+      rel.where(
+        Biblio::Creatorship \
+          .where(creator_assignments[:entry_id].eq(entries[:id]) \
+          .and(creator_assignments[:agent_appellation_id].eq(c_id))) \
+          .exists
+      )
+    }
+  }
+
+  def self.creator_ids(names)
+    appellation_ids =[]
+    names.each do |name|
+      appellation_ids << Zensus::Appellation.find_by_name(name).first.try(:id)
+      # appellation_ids << Zensus::Appellation.joins(:appellation_parts).merge(Zensus::AppellationPart.where(body: name.family, type: 'Family')).merge(Zensus::AppellationPart.where(body: name.given, type: 'Given')).first.id
+    end
+    appellation_ids
+  end
+
   def should_generate_new_friendly_id?
     true || super
   end
 
-  def punctioned_title
-    title.end_with?('.', '?')? title : title.concat('.') if title
-  end
-
-  def authors_list(limit=nil, reverse=true, join_by=', ')
+  def authors_list(limit=nil, reverse=true, join_by='; ')
     authors.limit(limit).map{ |a| a.name(reverse: reverse) }.join(join_by) + ' '
   end
 
@@ -84,6 +109,10 @@ class Biblio::Entry < ApplicationRecord
     last_record = Biblio::Entry.where(citation_raw: self.citation_raw).order(sequential_id: :asc).last
     new_seq_id = last_record.present? ? (last_record == self ? last_record.sequential_id : last_record.sequential_id+1) : 1
     self.sequential_id = new_seq_id if sequential_id.blank?
+  end
+
+  def bibtex_citation
+    citation.gsub(/[,()]/ ,"")
   end
 
   def citation

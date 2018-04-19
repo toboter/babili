@@ -62,7 +62,7 @@ class Zensus::AppellationsController < ApplicationController
       :period, 
       :trans, 
       :agent_id,
-      :new_agent_type,
+      :name,
       appellation_parts_attributes: [
         :id,
         :type,

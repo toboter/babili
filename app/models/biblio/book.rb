@@ -41,7 +41,7 @@ class Biblio::Book < Biblio::Entry
   validates :authors, :title, :publisher_id, :year, presence: true
 
   def publisher
-    publisher_id.present? ? Zensus::Agent.find(publisher_id) : nil
+    publisher_id.present? ? Zensus::Appellation.find(publisher_id) : nil
   end
 
   def places
@@ -49,7 +49,7 @@ class Biblio::Book < Biblio::Entry
   end
 
   def organization
-    organization_id.present? ? Zensus::Agent.find(organization_id) : nil
+    organization_id.present? ? Zensus::Appellation.find(organization_id) : nil
   end
 
   has_many :in_books, class_name: 'Biblio::InBook', foreign_key: :parent_id
@@ -67,7 +67,7 @@ class Biblio::Book < Biblio::Entry
       author: authors.map(&:name).join(' '),
       title: title,
       publisher: publisher.try(:default_name),
-      serie: [serie.title, serie.abbr, serie.print_issn].join(' '),
+      serie: [serie.try(:title), serie.try(:abbr), serie.try(:print_issn)].join(' '),
       year: year,
       place: places.map(&:default_name).join(' '),
       tag: tag_list.join(' '),
@@ -84,7 +84,7 @@ class Biblio::Book < Biblio::Entry
   def to_bib
     BibTeX::Entry.new({
       :bibtex_type => type.demodulize.downcase.to_sym,
-      :bibtex_key => citation,
+      :bibtex_key => bibtex_citation,
       :author => authors.map{ |a| a.name(reverse: true) }.join(' and '),
       :title => title,
       :publisher => publisher.try(:default_name),
@@ -103,4 +103,32 @@ class Biblio::Book < Biblio::Entry
       :keywords => tag_list.join('; ')
     })
   end
+
+  def self.from_bib(bibtex, creator)
+    obj = self.with_creators(bibtex.author).jsonb_contains(year: bibtex.year, title: bibtex.title).first || self.new
+    if obj.new_record?
+      obj.key = bibtex.key
+      bibtex.author.each do |a|
+        author = Zensus::Appellation.find_by_name(a).first || Zensus::Appellation.create(name: a)
+        obj.authors << author
+      end
+      obj.title = bibtex.title
+      obj.publisher_id = Zensus::Appellation.find_by_name(bibtex.publisher).first.try(:id) || Zensus::Appellation.create(name: bibtex.publisher).id
+      obj.year = bibtex.year
+      obj.place_ids = ''
+      obj.month = bibtex.month
+      obj.serie = Biblio::Serie.jsonb_contains(title: b.series).first.try(:id) || Biblio::Serie.create(title: b.series, print_issn: b.try(:issn)).id
+      obj.volume = bibtex.volume
+      obj.edition = bibtex.edition
+      obj.note = bibtex.note
+      obj.abstract = bibtex.abstract
+      obj.print_isbn = bibtex.isbn
+      obj.doi = bibtex.doi
+      obj.url = bibtex.url
+      obj.tag_list = bibtex.try(:keywords)
+      obj.creator = creator
+    end
+    return obj
+  end
+  
 end

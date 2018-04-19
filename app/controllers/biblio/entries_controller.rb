@@ -10,11 +10,11 @@ class Biblio::EntriesController < ApplicationController
           :volume, :number, :note, :key, :isbn, :url, :doi, :abstract],
         where: {type: {not: ['Biblio::Serie', 'Biblio::Journal']}},
         page: params[:page], 
-        per_page: user_signed_in? && current_person.per_page.present? ? current_person.per_page : DEFAULT_PER_PAGE)
+        per_page: current_user.try(:person).try(:per_page).present? ? current_user.person.per_page : DEFAULT_PER_PAGE)
     else
       @entries = @all_entries
         .where.not(type: ['Biblio::Serie', 'Biblio::Journal'])
-        .order(slug: :asc).paginate(page: params[:page], per_page: user_signed_in? && current_person.per_page.present? ? current_person.per_page : DEFAULT_PER_PAGE)
+        .order(slug: :asc).paginate(page: params[:page], per_page: current_user.try(:person).try(:per_page).present? ? current_user.person.per_page : DEFAULT_PER_PAGE)
     end
 
     @serials = @all_entries.where(type: ['Biblio::Serie', 'Biblio::Journal']).order(slug: :asc)

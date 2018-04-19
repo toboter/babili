@@ -38,7 +38,7 @@ class Biblio::Techreport < Biblio::Entry
   validates :authors, :title, :institution_id, :year, presence: true
 
   def institution
-    institution_id.present? ? Zensus::Agent.find(institution_id) : nil
+    institution_id.present? ? Zensus::Appellation.find(institution_id) : nil
   end
 
   def places

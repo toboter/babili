@@ -10,4 +10,8 @@ module Biblio::EntriesHelper
   def book_for(article)
     link_to format_citation(article.parent), article.parent
   end
+
+  def doi_url(entry)
+    entry.doi.present? ? link_to(entry.doi, 'https://doi.org/'+entry.doi) : (entry.url.present? ? link_to(entry.url, entry.url) : '')
+  end
 end

@@ -40,7 +40,7 @@ class Biblio::Proceeding < Biblio::Entry
   validates :title, :year, presence: true
 
   def publisher
-    publisher_id.present? ? Zensus::Agent.find(publisher_id) : nil
+    publisher_id.present? ? Zensus::Appellation.find(publisher_id) : nil
   end
 
   def places
@@ -48,7 +48,7 @@ class Biblio::Proceeding < Biblio::Entry
   end
 
   def organization
-    organization_id.present? ? Zensus::Agent.find(organization_id) : nil
+    organization_id.present? ? Zensus::Appellation.find(organization_id) : nil
   end
 
   has_many :in_proceedings, class_name: 'Biblio::InProceeding', foreign_key: :parent_id
@@ -84,7 +84,7 @@ class Biblio::Proceeding < Biblio::Entry
   def to_bib
     BibTeX::Entry.new({
       :bibtex_type => type.demodulize.downcase.to_sym,
-      :bibtex_key => citation,
+      :bibtex_key => bibtex_citation,
       :editor => editors.map{ |a| a.name(reverse: true) }.join(' and '),
       :title => title,
       :publisher => publisher.try(:default_name),

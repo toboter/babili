@@ -7,7 +7,7 @@ class Biblio::Creatorship < ApplicationRecord
   # after create add agent activity :edited, :authored
   # after destroy :remove_activity
   def agent_activity
-
+    # activity_build.event()
   end
 
 end

@@ -1,15 +1,15 @@
 <div class="row">
   <div class="col-md-8">
     <h3>
-      <%= book.punctioned_title %><br>
+      <%= book.title %><br>
       <small>by <%= book.authors.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %> <%= book.year %> <%= '(' + book.month + ')' if book.month.present? %></small>
     </h3>
     <ul class="list-unstyled">
       <%= content_tag :li, "Serie: #{serie_for(book)}".html_safe if book.serie.present? %>      
-      <%= content_tag :li, "Publisher: #{link_to(book.publisher.try(:default_name), [:zensus, book.publisher])}".html_safe if book.publisher.present? %>
+      <%= content_tag :li, "Publisher: #{link_to(book.publisher.try(:name), zensus_name_path(book.publisher))}".html_safe if book.publisher.present? %>
       <%= content_tag :li, "Place: #{book.places.map{ |p| link_to p.default_name, p }.join(', ')}".html_safe if book.places.any? %>
       <%= content_tag :li, "ISBN: #{book.print_isbn}" if book.print_isbn.present? %>
-      <%= content_tag :li, book.doi.present? ? link_to(book.doi, book.doi) : (book.url.present? ? link_to(book.url, book.url) : ''), class: 'text-small' if book.doi || book.url %>
+      <%= content_tag :li, doi_url(book), class: 'text-small' if book.doi || book.url %>
       
     </ul>
     <%= content_tag :p, class: "text-gray" do %>

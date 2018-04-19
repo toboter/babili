@@ -1,12 +1,12 @@
 <div class="row">
   <div class="col-md-8">
     <h3>
-      <%= article.punctioned_title %><br>
+      <%= article.title %><br>
       <small>by <%= article.authors.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %> <%= article.year %> <%= '(' + article.month + ')' if article.month.present? %></small>
     </h3>
     <ul class="list-unstyled">
         <%= content_tag :li, journal_for(article) %>      
-        <%= content_tag :li, article.doi.present? ? link_to(article.doi, article.doi) : (article.url.present? ? link_to(article.url, article.url) : ''), class: 'text-small' if article.doi || article.url %>
+        <%= content_tag :li, doi_url(article), class: 'text-small' if article.doi || article.url %>
     </ul>
     <%= content_tag :p, class: "text-gray" do %>
       <%= content_tag :span, 'Note: ', class: 'text-strong' %> <%= article.note %>

@@ -101,6 +101,7 @@ $(document).on('turbolinks:load', function(){
       selectizeCallback = callback;
 
       $(".name-modal").modal();
+      $('#zensus_name_name').val(input);
     }
   });
 

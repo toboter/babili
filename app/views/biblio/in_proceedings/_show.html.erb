@@ -1,13 +1,13 @@
 <div class="row">
   <div class="col-md-8">
     <h3>
-      <%= in_proceeding.punctioned_title %><br>
+      <%= in_proceeding.title %><br>
       <small>by <%= in_proceeding.authors.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %> <%= in_proceeding.year %> <%= '(' + in_proceeding.month + ')' if in_proceeding.month.present? %></small>
     </h3>
     <ul class="list-unstyled">
         <%= content_tag :li, book_for(in_proceeding) %> 
         <%= content_tag :li, "Pages: #{in_proceeding.pages}" if in_proceeding.pages.present? %>     
-        <%= content_tag :li, in_proceeding.doi.present? ? link_to(in_proceeding.doi, in_proceeding.doi) : (in_proceeding.url.present? ? link_to(in_proceeding.url, in_proceeding.url) : ''), class: 'text-small' if in_proceeding.doi || in_proceeding.url %>
+        <%= content_tag :li, doi_url(in_proceeding), class: 'text-small' if in_proceeding.doi || in_proceeding.url %>
     </ul>
     <%= content_tag :p, class: "text-gray" do %>
       <%= content_tag :span, 'Note: ', class: 'text-strong' %> <%= in_proceeding.note %>

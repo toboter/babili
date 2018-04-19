@@ -10,7 +10,7 @@ module Biblio::StylesHelper
     else
       bib = BibTeX::Bibliography.new
       bib << obj.to_bib
-      cp = CiteProc::Processor.new style: (user_signed_in? && current_person.csl.present? ? current_person.csl : 'apa'), format: 'html'
+      cp = CiteProc::Processor.new style: (current_user.try(:person).try(:csl).present? ? current_user.person.csl : 'apa'), format: 'html'
       cp.import bib.to_citeproc
       ref = cp.bibliography.join
       ref = ref.gsub(%r{<ol/?[^>]+?>}, '').gsub(%r{<li/?[^>]+?>}, '').gsub(/<\/ol>|<\/li>/, '') if strip_list

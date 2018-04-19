@@ -59,7 +59,7 @@ class Biblio::InCollection < Biblio::Entry
   def to_bib
     BibTeX::Entry.new({
       :bibtex_type => type.demodulize.downcase.to_sym,
-      :bibtex_key => citation,
+      :bibtex_key => bibtex_citation,
       :author => authors.map{ |a| a.name(reverse: true) }.join(' and '),
       :title => title,
       :pages => pages,
@@ -76,7 +76,7 @@ class Biblio::InCollection < Biblio::Entry
       :address => places.map(&:default_name).join(', '),
       :series => serie.try(:title),
       :volume => volume,
-      :organization => organization
+      :organization => organization.try(:name)
     })
   end
 end

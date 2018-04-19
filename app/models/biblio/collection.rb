@@ -41,7 +41,7 @@ class Biblio::Collection < Biblio::Entry
   validates :editors, :title, :publisher_id, :year, presence: true
 
   def publisher
-    publisher_id.present? ? Zensus::Agent.find(publisher_id) : nil
+    publisher_id.present? ? Zensus::Appellation.find(publisher_id) : nil
   end
 
   def places
@@ -49,7 +49,7 @@ class Biblio::Collection < Biblio::Entry
   end
 
   def organization
-    organization_id.present? ? Zensus::Agent.find(organization_id) : nil
+    organization_id.present? ? Zensus::Appellation.find(organization_id) : nil
   end
 
   has_many :in_collections, class_name: 'Biblio::InCollection', foreign_key: :parent_id
@@ -67,7 +67,7 @@ class Biblio::Collection < Biblio::Entry
       author: editors.map(&:name).join(' '),
       title: title,
       publisher: publisher.try(:default_name),
-      serie: [serie.title, serie.abbr, serie.print_issn].join(' '),
+      serie: [serie.try(:title), serie.try(:abbr), serie.try(:print_issn)].join(' '),
       year: year,
       place: places.map(&:default_name).join(' '),
       tag: tag_list.join(' '),
@@ -84,8 +84,8 @@ class Biblio::Collection < Biblio::Entry
 
   def to_bib
     BibTeX::Entry.new({
-      :bibtex_type => 'book',
-      :bibtex_key => citation,
+      :bibtex_type => 'collection',
+      :bibtex_key => bibtex_citation,
       :editor => editors.map{ |a| a.name(reverse: true) }.join(' and '),
       :title => title,
       :publisher => publisher.try(:default_name),

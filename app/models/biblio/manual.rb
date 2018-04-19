@@ -40,7 +40,7 @@ class Biblio::Manual < Biblio::Entry
   end
 
   def organization
-    organization_id.present? ? Zensus::Agent.find(organization_id) : nil
+    organization_id.present? ? Zensus::Appellation.find(organization_id) : nil
   end
 
 end

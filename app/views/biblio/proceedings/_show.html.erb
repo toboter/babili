@@ -1,16 +1,16 @@
 <div class="row">
   <div class="col-md-8">
     <h3>
-      <%= proceeding.punctioned_title %><br>
+      <%= proceeding.title %><br>
       <small>Edited by: <%= proceeding.editors.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %> <%= proceeding.year %> <%= '(' + proceeding.month + ')' if proceeding.month.present? %></small>
     </h3>
     <ul class="list-unstyled">
       <%= content_tag :li, "Serie: #{serie_for(proceeding)}".html_safe if proceeding.serie.present? %>      
-      <%= content_tag :li, "Publisher: #{link_to(proceeding.publisher.try(:default_name), [:zensus, proceeding.publisher])}".html_safe if proceeding.publisher.present? %>
+      <%= content_tag :li, "Publisher: #{link_to(proceeding.publisher.try(:name), zensus_name_path(proceeding.publisher))}".html_safe if proceeding.publisher.present? %>
       <%= content_tag :li, "Place: #{proceeding.places.map{ |p| link_to p.default_name, p }.join(', ')}".html_safe if proceeding.places.any? %>
       <%= content_tag :li, "ISBN: #{proceeding.print_isbn}" if proceeding.print_isbn.present? %>
-      <%= content_tag :li, proceeding.doi.present? ? link_to(proceeding.doi, proceeding.doi) : (proceeding.url.present? ? link_to(proceeding.url, proceeding.url) : ''), class: 'text-small' if proceeding.doi || proceeding.url %>
-      <%= content_tag :li, "Organization: #{link_to proceeding.organization.try(:default_name), [:zensus, proceeding.organization]}".html_safe if proceeding.organization.present? %>
+      <%= content_tag :li, doi_url(proceeding), class: 'text-small' if proceeding.doi || proceeding.url %>
+      <%= content_tag :li, "Organization: #{link_to proceeding.organization.try(:name), zensus_name_path(proceeding.organization)}".html_safe if proceeding.organization.present? %>
     </ul>
     <%= content_tag :p, class: "text-gray" do %>
       <%= content_tag :span, 'Note: ', class: 'text-strong' %> <%= proceeding.note %>

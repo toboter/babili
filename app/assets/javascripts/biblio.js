@@ -36,6 +36,40 @@ $(document).on("turbolinks:load", function()  {
   });
 
 
+  $(".serie-modal").on("hide.bs.modal", function(e) {
+    if (selectizeCallback != null) {
+      selectizeCallback();
+      selecitzeCallback = null;
+    }
+
+    $("#new_biblio_serie").trigger("reset");
+    $.rails.enableFormElements($("#new_biblio_serie"));
+  });
+
+  $("#new_biblio_serie").on("submit", function(e) {
+    e.preventDefault();
+    $.ajax({
+      method: "POST",
+      url: $(this).attr("action") + '.json',
+      data: $(this).serialize(),
+      success: function(response) {
+        selectizeCallback({value: response.id, text: response.title});
+        selectizeCallback = null;
+
+        $(".serie-modal").modal('toggle');
+      }
+    });
+  });
+
+  $(".serie-selectize").selectize({
+    create: function(input, callback) {
+      selectizeCallback = callback;
+
+      $(".serie-modal").modal();
+      $("#biblio_serie_title").val(input);
+    }
+  });
+
   $('.repo-selectize').selectize({
     placeholder: 'Add to repository...'
   });

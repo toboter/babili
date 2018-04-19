@@ -8,6 +8,7 @@
     label_method: :name, 
     value_method: :id, 
     label: 'Authors', 
+    required: true,
     selected: @in_collection.creatorships.map(&:agent_appellation_id), 
     input_html: {
       multiple: true, 
@@ -64,5 +65,5 @@
 
 <% content_for :modals do %>
   <%= render 'zensus/appellations/new_modal' %>
-  <%= render 'biblio/journals/new_modal' %>
+  <%= render 'biblio/collections/new_modal' %>
 <% end %>

@@ -10,18 +10,14 @@
             <div class="row">
               <div class="appellation-parts col-md-8">
                 <%= f.error_notification %>
+                <%= f.input :name, label: 'Simple full-name', hint: 'Leave blank if adding a complex name.' %>
                 <%= f.simple_fields_for :appellation_parts do |p| %>
                   <%= render partial: 'zensus/agents/appellation_part_fields', locals: {f: p} %>
                 <% end %>
                 <div class="links">
-                  <%= link_to_add_association fa_icon('plus', text: 'Name element'), f, :appellation_parts, class: 'btn btn-default btn-sm', partial: 'zensus/agents/appellation_part_fields' %>
+                  <%= link_to_add_association fa_icon('plus', text: 'Complex name element'), f, :appellation_parts, class: 'btn btn-default btn-sm', partial: 'zensus/agents/appellation_part_fields' %>
                 </div>
-                <%= f.input :agent_id, 
-                  collection: Zensus::Agent.all, 
-                  label_method: :default_name, 
-                  value_method: :id,
-                  hint: "If creating a new name for an existing agent, please choose. Otherwise choose an agent type to create." %>
-                or <%= f.input :new_agent_type, collection: Zensus::Agent.types %>
+                <p class="text-muted text-small --spacious-20">Creating a new name needs editorial work to ensure the name is assigned to a unique agent.</p>
               </div>
               <div class="col-md-4">
                 <%= f.input :language %>

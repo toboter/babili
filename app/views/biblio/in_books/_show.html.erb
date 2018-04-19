@@ -1,14 +1,14 @@
 <div class="row">
   <div class="col-md-8">
     <h3>
-      <%= in_book.punctioned_title %><br>
+      <%= in_book.title %><br>
       <small>by <%= in_book.authors.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %> <%= in_book.year %> <%= '(' + in_book.month + ')' if in_book.month.present? %></small>
     </h3>
     <ul class="list-unstyled">
         <%= content_tag :li, book_for(in_book) %> 
         <%= content_tag :li, "Pages: #{in_book.pages}" if in_book.pages.present? %>
         <%= content_tag :li, "Chapter: #{in_book.chapter}" if in_book.chapter.present? %> 
-        <%= content_tag :li, in_book.doi.present? ? link_to(in_book.doi, in_book.doi) : (in_book.url.present? ? link_to(in_book.url, in_book.url) : ''), class: 'text-small' if in_book.doi || in_book.url %>
+        <%= content_tag :li, doi_url(in_book), class: 'text-small' if in_book.doi || in_book.url %>
     </ul>
     <%= content_tag :p, class: "text-gray" do %>
       <%= content_tag :span, 'Note: ', class: 'text-strong' %> <%= in_book.note %>

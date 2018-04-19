@@ -1,16 +1,10 @@
-class Biblio::EntryImport
-  require 'roo'
-  # switch to ActiveModel::Model in Rails 4
+class Biblio::Import
   extend ActiveModel::Naming
   include ActiveModel::Conversion
   include ActiveModel::Validations
 
-  attr_accessor :file
+  attr_accessor :file, :creator, :repository_ids, :bibtex_text
   
-  def self.col_attr
-    %w(type title subtitle first_page last_page page_count volume published_date abbr edition language place publisher serie_name)
-  end
-
   def initialize(attributes = {})
     attributes.each { |name, value| send("#{name}=", value) }
   end
@@ -20,25 +14,54 @@ class Biblio::EntryImport
   end
 
   def save
-  # raise imported_subjects.first.creators.inspect
-    if imported_subjects.map(&:valid?).all?
-      imported_subjects.each(&:save!)
+    if imported_entries.map(&:valid?).all?
+      imported_entries.each(&:save!)
       true
     else
-      imported_subjects.each_with_index do |subject, index|
-        subject.errors.full_messages.each do |message|
+      imported_entries.each_with_index do |entry, index|
+        entry.errors.full_messages.each do |message|
           errors.add :base, "Row #{index+2}: #{message}"
         end
       end
       false
     end
+    raise repository_ids.reject(&:blank?).map(&:to_i).inspect
   end
 
-  def imported_subjects
-    @imported_subjects ||= load_imported_subjects
+  def imported_entries
+    @imported_entries ||= import_bibtex
   end
 
-  def load_imported_subjects
+  def import_bibtex
+    bib = file.present? ? BibTeX.open(file.path) : BibTeX.parse(bibtex_text)
+    entries =[]
+    bib['@book'].each do |book|
+      raise book.inspect
+      entries << Biblio::Book.from_bib(book, creator)
+    end
+    bib['@collection'].each do |collection|
+      raise collection.inspect
+      entries << Biblio::Collection.from_bib(collection, creator)
+    end
+    bib['@article'].each do |article|
+      entries << Biblio::Article.from_bib(article, creator)
+    end
+
+
+    entries
+    raise entries.inspect
+  end
+
+  def type(entry)
+    Biblio::Entry.types.select {|t| t.include?('::'+entry.type.to_s.classify)}.first
+  end
+
+  def type_class(entry)
+    type(entry).constantize
+  end
+
+  # nur mit type column
+  def import_entries_from_spreadsheet
     spreadsheet = open_spreadsheet
     header = spreadsheet.row(1)
     (2..spreadsheet.last_row).map do |i|

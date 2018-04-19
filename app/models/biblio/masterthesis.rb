@@ -39,7 +39,7 @@ class Biblio::Masterthesis < Biblio::Entry
   end
 
   def school
-    school_id.present? ? Zensus::Agent.find(school_id) : nil
+    school_id.present? ? Zensus::Appellation.find(school_id) : nil
   end
 
 end

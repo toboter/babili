@@ -84,7 +84,7 @@ gem 'citeproc-ruby'
 gem 'csl-styles'
 gem 'unicode_utils'
 gem 'bibtex-ruby'
-gem 'sequenced'
+gem 'namae'
 
 gem 'devise'
 gem 'doorkeeper'

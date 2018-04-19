@@ -68,7 +68,7 @@
           </table>
         <% end if @serials.present? %>
         <%= content_tag :div, class: 'hint text-muted text-small --spacious' do %>
-          <p>The default size of results per page is 50. You can change this and also the format of the shown citations on your 
+          <p>The default size of results per page is 50. You can change this and the citations format on your 
           <%= link_to 'settings pages', settings_path %>.</p>
         <% end if user_signed_in? %>
       <% end %>

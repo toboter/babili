@@ -6,7 +6,7 @@
 
 class Zensus::AppellationPart < ApplicationRecord
   self.inheritance_column = :_type_disabled
-  belongs_to :appellation, touch: true
+  belongs_to :appellation, touch: true, inverse_of: :appellation_parts
   acts_as_list scope: :appellation
 
   after_commit :reindex_agent
@@ -14,18 +14,20 @@ class Zensus::AppellationPart < ApplicationRecord
 
   validates :body, :type, presence: true
 
+  scope :identify, -> name, type { where(body: name, type: type) }
+
   def set_position
       case type
-      when 'Descriptor'
-        self.insert_at(1)
-      when 'Prefix'
-        insert_after(['Descriptor', 'Prefix'])
-      when 'Forename'
-        insert_after(['Descriptor', 'Prefix', 'Forename'])
-      when 'Surname'
-        insert_after(['Descriptor', 'Prefix', 'Forename', 'Surname'])
-      when 'Birthname'
-        insert_after(['Descriptor', 'Prefix', 'Forename', 'Surname'])
+      when 'Appellation'
+        insert_after(['Appellation'])
+      when 'Title'
+        insert_after(['Appellation', 'Title'])
+      when 'Given'
+        insert_after(['Appellation', 'Title', 'Given'])
+      when 'Particle'
+        insert_after(['Appellation', 'Title', 'Given', 'Particle'])
+      when 'Family'
+        insert_after(['Appellation', 'Title', 'Given', 'Particle', 'Family'])
       when 'Suffix'
         self.move_to_bottom
       else
@@ -43,7 +45,7 @@ class Zensus::AppellationPart < ApplicationRecord
   end
 
   def self.types
-    %w[Descriptor Prefix Forename Nick Surname Birthname Suffix]
+    %w[Appellation Title Given Nick Family Suffix]
   end
 
   def reindex_agent
