@@ -71,9 +71,9 @@ class Biblio::InProceeding < Biblio::Entry
       :keywords => tag_list.join('; '),
       :booktitle => proceeding.try(:title),
       :editor => proceeding.editors.map{ |a| a.name(reverse: true) }.join(' and '),
-      :publisher => publisher.try(:default_name),
+      :publisher => publisher.try(:name),
       :year => year,
-      :address => places.map(&:default_name).join('; '),
+      :address => places.map(&:given).join('; '),
       :series => serie.try(:title),
       :volume => volume,
       :organization => organization.try(:name)

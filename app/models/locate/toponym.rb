@@ -14,5 +14,8 @@ class Locate::Toponym < ApplicationRecord
   TYPES = %w(Preferred Alternative Hidden)
 
   belongs_to :dating
+  has_one :place, through: :dating
+
+  alias_attribute :given, :descriptor
 
 end

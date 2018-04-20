@@ -40,11 +40,13 @@ class Biblio::Import
       entries << Biblio::Book.from_bib(book, creator)
     end
     bib['@collection'].each do |collection|
-      raise collection.inspect
       entries << Biblio::Collection.from_bib(collection, creator)
     end
     bib['@article'].each do |article|
       entries << Biblio::Article.from_bib(article, creator)
+    end
+    bib['@in_collection'].each do |collection|
+      entries << Biblio::InCollection.from_bib(collection, creator, entries)
     end
 
 

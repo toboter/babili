@@ -71,12 +71,37 @@ class Biblio::InCollection < Biblio::Entry
       :keywords => tag_list.join('; '),
       :booktitle => collection.title,
       :editor => collection.editors.map{ |a| a.name(reverse: true) }.join(' and '),
-      :publisher => publisher.try(:default_name),
+      :publisher => publisher.try(:name),
       :year => year,
-      :address => places.map(&:default_name).join(', '),
+      :address => places.map(&:given).join(', '),
       :series => serie.try(:title),
       :volume => volume,
       :organization => organization.try(:name)
     })
   end
+
+  def self.from_bib(bibtex, creator, entries)
+    collection = entries.select{|e| e.type == 'Biblio::Collection' && e.data['key'] == bibtex.crossref}.first# || Biblio::Collection.new
+
+    obj = self.with_creators(bibtex.author).where(parent_id: collection.try(:id)).jsonb_contains(title: bibtex.title).first || self.new
+    if obj.new_record?
+      obj.key = bibtex.key
+      bibtex.author.each do |a|
+        author = Zensus::Appellation.find_by_name(a).first || Zensus::Appellation.create(name: a)
+        obj.authors << author
+      end
+      obj.title = bibtex.title
+      obj.parent = collection # <- diese collecttion muss der incollection zugewiesen werden
+      obj.pages = bibtex.pages
+      obj.note = bibtex.note
+      obj.abstract = bibtex.abstract
+      obj.doi = bibtex.doi
+      obj.url = bibtex.url
+      obj.tag_list = bibtex.try(:keywords)
+      obj.creator = creator
+    end
+    return obj
+  end
+
+
 end

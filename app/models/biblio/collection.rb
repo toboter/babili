@@ -45,7 +45,7 @@ class Biblio::Collection < Biblio::Entry
   end
 
   def places
-    place_ids.present? ? Locate::Place.find(place_ids) : []
+    place_ids.present? ? Locate::Toponym.find(place_ids) : []
   end
 
   def organization
@@ -66,10 +66,10 @@ class Biblio::Collection < Biblio::Entry
       entry_type: type.demodulize,
       author: editors.map(&:name).join(' '),
       title: title,
-      publisher: publisher.try(:default_name),
+      publisher: publisher.try(:name),
       serie: [serie.try(:title), serie.try(:abbr), serie.try(:print_issn)].join(' '),
       year: year,
-      place: places.map(&:default_name).join(' '),
+      place: places.map(&:given).join(' '),
       tag: tag_list.join(' '),
       volume: volume,
       note: note,
@@ -78,7 +78,7 @@ class Biblio::Collection < Biblio::Entry
       url: url,
       doi: doi,
       abstract: abstract,
-      organization: organization.try(:default_name)
+      organization: organization.try(:name)
     }
   end
 
@@ -88,14 +88,14 @@ class Biblio::Collection < Biblio::Entry
       :bibtex_key => bibtex_citation,
       :editor => editors.map{ |a| a.name(reverse: true) }.join(' and '),
       :title => title,
-      :publisher => publisher.try(:default_name),
+      :publisher => publisher.try(:name),
       :year => year,
-      :address => places.map(&:default_name).join('; '),
+      :address => places.map(&:given).join('; '),
       :month => month,
       :series => serie.try(:title),
       :volume => volume,
       :edition => edition,
-      :organization => organization.try(:default_name),
+      :organization => organization.try(:name),
       :note => note,
       :key => key,
       :isbn => print_isbn,
@@ -105,4 +105,32 @@ class Biblio::Collection < Biblio::Entry
       :keywords => tag_list.join('; ')
     })
   end
+
+  def self.from_bib(bibtex, creator)
+    obj = self.with_creators(bibtex.editor).jsonb_contains(year: bibtex.year, title: bibtex.title).first || self.new
+    if obj.new_record?
+      obj.key = bibtex.key
+      bibtex.editor.each do |e|
+        editor = Zensus::Appellation.find_by_name(e).first || Zensus::Appellation.create(name: e)
+        obj.editors << editor
+      end
+      obj.title = bibtex.title
+      obj.publisher_id = Zensus::Appellation.find_by_name(bibtex.publisher).first.try(:id) || Zensus::Appellation.create(name: bibtex.publisher).id if bibtex.publisher.present?
+      obj.year = bibtex.year
+      obj.place_ids = bibtex.address.split('; ').map{|a| Locate::Toponym.find_by_given(a).try(:id) || Locate::Toponym.create(given: a).id if a }
+      obj.month = bibtex.month
+      obj.serie = Biblio::Serie.jsonb_contains(title: bibtex.series).first.try(:id) || Biblio::Serie.create(title: bibtex.series, print_issn: bibtex.try(:issn)).id
+      obj.volume = bibtex.volume
+      obj.edition = bibtex.edition
+      obj.note = bibtex.note
+      obj.abstract = bibtex.abstract
+      obj.print_isbn = bibtex.isbn
+      obj.doi = bibtex.doi
+      obj.url = bibtex.url
+      obj.tag_list = bibtex.try(:keywords)
+      obj.creator = creator
+    end
+    return obj
+  end
+
 end

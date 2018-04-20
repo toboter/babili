@@ -57,7 +57,6 @@ class Biblio::Entry < ApplicationRecord
     appellation_ids =[]
     names.each do |name|
       appellation_ids << Zensus::Appellation.find_by_name(name).first.try(:id)
-      # appellation_ids << Zensus::Appellation.joins(:appellation_parts).merge(Zensus::AppellationPart.where(body: name.family, type: 'Family')).merge(Zensus::AppellationPart.where(body: name.given, type: 'Given')).first.id
     end
     appellation_ids
   end

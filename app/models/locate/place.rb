@@ -26,7 +26,7 @@ class Locate::Place < ApplicationRecord
   def names
     toponyms.map{ |t| t.descriptor unless t.type == 'hidden' }.join(', ')
   end
-
+  
   def search_data
     { 
       type: type,

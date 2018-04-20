@@ -93,7 +93,7 @@ class Biblio::Article < Biblio::Entry
       obj.title = bibtex.title
       obj.year = bibtex.year
       obj.month = bibtex.month
-      obj.journal = Biblio::Journal.jsonb_contains(name: b.journal).first.id || Biblio::Journal.create(name: b.journal, print_issn: b.issn).id
+      obj.journal = Biblio::Journal.jsonb_contains(name: bibtex.journal).first.id || Biblio::Journal.create(name: bibtex.journal, print_issn: bibtex.issn).id
       obj.volume = bibtex.volume
       obj.number = bibtex.number
       obj.pages = bibtex.pages

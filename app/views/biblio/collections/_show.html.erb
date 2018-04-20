@@ -7,7 +7,7 @@
     <ul class="list-unstyled">
       <%= content_tag :li, "Serie: #{serie_for(collection)}".html_safe if collection.serie.present? %>      
       <%= content_tag :li, "Publisher: #{link_to(collection.publisher.try(:name), zensus_name_path(collection.publisher))}".html_safe if collection.publisher.present? %>
-      <%= content_tag :li, "Place: #{collection.places.map{ |p| link_to p.default_name, p }.join(', ')}".html_safe if collection.places.any? %>
+      <%= content_tag :li, "Place: #{places_url(collection)}".html_safe if collection.places.any? %>
       <%= content_tag :li, "Edition: #{collection.edition}" if collection.edition.present? %>
       <%= content_tag :li, "ISBN: #{collection.print_isbn}" if collection.print_isbn.present? %>
       <%= content_tag :li, doi_url(collection), class: 'text-small' if collection.doi || collection.url %>

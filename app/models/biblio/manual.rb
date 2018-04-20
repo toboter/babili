@@ -36,7 +36,7 @@ class Biblio::Manual < Biblio::Entry
   validates :title, presence: true
 
   def places
-    place_ids.present? ? Locate::Place.find(place_ids) : []
+    place_ids.present? ? Locate::Toponym.find(place_ids) : []
   end
 
   def organization

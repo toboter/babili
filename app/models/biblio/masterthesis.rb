@@ -35,7 +35,7 @@ class Biblio::Masterthesis < Biblio::Entry
   validates :authors, :title, :school_id, :year, presence: true
 
   def places
-    place_ids.present? ? Locate::Place.find(place_ids) : []
+    place_ids.present? ? Locate::Toponym.find(place_ids) : []
   end
 
   def school

@@ -45,7 +45,7 @@ class Biblio::Book < Biblio::Entry
   end
 
   def places
-    place_ids.present? ? Locate::Place.find(place_ids) : []
+    place_ids.present? ? Locate::Toponym.find(place_ids) : []
   end
 
   def organization
@@ -66,10 +66,10 @@ class Biblio::Book < Biblio::Entry
       entry_type: type.demodulize,
       author: authors.map(&:name).join(' '),
       title: title,
-      publisher: publisher.try(:default_name),
+      publisher: publisher.try(:name),
       serie: [serie.try(:title), serie.try(:abbr), serie.try(:print_issn)].join(' '),
       year: year,
-      place: places.map(&:default_name).join(' '),
+      place: places.map(&:given).join(' '),
       tag: tag_list.join(' '),
       volume: volume,
       note: note,
@@ -87,9 +87,9 @@ class Biblio::Book < Biblio::Entry
       :bibtex_key => bibtex_citation,
       :author => authors.map{ |a| a.name(reverse: true) }.join(' and '),
       :title => title,
-      :publisher => publisher.try(:default_name),
+      :publisher => publisher.try(:name),
       :year => year,
-      :address => places.map(&:default_name).join('; '),
+      :address => places.map(&:given).join('; '),
       :month => month,
       :series => serie.title,
       :volume => volume,
@@ -115,7 +115,7 @@ class Biblio::Book < Biblio::Entry
       obj.title = bibtex.title
       obj.publisher_id = Zensus::Appellation.find_by_name(bibtex.publisher).first.try(:id) || Zensus::Appellation.create(name: bibtex.publisher).id
       obj.year = bibtex.year
-      obj.place_ids = ''
+      obj.place_ids = bibtex.address.split('; ').map{|a| Locate::Toponym.find_by_given(a).try(:id) || Locate::Toponym.create(given: a).id if a }
       obj.month = bibtex.month
       obj.serie = Biblio::Serie.jsonb_contains(title: b.series).first.try(:id) || Biblio::Serie.create(title: b.series, print_issn: b.try(:issn)).id
       obj.volume = bibtex.volume
@@ -130,5 +130,5 @@ class Biblio::Book < Biblio::Entry
     end
     return obj
   end
-  
+
 end

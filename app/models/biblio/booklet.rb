@@ -35,7 +35,7 @@ class Biblio::Booklet < Biblio::Entry
   validates :title, presence: true
 
   def places
-    Locate::Place.find(self.place_ids)
+    Locate::Toponym.find(self.place_ids)
   end
 
   def search_data
@@ -45,7 +45,7 @@ class Biblio::Booklet < Biblio::Entry
       author: authors.map(&:name).join(' '),
       title: title,
       year: year,
-      place: places.map(&:default_name).join(' '),
+      place: places.map(&:given).join(' '),
       tag: tag_list.join(' '),
       note: note,
       key: key,
@@ -63,7 +63,7 @@ class Biblio::Booklet < Biblio::Entry
       :title => title,
       :howpublished => howpublished,
       :year => year,
-      :address => places.map(&:default_name).join('; '),
+      :address => places.map(&:given).join('; '),
       :month => month,
       :note => note,
       :key => key,

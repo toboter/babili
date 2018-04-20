@@ -44,7 +44,7 @@ class Biblio::Proceeding < Biblio::Entry
   end
 
   def places
-    place_ids.present? ? Locate::Place.find(place_ids) : []
+    place_ids.present? ? Locate::Toponym.find(place_ids) : []
   end
 
   def organization
@@ -65,10 +65,10 @@ class Biblio::Proceeding < Biblio::Entry
       entry_type: type.demodulize,
       author: editors.map(&:name).join(' '),
       title: title,
-      publisher: publisher.try(:default_name),
+      publisher: publisher.try(:name),
       serie: [serie.try(:title), serie.try(:abbr), serie.try(:print_issn)].join(' '),
       year: year,
-      place: places.map(&:default_name).join(' '),
+      place: places.map(&:given).join(' '),
       tag: tag_list.join(' '),
       volume: volume,
       note: note,
@@ -77,7 +77,7 @@ class Biblio::Proceeding < Biblio::Entry
       url: url,
       doi: doi,
       abstract: abstract,
-      organization: organization.try(:default_name)
+      organization: organization.try(:name)
     }
   end
 
@@ -87,13 +87,13 @@ class Biblio::Proceeding < Biblio::Entry
       :bibtex_key => bibtex_citation,
       :editor => editors.map{ |a| a.name(reverse: true) }.join(' and '),
       :title => title,
-      :publisher => publisher.try(:default_name),
+      :publisher => publisher.try(:name),
       :year => year,
-      :address => places.map(&:default_name).join('; '),
+      :address => places.map(&:given).join('; '),
       :month => month,
       :series => serie.try(:title),
       :volume => volume,
-      :organization => organization.try(:default_name),
+      :organization => organization.try(:name),
       :note => note,
       :key => key,
       :isbn => print_isbn,

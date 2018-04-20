@@ -14,4 +14,8 @@ module Biblio::EntriesHelper
   def doi_url(entry)
     entry.doi.present? ? link_to(entry.doi, 'https://doi.org/'+entry.doi) : (entry.url.present? ? link_to(entry.url, entry.url) : '')
   end
+
+  def places_url(entry)
+    entry.places.map{ |p| p.place ? link_to(p.given, p.try(:place)) : p.given }.join(', ').html_safe
+  end
 end

@@ -39,7 +39,12 @@ class Zensus::Appellation < ApplicationRecord
     options[:reverse] ? name.reverse.join(', ') : name.join(' ')
   end
 
+  def describe
+    Hash[*appellation_parts.map{ |p| {p.type.downcase.to_sym => p.body} }.collect{|h| h.to_a}.flatten].delete_if{|k,v| v.blank?}
+  end
+
   def name=(full_name)
+    return nil if full_name.blank?
     name_parts = Namae.parse(full_name).first
     self.appellation_parts.build(body: name_parts.given, type: 'Given', preferred: true) if name_parts.given
     self.appellation_parts.build(body: name_parts.family, type: 'Family', preferred: true) if name_parts.family.present?
@@ -52,15 +57,33 @@ class Zensus::Appellation < ApplicationRecord
 
   def self.find_by_name(full_name)
     name = Namae.parse(full_name).first
-    appellations = all.joins(:appellation_parts)
-    appellations = appellations.merge(Zensus::AppellationPart.identify(name.family, 'Family')) if name.family
-    appellations = appellations.merge(Zensus::AppellationPart.identify(name.given, 'Given')) if name.given
-    appellations = appellations.merge(Zensus::AppellationPart.identify(name.title, 'Title')) if name.title
-    appellations = appellations.merge(Zensus::AppellationPart.identify(name.nick, 'Nick')) if name.nick
-    appellations = appellations.merge(Zensus::AppellationPart.identify(name.appellation, 'Appellation')) if name.appellation
-    appellations = appellations.merge(Zensus::AppellationPart.identify(name.suffix, 'Suffix')) if name.suffix
-    appellations = appellations.merge(Zensus::AppellationPart.identify(name.particle, 'Particle')) if name.particle
-    return appellations
+
+    return [] if name.blank?
+
+    terms = [
+      {body: name.family, type: name.family ? 'Family' : nil}.compact, 
+      {body: name.given, type: name.given ? 'Given' : nil}.compact,
+      {body: name.title, type: name.title ? 'Title' : nil}.compact,
+      {body: name.nick, type: name.nick ? 'Nick' : nil}.compact,
+      {body: name.appellation, type: name.appellation ? 'Appellation' : nil}.compact,
+      {body: name.suffix, type: name.suffix ? 'Suffix' : nil}.compact,
+      {body: name.particle, type: name.particle ? 'Particle' : nil}.compact
+    ].delete_if &:empty?
+
+    # get a reference to the join table
+    parts = Zensus::AppellationPart.arel_table
+    # get a reference to the filtered table
+    appellations = Zensus::Appellation.arel_table
+    # let AREL generate a complex SQL query
+    terms.inject(self) { |rel, term|
+      rel.where(
+        Zensus::AppellationPart \
+          .where(parts[:appellation_id].eq(appellations[:id])) \
+          .where(parts[:body].eq(term[:body]).and(parts[:type].eq(term[:type]))) \
+          .exists
+      )
+    }
+
   end
 
   def self.transis

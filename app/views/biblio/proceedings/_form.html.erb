@@ -21,8 +21,8 @@
   <%= f.input :title, as: :text %>
 
   <%= f.input :publisher_id, 
-    collection: Zensus::Group.all, 
-    label_method: :default_name, 
+    collection: Zensus::Appellation.all, 
+    label_method: :name, 
     value_method: :id, 
     include_blank: false, 
     label: "Publisher", 
@@ -34,8 +34,8 @@
   <hr>
   
   <%= f.input :place_ids, 
-    collection: Locate::Place.all, 
-    label_method: :default_name, 
+    collection: Locate::Toponym.all, 
+    label_method: :given, 
     value_method: :id, 
     label: 'Places', 
     selected: @proceeding.place_ids, 
@@ -60,8 +60,8 @@
   <%= f.input :volume %>
 
   <%= f.input :organization_id, 
-    collection: Zensus::Group.all, 
-    label_method: :default_name, 
+    collection: Zensus::Appellation.all, 
+    label_method: :name, 
     value_method: :id, 
     include_blank: true, 
     label: "Organization", 

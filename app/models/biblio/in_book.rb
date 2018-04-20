@@ -73,9 +73,9 @@ class Biblio::InBook < Biblio::Entry
       :abstract => abstract,
       :keywords => tag_list.join('; '),
       :booktitle => book.title,
-      :publisher => publisher.try(:default_name),
+      :publisher => publisher.try(:name),
       :year => year,
-      :address => places.map(&:default_name).join('; '),
+      :address => places.map(&:given).join('; '),
       :series => serie.title,
       :volume => volume
     })
