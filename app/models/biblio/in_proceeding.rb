@@ -34,7 +34,7 @@ class Biblio::InProceeding < Biblio::Entry
 
   delegate :editors, :year, :publisher, :places, :serie, :volume, :organization, :month, to: :proceeding
 
-  def proceeding=(id)
+  def proceeding_id=(id)
     self.parent_id = id
   end
 

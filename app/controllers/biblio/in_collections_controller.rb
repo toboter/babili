@@ -50,7 +50,7 @@ class Biblio::InCollectionsController < Biblio::EntriesController
   private
   # Never trust parameters from the scary internet, only allow the white list through.
   def in_collection_params
-    params.require(:biblio_in_collection).permit(:title, :collection,
+    params.require(:biblio_in_collection).permit(:title, :collection_id,
       :pages, :note, :key, :url, :doi, :abstract, :tag_list, :author_ids => [])
   end
 end

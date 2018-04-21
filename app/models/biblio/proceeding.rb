@@ -68,7 +68,7 @@ class Biblio::Proceeding < Biblio::Entry
       publisher: publisher.try(:name),
       serie: [serie.try(:title), serie.try(:abbr), serie.try(:print_issn)].join(' '),
       year: year,
-      place: places.map(&:given).join(' '),
+      place: places.map(&:given).join('; '),
       tag: tag_list.join(' '),
       volume: volume,
       note: note,

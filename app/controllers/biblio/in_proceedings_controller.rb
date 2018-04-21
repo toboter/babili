@@ -50,7 +50,7 @@ class Biblio::InProceedingsController < Biblio::EntriesController
   private
   # Never trust parameters from the scary internet, only allow the white list through.
   def in_proceeding_params
-    params.require(:biblio_in_proceeding).permit(:title, :proceeding,
+    params.require(:biblio_in_proceeding).permit(:title, :proceeding_id,
       :pages, :note, :key, :url, :doi, :abstract, :tag_list, :author_ids => [])
   end
 end

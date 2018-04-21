@@ -50,7 +50,7 @@ class Biblio::InBooksController < Biblio::EntriesController
   private
   # Never trust parameters from the scary internet, only allow the white list through.
   def in_book_params
-    params.require(:biblio_in_book).permit(:title, :book, :chapter,
+    params.require(:biblio_in_book).permit(:title, :book_id, :chapter,
       :pages, :note, :key, :url, :doi, :abstract, :tag_list, :author_ids => [])
   end
 end

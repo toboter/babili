@@ -35,7 +35,7 @@ class Biblio::InBook < Biblio::Entry
 
   delegate :year, :month, :publisher, :places, :serie, :volume, to: :book
 
-  def book=(id)
+  def book_id=(id)
     self.parent_id = id
   end
 

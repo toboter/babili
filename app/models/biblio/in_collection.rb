@@ -34,7 +34,7 @@ class Biblio::InCollection < Biblio::Entry
 
   delegate :editors, :year, :month, :publisher, :places, :serie, :volume, :organization, to: :collection
 
-  def collection=(id)
+  def collection_id=(id)
     self.parent_id = id
   end
 
@@ -73,7 +73,7 @@ class Biblio::InCollection < Biblio::Entry
       :editor => collection.editors.map{ |a| a.name(reverse: true) }.join(' and '),
       :publisher => publisher.try(:name),
       :year => year,
-      :address => places.map(&:given).join(', '),
+      :address => places.map(&:given).join('; '),
       :series => serie.try(:title),
       :volume => volume,
       :organization => organization.try(:name)
@@ -81,7 +81,28 @@ class Biblio::InCollection < Biblio::Entry
   end
 
   def self.from_bib(bibtex, creator, entries)
-    collection = entries.select{|e| e.type == 'Biblio::Collection' && e.data['key'] == bibtex.crossref}.first# || Biblio::Collection.new
+    if bibtex.respond_to?(:crossref) && bibtex.crossref.present?
+      collection = entries.select{|e| e.type == 'Biblio::Collection' && e.data['key'] == bibtex.crossref}.first
+    elsif bibtex.respond_to?(:editor) && bibtex.respond_to?(:year) && bibtex.respond_to?(:booktitle)
+      collection = Biblio::Collection.with_creators(bibtex.editor).jsonb_contains(year: bibtex.year, title: bibtex.booktitle).first || Biblio::Collection.new
+      if collection.new_record?
+        bibtex.editor.each do |e|
+          editor = Zensus::Appellation.find_by_name(e).first || Zensus::Appellation.create(name: e)
+          collection.editors << editor
+        end
+        collection.title = bibtex.booktitle
+        collection.publisher_id = Zensus::Appellation.find_by_name(bibtex.publisher).first.try(:id) || Zensus::Appellation.create(name: bibtex.publisher).id if bibtex.publisher.present?
+        collection.year = bibtex.year
+        collection.place_ids = bibtex.address.split('; ').map{|a| Locate::Toponym.find_by_given(a).try(:id) || Locate::Toponym.create(given: a).id if a }
+        collection.month = bibtex.try(:month)
+        collection.serie = Biblio::Serie.jsonb_contains(title: bibtex.series).first.try(:id) || Biblio::Serie.create(title: bibtex.series, print_issn: bibtex.try(:issn)).id
+        collection.volume = bibtex.try(:volume)
+        collection.edition = bibtex.try(:edition)
+        collection.print_isbn = bibtex.try(:isbn)
+        collection.creator = creator
+      end
+    end
+    return nil unless collection.valid?
 
     obj = self.with_creators(bibtex.author).where(parent_id: collection.try(:id)).jsonb_contains(title: bibtex.title).first || self.new
     if obj.new_record?
@@ -91,7 +112,7 @@ class Biblio::InCollection < Biblio::Entry
         obj.authors << author
       end
       obj.title = bibtex.title
-      obj.parent = collection # <- diese collecttion muss der incollection zugewiesen werden
+      obj.collection = collection # <- diese collecttion muss der incollection zugewiesen werden
       obj.pages = bibtex.pages
       obj.note = bibtex.note
       obj.abstract = bibtex.abstract

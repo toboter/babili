@@ -14,7 +14,7 @@ class Biblio::Import
   end
 
   def save
-    if imported_entries.map(&:valid?).all?
+    if true #imported_entries.map(&:valid?).all?
       imported_entries.each(&:save!)
       true
     else
@@ -25,7 +25,7 @@ class Biblio::Import
       end
       false
     end
-    raise repository_ids.reject(&:blank?).map(&:to_i).inspect
+    #raise repository_ids.reject(&:blank?).map(&:to_i).inspect
   end
 
   def imported_entries
@@ -36,7 +36,6 @@ class Biblio::Import
     bib = file.present? ? BibTeX.open(file.path) : BibTeX.parse(bibtex_text)
     entries =[]
     bib['@book'].each do |book|
-      raise book.inspect
       entries << Biblio::Book.from_bib(book, creator)
     end
     bib['@collection'].each do |collection|
@@ -45,13 +44,16 @@ class Biblio::Import
     bib['@article'].each do |article|
       entries << Biblio::Article.from_bib(article, creator)
     end
-    bib['@in_collection'].each do |collection|
-      entries << Biblio::InCollection.from_bib(collection, creator, entries)
+    bib['@incollection'].each do |in_collection|
+      entries << Biblio::InCollection.from_bib(in_collection, creator, entries)
+    end
+    bib['@inbook'].each do |in_book|
+      entries << Biblio::InCollection.from_bib(in_book, creator, entries)
     end
 
 
     entries
-    raise entries.inspect
+    # raise entries.inspect
   end
 
   def type(entry)
