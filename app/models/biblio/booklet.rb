@@ -48,7 +48,6 @@ class Biblio::Booklet < Biblio::Entry
       place: places.map(&:given).join(' '),
       tag: tag_list.join(' '),
       note: note,
-      key: key,
       url: url,
       doi: doi,
       abstract: abstract
@@ -66,11 +65,33 @@ class Biblio::Booklet < Biblio::Entry
       :address => places.map(&:given).join('; '),
       :month => month,
       :note => note,
-      :key => key,
       :url => url,
       :doi => doi,
       :abstract => abstract,
       :keywords => tag_list.join('; ')
     })
+  end
+
+  def self.from_bib(bibtex, creator)
+    obj = self.with_creators(bibtex.author).jsonb_contains(year: bibtex.year, title: bibtex.title).first || self.new
+    obj.key = bibtex.key
+    if obj.new_record?
+      bibtex.author.each do |a|
+        author = Zensus::Appellation.find_by_name(a).first || Zensus::Appellation.create(name: a)
+        obj.authors << author
+      end if bibtex.try(:author)
+      obj.title = bibtex.title
+      obj.howpublished = bibtex.try(:howpublished)
+      obj.year = bibtex.try(:year)
+      obj.month = bibtex.try(:month)
+      obj.place_ids = bibtex.address.split('; ').map{|a| Locate::Toponym.find_by_given(a).try(:id) || Locate::Toponym.create(given: a).id if a } if bibtex.try(:address)
+      obj.note = bibtex.try(:note)
+      obj.abstract = bibtex.try(:abstract)
+      obj.doi = bibtex.try(:doi)
+      obj.url = bibtex.try(:url)
+      obj.tag_list = bibtex.try(:keywords)
+      obj.creator = creator
+    end
+    return obj
   end
 end

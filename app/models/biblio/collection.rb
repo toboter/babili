@@ -73,7 +73,6 @@ class Biblio::Collection < Biblio::Entry
       tag: tag_list.join(' '),
       volume: volume,
       note: note,
-      key: key,
       isbn: print_isbn,
       url: url,
       doi: doi,
@@ -97,7 +96,6 @@ class Biblio::Collection < Biblio::Entry
       :edition => edition,
       :organization => organization.try(:name),
       :note => note,
-      :key => key,
       :isbn => print_isbn,
       :url => url,
       :doi => doi,
@@ -108,8 +106,9 @@ class Biblio::Collection < Biblio::Entry
 
   def self.from_bib(bibtex, creator)
     obj = self.with_creators(bibtex.editor).jsonb_contains(year: bibtex.year, title: bibtex.title).first || self.new
+    obj.key = bibtex.key
     if obj.new_record?
-      obj.key = bibtex.key
+      bibtex.publisher = bibtex.publisher.presence || 'anonymous'
       bibtex.editor.each do |e|
         editor = Zensus::Appellation.find_by_name(e).first || Zensus::Appellation.create(name: e)
         obj.editors << editor
@@ -117,16 +116,16 @@ class Biblio::Collection < Biblio::Entry
       obj.title = bibtex.title
       obj.publisher_id = Zensus::Appellation.find_by_name(bibtex.publisher).first.try(:id) || Zensus::Appellation.create(name: bibtex.publisher).id if bibtex.publisher.present?
       obj.year = bibtex.year
-      obj.place_ids = bibtex.address.split('; ').map{|a| Locate::Toponym.find_by_given(a).try(:id) || Locate::Toponym.create(given: a).id if a }
-      obj.month = bibtex.month
+      obj.place_ids = bibtex.address.split('; ').map{|a| Locate::Toponym.find_by_given(a).try(:id) || Locate::Toponym.create(given: a).id if a } if bibtex.try(:address)
+      obj.month = bibtex.try(:month)
       obj.serie = Biblio::Serie.jsonb_contains(title: bibtex.series).first.try(:id) || Biblio::Serie.create(title: bibtex.series, print_issn: bibtex.try(:issn)).id
-      obj.volume = bibtex.volume
-      obj.edition = bibtex.edition
-      obj.note = bibtex.note
-      obj.abstract = bibtex.abstract
-      obj.print_isbn = bibtex.isbn
-      obj.doi = bibtex.doi
-      obj.url = bibtex.url
+      obj.volume = bibtex.try(:volume)
+      obj.edition = bibtex.try(:edition)
+      obj.note = bibtex.try(:note)
+      obj.abstract = bibtex.try(:abstract)
+      obj.print_isbn = bibtex.try(:isbn)
+      obj.doi = bibtex.try(:doi)
+      obj.url = bibtex.try(:url)
       obj.tag_list = bibtex.try(:keywords)
       obj.creator = creator
     end

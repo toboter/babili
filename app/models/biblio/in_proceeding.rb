@@ -49,7 +49,6 @@ class Biblio::InProceeding < Biblio::Entry
       tag: tag_list.join(' '),
       pages: pages,
       note: note,
-      key: key,
       url: url,
       doi: doi,
       abstract: abstract
@@ -64,7 +63,6 @@ class Biblio::InProceeding < Biblio::Entry
       :title => title,
       :pages => pages,
       :note => note,
-      :key => key,
       :url => url,
       :doi => doi,
       :abstract => abstract,
@@ -78,5 +76,50 @@ class Biblio::InProceeding < Biblio::Entry
       :volume => volume,
       :organization => organization.try(:name)
     })
+  end
+
+  def self.from_bib(bibtex, creator, entries)
+    if bibtex.respond_to?(:crossref) && bibtex.crossref.present?
+      proceeding = entries.select{|e| e.type == 'Biblio::Proceeding' && e.data['key'] == bibtex.crossref}.first
+    elsif bibtex.respond_to?(:editor) && bibtex.respond_to?(:year) && bibtex.respond_to?(:booktitle)
+      proceeding = Biblio::Proceeding.with_creators(bibtex.editor).jsonb_contains(year: bibtex.year, title: bibtex.booktitle).first || Biblio::Proceeding.new
+      if proceeding.new_record?
+        bibtex.publisher = bibtex.publisher.presence || 'anonymous'
+        bibtex.editor.each do |e|
+          editor = Zensus::Appellation.find_by_name(e).first || Zensus::Appellation.create(name: e)
+          proceeding.editors << editor
+        end
+        proceeding.title = bibtex.booktitle
+        proceeding.publisher_id = Zensus::Appellation.find_by_name(bibtex.publisher).first.try(:id) || Zensus::Appellation.create(name: bibtex.publisher).id if bibtex.publisher.present?
+        proceeding.year = bibtex.year
+        proceeding.place_ids = bibtex.address.split('; ').map{|a| Locate::Toponym.find_by_given(a).try(:id) || Locate::Toponym.create(given: a).id if a }
+        proceeding.month = bibtex.try(:month)
+        proceeding.serie = Biblio::Serie.jsonb_contains(title: bibtex.series).first.try(:id) || Biblio::Serie.create(title: bibtex.series, print_issn: bibtex.try(:issn)).id
+        proceeding.volume = bibtex.try(:volume)
+        proceeding.organization_id = Zensus::Appellation.find_by_name(bibtex.organization).first.try(:id) || Zensus::Appellation.create(name: bibtex.organization).id if bibtex.organization.present?
+        proceeding.print_isbn = bibtex.try(:isbn)
+        proceeding.creator = creator
+      end
+    end
+    return nil unless proceeding.valid?
+
+    obj = self.with_creators(bibtex.author).where(parent_id: proceeding.try(:id)).jsonb_contains(title: bibtex.title).first || self.new
+    obj.key = bibtex.key
+    if obj.new_record?
+      bibtex.author.each do |a|
+        author = Zensus::Appellation.find_by_name(a).first || Zensus::Appellation.create(name: a)
+        obj.authors << author
+      end
+      obj.title = bibtex.title
+      obj.proceeding = entries.map{|e| e.proceeding if e.respond_to?(:proceeding) }.select{ |c| c.editors == proceeding.editors && c.title == proceeding.title && c.year == proceeding.year }.first || proceeding
+      obj.pages = bibtex.try(:pages)
+      obj.note = bibtex.try(:note)
+      obj.abstract = bibtex.try(:abstract)
+      obj.doi = bibtex.try(:doi)
+      obj.url = bibtex.try(:url)
+      obj.tag_list = bibtex.try(:keywords)
+      obj.creator = creator
+    end
+    return obj
   end
 end

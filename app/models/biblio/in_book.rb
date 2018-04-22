@@ -51,7 +51,6 @@ class Biblio::InBook < Biblio::Entry
       chapter: chapter,
       pages: pages,
       note: note,
-      key: key,
       url: url,
       doi: doi,
       abstract: abstract
@@ -67,7 +66,6 @@ class Biblio::InBook < Biblio::Entry
       :pages => pages,
       :chapter => chapter,
       :note => note,
-      :key => key,
       :url => url,
       :doi => doi,
       :abstract => abstract,
@@ -80,4 +78,51 @@ class Biblio::InBook < Biblio::Entry
       :volume => volume
     })
   end
+
+  def self.from_bib(bibtex, creator, entries)
+    if bibtex.respond_to?(:crossref) && bibtex.crossref.present?
+      book = entries.select{|e| e.type == 'Biblio::Book' && e.data['key'] == bibtex.crossref}.first
+    elsif bibtex.respond_to?(:author) && bibtex.respond_to?(:year) && (bibtex.respond_to?(:booktitle) || bibtex.respond_to?(:title))
+      book = Biblio::Book.with_creators(bibtex.author).jsonb_contains(year: bibtex.year, title: (bibtex.try(:booktitle) ? bibtex.booktitle : bibtex.title)).first || Biblio::Book.new
+      if book.new_record?
+        bibtex.publisher = bibtex.publisher.presence || 'anonymous'
+        bibtex.author.each do |e|
+          author = Zensus::Appellation.find_by_name(e).first || Zensus::Appellation.create(name: e)
+          book.authors << author
+        end
+        book.title = bibtex.try(:booktitle) ? bibtex.booktitle : bibtex.title
+        book.publisher_id = Zensus::Appellation.find_by_name(bibtex.publisher).first.try(:id) || Zensus::Appellation.create(name: bibtex.publisher).id if bibtex.publisher.present?
+        book.year = bibtex.year
+        book.place_ids = bibtex.address.split('; ').map{|a| Locate::Toponym.find_by_given(a).try(:id) || Locate::Toponym.create(given: a).id if a }
+        book.month = bibtex.try(:month)
+        book.serie = Biblio::Serie.jsonb_contains(title: bibtex.series).first.try(:id) || Biblio::Serie.create(title: bibtex.series, print_issn: bibtex.try(:issn)).id
+        book.volume = bibtex.try(:volume)
+        book.edition = bibtex.try(:edition)
+        book.print_isbn = bibtex.try(:isbn)
+        book.creator = creator
+      end
+    end
+    return nil unless book.valid?
+
+    obj = self.with_creators(bibtex.author).where(parent_id: book.try(:id)).jsonb_contains(title: bibtex.title).first || self.new
+    obj.key = bibtex.key
+    if obj.new_record?
+      bibtex.author.each do |a|
+        author = Zensus::Appellation.find_by_name(a).first || Zensus::Appellation.create(name: a)
+        obj.authors << author
+      end
+      obj.title = bibtex.title
+      obj.book = entries.map{|e| e.book if e.respond_to?(:book) }.select{ |c| c.authors == book.authors && c.title == book.title && c.year == book.year }.first || book
+      obj.pages = bibtex.try(:pages)
+      obj.chapter = bibtex.try(:chapter)
+      obj.note = bibtex.try(:note)
+      obj.abstract = bibtex.try(:abstract)
+      obj.doi = bibtex.try(:doi)
+      obj.url = bibtex.try(:url)
+      obj.tag_list = bibtex.try(:keywords)
+      obj.creator = creator
+    end
+    return obj
+  end
+
 end

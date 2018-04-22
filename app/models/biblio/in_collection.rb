@@ -49,7 +49,6 @@ class Biblio::InCollection < Biblio::Entry
       tag: tag_list.join(' '),
       pages: pages,
       note: note,
-      key: key,
       url: url,
       doi: doi,
       abstract: abstract
@@ -64,7 +63,6 @@ class Biblio::InCollection < Biblio::Entry
       :title => title,
       :pages => pages,
       :note => note,
-      :key => key,
       :url => url,
       :doi => doi,
       :abstract => abstract,
@@ -86,6 +84,7 @@ class Biblio::InCollection < Biblio::Entry
     elsif bibtex.respond_to?(:editor) && bibtex.respond_to?(:year) && bibtex.respond_to?(:booktitle)
       collection = Biblio::Collection.with_creators(bibtex.editor).jsonb_contains(year: bibtex.year, title: bibtex.booktitle).first || Biblio::Collection.new
       if collection.new_record?
+        bibtex.publisher = bibtex.publisher.presence || 'anonymous'
         bibtex.editor.each do |e|
           editor = Zensus::Appellation.find_by_name(e).first || Zensus::Appellation.create(name: e)
           collection.editors << editor
@@ -93,7 +92,7 @@ class Biblio::InCollection < Biblio::Entry
         collection.title = bibtex.booktitle
         collection.publisher_id = Zensus::Appellation.find_by_name(bibtex.publisher).first.try(:id) || Zensus::Appellation.create(name: bibtex.publisher).id if bibtex.publisher.present?
         collection.year = bibtex.year
-        collection.place_ids = bibtex.address.split('; ').map{|a| Locate::Toponym.find_by_given(a).try(:id) || Locate::Toponym.create(given: a).id if a }
+        collection.place_ids = bibtex.address.split('; ').map{|a| Locate::Toponym.find_by_given(a).try(:id) || Locate::Toponym.create(given: a).id if a } if bibtex.try(:address)
         collection.month = bibtex.try(:month)
         collection.serie = Biblio::Serie.jsonb_contains(title: bibtex.series).first.try(:id) || Biblio::Serie.create(title: bibtex.series, print_issn: bibtex.try(:issn)).id
         collection.volume = bibtex.try(:volume)
@@ -105,19 +104,19 @@ class Biblio::InCollection < Biblio::Entry
     return nil unless collection.valid?
 
     obj = self.with_creators(bibtex.author).where(parent_id: collection.try(:id)).jsonb_contains(title: bibtex.title).first || self.new
+    obj.key = bibtex.key
     if obj.new_record?
-      obj.key = bibtex.key
       bibtex.author.each do |a|
         author = Zensus::Appellation.find_by_name(a).first || Zensus::Appellation.create(name: a)
         obj.authors << author
       end
       obj.title = bibtex.title
-      obj.collection = collection # <- diese collecttion muss der incollection zugewiesen werden
-      obj.pages = bibtex.pages
-      obj.note = bibtex.note
-      obj.abstract = bibtex.abstract
-      obj.doi = bibtex.doi
-      obj.url = bibtex.url
+      obj.collection = entries.map{|e| e.collection if e.respond_to?(:collection) }.select{ |c| c.try(:editors) == collection.try(:editors) && c.title == collection.title && c.year == collection.year }.first || collection
+      obj.pages = bibtex.try(:pages)
+      obj.note = bibtex.try(:note)
+      obj.abstract = bibtex.try(:abstract)
+      obj.doi = bibtex.try(:doi)
+      obj.url = bibtex.try(:url)
       obj.tag_list = bibtex.try(:keywords)
       obj.creator = creator
     end

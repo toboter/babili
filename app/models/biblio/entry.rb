@@ -5,8 +5,9 @@ class Biblio::Entry < ApplicationRecord
   has_closure_tree dependent: :destroy
   acts_as_taggable
   before_validation :set_citation_raw
-  before_validation :set_citation_sequence
-  friendly_id :citation, use: :slugged
+  #acts_as_sequenced scope: :citation_raw
+  before_create :set_citation_sequence
+  friendly_id :id, use: :slugged
 
   has_many :creatorships, dependent: :destroy, class_name: 'Biblio::Creatorship', foreign_key: :entry_id
   has_many :creators, -> { order 'biblio_creatorships.id asc' }, through: :creatorships, source: :agent_appellation
@@ -37,7 +38,7 @@ class Biblio::Entry < ApplicationRecord
 
   scope :with_creators, lambda{ |names|
     c_ids = creator_ids(names)
-    return [] if c_ids.include?(nil)
+    return self.none if c_ids.include?(nil)
     # get a reference to the join table
     creator_assignments = Biblio::Creatorship.arel_table
     # get a reference to the filtered table

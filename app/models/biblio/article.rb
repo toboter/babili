@@ -54,7 +54,6 @@ class Biblio::Article < Biblio::Entry
       number: number,
       pages: pages,
       note: note,
-      key: key,
       url: url,
       doi: doi,
       abstract: abstract
@@ -74,7 +73,6 @@ class Biblio::Article < Biblio::Entry
       :number => number,
       :pages => pages,
       :note => note,
-      :key => key,
       :url => url,
       :doi => doi,
       :abstract => abstract,
@@ -84,23 +82,23 @@ class Biblio::Article < Biblio::Entry
 
   def self.from_bib(bibtex, creator)
     obj = self.with_creators(bibtex.author).jsonb_contains(year: bibtex.year, title: bibtex.title).first || self.new
+    obj.key = bibtex.key
     if obj.new_record?
-      obj.key = bibtex.key
       bibtex.author.each do |a|
         author = Zensus::Appellation.find_by_name(a).first || Zensus::Appellation.create(name: a)
         obj.authors << author
       end
       obj.title = bibtex.title
       obj.year = bibtex.year
-      obj.month = bibtex.month
-      obj.journal = Biblio::Journal.jsonb_contains(name: bibtex.journal).first.id || Biblio::Journal.create(name: bibtex.journal, print_issn: bibtex.issn).id
-      obj.volume = bibtex.volume
-      obj.number = bibtex.number
-      obj.pages = bibtex.pages
-      obj.note = bibtex.note
-      obj.abstract = bibtex.abstract
-      obj.doi = bibtex.doi
-      obj.url = bibtex.url
+      obj.month = bibtex.try(:month)
+      obj.journal = Biblio::Journal.jsonb_contains(name: bibtex.journal).first.try(:id) || Biblio::Journal.create(name: bibtex.journal, print_issn: bibtex.issn).id
+      obj.volume = bibtex.try(:volume)
+      obj.number = bibtex.try(:number)
+      obj.pages = bibtex.try(:pages)
+      obj.note = bibtex.try(:note)
+      obj.abstract = bibtex.try(:abstract)
+      obj.doi = bibtex.try(:doi)
+      obj.url = bibtex.try(:url)
       obj.tag_list = bibtex.try(:keywords)
       obj.creator = creator
     end

@@ -49,7 +49,7 @@
     collection: Biblio::Serie.all, 
     label_method: :title, 
     value_method: :id, 
-    include_blank: false, 
+    include_blank: true, 
     label: "Serie", 
     selected: @book.serie.try(:id), 
     input_html: {
