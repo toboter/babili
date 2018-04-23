@@ -16,6 +16,9 @@ class Biblio::InProceeding < Biblio::Entry
 
   CREATOR_TYPES = %w(Author)
   DESCRIPTION = 'An article in the proceedings of a conference.'
+  def icon
+    'file'
+  end
 
   has_many :creatorships, dependent: :destroy, class_name: 'Biblio::Creatorship', foreign_key: :entry_id
   has_many :authors, through: :creatorships, source: :agent_appellation
@@ -44,7 +47,11 @@ class Biblio::InProceeding < Biblio::Entry
       entry_type: type.demodulize,
       author: authors.map(&:name).join(' '),
       title: title,
-      book: proceeding.search_data,
+      booktitle: proceeding.title,
+      editor: editors.map(&:name).join(' '),
+      publisher: publisher.name,
+      address: places.map(&:given).join(' '),
+      series: [serie.try(:title), serie.try(:abbr), serie.try(:print_issn)].join(' '),
       year: year,
       tag: tag_list.join(' '),
       pages: pages,
@@ -84,19 +91,19 @@ class Biblio::InProceeding < Biblio::Entry
     elsif bibtex.respond_to?(:editor) && bibtex.respond_to?(:year) && bibtex.respond_to?(:booktitle)
       proceeding = Biblio::Proceeding.with_creators(bibtex.editor).jsonb_contains(year: bibtex.year, title: bibtex.booktitle).first || Biblio::Proceeding.new
       if proceeding.new_record?
-        bibtex.publisher = bibtex.publisher.presence || 'anonymous'
+        bibtex.publisher = bibtex.publisher.presence || 'unknown'
         bibtex.editor.each do |e|
           editor = Zensus::Appellation.find_by_name(e).first || Zensus::Appellation.create(name: e)
           proceeding.editors << editor
         end
-        proceeding.title = bibtex.booktitle
-        proceeding.publisher_id = Zensus::Appellation.find_by_name(bibtex.publisher).first.try(:id) || Zensus::Appellation.create(name: bibtex.publisher).id if bibtex.publisher.present?
+        proceeding.title = bibtex.booktitle.strip if bibtex.try(:booktitle)
+        proceeding.publisher_id = Zensus::Appellation.find_by_name(bibtex.publisher).first.try(:id) || Zensus::Appellation.create(name: bibtex.publisher).id if bibtex.try(:publisher)
         proceeding.year = bibtex.year
-        proceeding.place_ids = bibtex.address.split('; ').map{|a| Locate::Toponym.find_by_given(a).try(:id) || Locate::Toponym.create(given: a).id if a }
+        proceeding.place_ids = bibtex.address.split('; ').map{|a| Locate::Toponym.find_by_given(a).try(:id) || Locate::Toponym.create(given: a).id if a } if bibtex.try(:address)
         proceeding.month = bibtex.try(:month)
         proceeding.serie = Biblio::Serie.jsonb_contains(title: bibtex.series).first.try(:id) || Biblio::Serie.create(title: bibtex.series, print_issn: bibtex.try(:issn)).id
         proceeding.volume = bibtex.try(:volume)
-        proceeding.organization_id = Zensus::Appellation.find_by_name(bibtex.organization).first.try(:id) || Zensus::Appellation.create(name: bibtex.organization).id if bibtex.organization.present?
+        proceeding.organization_id = Zensus::Appellation.find_by_name(bibtex.organization).first.try(:id) || Zensus::Appellation.create(name: bibtex.organization).id if bibtex.try(:organization)
         proceeding.print_isbn = bibtex.try(:isbn)
         proceeding.creator = creator
       end
@@ -110,7 +117,7 @@ class Biblio::InProceeding < Biblio::Entry
         author = Zensus::Appellation.find_by_name(a).first || Zensus::Appellation.create(name: a)
         obj.authors << author
       end
-      obj.title = bibtex.title
+      obj.title = bibtex.title.strip if bibtex.try(:title)
       obj.proceeding = entries.map{|e| e.proceeding if e.respond_to?(:proceeding) }.select{ |c| c.editors == proceeding.editors && c.title == proceeding.title && c.year == proceeding.year }.first || proceeding
       obj.pages = bibtex.try(:pages)
       obj.note = bibtex.try(:note)

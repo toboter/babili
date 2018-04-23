@@ -16,6 +16,9 @@ class Biblio::InCollection < Biblio::Entry
 
   CREATOR_TYPES = %w(Author)
   DESCRIPTION = 'A part of a book with its own title.'
+  def icon
+    'file'
+  end
 
   has_many :creatorships, dependent: :destroy, class_name: 'Biblio::Creatorship', foreign_key: :entry_id
   has_many :authors, through: :creatorships, source: :agent_appellation
@@ -44,7 +47,11 @@ class Biblio::InCollection < Biblio::Entry
       entry_type: type.demodulize,
       author: authors.map(&:name).join(' '),
       title: title,
-      book: collection.search_data,
+      booktitle: collection.title,
+      editor: editors.map(&:name).join(' '),
+      publisher: publisher.name,
+      address: places.map(&:given).join(' '),
+      series: [serie.try(:title), serie.try(:abbr), serie.try(:print_issn)].join(' '),
       year: year,
       tag: tag_list.join(' '),
       pages: pages,
@@ -84,12 +91,12 @@ class Biblio::InCollection < Biblio::Entry
     elsif bibtex.respond_to?(:editor) && bibtex.respond_to?(:year) && bibtex.respond_to?(:booktitle)
       collection = Biblio::Collection.with_creators(bibtex.editor).jsonb_contains(year: bibtex.year, title: bibtex.booktitle).first || Biblio::Collection.new
       if collection.new_record?
-        bibtex.publisher = bibtex.publisher.presence || 'anonymous'
+        bibtex.publisher = bibtex.publisher.presence || 'unknown'
         bibtex.editor.each do |e|
           editor = Zensus::Appellation.find_by_name(e).first || Zensus::Appellation.create(name: e)
           collection.editors << editor
         end
-        collection.title = bibtex.booktitle
+        collection.title = bibtex.booktitle.strip if bibtex.booktitle.present?
         collection.publisher_id = Zensus::Appellation.find_by_name(bibtex.publisher).first.try(:id) || Zensus::Appellation.create(name: bibtex.publisher).id if bibtex.publisher.present?
         collection.year = bibtex.year
         collection.place_ids = bibtex.address.split('; ').map{|a| Locate::Toponym.find_by_given(a).try(:id) || Locate::Toponym.create(given: a).id if a } if bibtex.try(:address)
@@ -110,7 +117,7 @@ class Biblio::InCollection < Biblio::Entry
         author = Zensus::Appellation.find_by_name(a).first || Zensus::Appellation.create(name: a)
         obj.authors << author
       end
-      obj.title = bibtex.title
+      obj.title = bibtex.title.strip if bibtex.title.present?
       obj.collection = entries.map{|e| e.collection if e.respond_to?(:collection) }.select{ |c| c.try(:editors) == collection.try(:editors) && c.title == collection.title && c.year == collection.year }.first || collection
       obj.pages = bibtex.try(:pages)
       obj.note = bibtex.try(:note)

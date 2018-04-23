@@ -1,0 +1,39 @@
+<% title "Journals", false %>
+
+<% content_for :container do %>
+  <div class="wrapper biblio">
+    <div class="row">
+      <div class="col-md-12">
+        <%= content_tag :h4, class: '--spacing-20 --spacious-20' do %>
+          <%= link_to 'References', biblio_entries_path %> /
+          <%= yield :title %>
+        
+        <% end %>
+        <hr>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-8 main">
+        <div id='entries'>
+          <table class="table table-simple">
+            <tbody>
+              <%= render @journals %>
+            </tbody>
+          </table>
+        </div>
+        <%= content_tag :div, link_to('Get an overview.', biblio_path, class: 'text-small'), class: 'links --spacious-10' %>
+      </div>
+      <%= content_tag :div, class: 'col-md-4 sidebar' do %>
+        <%= content_tag :div, class: "list-group" do %>
+          <%= link_to 'References', biblio_entries_path, class: 'list-group-item' %>
+          <%= link_to 'Series', biblio_series_path, class: 'list-group-item' %>
+        <% end %>
+
+        <p class="text-small text-grey">
+          Die Bibliographie ist in einem fortlaufenden Prozess. Umfang und Genauigkeit der Daten entwickeln sich mit dem Voranschreiten des Projekts. 
+          Hinweise, Ergänzungen, sowie Berichtigungen werden dankbar entgegengenommen.
+        </p>
+      <% end %>
+    </div>
+  </div>
+<% end %>

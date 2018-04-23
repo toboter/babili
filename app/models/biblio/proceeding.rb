@@ -16,6 +16,9 @@ class Biblio::Proceeding < Biblio::Entry
 
   CREATOR_TYPES = %w(Editor)
   DESCRIPTION = 'The proceedings of a conference.'
+  def icon
+    'book'
+  end
 
   json_attribute :title, :string
   json_attribute :year, :string
@@ -66,9 +69,9 @@ class Biblio::Proceeding < Biblio::Entry
       author: editors.map(&:name).join(' '),
       title: title,
       publisher: publisher.try(:name),
-      serie: [serie.try(:title), serie.try(:abbr), serie.try(:print_issn)].join(' '),
+      series: [serie.try(:title), serie.try(:abbr), serie.try(:print_issn)].join(' '),
       year: year,
-      place: places.map(&:given).join('; '),
+      address: places.map(&:given).join('; '),
       tag: tag_list.join(' '),
       volume: volume,
       note: note,
@@ -106,14 +109,14 @@ class Biblio::Proceeding < Biblio::Entry
     obj = self.with_creators(bibtex.editor).jsonb_contains(year: bibtex.year, title: bibtex.title).first || self.new
     obj.key = bibtex.key
     if obj.new_record?
-      bibtex.publisher = bibtex.publisher.presence || 'anonymous'
+      bibtex.publisher = bibtex.publisher.presence || 'unknown'
       bibtex.editor.each do |e|
         editor = Zensus::Appellation.find_by_name(e).first || Zensus::Appellation.create(name: e)
         obj.editors << editor
       end
-      obj.title = bibtex.title
-      obj.publisher_id = Zensus::Appellation.find_by_name(bibtex.publisher).first.try(:id) || Zensus::Appellation.create(name: bibtex.publisher).id if bibtex.publisher.present?
-      obj.organization_id = Zensus::Appellation.find_by_name(bibtex.organization).first.try(:id) || Zensus::Appellation.create(name: bibtex.organization).id if bibtex.organization.present?
+      obj.title = bibtex.title.strip if bibtex.try(:title)
+      obj.publisher_id = Zensus::Appellation.find_by_name(bibtex.publisher).first.try(:id) || Zensus::Appellation.create(name: bibtex.publisher).id if bibtex.try(:publisher)
+      obj.organization_id = Zensus::Appellation.find_by_name(bibtex.organization).first.try(:id) || Zensus::Appellation.create(name: bibtex.organization).id if bibtex.try(:organization)
       obj.year = bibtex.year
       obj.place_ids = bibtex.address.split('; ').map{|a| Locate::Toponym.find_by_given(a).try(:id) || Locate::Toponym.create(given: a).id if a } if bibtex.try(:address)
       obj.month = bibtex.try(:month)

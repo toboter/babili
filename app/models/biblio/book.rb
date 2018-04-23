@@ -16,6 +16,9 @@ class Biblio::Book < Biblio::Entry
 
   CREATOR_TYPES = %w(Author)
   DESCRIPTION = 'A book with an author and explicit publisher.'
+  def icon
+    'book'
+  end
 
   has_many :creatorships, dependent: :destroy, class_name: 'Biblio::Creatorship', foreign_key: :entry_id
   has_many :authors, through: :creatorships, source: :agent_appellation
@@ -67,9 +70,9 @@ class Biblio::Book < Biblio::Entry
       author: authors.map(&:name).join(' '),
       title: title,
       publisher: publisher.try(:name),
-      serie: [serie.try(:title), serie.try(:abbr), serie.try(:print_issn)].join(' '),
+      series: [serie.try(:title), serie.try(:abbr), serie.try(:print_issn)].join(' '),
       year: year,
-      place: places.map(&:given).join(' '),
+      address: places.map(&:given).join(' '),
       tag: tag_list.join(' '),
       volume: volume,
       note: note,
@@ -106,12 +109,12 @@ class Biblio::Book < Biblio::Entry
     obj = self.with_creators(bibtex.author).jsonb_contains(year: bibtex.year, title: bibtex.title).first || self.new
     obj.key = bibtex.key
     if obj.new_record?
-      bibtex.publisher = bibtex.publisher.presence || 'anonymous'
+      bibtex.publisher = bibtex.publisher.presence || 'unknown'
       bibtex.author.each do |a|
         author = Zensus::Appellation.find_by_name(a).first || Zensus::Appellation.create(name: a)
         obj.authors << author
       end
-      obj.title = bibtex.title
+      obj.title = bibtex.title.strip if bibtex.title.present?
       obj.publisher_id = Zensus::Appellation.find_by_name(bibtex.publisher).first.try(:id) || Zensus::Appellation.create(name: bibtex.publisher).id
       obj.year = bibtex.year
       obj.place_ids = bibtex.address.split('; ').map{|a| Locate::Toponym.find_by_given(a).try(:id) || Locate::Toponym.create(given: a).id if a } if bibtex.try(:address)

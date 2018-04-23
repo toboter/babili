@@ -16,6 +16,9 @@ class Biblio::Collection < Biblio::Entry
 
   CREATOR_TYPES = %w(Editor)
   DESCRIPTION = 'A book with an editor and explicit publisher.'
+  def icon
+    'book'
+  end
 
   has_many :creatorships, dependent: :destroy, class_name: 'Biblio::Creatorship', foreign_key: :entry_id
   has_many :editors, through: :creatorships, source: :agent_appellation
@@ -64,12 +67,12 @@ class Biblio::Collection < Biblio::Entry
     {
       citation: citation,
       entry_type: type.demodulize,
-      author: editors.map(&:name).join(' '),
+      editor: editors.map(&:name).join(' '),
       title: title,
       publisher: publisher.try(:name),
-      serie: [serie.try(:title), serie.try(:abbr), serie.try(:print_issn)].join(' '),
+      series: [serie.try(:title), serie.try(:abbr), serie.try(:print_issn)].join(' '),
       year: year,
-      place: places.map(&:given).join(' '),
+      address: places.map(&:given).join(' '),
       tag: tag_list.join(' '),
       volume: volume,
       note: note,
@@ -108,15 +111,16 @@ class Biblio::Collection < Biblio::Entry
     obj = self.with_creators(bibtex.editor).jsonb_contains(year: bibtex.year, title: bibtex.title).first || self.new
     obj.key = bibtex.key
     if obj.new_record?
-      bibtex.publisher = bibtex.publisher.presence || 'anonymous'
+      bibtex.publisher = bibtex.publisher.presence || 'unknown'
       bibtex.editor.each do |e|
         editor = Zensus::Appellation.find_by_name(e).first || Zensus::Appellation.create(name: e)
         obj.editors << editor
       end
-      obj.title = bibtex.title
+      obj.title = bibtex.title.strip if bibtex.title.present?
       obj.publisher_id = Zensus::Appellation.find_by_name(bibtex.publisher).first.try(:id) || Zensus::Appellation.create(name: bibtex.publisher).id if bibtex.publisher.present?
       obj.year = bibtex.year
       obj.place_ids = bibtex.address.split('; ').map{|a| Locate::Toponym.find_by_given(a).try(:id) || Locate::Toponym.create(given: a).id if a } if bibtex.try(:address)
+      obj.organization_id = Zensus::Appellation.find_by_name(bibtex.organization).first.try(:id) || Zensus::Appellation.create(name: bibtex.organization).id if bibtex.try(:organization)
       obj.month = bibtex.try(:month)
       obj.serie = Biblio::Serie.jsonb_contains(title: bibtex.series).first.try(:id) || Biblio::Serie.create(title: bibtex.series, print_issn: bibtex.try(:issn)).id
       obj.volume = bibtex.try(:volume)

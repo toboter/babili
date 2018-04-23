@@ -12,14 +12,14 @@ Rails.application.routes.draw do
     resources :entries, only: :index do
        post :add_repositories, to: 'referencations#add_repository', on: :member
     end
-    resources :series, type: 'Biblio::Serie', except: :index
+    resources :series, type: 'Biblio::Serie'
     resources :books, type: 'Biblio::Book', except: :index
     resources :in_books, type: 'Biblio::InBook', except: :index
     resources :collections, type: 'Biblio::Collection', except: :index
     resources :in_collections, type: 'Biblio::InCollection', except: :index
     resources :proceedings, type: 'Biblio::Proceeding', except: :index
     resources :in_proceedings, type: 'Biblio::InProceeding', except: :index
-    resources :journals, type: 'Biblio::Journal', except: :index
+    resources :journals, type: 'Biblio::Journal'
     resources :articles, type: 'Biblio::Article', except: :index
     resources :miscs, type: 'Biblio::Misc', except: :index
     resources :manuals, type: 'Biblio::Manual', except: :index

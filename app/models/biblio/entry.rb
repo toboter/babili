@@ -1,4 +1,5 @@
 class Biblio::Entry < ApplicationRecord
+  #require 'csl/styles'
   extend FriendlyId
   searchkick inheritance: true
   include ActionView::Helpers::TextHelper
@@ -117,6 +118,19 @@ class Biblio::Entry < ApplicationRecord
 
   def citation
     "#{citation_raw}#{numeric_to_alph(sequential_id) if sequential_id > 1 && !self.type.in?(['Biblio::Serie', 'Biblio::Journal'])}"
+  end
+
+  def bibliographic(style='apa', locale='en-US')
+    csl_style = CSL::Style.load(style)
+    csl_locale = CSL::Locale.load(locale)
+
+    citation_item = CiteProc::CitationItem.new(id: self.bibtex_citation) do |c|
+      c.data = CiteProc::Item.new(self.to_bib.to_citeproc)
+    end
+
+    cpr = CiteProc::Ruby::Renderer.new(:format => 'html', :style => csl_style, :locale => csl_locale)
+    cpr.render(citation_item, csl_style.bibliography).html_safe
+
   end
 
   Alpha26 = ("a".."z").to_a

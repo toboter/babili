@@ -1,5 +1,9 @@
 class Biblio::SeriesController < Biblio::EntriesController
 
+  def index
+    @serials = Biblio::Serie.all.sort_by(&:title)
+  end
+
   def show
     @entry = @serie
   end

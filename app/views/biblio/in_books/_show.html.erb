@@ -27,7 +27,7 @@
     <div class="row">
       <div class="col-md-7">
         <p class="text-gray text-small">
-          <%= format_citation(in_book) %>
+          <%= in_book.bibliographic(current_user.try(:person).try(:csl), 'en-US') %>
         </p>
         <%= content_tag :p, in_book.abstract %>
       </div>

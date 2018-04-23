@@ -1,10 +1,10 @@
 <tr>
   <td width="5%">
-    <%= content_tag :span, fa_icon('file'), title: 'In collection' %>
+    <%= content_tag :span, fa_icon(in_collection.icon), title: 'In collection' %>
   </td>
   <td>
     <%= render 'biblio/shared/actions', entry: in_collection, referencation: local_assigns[:referencation] %>
     <%= content_tag :span, link_to(in_collection.citation, in_collection), class: 'text-strong' %><br>
-    <%= content_tag :span, format_citation(in_collection), class: 'text-small' %>
+    <%= content_tag :span, in_collection.bibliographic(current_user.try(:person).try(:csl), 'en-US'), class: 'text-small' %>
   </td>
 </tr>

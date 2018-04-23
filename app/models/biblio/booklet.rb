@@ -16,6 +16,9 @@ class Biblio::Booklet < Biblio::Entry
 
   CREATOR_TYPES = %w(Author)
   DESCRIPTION = 'A work that is printed and bound, but without a named publisher or sponsoring institution.'
+  def icon
+    'book'
+  end
 
   json_attribute :title, :string
 
@@ -45,7 +48,7 @@ class Biblio::Booklet < Biblio::Entry
       author: authors.map(&:name).join(' '),
       title: title,
       year: year,
-      place: places.map(&:given).join(' '),
+      address: places.map(&:given).join(' '),
       tag: tag_list.join(' '),
       note: note,
       url: url,
@@ -80,7 +83,7 @@ class Biblio::Booklet < Biblio::Entry
         author = Zensus::Appellation.find_by_name(a).first || Zensus::Appellation.create(name: a)
         obj.authors << author
       end if bibtex.try(:author)
-      obj.title = bibtex.title
+      obj.title = bibtex.title.strip if bibtex.title.present?
       obj.howpublished = bibtex.try(:howpublished)
       obj.year = bibtex.try(:year)
       obj.month = bibtex.try(:month)

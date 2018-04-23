@@ -1,5 +1,9 @@
 class Biblio::JournalsController < Biblio::EntriesController
 
+  def index
+    @journals = Biblio::Journal.all.sort_by(&:name)
+  end
+
   def show
     @entry = @journal
   end

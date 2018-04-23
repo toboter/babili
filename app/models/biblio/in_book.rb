@@ -16,6 +16,9 @@ class Biblio::InBook < Biblio::Entry
 
   CREATOR_TYPES = %w(Author)
   DESCRIPTION = 'A part of a book, which may be a chapter and/or a range of pages.'
+  def icon
+    'file'
+  end
 
   has_many :creatorships, dependent: :destroy, class_name: 'Biblio::Creatorship', foreign_key: :entry_id
   has_many :authors, through: :creatorships, source: :agent_appellation
@@ -45,7 +48,10 @@ class Biblio::InBook < Biblio::Entry
       entry_type: type.demodulize,
       author: authors.map(&:name).join(' '),
       title: title,
-      book: book.search_data,
+      booktitle: book.title,
+      publisher: publisher.name,
+      address: places.map(&:given).join(' '),
+      series: [serie.try(:title), serie.try(:abbr), serie.try(:print_issn)].join(' '),
       year: year,
       tag: tag_list.join(' '),
       chapter: chapter,
@@ -74,7 +80,7 @@ class Biblio::InBook < Biblio::Entry
       :publisher => publisher.try(:name),
       :year => year,
       :address => places.map(&:given).join('; '),
-      :series => serie.title,
+      :series => serie.try(:title),
       :volume => volume
     })
   end
@@ -85,12 +91,12 @@ class Biblio::InBook < Biblio::Entry
     elsif bibtex.respond_to?(:author) && bibtex.respond_to?(:year) && (bibtex.respond_to?(:booktitle) || bibtex.respond_to?(:title))
       book = Biblio::Book.with_creators(bibtex.author).jsonb_contains(year: bibtex.year, title: (bibtex.try(:booktitle) ? bibtex.booktitle : bibtex.title)).first || Biblio::Book.new
       if book.new_record?
-        bibtex.publisher = bibtex.publisher.presence || 'anonymous'
+        bibtex.publisher = bibtex.publisher.presence || 'unknown'
         bibtex.author.each do |e|
           author = Zensus::Appellation.find_by_name(e).first || Zensus::Appellation.create(name: e)
           book.authors << author
         end
-        book.title = bibtex.try(:booktitle) ? bibtex.booktitle : bibtex.title
+        book.title = bibtex.try(:booktitle) ? bibtex.booktitle.strip : bibtex.title.strip
         book.publisher_id = Zensus::Appellation.find_by_name(bibtex.publisher).first.try(:id) || Zensus::Appellation.create(name: bibtex.publisher).id if bibtex.publisher.present?
         book.year = bibtex.year
         book.place_ids = bibtex.address.split('; ').map{|a| Locate::Toponym.find_by_given(a).try(:id) || Locate::Toponym.create(given: a).id if a }
@@ -111,7 +117,7 @@ class Biblio::InBook < Biblio::Entry
         author = Zensus::Appellation.find_by_name(a).first || Zensus::Appellation.create(name: a)
         obj.authors << author
       end
-      obj.title = bibtex.title
+      obj.title = bibtex.title.strip if bibtex.title.present?
       obj.book = entries.map{|e| e.book if e.respond_to?(:book) }.select{ |c| c.authors == book.authors && c.title == book.title && c.year == book.year }.first || book
       obj.pages = bibtex.try(:pages)
       obj.chapter = bibtex.try(:chapter)

@@ -8,7 +8,7 @@ module Biblio::EntriesHelper
   end
 
   def book_for(article)
-    link_to format_citation(article.parent), article.parent
+    link_to article.parent.bibliographic(current_user.try(:person).try(:csl), 'en-US'), article.parent
   end
 
   def doi_url(entry)

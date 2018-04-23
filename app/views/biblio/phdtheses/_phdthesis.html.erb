@@ -1,10 +1,10 @@
 <tr>
   <td width="5%">
-    <%= content_tag :span, fa_icon('book'), title: 'Phd thesis' %>
+    <%= content_tag :span, fa_icon(phdthesis.icon), title: 'Phd thesis' %>
   </td>
   <td>
     <%= render 'biblio/shared/actions', entry: phdthesis, referencation: local_assigns[:referencation] %>
     <%= content_tag :span, link_to(phdthesis.citation, phdthesis), class: 'text-strong' %><br>
-    <%= content_tag :span, format_citation(phdthesis), class: 'text-small' %>
+    <%= content_tag :span, phdthesis.bibliographic(current_user.try(:person).try(:csl), 'en-US'), class: 'text-small' %>
   </td>
 </tr>

@@ -41,6 +41,9 @@ class Biblio::Import
     bib['@booklet'].each do |book|
       entries << Biblio::Booklet.from_bib(book, creator)
     end
+    bib['@manual'].each do |book|
+      entries << Biblio::Manual.from_bib(book, creator)
+    end
     bib['@collection'].each do |collection|
       entries << Biblio::Collection.from_bib(collection, creator)
     end
@@ -59,9 +62,22 @@ class Biblio::Import
     bib['@inproceeding'].each do |in_proceeding|
       entries << Biblio::InProceeding.from_bib(in_proceeding, creator, entries)
     end
+    bib['@masterthesis'].each do |book|
+      entries << Biblio::Masterthesis.from_bib(book, creator)
+    end
+    bib['@phdthesis'].each do |book|
+      entries << Biblio::Phdthesis.from_bib(book, creator)
+    end
+    bib['@misc'].each do |book|
+      entries << Biblio::Misc.from_bib(book, creator)
+    end
+    bib['@techreport'].each do |book|
+      entries << Biblio::Techreport.from_bib(book, creator)
+    end
+    bib['@unpublished'].each do |book|
+      entries << Biblio::Unpublished.from_bib(book, creator)
+    end
     entries
-
-
     # raise entries.inspect
   end
 

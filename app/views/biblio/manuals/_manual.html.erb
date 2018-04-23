@@ -1,10 +1,10 @@
 <tr>
   <td width="5%">
-    <%= content_tag :span, fa_icon('file'), title: 'Manual' %>
+    <%= content_tag :span, fa_icon(manual.icon), title: 'Manual' %>
   </td>
   <td>
     <%= render 'biblio/shared/actions', entry: manual, referencation: local_assigns[:referencation] %>
     <%= content_tag :span, link_to(manual.citation, manual), class: 'text-strong' %><br>
-    <%= content_tag :span, format_citation(manual), class: 'text-small' %>
+    <%= content_tag :span, manual.bibliographic(current_user.try(:person).try(:csl), 'en-US'), class: 'text-small' %>
   </td>
 </tr>

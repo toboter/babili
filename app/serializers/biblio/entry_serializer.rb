@@ -1,5 +1,4 @@
 class Biblio::EntrySerializer <  ActiveModel::Serializer
-  include Biblio::StylesHelper
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::TextHelper
   include Rails.application.routes.url_helpers
@@ -9,7 +8,7 @@ class Biblio::EntrySerializer <  ActiveModel::Serializer
     object.type.demodulize
   end
   attribute :cite do
-    format_citation(object).strip
+    object.bibliographic
   end
 
 

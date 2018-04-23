@@ -18,6 +18,9 @@ class Biblio::Article < Biblio::Entry
 
   CREATOR_TYPES = %w(Author)
   DESCRIPTION = 'An article from a journal or magazine.'
+  def icon
+    'file'
+  end
 
   has_many :authors, -> { order 'biblio_creatorships.id asc' }, through: :creatorships, source: :agent_appellation
   json_attribute :title, :string
@@ -88,7 +91,7 @@ class Biblio::Article < Biblio::Entry
         author = Zensus::Appellation.find_by_name(a).first || Zensus::Appellation.create(name: a)
         obj.authors << author
       end
-      obj.title = bibtex.title
+      obj.title = bibtex.title.strip if bibtex.title.present?
       obj.year = bibtex.year
       obj.month = bibtex.try(:month)
       obj.journal = Biblio::Journal.jsonb_contains(name: bibtex.journal).first.try(:id) || Biblio::Journal.create(name: bibtex.journal, print_issn: bibtex.issn).id

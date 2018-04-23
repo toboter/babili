@@ -43,12 +43,12 @@
         <div id='entries'>
           <table class="table table-simple">
             <tbody>
-              <%= render @entries, show_actions: true %>
+              <%= render @results %>
             </tbody>
           </table>
         </div>
         <div id="pagination-results">
-          <%= will_paginate @entries, renderer: BootstrapPagination::Rails %>
+          <%= will_paginate @results, renderer: BootstrapPagination::Rails %>
         </div>
         <%= content_tag :div, link_to('Get an overview.', biblio_path, class: 'text-small'), class: 'links --spacious-10' %>
       </div>
@@ -60,16 +60,19 @@
           <%= content_tag :div, class: 'links --spacious-10' do %>
             <%= content_tag :span, 'Total: '+ @entries.count.to_s, class: 'text-small' %> - 
             <%= link_to('View all', biblio_entries_path, class: 'text-small') %>
+            <%= content_tag :p, 'Results: '+@results.total_entries.to_s, class: 'text-small text-muted' if params[:q].present? %>
           <% end %>
         </div>
-        <%= content_tag :div, id: 'serials', class: "--spacious" do %>
-          <h4>Series and Journals</h4>
-          <table class="table table-simple text-small">
-            <tbody>
-              <%= render @serials %>
-            </tbody>
-          </table>
-        <% end if @serials.present? %>
+        <%= content_tag :div, class: "list-group --spacious" do %>
+          <%= link_to 'Journals', biblio_journals_path, class: 'list-group-item' %>
+          <%= link_to 'Series', biblio_series_path, class: 'list-group-item' %>
+        <% end %>
+
+        <p class="text-small text-grey">
+          Die Bibliographie ist in einem fortlaufenden Prozess. Umfang und Genauigkeit der Daten entwickeln sich mit dem Voranschreiten des Projekts. 
+          Hinweise, Ergänzungen, sowie Berichtigungen werden dankbar entgegengenommen.
+        </p>
+
         <%= content_tag :div, class: 'hint text-muted text-small --spacious' do %>
           <p>The default size of results per page is 50. You can change this and the citations format on your 
           <%= link_to 'settings pages', settings_path %>.</p>

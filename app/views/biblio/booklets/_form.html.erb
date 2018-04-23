@@ -1,0 +1,71 @@
+<%= simple_form_for @booklet, 
+  html: { class: 'form-horizontal' },
+  wrapper: :horizontal_form do |f| %>
+  <%= f.error_notification %>
+
+  <%= f.input :author_ids, 
+    collection: @creators, 
+    label_method: :name, 
+    value_method: :id, 
+    label: 'Authors', 
+    selected: @booklet.creatorships.map(&:agent_appellation_id), 
+    input_html: {
+      multiple: true, 
+      id: 'creators_names',
+      class: 'creators-selectize'
+    } %>
+  
+  <%= f.input :year %>
+  <%= f.input :month %>
+  
+  <%= f.input :title, as: :text %>
+
+  <%= f.input :howpublished, as: :text %>
+  
+  <hr>
+
+  <%= f.input :place_ids, 
+    collection: Locate::Toponym.all, 
+    label_method: :given, 
+    value_method: :id, 
+    label: 'Places', 
+    selected: @booklet.place_ids, 
+    input_html: {
+      multiple: true, 
+      id: 'places_names',
+      class: 'places-selectize'
+    } %>
+    
+  <hr>
+
+  <%= f.input :note %>
+  <%= f.input :key %>
+
+  <%= f.input :url %>
+  <%= f.input :doi %>
+  <%= f.input :abstract, as: :text %>
+  
+  <hr>
+
+  <%= f.input :tag_list, 
+    as: :string,
+    input_html: {
+      value: f.object.tag_list.join(','),
+      id: 'vocab_tag_list' }, 
+    label: "Tags <span class='text-muted' style='font-weight:normal;'>(separate with comma)</span>".html_safe,
+    hint: 'Add tags to categorize the booklet and make it more discoverable.' %>
+  
+    <div class="row">
+      <div class="col-md-6">
+        <hr>
+        <%= f.submit class: 'btn btn-primary' %>
+        <%= link_to 'Cancel', (@booklet.new_record? ? biblio_entries_path : @booklet), class: "btn btn-default" %>
+      </div>
+    </div>
+
+<% end %>
+
+<% content_for :modals do %>
+  <%= render 'zensus/appellations/new_modal' %>
+  <%= render 'biblio/series/new_modal' %>
+<% end %>

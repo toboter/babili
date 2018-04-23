@@ -1,33 +1,58 @@
-<%= simple_form_for @import, url: biblio_import_path do |f| %>
-  <% if @import.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@import.errors.count, "error") %> prohibited this import from completing:</h2>
-      <ul>
-      <% @import.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
+<% title "Import bibtex" %>
+
+<% content_for :container do %>
+  <div class="wrapper biblio">
+    <div class="row">
+      <div class="col-md-12">
+        <%= content_tag :h4, class: 'h-condensed --spacing-20 --spacious-20' do %>
+          <%= yield :title %>
+        <% end %>
+        <hr>
+      </div>
     </div>
-  <% end %>
+    <div class="row">
+      <div class="col-sm-12 col-md-8 main">
+        <%= simple_form_for @import, url: biblio_import_path do |f| %>
+          <% if @import.errors.any? %>
+            <div id="error_explanation">
+              <h2><%= pluralize(@import.errors.count, "error") %> prohibited this import from completing:</h2>
+              <ul>
+              <% @import.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+              </ul>
+            </div>
+          <% end %>
 
-  <%= f.file_field :file %>
-  or paste
-  <%= f.input :bibtex_text, as: :text, label: 'BibTeX text', placeholder: '@article{}', input_html: {rows: 8} %>
-  <br>
-  <%= f.input :repository_ids, 
-    collection: current_person.repositories, 
-    value_method: :id,
-    label_method: :name,
-    hint: 'Directly add your upload to your repositories. Leave blank if you just want to add references to the overall bibliography.', 
-    input_html: {
-      multiple: true
-    } %>
+          <div class="upload well">
+            <%= f.file_field :file %>
+          </div>
+          <p class="text-center text-strong text-muted">or paste</p>
+          <div class="paste well --spacious-20">
+            <%= f.input :bibtex_text, as: :text, label: 'BibTeX text', placeholder: '@article{}', input_html: {rows: 8} %>
+          </div>
 
-    <h4 class="subhead">What happens here?</h4>
-    <ul>
-      <li>New records will only be added if Authors/Editors, year and title for an import are not already existing.</li>
-    </ul>
+          <%= f.input :repository_ids, 
+            collection: current_person.repositories, 
+            value_method: :id,
+            label_method: :name,
+            label: 'Repositories',
+            hint: 'Directly add your upload to your repositories. Leave blank if you just want to add references to the overall bibliography.', 
+            input_html: {
+              multiple: true
+            } %>
 
-  <%= f.submit %>
+          <h4 class="subhead --spacious">What happens here?</h4>
+          <ul>
+            <li>The import accepts all 14 bibtex entry-types (13+collection)</li>
+            <li>New records will only be added if Authors/Editors, year and title for an import are not already existing.</li>
+          </ul>
 
+          <div class="actions --spacious-20">
+            <%= f.submit 'Import!', class: 'btn btn-default text-strong' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
 <% end %>
