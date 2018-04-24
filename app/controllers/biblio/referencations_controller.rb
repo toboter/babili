@@ -12,6 +12,7 @@ class Biblio::ReferencationsController < ApplicationController
     repository = Repository.find(ref_params[:repository_id])
     entry = Biblio::Entry.friendly.find(ref_params[:id])
     authorize! :update, repository
+    # auf diesem weg fehlen die ancestor elemente, die auch zu der repo-biblio hinzugefügt werden müssen
     reference = Biblio::Referencation.new(entry_id: entry.id, repository_id: repository.id, creator_id: current_person.id)
     respond_to do |format|
       if reference.save
@@ -25,6 +26,7 @@ class Biblio::ReferencationsController < ApplicationController
   end
 
   def add_entry
+    # auf diesem weg fehlen die ancestor elemente, die auch zu der repo-biblio hinzugefügt werden müssen
     @entry = Biblio::Entry.friendly.find(ref_params[:entry_id])
     authorize! :read, @entry
     @reference = Biblio::Referencation.new(entry_id: @entry.id, repository_id: @repository.id, creator_id: current_person.id)

@@ -4,7 +4,7 @@ module Biblio::EntriesHelper
   end
 
   def serie_for(book)
-    "#{link_to(book.serie.title, book.serie)}#{' ' + book.volume if book.volume.present?}.".html_safe
+    "#{link_to(book.serie.title, book.serie)}#{' ' + book.volume if book.try(:volume)}#{' ' + book.number if book.try(:number)}.".html_safe
   end
 
   def book_for(article)

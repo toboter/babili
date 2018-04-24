@@ -1,4 +1,4 @@
-<%= simple_form_for @booklet, 
+<%= simple_form_for @techreport, 
   html: { class: 'form-horizontal' },
   wrapper: :horizontal_form do |f| %>
   <%= f.error_notification %>
@@ -8,34 +8,60 @@
     label_method: :name, 
     value_method: :id, 
     label: 'Authors', 
-    selected: @booklet.creatorships.map(&:agent_appellation_id), 
+    selected: @techreport.creatorships.map(&:agent_appellation_id), 
     input_html: {
       multiple: true, 
       id: 'creators_names',
       class: 'creators-selectize'
     } %>
-  
-  <%= f.input :year %>
-  <%= f.input :month %>
-  
+
   <%= f.input :title, as: :text %>
 
-  <%= f.input :howpublished, as: :text %>
-  
+  <%= f.input :subtype, label: 'Type' %>
+
+  <%= f.input :institution_id, 
+    collection: @institutions, 
+    label_method: :name, 
+    value_method: :id, 
+    include_blank: true, 
+    label: "Institution", 
+    selected: @techreport.institution_id, 
+    input_html: {
+      class: 'appellation-create-selectize'
+    } %>
+
   <hr>
+
+  <%= f.input :year %>
+  <%= f.input :month %>
 
   <%= f.input :place_ids, 
     collection: @toponyms, 
     label_method: :given, 
     value_method: :id, 
     label: 'Places', 
-    selected: @booklet.place_ids, 
+    selected: @techreport.place_ids, 
     input_html: {
       multiple: true, 
       id: 'places_names',
       class: 'places-selectize'
     } %>
-    
+  
+  <%= f.input :serie, 
+    collection: @series, 
+    label_method: :title, 
+    value_method: :id, 
+    include_blank: true, 
+    label: "Serie", 
+    selected: @techreport.serie.try(:id), 
+    input_html: {
+      id: 'serie_title',
+      class: 'serie-selectize'
+    } %>
+  
+  <%= f.input :number %>
+
+  
   <hr>
 
   <%= f.input :note %>
@@ -53,13 +79,13 @@
       value: f.object.tag_list.join(','),
       id: 'vocab_tag_list' }, 
     label: "Tags <span class='text-muted' style='font-weight:normal;'>(separate with comma)</span>".html_safe,
-    hint: 'Add tags to categorize the booklet and make it more discoverable.' %>
+    hint: 'Add tags to categorize the techreport and make it more discoverable.' %>
   
     <div class="row">
       <div class="col-md-6">
         <hr>
         <%= f.submit class: 'btn btn-primary' %>
-        <%= link_to 'Cancel', (@booklet.new_record? ? biblio_entries_path : @booklet), class: "btn btn-default" %>
+        <%= link_to 'Cancel', (@techreport.new_record? ? biblio_entries_path : @techreport), class: "btn btn-default" %>
       </div>
     </div>
 

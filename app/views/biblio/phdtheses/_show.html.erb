@@ -1,0 +1,38 @@
+<div class="row">
+  <div class="col-md-8">
+    <h3>
+      <%= phdthesis.title %><br>
+      <small>by <%= phdthesis.authors.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %> <%= phdthesis.year %> <%= '(' + phdthesis.month + ')' if phdthesis.month.present? %></small>
+    </h3>
+    <ul class="list-unstyled">
+        <%= content_tag :li, "School: #{link_to phdthesis.school.try(:name), zensus_name_path(phdthesis.school)}".html_safe if phdthesis.school.present? %>     
+        <%= content_tag :li, "Place: #{places_url(phdthesis)}".html_safe if phdthesis.places.any? %>
+        <%= content_tag :li, doi_url(phdthesis), class: 'text-small' if phdthesis.doi || phdthesis.url %>
+    </ul>
+    <%= content_tag :p, class: "text-gray" do %>
+      <%= content_tag :span, 'Note: ', class: 'text-strong' %> <%= phdthesis.note %>
+    <% end if phdthesis.note.present? %>
+
+    <%= phdthesis.tag_list.map{|tag| content_tag(:span, tag, class: 'label label-default')}.join(' ').html_safe %>
+  </div>
+  <div class="col-md-4">
+    <%= render 'biblio/referencations/add_repository', entry: phdthesis %>
+    <%= phdthesis.repositories.map{|repo| content_tag(:span, link_to(repo.name, namespace_repository_biblio_references_path(repo.owner, repo), style: 'color: white;'), class: 'label label-default')}.join(' ').html_safe %>
+  </div>
+</div>
+
+<%= content_for :contents do %>
+  <div class='phdthesis-contents'>
+    <div class="row">
+      <div class="col-md-7">
+        <p class="text-gray text-small">
+          <%= phdthesis.bibliographic(current_user.try(:person).try(:csl), 'en-US') %>
+        </p>
+        <%= content_tag :p, phdthesis.abstract %>
+      </div>
+      <div class="col-md-4 col-md-offset-1">
+        <%= content_tag :pre, phdthesis.to_bib, style: 'font-size:smaller;' %>
+      </div>
+    </div>
+  </div>
+<% end %>

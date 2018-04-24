@@ -5,12 +5,14 @@ class Biblio::ArticlesController < Biblio::EntriesController
   end
 
   def new 
-    @creators = Zensus::Appellation.all
+    @authors = Zensus::Appellation.all.eager_load(:appellation_parts)
+    @journals = Biblio::Journal.all
     @entry = @article
   end
 
   def edit
-    @creators = @article.creatorships.order(id: :asc).map{|c| c.agent_appellation }.concat(Zensus::Appellation.all).uniq
+    @authors = @article.creatorships.order(id: :asc).map{|c| c.agent_appellation }.concat(Zensus::Appellation.all.eager_load(:appellation_parts)).uniq
+    @journals = Biblio::Journal.all
     @entry = @article
   end
 

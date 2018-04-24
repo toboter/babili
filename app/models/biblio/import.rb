@@ -14,8 +14,14 @@ class Biblio::Import
   end
 
   def save
+    repositories = Repository.find(repository_ids.reject(&:blank?).map(&:to_i))
+
     if imported_entries.map(&:valid?).all?
       imported_entries.each(&:save!)
+      entries = imported_entries.map{|i| i.self_and_ancestors }.flatten.uniq
+      repositories.each do |repo|
+        repo.references << entries.map{|e| e unless e.repositories.include?(repo)}.compact # so haben die keinen creator! erscheint mir aber eben einfacher.
+      end
       true
     else
       imported_entries.each_with_index do |entry, index|
@@ -25,7 +31,6 @@ class Biblio::Import
       end
       false
     end
-    #raise repository_ids.reject(&:blank?).map(&:to_i).inspect
   end
 
   def imported_entries
@@ -34,6 +39,7 @@ class Biblio::Import
 
   def import_bibtex
     bib = file.present? ? BibTeX.open(file.path).convert(:latex) : BibTeX.parse(bibtex_text).convert(:latex)
+    #raise bib.data.first.type.inspect
     entries =[]
     bib['@book'].each do |book|
       entries << Biblio::Book.from_bib(book, creator)
@@ -56,26 +62,29 @@ class Biblio::Import
     bib['@incollection'].each do |in_collection|
       entries << Biblio::InCollection.from_bib(in_collection, creator, entries)
     end
+    bib['@conference'].each do |conference|
+      entries << Biblio::InCollection.from_bib(conference, creator, entries)
+    end
     bib['@inbook'].each do |in_book|
       entries << Biblio::InBook.from_bib(in_book, creator, entries)
     end
     bib['@inproceeding'].each do |in_proceeding|
       entries << Biblio::InProceeding.from_bib(in_proceeding, creator, entries)
     end
-    bib['@masterthesis'].each do |book|
-      entries << Biblio::Masterthesis.from_bib(book, creator)
+    bib['@mastersthesis'].each do |mastersthesis|
+      entries << Biblio::Masterthesis.from_bib(mastersthesis, creator)
     end
-    bib['@phdthesis'].each do |book|
-      entries << Biblio::Phdthesis.from_bib(book, creator)
+    bib['@phdthesis'].each do |phdthesis|
+      entries << Biblio::Phdthesis.from_bib(phdthesis, creator)
     end
-    bib['@misc'].each do |book|
-      entries << Biblio::Misc.from_bib(book, creator)
+    bib['@misc'].each do |misc|
+      entries << Biblio::Misc.from_bib(misc, creator)
     end
-    bib['@techreport'].each do |book|
-      entries << Biblio::Techreport.from_bib(book, creator)
+    bib['@techreport'].each do |techreport|
+      entries << Biblio::Techreport.from_bib(techreport, creator)
     end
-    bib['@unpublished'].each do |book|
-      entries << Biblio::Unpublished.from_bib(book, creator)
+    bib['@unpublished'].each do |unpublished|
+      entries << Biblio::Unpublished.from_bib(unpublished, creator)
     end
     entries
     # raise entries.inspect

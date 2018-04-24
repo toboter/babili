@@ -4,13 +4,21 @@ class Biblio::CollectionsController < Biblio::EntriesController
     @entry = @collection
   end
 
-  def new 
-    @creators = Zensus::Appellation.all
+  def new
+    @editors = Zensus::Appellation.all.eager_load(:appellation_parts)
+    @publishers = Zensus::Appellation.all.eager_load(:appellation_parts)
+    @toponyms = Locate::Toponym.all
+    @series = Biblio::Serie.all
+    @organizations = Zensus::Appellation.all.eager_load(:appellation_parts)
     @entry = @collection
   end
 
   def edit
-    @creators = @collection.creatorships.order(id: :asc).map{|c| c.agent_appellation }.concat(Zensus::Appellation.all).uniq
+    @editors = @collection.creatorships.order(id: :asc).map{|c| c.agent_appellation }.concat(Zensus::Appellation.all.eager_load(:appellation_parts)).uniq
+    @publishers = Zensus::Appellation.all.eager_load(:appellation_parts)
+    @toponyms = Locate::Toponym.all
+    @series = Biblio::Serie.all
+    @organizations = Zensus::Appellation.all.eager_load(:appellation_parts)
     @entry = @collection
   end
 

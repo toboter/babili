@@ -144,4 +144,34 @@ class Biblio::Entry < ApplicationRecord
     end
     s
   end
+
+  def self.sorted_by(sort_option)
+    direction = ((sort_option =~ /desc$/) ? 'desc' : 'asc').to_sym
+    case sort_option.to_s
+    when /^creator_/
+      { citation: direction }
+    when /^year_/
+      { year: direction } 
+    #when /^updated_at_/
+    #  { updated_at: direction }
+    when /^score_/
+      { _score: direction }
+    else
+      raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
+    end
+  end
+
+  def self.options_for_sorted_by
+    [
+      ['Relevance asc', 'score_asc'],
+      ['Relevance desc', 'score_desc'],
+      ['Author/Editor asc', 'creator_asc'],
+      ['Author/Editor desc', 'creator_desc'],
+      ['Year asc', 'year_asc'],
+      ['Year desc', 'year_desc']
+      #['Updated asc', 'updated_at_asc'],
+      #['Updated desc', 'updated_at_desc']
+    ]
+  end
+
 end

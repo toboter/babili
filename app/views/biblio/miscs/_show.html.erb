@@ -1,0 +1,37 @@
+<div class="row">
+  <div class="col-md-8">
+    <h3>
+      <%= misc.title %><br>
+      <small>by <%= misc.authors.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %> <%= misc.year %> <%= '(' + misc.month + ')' if misc.month.present? %></small>
+    </h3>
+    <ul class="list-unstyled">   
+        <%= content_tag :li, "Howpublished: #{misc.howpublished}" if misc.howpublished.present? %>
+        <%= content_tag :li, doi_url(misc), class: 'text-small' if misc.doi || misc.url %>
+    </ul>
+    <%= content_tag :p, class: "text-gray" do %>
+      <%= content_tag :span, 'Note: ', class: 'text-strong' %> <%= misc.note %>
+    <% end if misc.note.present? %>
+
+    <%= misc.tag_list.map{|tag| content_tag(:span, tag, class: 'label label-default')}.join(' ').html_safe %>
+  </div>
+  <div class="col-md-4">
+    <%= render 'biblio/referencations/add_repository', entry: misc %>
+    <%= misc.repositories.map{|repo| content_tag(:span, link_to(repo.name, namespace_repository_biblio_references_path(repo.owner, repo), style: 'color: white;'), class: 'label label-default')}.join(' ').html_safe %>
+  </div>
+</div>
+
+<%= content_for :contents do %>
+  <div class='misc-contents'>
+    <div class="row">
+      <div class="col-md-7">
+        <p class="text-gray text-small">
+          <%= misc.bibliographic(current_user.try(:person).try(:csl), 'en-US') %>
+        </p>
+        <%= content_tag :p, misc.abstract %>
+      </div>
+      <div class="col-md-4 col-md-offset-1">
+        <%= content_tag :pre, misc.to_bib, style: 'font-size:smaller;' %>
+      </div>
+    </div>
+  </div>
+<% end %>

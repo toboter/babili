@@ -4,7 +4,7 @@
   <%= f.error_notification %>
  
   <%= f.input :editor_ids, 
-    collection: @creators, 
+    collection: @editors, 
     label_method: :name, 
     value_method: :id, 
     label: 'Editors', 
@@ -21,7 +21,7 @@
   <%= f.input :title, as: :text %>
 
   <%= f.input :publisher_id, 
-    collection: Zensus::Appellation.all, 
+    collection: @publishers, 
     label_method: :name, 
     value_method: :id, 
     include_blank: false, 
@@ -34,7 +34,7 @@
   <hr>
   
   <%= f.input :place_ids, 
-    collection: Locate::Toponym.all, 
+    collection: @toponyms, 
     label_method: :given, 
     value_method: :id, 
     label: 'Places', 
@@ -46,7 +46,7 @@
     } %>
   
   <%= f.input :serie, 
-    collection: Biblio::Serie.all, 
+    collection: @series, 
     label_method: :title, 
     value_method: :id, 
     include_blank: true, 
@@ -60,7 +60,7 @@
   <%= f.input :volume %>
 
   <%= f.input :organization_id, 
-    collection: Zensus::Appellation.all, 
+    collection: @organizations, 
     label_method: :name, 
     value_method: :id, 
     include_blank: true, 

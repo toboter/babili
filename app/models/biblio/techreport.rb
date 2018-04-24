@@ -103,7 +103,7 @@ class Biblio::Techreport < Biblio::Entry
       obj.year = bibtex.try(:year)
       obj.month = bibtex.try(:month)
       obj.subtype = bibtex.try(:type)
-      obj.serie = Biblio::Serie.jsonb_contains(title: bibtex.series).first.try(:id) || Biblio::Serie.create(title: bibtex.series, print_issn: bibtex.try(:issn)).id
+      obj.serie = Biblio::Serie.jsonb_contains(title: bibtex.series).first.try(:id) || Biblio::Serie.create(title: bibtex.series, print_issn: bibtex.try(:issn)).id if bibtex.try(:series)
       obj.number = bibtex.try(:number)
       obj.place_ids = bibtex.address.split('; ').map{|a| Locate::Toponym.find_by_given(a).try(:id) || Locate::Toponym.create(given: a).id if a } if bibtex.try(:address)
       obj.institution_id = Zensus::Appellation.find_by_name(bibtex.institution).first.try(:id) || Zensus::Appellation.create(name: bibtex.institution).id if bibtex.try(:institution)

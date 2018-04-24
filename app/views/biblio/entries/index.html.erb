@@ -56,6 +56,7 @@
         <div class="biblio-search">
           <%= form_tag biblio_entries_path, method: :get, class: "" do %>
             <%= search_field_tag 'q', params[:q], placeholder: "Search for references ...", class: "form-control", autofocus: true %>
+            <%= select_tag 'sorted_by', options_for_select(Biblio::Entry.options_for_sorted_by, params[:sorted_by]), style: 'width:50%;', class: 'pull-right form-control --spacing-10', onchange: "this.form.submit()" %>
           <% end %>
           <%= content_tag :div, class: 'links --spacious-10' do %>
             <%= content_tag :span, 'Total: '+ @entries.count.to_s, class: 'text-small' %> - 

@@ -94,7 +94,7 @@ class Biblio::Article < Biblio::Entry
       obj.title = bibtex.title.strip if bibtex.title.present?
       obj.year = bibtex.year
       obj.month = bibtex.try(:month)
-      obj.journal = Biblio::Journal.jsonb_contains(name: bibtex.journal).first.try(:id) || Biblio::Journal.create(name: bibtex.journal, print_issn: bibtex.issn).id
+      obj.journal = Biblio::Journal.jsonb_contains(name: bibtex.journal).first.try(:id) || Biblio::Journal.create(name: bibtex.journal, print_issn: bibtex.try(:issn)).id
       obj.volume = bibtex.try(:volume)
       obj.number = bibtex.try(:number)
       obj.pages = bibtex.try(:pages)

@@ -1,11 +1,21 @@
 class Biblio::JournalsController < Biblio::EntriesController
 
   def index
-    @journals = Biblio::Journal.all.sort_by(&:name)
+    @journals = Biblio::Journal.order(citation_raw: :asc).all   
+    
+    respond_to do |format|
+      format.html
+      format.json { render json: @journals, each_serializer: Biblio::JournalSerializer }
+    end
   end
 
   def show
     @entry = @journal
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @journal, serializer: Biblio::JournalSerializer }
+    end
   end
 
   def new 

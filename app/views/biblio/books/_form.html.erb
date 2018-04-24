@@ -4,11 +4,12 @@
   <%= f.error_notification %>
   
   <%= f.input :author_ids, 
-    collection: @creators, 
+    collection: @authors, 
     label_method: :name, 
     value_method: :id, 
     label: 'Authors', 
-    selected: @book.creatorships.map(&:agent_appellation_id), 
+    selected: @book.creatorships.map(&:agent_appellation_id),
+    required: true, 
     input_html: {
       multiple: true, 
       id: 'creators_names',
@@ -21,7 +22,7 @@
   <%= f.input :title, as: :text %>
 
   <%= f.input :publisher_id, 
-    collection: Zensus::Appellation.all, 
+    collection: @publishers, 
     label_method: :name, 
     value_method: :id, 
     include_blank: false, 
@@ -34,7 +35,7 @@
   <hr>
 
   <%= f.input :place_ids, 
-    collection: Locate::Toponym.all, 
+    collection: @toponyms, 
     label_method: :given, 
     value_method: :id, 
     label: 'Places', 
@@ -46,7 +47,7 @@
     } %>
   
   <%= f.input :serie, 
-    collection: Biblio::Serie.all, 
+    collection: @series, 
     label_method: :title, 
     value_method: :id, 
     include_blank: true, 

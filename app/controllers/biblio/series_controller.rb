@@ -1,20 +1,29 @@
 class Biblio::SeriesController < Biblio::EntriesController
 
   def index
-    @serials = Biblio::Serie.all.sort_by(&:title)
+    @serials = Biblio::Serie.order(citation_raw: :asc).all
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @serials, each_serializer: Biblio::SerieSerializer }
+    end
   end
 
   def show
     @entry = @serie
+    respond_to do |format|
+      format.html
+      format.json { render json: @serie, serializer: Biblio::SerieSerializer }
+    end
   end
 
   def new
-    @creators = Zensus::Appellation.all
+    @creators = Zensus::Appellation.all.eager_load(:appellation_parts)
     @entry = @serie
   end
 
   def edit
-    @creators = @serie.creatorships.order(id: :asc).map{|c| c.agent_appellation }.concat(Zensus::Appellation.all).uniq
+    @creators = @serie.creatorships.order(id: :asc).map{|c| c.agent_appellation }.concat(Zensus::Appellation.all.eager_load(:appellation_parts)).uniq
     @entry = @serie
   end
     

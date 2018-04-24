@@ -4,7 +4,7 @@
   <%= f.error_notification %>
   
   <%= f.input :author_ids, 
-    collection: @creators, 
+    collection: @authors, 
     label_method: :name, 
     value_method: :id, 
     label: 'Authors', 
@@ -23,7 +23,7 @@
   <hr>
 
   <%= f.input :journal, 
-    collection: Biblio::Journal.all, 
+    collection: @journals, 
     label_method: :name_abbr, 
     value_method: :id, 
     include_blank: false, 

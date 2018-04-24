@@ -8,7 +8,7 @@ class Biblio::EntrySerializer <  ActiveModel::Serializer
     object.type.demodulize
   end
   attribute :cite do
-    object.bibliographic
+    object.bibliographic unless object.type.in?(['Biblio::Serie', 'Biblio::Journal'])
   end
 
 

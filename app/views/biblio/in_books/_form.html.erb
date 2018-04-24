@@ -4,7 +4,7 @@
   <%= f.error_notification %>
   
   <%= f.input :author_ids, 
-    collection: @creators, 
+    collection: @authors, 
     label_method: :name, 
     value_method: :id, 
     label: 'Authors', 
@@ -20,7 +20,7 @@
   <hr>
 
   <%= f.input :book_id, 
-    collection: Biblio::Book.all, 
+    collection: @books, 
     label_method: :citation, 
     value_method: :id, 
     include_blank: false, 
@@ -65,5 +65,6 @@
 
 <% content_for :modals do %>
   <%= render 'zensus/appellations/new_modal' %>
-  <%= render 'biblio/journals/new_modal' %>
+  <%= render 'biblio/books/new_modal' %>
+  <%= render 'biblio/series/new_modal' %>
 <% end %>

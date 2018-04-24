@@ -5,12 +5,14 @@ class Biblio::BookletsController < Biblio::EntriesController
   end
 
   def new 
-    @creators = Zensus::Appellation.all
+    @authors = Zensus::Appellation.all.eager_load(:appellation_parts)
+    @toponyms = Locate::Toponym.all
     @entry = @booklet
   end
 
   def edit
-    @creators = @booklet.creatorships.order(id: :asc).map{|c| c.agent_appellation }.concat(Zensus::Appellation.all).uniq
+    @authors = @booklet.creatorships.order(id: :asc).map{|c| c.agent_appellation }.concat(Zensus::Appellation.all.eager_load(:appellation_parts)).uniq
+    @toponyms = Locate::Toponym.all
     @entry = @booklet
   end
 

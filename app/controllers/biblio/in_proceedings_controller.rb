@@ -5,12 +5,14 @@ class Biblio::InProceedingsController < Biblio::EntriesController
   end
 
   def new 
-    @creators = Zensus::Appellation.all
+    @authors = Zensus::Appellation.all.eager_load(:appellation_parts)
+    @proceedings = Biblio::Proceeding.all
     @entry = @in_proceeding
   end
 
   def edit
-    @creators = @in_proceeding.creatorships.order(id: :asc).map{|c| c.agent_appellation }.concat(Zensus::Appellation.all).uniq
+    @authors = @in_proceeding.creatorships.order(id: :asc).map{|c| c.agent_appellation }.concat(Zensus::Appellation.all.eager_load(:appellation_parts)).uniq
+    @proceedings = Biblio::Proceeding.all
     @entry = @in_proceeding
   end
 
