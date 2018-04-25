@@ -2,14 +2,12 @@ $(document).on('turbolinks:load', function(){
   
   $('#vocab_broader_id').selectize({
     delimiter: ',',
-    persist: true,
-    maxItems: 3
+    persist: true
   });
 
   $('#vocab_narrower_id').selectize({
     delimiter: ',',
-    persist: true,
-    maxItems: 3
+    persist: true
   });
   
   $('#matches').on('cocoon:after-insert', function(e, addedItem){
