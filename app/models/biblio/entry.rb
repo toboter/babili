@@ -8,7 +8,7 @@ class Biblio::Entry < ApplicationRecord
   before_validation :set_citation_raw
   #acts_as_sequenced scope: :citation_raw
   before_create :set_citation_sequence
-  friendly_id :id, use: :slugged
+  friendly_id :citation_raw, use: :slugged
 
   has_many :creatorships, dependent: :destroy, class_name: 'Biblio::Creatorship', foreign_key: :entry_id
   has_many :creators, -> { order 'biblio_creatorships.id asc' }, through: :creatorships, source: :agent_appellation

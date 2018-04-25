@@ -45,7 +45,7 @@ class Biblio::Techreport < Biblio::Entry
   end
 
   def places
-    place_ids.present? ? Locate::Toponym.find(place_ids) : []
+    place_ids.any? ? Locate::Toponym.find(place_ids) : []
   end
 
   accepts_nested_attributes_for :serie, reject_if: :all_blank, allow_destroy: false

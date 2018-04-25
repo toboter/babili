@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/jrochkind/json_attribute.git
-  revision: 39bc7f19a10dcf89251d203ae41abf9cca3e4609
+  revision: 599edcf57ed83cd85efce3d6551876fbfbc32d28
   specs:
     json_attribute (0.1.0)
       activerecord (>= 5.0.0, < 5.3)

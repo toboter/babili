@@ -47,7 +47,7 @@ class Biblio::Proceeding < Biblio::Entry
   end
 
   def places
-    place_ids.present? ? Locate::Toponym.find(place_ids) : []
+    place_ids.any? ? Locate::Toponym.find(place_ids) : []
   end
 
   def organization
