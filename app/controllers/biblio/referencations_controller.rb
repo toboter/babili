@@ -5,7 +5,7 @@ class Biblio::ReferencationsController < ApplicationController
 
   def index
     @referencations = @repository.referencations.joins(:entry).where.not('biblio_entries.type IN (?)', ['Biblio::Serie', 'Biblio::Journal']).order('biblio_entries.slug asc')
-    authorize! :read, @references
+    authorize! :read, @referencations
   end
 
   def add_repository
@@ -28,7 +28,7 @@ class Biblio::ReferencationsController < ApplicationController
   def add_entry
     # auf diesem weg fehlen die ancestor elemente, die auch zu der repo-biblio hinzugefügt werden müssen
     @entry = Biblio::Entry.friendly.find(ref_params[:entry_id])
-    authorize! :read, @entry
+    authorize! :add_reference, Biblio::Referencation(repository: @repository)
     @reference = Biblio::Referencation.new(entry_id: @entry.id, repository_id: @repository.id, creator_id: current_person.id)
     respond_to do |format|
       if @reference.save
@@ -42,7 +42,9 @@ class Biblio::ReferencationsController < ApplicationController
   end
 
   def destroy
-    @repository.referencations.find(params[:id]).destroy
+    @reference = @repository.referencations.find(params[:id])
+    authorize! :destroy, @reference
+    @reference.destroy
     respond_to do |format|
       format.html { redirect_to namespace_repository_biblio_references_url(@namespace, @repository), notice: "Reference successfully removed from your repository." }
       format.json { head :no_content }

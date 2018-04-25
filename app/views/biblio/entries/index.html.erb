@@ -6,7 +6,7 @@
       <div class="col-md-12">
         <%= content_tag :h4, class: '--spacing-20 --spacious-20' do %>
           <%= yield :title %>
-          <div class="btn-group pull-right">
+          <%= content_tag :div, class: "btn-group pull-right" do %>
             <button type="button" class="btn btn-default dropdown-toggle text-strong" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <%= fa_icon('plus', text: "Create") %> <span class="caret"></span>
             </button>
@@ -32,7 +32,7 @@
               <li role="separator" class="divider"></li>
               <%= content_tag :li, link_to('Import', new_biblio_import_path) if can?(:import, Biblio::Entry) %>
             </ul>
-          </div>
+          <% end if can?(:create, Biblio::Entry) || can?(:import, Biblio::Entry) %>
         
         <% end %>
         <hr>

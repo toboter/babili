@@ -3,4 +3,4 @@
     class: 'form-control repo-selectize',
     style: 'width:80%;' %>
   <%= submit_tag 'Add', class: 'btn btn-default', style: 'margin-bottom:5px' %>
-<% end %>
+<% end if can?(:add_repository, Biblio::Referencation.new(entry: entry)) %>

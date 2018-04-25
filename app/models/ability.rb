@@ -30,6 +30,14 @@ class Ability
       end
       can :read, Repository
 
+      cannot [:add_reference, :destroy], Biblio::Referencation do |ref|
+        !ref.repository.owner.accessors.include?(user.person)
+      end
+
+      cannot :add_repository, Biblio::Referencation do |ref|
+        !user.person.repositories.any?
+      end
+
       cannot :manage, [CMS::Novelity, CMS::HelpPage, CMS::HelpCategory, CMS::BlogCategory] unless user.is_admin?
       cannot :read, [CMS::HelpCategory, CMS::BlogCategory] unless user.is_admin?
       can :read, [CMS::Novelity, CMS::HelpPage]
