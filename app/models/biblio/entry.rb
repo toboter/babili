@@ -16,24 +16,29 @@ class Biblio::Entry < ApplicationRecord
   has_many :referencations, class_name: 'Biblio::Referencation', dependent: :destroy
   has_many :repositories, through: :referencations
 
-  def self.types
+  def self.authored_types
     [
       'Biblio::Article',
       'Biblio::Book',
       'Biblio::Booklet',
-      'Biblio::Collection',
       'Biblio::InBook',
       'Biblio::InCollection',
       'Biblio::InProceeding',
-      'Biblio::Journal',
       'Biblio::Manual',
       'Biblio::Masterthesis',
       'Biblio::Misc',
       'Biblio::Phdthesis',
-      'Biblio::Proceeding',
-      'Biblio::Serie',
       'Biblio::Techreport',
       'Biblio::Unpublished'
+    ]
+  end
+
+  def self.edited_types
+    [
+      'Biblio::Collection',
+      'Biblio::Journal',
+      'Biblio::Proceeding',
+      'Biblio::Serie'
     ]
   end
 
@@ -67,35 +72,27 @@ class Biblio::Entry < ApplicationRecord
     true || super
   end
 
-  def authors_list(limit=nil, reverse=true, join_by='; ')
-    authors.limit(limit).map{ |a| a.name(reverse: reverse) }.join(join_by) + ' '
+  def creators_name_list
+    creatorships.order(id: :asc).map{|c| c.agent_appellation }
   end
 
-  def editors_list(limit=nil, reverse=true)
-    editors.limit(limit).map{ |a| a.name(reverse: true) }.join(', ') + " (#{'Ed'.pluralize(editors.count)}.) "
+  def creators_citation
+    creators = self.respond_to?(:authors) ? authors : editors
+    names = creators.map{ |a| a.name(reverse: true).split(', ').first }
+    creators.compact.count > 3 ? [names.take(3).join(', ')].push('et al.').reject(&:blank?) : [names.join(', ')]
   end
-
-
-  def citation_authors_list
-    authors.take(3).map{ |a| a.name(reverse: true).split(', ').first }.join(', ') + ' '
-  end
-
-  def citation_editors_list
-    editors.take(3).map{ |a| a.name(reverse: true).split(', ').first }.join(', ') + " (#{'Ed'.pluralize(editors.count)}.) "
-  end
-
 
   # set unique citation
   def set_citation_raw
-    if self.respond_to?(:authors) && !self.type.in?(['Biblio::Serie', 'Biblio::Journal'])
+    if self.type.in?(Biblio::Entry.authored_types) && !self.type.in?(['Biblio::Serie', 'Biblio::Journal'])
       if authors.any?
-        self.citation_raw = (authors.count > 3 ? citation_authors_list.concat('et al. ') : citation_authors_list).concat(self.respond_to?(:year) ? (year.present? ? year : '') : '')
+        self.citation_raw = creators_citation.push(try(:year)).reject(&:blank?).join(' ')
       else
         self.citation_raw = key
       end
-    elsif self.respond_to?(:editors) && !self.type.in?(['Biblio::Serie', 'Biblio::Journal'])
+    elsif self.type.in?(Biblio::Entry.edited_types) && !self.type.in?(['Biblio::Serie', 'Biblio::Journal'])
       if editors.any?
-        self.citation_raw = (editors.count > 3 ? citation_editors_list.concat('et al. ') : citation_editors_list).concat(self.respond_to?(:year) ? (year.present? ? year : '') : '')
+        self.citation_raw = creators_citation.push('ed'.pluralize(editors.count)).push(try(:year)).reject(&:blank?).join(' ')
       else
         self.citation_raw = key
       end
@@ -120,7 +117,7 @@ class Biblio::Entry < ApplicationRecord
     "#{citation_raw}#{numeric_to_alph(sequential_id) if sequential_id > 1 && !self.type.in?(['Biblio::Serie', 'Biblio::Journal'])}"
   end
 
-  def bibliographic(style='apa', locale='en-US')
+  def bibliographic(style='apa', locale='de')
     csl_style = CSL::Style.load(style)
     csl_locale = CSL::Locale.load(locale)
 

@@ -2,7 +2,7 @@
   <div class="col-md-8">
     <h3>
       <%= techreport.title %><br>
-      <small>by <%= techreport.authors.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %> <%= techreport.year %> <%= '(' + techreport.month + ')' if techreport.month.present? %></small>
+      <small>by <%= techreport.creators_name_list.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %> <%= techreport.year %> <%= '(' + techreport.month + ')' if techreport.month.present? %></small>
     </h3>
     <ul class="list-unstyled">
         <%= content_tag :li, "Serie: #{serie_for(techreport)}".html_safe if techreport.serie.present? %>   

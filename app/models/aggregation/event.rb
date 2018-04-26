@@ -34,7 +34,7 @@ class Aggregation::Event < ApplicationRecord
       item = Aggregation::Item.where(pref_identifier_id: identifier.id, repository_id: self.repository_id, type: resource_type).first_or_create
       item.identifiers << identifier unless item.identifiers.include?(identifier)
       data[:changeset] = item.commits.any? ? HashDiff.diff(data[:payload], JSON.parse( item.commits.last.try(:data).try(:[], 'payload').to_json, {:symbolize_names => true} )) : []
-      commit = (data[:changeset].present? || item.commits.empty?) ? Aggregation::Commit.create(type: 'Aggregation::Commit::Custom', item_id: item.id, event_id: self.id, creator_id: self.creator_id, data: data) : item.commits.last
+      commit = (data[:changeset].present? || item.commits.empty?) ? Aggregation::Commit.create(type: 'Aggregation::Commit::Legacy', item_id: item.id, event_id: self.id, creator_id: self.creator_id, data: data) : item.commits.last
       return commit
     elsif data.is_a?(Array)
       # data is a array. import through AcitveRecord.import
@@ -44,7 +44,7 @@ class Aggregation::Event < ApplicationRecord
         item = Aggregation::Item.where(pref_identifier: identifier, repository_id: self.repository_id, type: resource_type).first_or_create
         item.identifiers << identifier unless item.identifiers.include?(identifier)
         element[:changeset] = item.commits.any? ? HashDiff.diff(element[:payload], item.commits.last.try(:data).try(:[], 'payload')) : []
-        commit = Aggregation::Commit.new(type: 'Aggregation::Commit::Custom', item_id: item.id, event_id: self.id, creator_id: self.creator_id, data: element)
+        commit = Aggregation::Commit.new(type: 'Aggregation::Commit::Legacy', item_id: item.id, event_id: self.id, creator_id: self.creator_id, data: element)
         commits << commit if element[:changeset].present? || item.commits.empty?
       end
       Aggregation::Commit.import commits

@@ -2,7 +2,7 @@
   <div class="col-md-8">
     <h3>
       <%= serie.title %> <%= '[' + serie.abbr + ']' if serie.abbr.present? %><br>
-      <%= content_tag :small, "Edited by: #{serie.editors.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ')}".html_safe %>
+      <%= content_tag :small, "Edited by: #{serie.creators_name_list.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ')}".html_safe %>
     </h3>
     <p class="text-gray">
       <%= serie.note %>

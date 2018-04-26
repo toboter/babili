@@ -2,7 +2,7 @@
   <div class="col-md-8">
     <h3>
       <%= misc.title %><br>
-      <small>by <%= misc.authors.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %> <%= misc.year %> <%= '(' + misc.month + ')' if misc.month.present? %></small>
+      <small>by <%= misc.creators_name_list.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %> <%= misc.year %> <%= '(' + misc.month + ')' if misc.month.present? %></small>
     </h3>
     <ul class="list-unstyled">   
         <%= content_tag :li, "Howpublished: #{misc.howpublished}" if misc.howpublished.present? %>

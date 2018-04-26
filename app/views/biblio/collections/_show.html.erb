@@ -2,7 +2,7 @@
   <div class="col-md-8">
     <h3>
       <%= collection.title %><br>
-      <small>Edited by: <%= collection.editors.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %> <%= collection.year %> <%= '(' + collection.month + ')' if collection.month.present? %></small>
+      <small>Edited by: <%= collection.creators_name_list.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %> <%= collection.year %> <%= '(' + collection.month + ')' if collection.month.present? %></small>
     </h3>
     <ul class="list-unstyled">
       <%= content_tag :li, "Serie: #{serie_for(collection)}".html_safe if collection.serie.present? %>      

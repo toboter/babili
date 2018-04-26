@@ -53,7 +53,7 @@ class Biblio::Misc < Biblio::Entry
     BibTeX::Entry.new({
       :bibtex_type => type.demodulize.downcase.to_sym,
       :bibtex_key => bibtex_citation,
-      :author => authors.map{ |a| a.name(reverse: true) }.join(' and '),
+      :author => creators_name_list.map{ |a| a.name(reverse: true) }.join(' and '),
       :title => title,
       :year => year,
       :month => month,

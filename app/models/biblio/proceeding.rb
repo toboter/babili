@@ -87,7 +87,7 @@ class Biblio::Proceeding < Biblio::Entry
     BibTeX::Entry.new({
       :bibtex_type => type.demodulize.downcase.to_sym,
       :bibtex_key => bibtex_citation,
-      :editor => editors.map{ |a| a.name(reverse: true) }.join(' and '),
+      :editor => creators_name_list.map{ |a| a.name(reverse: true) }.join(' and '),
       :title => title,
       :publisher => publisher.try(:name),
       :year => year,

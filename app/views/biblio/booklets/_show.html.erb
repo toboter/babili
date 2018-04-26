@@ -2,7 +2,7 @@
   <div class="col-md-8">
     <h3>
       <%= booklet.title %><br>
-      <small>by <%= booklet.authors.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe if booklet.authors.any? %> <%= booklet.year %> <%= '(' + booklet.month + ')' if booklet.month.present? %></small>
+      <small>by <%= booklet.creators_name_list.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe if booklet.authors.any? %> <%= booklet.year %> <%= '(' + booklet.month + ')' if booklet.month.present? %></small>
     </h3>
     <ul class="list-unstyled">
       <%= content_tag :li, "Howpublished: #{booklet.howpublished}".html_safe if booklet.howpublished.present? %>

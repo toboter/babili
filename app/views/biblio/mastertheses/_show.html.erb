@@ -2,7 +2,7 @@
   <div class="col-md-8">
     <h3>
       <%= masterthesis.title %><br>
-      <small>by <%= masterthesis.authors.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %> <%= masterthesis.year %> <%= '(' + masterthesis.month + ')' if masterthesis.month.present? %></small>
+      <small>by <%= masterthesis.creators_name_list.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %> <%= masterthesis.year %> <%= '(' + masterthesis.month + ')' if masterthesis.month.present? %></small>
     </h3>
     <ul class="list-unstyled">
         <%= content_tag :li, "School: #{link_to masterthesis.school.try(:name), zensus_name_path(masterthesis.school)}".html_safe if masterthesis.school.present? %>     

@@ -2,7 +2,7 @@
   <div class="col-md-8">
     <h3>
       <%= proceeding.title %><br>
-      <small>Edited by: <%= proceeding.editors.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %> <%= proceeding.year %> <%= '(' + proceeding.month + ')' if proceeding.month.present? %></small>
+      <small>Edited by: <%= proceeding.creators_name_list.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %> <%= proceeding.year %> <%= '(' + proceeding.month + ')' if proceeding.month.present? %></small>
     </h3>
     <ul class="list-unstyled">
       <%= content_tag :li, "Serie: #{serie_for(proceeding)}".html_safe if proceeding.serie.present? %>      

@@ -2,7 +2,7 @@
   <div class="col-md-8">
     <h3>
       <%= manual.title %><br>
-      <small>by <%= manual.authors.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %> <%= manual.year %> <%= '(' + manual.month + ')' if manual.month.present? %></small>
+      <small>by <%= manual.creators_name_list.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %> <%= manual.year %> <%= '(' + manual.month + ')' if manual.month.present? %></small>
     </h3>
     <ul class="list-unstyled">
         <%= content_tag :li, "Organization: #{link_to manual.organization.try(:name), zensus_name_path(manual.organization)}".html_safe if manual.organization.present? %>     

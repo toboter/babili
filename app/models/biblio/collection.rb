@@ -88,7 +88,7 @@ class Biblio::Collection < Biblio::Entry
     BibTeX::Entry.new({
       :bibtex_type => 'collection',
       :bibtex_key => bibtex_citation,
-      :editor => editors.map{ |a| a.name(reverse: true) }.join(' and '),
+      :editor => creators_name_list.map{ |a| a.name(reverse: true) }.join(' and '),
       :title => title,
       :publisher => publisher.try(:name),
       :year => year,
