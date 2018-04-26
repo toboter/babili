@@ -5,7 +5,7 @@
     <div class="row">
       <div class="col-md-12">
         <%= content_tag :h4, class: '--spacing-20 --spacious-20' do %>
-          <%= yield :title %>
+          <%= link_to yield(:title), biblio_entries_path %>
           <%= content_tag :div, class: "btn-group pull-right" do %>
             <button type="button" class="btn btn-default dropdown-toggle text-strong" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <%= fa_icon('plus', text: "Create") %> <span class="caret"></span>

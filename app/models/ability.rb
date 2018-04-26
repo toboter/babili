@@ -35,7 +35,7 @@ class Ability
       end
 
       cannot :add_repository, Biblio::Referencation do |ref|
-        !user.person.repositories.any?
+        !user.person.all_repos.any?
       end
 
       cannot :manage, [CMS::Novelity, CMS::HelpPage, CMS::HelpCategory, CMS::BlogCategory] unless user.is_admin?
