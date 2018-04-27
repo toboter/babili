@@ -3,42 +3,16 @@
 <% content_for :container do %>
   <div class="wrapper biblio">
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-9">
         <%= content_tag :h4, class: '--spacing-20 --spacious-20' do %>
           <%= link_to yield(:title), biblio_entries_path %>
-          <%= content_tag :div, class: "btn-group pull-right" do %>
-            <button type="button" class="btn btn-default dropdown-toggle text-strong" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <%= fa_icon('plus', text: "Create") %> <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-              <%= content_tag :li, link_to('Article', new_biblio_article_path), title: Biblio::Article::DESCRIPTION if can?(:create, Biblio::Article) %>
-              <%= content_tag :li, link_to('Booklet', new_biblio_booklet_path), title: Biblio::Booklet::DESCRIPTION if can?(:create, Biblio::Booklet) %>
-              <%= content_tag :li, link_to('InBook', new_biblio_in_book_path), title: Biblio::InBook::DESCRIPTION if can?(:create, Biblio::InBook) %>
-              <%= content_tag :li, link_to('InCollection', new_biblio_in_collection_path), title: Biblio::InCollection::DESCRIPTION if can?(:create, Biblio::InCollection) %>
-              <%= content_tag :li, link_to('InProceeding', new_biblio_in_proceeding_path), title: Biblio::InProceeding::DESCRIPTION if can?(:create, Biblio::InProceeding) %>
-              <%= content_tag :li, link_to('Manual', new_biblio_manual_path), title: Biblio::Manual::DESCRIPTION if can?(:create, Biblio::Manual) %>
-              <%= content_tag :li, link_to('Masterthesis', new_biblio_masterthesis_path), title: Biblio::Masterthesis::DESCRIPTION if can?(:create, Biblio::Masterthesis) %>
-              <%= content_tag :li, link_to('Misc', new_biblio_misc_path), title: Biblio::Misc::DESCRIPTION if can?(:create, Biblio::Misc) %>
-              <%= content_tag :li, link_to('Phd-Thesis', new_biblio_phdthesis_path), title: Biblio::Phdthesis::DESCRIPTION if can?(:create, Biblio::Phdthesis) %>
-              <%= content_tag :li, link_to('Techreport', new_biblio_techreport_path), title: Biblio::Techreport::DESCRIPTION if can?(:create, Biblio::Techreport) %>
-              <%= content_tag :li, link_to('Unpublished', new_biblio_unpublished_path), title: Biblio::Unpublished::DESCRIPTION if can?(:create, Biblio::Unpublished) %>
-              <li role="separator" class="divider"></li>
-              <%= content_tag :li, link_to('Book', new_biblio_book_path), title: Biblio::Book::DESCRIPTION if can?(:create, Biblio::Book) %>
-              <%= content_tag :li, link_to('Collection', new_biblio_collection_path), title: Biblio::Collection::DESCRIPTION if can?(:create, Biblio::Collection) %>
-              <%= content_tag :li, link_to('Proceeding', new_biblio_proceeding_path), title: Biblio::Proceeding::DESCRIPTION if can?(:create, Biblio::Proceeding) %>
-              <li role="separator" class="divider"></li>
-              <%= content_tag :li, link_to('Journal', new_biblio_journal_path), title: Biblio::Journal::DESCRIPTION if can?(:create, Biblio::Journal) %>
-              <%= content_tag :li, link_to('Serie', new_biblio_serie_path), title: Biblio::Serie::DESCRIPTION if can?(:create, Biblio::Serie) %>
-              <li role="separator" class="divider"></li>
-              <%= content_tag :li, link_to('Import', new_biblio_import_path) if can?(:import, Biblio::Entry) %>
-            </ul>
-          <% end if can?(:create, Biblio::Entry) || can?(:import, Biblio::Entry) %>
-        
         <% end %>
-        <hr>
+      </div>
+      <div class="col-md-3">
+        <%= content_tag :p, 'Add references through personal or group repositories.', class: 'text-muted text-small --spacious-10 text-right' if current_person %>
       </div>
     </div>
-    <div class="row">
+    <div class="row --spacious-10">
       <div class="col-sm-12 col-md-8 main">
         <div id='entries'>
           <table class="table table-simple">
@@ -50,7 +24,6 @@
         <div id="pagination-results">
           <%= will_paginate @results, renderer: BootstrapPagination::Rails %>
         </div>
-        <%= content_tag :div, link_to('Get an overview.', biblio_path, class: 'text-small'), class: 'links --spacious-10' %>
       </div>
       <%= content_tag :div, class: 'col-md-4 sidebar' do %>
         <div class="biblio-search">
@@ -70,9 +43,10 @@
         <% end %>
 
         <p class="text-small text-grey">
-          Die Bibliographie ist in einem fortlaufenden Prozess. Umfang und Genauigkeit der Daten entwickeln sich mit dem Voranschreiten des Projekts. 
+          Die projektübergreifende Bibliographie entwickelt sich mit den Projektbibliographien.  
           Hinweise, Ergänzungen, sowie Berichtigungen werden dankbar entgegengenommen.
         </p>
+        <%= content_tag :div, link_to('Get an overview.', biblio_path, class: 'text-small'), class: 'links --spacious-10' %>
 
         <%= content_tag :div, class: 'hint text-muted text-small --spacious' do %>
           <p>The default size of results per page is 50. You can change this and the citations format on your 

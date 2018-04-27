@@ -3,7 +3,7 @@ class Biblio::Import
   include ActiveModel::Conversion
   include ActiveModel::Validations
 
-  attr_accessor :file, :creator, :repository_ids, :bibtex_text
+  attr_accessor :file, :creator, :repository, :bibtex_text
   
   def initialize(attributes = {})
     attributes.each { |name, value| send("#{name}=", value) }
@@ -14,14 +14,10 @@ class Biblio::Import
   end
 
   def save
-    repositories = Repository.find(repository_ids.reject(&:blank?).map(&:to_i))
-
     if imported_entries.map(&:valid?).all?
       imported_entries.each(&:save!)
       entries = imported_entries.map{|i| i.self_and_ancestors }.flatten.uniq
-      repositories.each do |repo|
-        repo.references << entries.map{|e| e unless e.repositories.include?(repo)}.compact # so haben die keinen creator! erscheint mir aber eben einfacher.
-      end
+      repository.referencations << entries.map{|e| Biblio::Referencation.new(entry: e, creator: creator) unless e.repositories.include?(repository)}.compact
       true
     else
       imported_entries.each_with_index do |entry, index|

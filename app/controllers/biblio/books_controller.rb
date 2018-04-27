@@ -9,6 +9,9 @@ class Biblio::BooksController < Biblio::EntriesController
     @publishers = Zensus::Appellation.all.eager_load(:appellation_parts)
     @toponyms = Locate::Toponym.all
     @series = Biblio::Serie.all
+    @repository = Repository.find(params[:repo_id])
+    @referencation = @book.referencations.build(repository_id: @repository.id, creator: current_person)
+    authorize! :add_reference, @referencation
     @entry = @book
   end
 
@@ -21,10 +24,12 @@ class Biblio::BooksController < Biblio::EntriesController
   end
 
   def create
+    @entry = @book
     @book.creator = current_person
+    @repository = @book.referencations.last.repository
     respond_to do |format|
       if @book.save
-        format.html { redirect_to @book, notice: "Book was successfully created." }
+        format.html { redirect_to namespace_repository_biblio_references_path(@repository.owner, @repository), notice: "Book was successfully created. #{view_context.link_to('Show '+@book.citation, @book, class: 'text-strong')}".html_safe }
         format.json { render :show, status: :created, location: @book }
       else
         format.html { render :new }
@@ -34,6 +39,7 @@ class Biblio::BooksController < Biblio::EntriesController
   end
 
   def update
+    @entry = @book
     respond_to do |format|
       if @book.update(book_params)
         format.html { redirect_to @book, notice: "Book was successfully updated." }
@@ -57,6 +63,6 @@ class Biblio::BooksController < Biblio::EntriesController
   # Never trust parameters from the scary internet, only allow the white list through.
   def book_params
     params.require(:biblio_book).permit(:year, :month, :title, :serie, :volume, :publisher_id, :edition,
-      :note, :key, :print_isbn, :url, :doi, :abstract, :tag_list, :author_ids => [], :place_ids => [])
+      :note, :key, :print_isbn, :url, :doi, :abstract, :tag_list, :author_ids => [], :place_ids => [], referencations_attributes: [:id, :repository_id, :creator_id, :_destroy])
   end
 end

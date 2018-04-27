@@ -15,7 +15,6 @@ class Biblio::Article < Biblio::Entry
   include JsonAttribute::Record::QueryScopes
   self.default_json_container_attribute = 'data'
   
-
   CREATOR_TYPES = %w(Author)
   DESCRIPTION = 'An article from a journal or magazine.'
   def icon

@@ -13,7 +13,7 @@ class Repository < ApplicationRecord
   belongs_to :owner, class_name: 'Namespace', foreign_key: :namespace_id
   belongs_to :creator, class_name: 'Person'
   
-  has_many :events, class_name: 'Aggregation::Event', dependent: :destroy
+  has_many :events, class_name: 'Aggregation::Event', dependent: :destroy # ... data_events
   has_many :upload_events, class_name: 'Aggregation::Event::UploadEvent', dependent: :destroy
 
   has_many :commits, through: :events, class_name: 'Aggregation::Commit'

@@ -16,6 +16,8 @@ class Biblio::Entry < ApplicationRecord
   has_many :referencations, class_name: 'Biblio::Referencation', dependent: :destroy
   has_many :repositories, through: :referencations
 
+  accepts_nested_attributes_for :referencations, reject_if: :all_blank, allow_destroy: true
+
   def self.authored_types
     [
       'Biblio::Article',
@@ -92,7 +94,7 @@ class Biblio::Entry < ApplicationRecord
       end
     elsif self.type.in?(Biblio::Entry.edited_types) && !self.type.in?(['Biblio::Serie', 'Biblio::Journal'])
       if editors.any?
-        self.citation_raw = creators_citation.push('ed'.pluralize(editors.count)).push(try(:year)).reject(&:blank?).join(' ')
+        self.citation_raw = creators_citation.push('ed'.pluralize(creatorships.count)).push(try(:year)).reject(&:blank?).join(' ')
       else
         self.citation_raw = key
       end

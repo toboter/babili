@@ -6,7 +6,7 @@
     </h3>
     <ul class="list-unstyled">
       <%= content_tag :li, "Howpublished: #{booklet.howpublished}".html_safe if booklet.howpublished.present? %>
-      <%= content_tag :li, "Address: #{places_url(booklet)}".html_safe if booklet.places.any? %>
+      <%= content_tag :li, "Address: #{places_url(booklet)}".html_safe if booklet.try(:places) %>
       <%= content_tag :li, doi_url(booklet), class: 'text-small' if booklet.doi || booklet.url %>
 
     </ul>

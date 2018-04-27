@@ -1,17 +1,74 @@
-    <div class="row">
+<div class="row">
+  <div class="col-md-8">
+    <%= render 'biblio/referencations/add_entry', namespace: @namespace, repository: @repository %>
+  </div>
+  <div class="col-md-4">
+    <%= content_tag :div, class: "btn-group pull-right" do %>
+      <button type="button" class="btn btn-default dropdown-toggle text-strong" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <%= fa_icon('plus', text: "Create") %> <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <%= content_tag :li, link_to('Article', new_biblio_article_path(repo_id: @repository.id)), title: Biblio::Article::DESCRIPTION %>
+        <%= content_tag :li, link_to('Booklet', new_biblio_booklet_path(repo_id: @repository.id)), title: Biblio::Booklet::DESCRIPTION %>
+        <%= content_tag :li, link_to('InBook', new_biblio_in_book_path(repo_id: @repository.id)), title: Biblio::InBook::DESCRIPTION %>
+        <%= content_tag :li, link_to('InCollection', new_biblio_in_collection_path(repo_id: @repository.id)), title: Biblio::InCollection::DESCRIPTION %>
+        <%= content_tag :li, link_to('InProceeding', new_biblio_in_proceeding_path(repo_id: @repository.id)), title: Biblio::InProceeding::DESCRIPTION %>
+        <%= content_tag :li, link_to('Manual', new_biblio_manual_path(repo_id: @repository.id)), title: Biblio::Manual::DESCRIPTION %>
+        <%= content_tag :li, link_to('Masterthesis', new_biblio_masterthesis_path(repo_id: @repository.id)), title: Biblio::Masterthesis::DESCRIPTION %>
+        <%= content_tag :li, link_to('Misc', new_biblio_misc_path(repo_id: @repository.id)), title: Biblio::Misc::DESCRIPTION %>
+        <%= content_tag :li, link_to('Phd-Thesis', new_biblio_phdthesis_path(repo_id: @repository.id)), title: Biblio::Phdthesis::DESCRIPTION %>
+        <%= content_tag :li, link_to('Techreport', new_biblio_techreport_path(repo_id: @repository.id)), title: Biblio::Techreport::DESCRIPTION %>
+        <%= content_tag :li, link_to('Unpublished', new_biblio_unpublished_path(repo_id: @repository.id)), title: Biblio::Unpublished::DESCRIPTION %>
+        <li role="separator" class="divider"></li>
+        <%= content_tag :li, link_to('Book', new_biblio_book_path(repo_id: @repository.id)), title: Biblio::Book::DESCRIPTION %>
+        <%= content_tag :li, link_to('Collection', new_biblio_collection_path(repo_id: @repository.id)), title: Biblio::Collection::DESCRIPTION %>
+        <%= content_tag :li, link_to('Proceeding', new_biblio_proceeding_path(repo_id: @repository.id)), title: Biblio::Proceeding::DESCRIPTION %>
+        <li role="separator" class="divider"></li>
+        <%= content_tag :li, link_to('Journal', new_biblio_journal_path), title: Biblio::Journal::DESCRIPTION %>
+        <%= content_tag :li, link_to('Serie', new_biblio_serie_path), title: Biblio::Serie::DESCRIPTION %>
+        <li role="separator" class="divider"></li>
+        <%= content_tag :li, link_to('Import', new_biblio_import_path(repo_id: @repository.id)) %>
+      </ul>
+    <% end if can?(:add_reference, Biblio::Referencation.new(repository: @repository)) %>
+  </div>
+</div>
+    <div class="row --spacious-20">
       <div class="col-sm-12 col-md-8 main">
+        
         <div id='entries'>
           <table class="table table-simple">
             <tbody>
-              <% @referencations.each do |ref| %>
-                <%= render ref.entry, referencation: ref %>
+              <% @results.each do |result| %>
+                <%= render result, referencation: result.referencations.select{|r| r.repository_id == @repository.id}.first %>
               <% end %>
             </tbody>
           </table>
         </div>
-        <%= content_tag :div, link_to('Get an overview.', biblio_path, class: 'text-small'), class: 'links --spacious-10' %>
+        <div id="pagination-results">
+          <%= will_paginate @results, renderer: BootstrapPagination::Rails %>
+        </div>
       </div>
       <%= content_tag :div, class: 'col-md-4 sidebar' do %>
-        <%= render 'biblio/referencations/add_entry', namespace: @namespace, repository: @repository %>
+        <div class="biblio-search clearfix">
+          <%= form_tag namespace_repository_biblio_references_path(@namespace, @repository), method: :get, class: "" do %>
+            <%= search_field_tag 'q', params[:q], placeholder: "Search for references in #{@repository.name}...", class: "form-control", autofocus: true %>
+            <%= select_tag 'sorted_by', options_for_select(Biblio::Entry.options_for_sorted_by, params[:sorted_by]), style: 'width:50%;', class: 'pull-right form-control --spacing-10', onchange: "this.form.submit()" %>
+          <% end %>
+          <%= content_tag :div, class: 'links --spacious-10' do %>
+            <%= content_tag :span, 'Total: '+ @entries.count.to_s, class: 'text-small' %> - 
+            <%= link_to('View all', namespace_repository_biblio_references_path(@namespace, @repository), class: 'text-small') %>
+            <%= content_tag :p, 'Results: '+@results.total_entries.to_s, class: 'text-small text-muted' if params[:q].present? %>
+          <% end %>
+        </div>
+        <div class="--spacious">
+          <p class="text-small text-grey">
+            Diese Bibliographie ist work in progress. Sie umfasst Referenzen zum Forschungsthema dieses Repositoriums. Umfang und Genauigkeit der Daten entwickeln sich mit dem Voranschreiten des Projekts. 
+            Hinweise, Ergänzungen, sowie Berichtigungen werden dankbar entgegengenommen.
+          </p>
+          <%= content_tag :div, class: 'links --spacious-10' do %>
+            <%= link_to('Get an overview', biblio_path, class: 'text-small') %> | 
+            <%= link_to('View all bibliographic references', biblio_entries_path, class: 'text-small') %>
+          <% end %>
+        </div>
       <% end %>
     </div>

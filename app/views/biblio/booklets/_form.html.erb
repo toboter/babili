@@ -3,6 +3,11 @@
   wrapper: :horizontal_form do |f| %>
   <%= f.error_notification %>
 
+  <%= f.simple_fields_for :referencations do |r| %>
+    <%= r.hidden_field :repository_id %>
+    <%= r.hidden_field :creator_id %>
+  <% end %>
+
   <%= f.input :author_ids, 
     collection: @authors, 
     label_method: :name, 
@@ -59,7 +64,7 @@
       <div class="col-md-6">
         <hr>
         <%= f.submit class: 'btn btn-primary' %>
-        <%= link_to 'Cancel', (@booklet.new_record? ? biblio_entries_path : @booklet), class: "btn btn-default" %>
+        <%= link_to 'Cancel', (@booklet.new_record? ? namespace_repository_biblio_references_path(@entry.referencations.last.repository.owner, @entry.referencations.last.repository) : @booklet), class: "btn btn-default" %>
       </div>
     </div>
 

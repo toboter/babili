@@ -5,7 +5,8 @@
     <div class="row">
       <div class="col-md-12">
         <%= content_tag :h4, class: 'h-condensed --spacing-20 --spacious-20' do %>
-          <%= yield :title %>
+          <%= yield :title %><br>
+          <%= content_tag :span, "To #{content_tag :em, @import.repository.name}".html_safe, class: 'text-small' %>
         <% end %>
         <hr>
       </div>
@@ -24,6 +25,8 @@
             </div>
           <% end %>
 
+          <%= f.hidden_field :repository, value: @import.repository.id %>
+
           <div class="upload well">
             <%= f.file_field :file %>
           </div>
@@ -32,15 +35,6 @@
             <%= f.input :bibtex_text, as: :text, label: 'BibTeX text', placeholder: '@article{}', input_html: {rows: 8} %>
           </div>
 
-          <%= f.input :repository_ids, 
-            collection: current_person.repositories, 
-            value_method: :id,
-            label_method: :name,
-            label: 'Repositories',
-            hint: 'Directly add your upload to your repositories. Leave blank if you just want to add references to the overall bibliography.', 
-            input_html: {
-              multiple: true
-            } %>
 
           <h4 class="subhead --spacious">What happens here?</h4>
           <ul>

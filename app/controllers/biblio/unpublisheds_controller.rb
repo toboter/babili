@@ -6,6 +6,9 @@ class Biblio::UnpublishedsController < Biblio::EntriesController
 
   def new 
     @authors = Zensus::Appellation.all.eager_load(:appellation_parts)
+    @repository = Repository.find(params[:repo_id])
+    @referencation = @unpublished.referencations.build(repository_id: @repository.id, creator: current_person)
+    authorize! :add_reference, @referencation
     @entry = @unpublished
   end
 
@@ -15,10 +18,12 @@ class Biblio::UnpublishedsController < Biblio::EntriesController
   end
 
   def create
+    @entry = @unpublished
     @unpublished.creator = current_person
+    @repository = @unpublished.referencations.last.repository
     respond_to do |format|
       if @unpublished.save
-        format.html { redirect_to @unpublished, notice: "Unpublished was successfully created." }
+        format.html { redirect_to namespace_repository_biblio_references_path(@repository.owner, @repository), notice: "Unpublished was successfully created. #{view_context.link_to('Show '+@unpublished.citation, @unpublished, class: 'text-strong')}".html_safe }
         format.json { render :show, status: :created, location: @unpublished }
       else
         format.html { render :new }
@@ -28,6 +33,7 @@ class Biblio::UnpublishedsController < Biblio::EntriesController
   end
 
   def update
+    @entry = @unpublished
     respond_to do |format|
       if @unpublished.update(unpublished_params)
         format.html { redirect_to @unpublished, notice: "Unpublished was successfully updated." }
@@ -51,6 +57,6 @@ class Biblio::UnpublishedsController < Biblio::EntriesController
   # Never trust parameters from the scary internet, only allow the white list through.
   def unpublished_params
     params.require(:biblio_unpublished).permit(:title, :year, :month,
-      :note, :key, :url, :doi, :abstract, :tag_list, :author_ids => [])
+      :note, :key, :url, :doi, :abstract, :tag_list, :author_ids => [], referencations_attributes: [:id, :repository_id, :creator_id, :_destroy])
   end
 end

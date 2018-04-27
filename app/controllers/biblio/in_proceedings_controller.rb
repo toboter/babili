@@ -7,6 +7,9 @@ class Biblio::InProceedingsController < Biblio::EntriesController
   def new 
     @authors = Zensus::Appellation.all.eager_load(:appellation_parts)
     @proceedings = Biblio::Proceeding.all
+    @repository = Repository.find(params[:repo_id])
+    @referencation = @in_proceeding.referencations.build(repository_id: @repository.id, creator: current_person)
+    authorize! :add_reference, @referencation
     @entry = @in_proceeding
   end
 
@@ -17,10 +20,12 @@ class Biblio::InProceedingsController < Biblio::EntriesController
   end
 
   def create
+    @entry = @in_proceeding
     @in_proceeding.creator = current_person
+    @repository = @in_proceeding.referencations.last.repository
     respond_to do |format|
       if @in_proceeding.save
-        format.html { redirect_to @in_proceeding, notice: "InProceeding was successfully created." }
+        format.html { redirect_to namespace_repository_biblio_references_path(@repository.owner, @repository), notice: "InProceeding was successfully created. #{view_context.link_to('Show '+@in_proceeding.citation, @in_proceeding, class: 'text-strong')}".html_safe }
         format.json { render :show, status: :created, location: @in_proceeding }
       else
         format.html { render :new }
@@ -30,6 +35,7 @@ class Biblio::InProceedingsController < Biblio::EntriesController
   end
 
   def update
+    @entry = @in_proceeding
     respond_to do |format|
       if @in_proceeding.update(in_proceeding_params)
         format.html { redirect_to @in_proceeding, notice: "InProceeding was successfully updated." }
@@ -53,6 +59,6 @@ class Biblio::InProceedingsController < Biblio::EntriesController
   # Never trust parameters from the scary internet, only allow the white list through.
   def in_proceeding_params
     params.require(:biblio_in_proceeding).permit(:title, :proceeding_id,
-      :pages, :note, :key, :url, :doi, :abstract, :tag_list, :author_ids => [])
+      :pages, :note, :key, :url, :doi, :abstract, :tag_list, :author_ids => [], referencations_attributes: [:id, :repository_id, :creator_id, :_destroy])
   end
 end

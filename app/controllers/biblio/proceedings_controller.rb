@@ -10,6 +10,9 @@ class Biblio::ProceedingsController < Biblio::EntriesController
     @toponyms = Locate::Toponym.all
     @series = Biblio::Serie.all
     @organizations = Zensus::Appellation.all.eager_load(:appellation_parts)
+    @repository = Repository.find(params[:repo_id])
+    @referencation = @proceeding.referencations.build(repository_id: @repository.id, creator: current_person)
+    authorize! :add_reference, @referencation
     @entry = @proceeding
   end
 
@@ -23,10 +26,12 @@ class Biblio::ProceedingsController < Biblio::EntriesController
   end
 
   def create
+    @entry = @proceeding
     @proceeding.creator = current_person
+    @repository = @proceeding.referencations.last.repository
     respond_to do |format|
       if @proceeding.save
-        format.html { redirect_to @proceeding, notice: "Proceeding was successfully created." }
+        format.html { redirect_to namespace_repository_biblio_references_path(@repository.owner, @repository), notice: "Proceeding was successfully created. #{view_context.link_to('Show '+@proceeding.citation, @proceeding, class: 'text-strong')}".html_safe }
         format.json { render :show, status: :created, location: @proceeding }
       else
         format.html { render :new }
@@ -36,6 +41,7 @@ class Biblio::ProceedingsController < Biblio::EntriesController
   end
 
   def update
+    @entry = @proceeding
     respond_to do |format|
       if @proceeding.update(proceeding_params)
         format.html { redirect_to @proceeding, notice: "Proceeding was successfully updated." }
@@ -59,6 +65,6 @@ class Biblio::ProceedingsController < Biblio::EntriesController
   # Never trust parameters from the scary internet, only allow the white list through.
   def proceeding_params
     params.require(:biblio_proceeding).permit(:year, :month, :title, :serie, :volume, :publisher_id, :organization_id,
-      :note, :key, :print_isbn, :url, :doi, :abstract, :tag_list, :editor_ids => [], :place_ids => [])
+      :note, :key, :print_isbn, :url, :doi, :abstract, :tag_list, :editor_ids => [], :place_ids => [], referencations_attributes: [:id, :repository_id, :creator_id, :_destroy])
   end
 end
