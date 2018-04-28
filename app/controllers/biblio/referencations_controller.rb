@@ -28,34 +28,34 @@ class Biblio::ReferencationsController < ApplicationController
 
   end
 
-  def add_repository
+  def add_repository # from entry
     repository = Repository.find(ref_params[:repository_id])
     entry = Biblio::Entry.friendly.find(ref_params[:id])
-    authorize! :update, repository
-    # auf diesem weg fehlen die ancestor elemente, die auch zu der repo-biblio hinzugefügt werden müssen
-    reference = Biblio::Referencation.new(entry_id: entry.id, repository_id: repository.id, creator_id: current_person.id)
+    referencations = entry.self_and_ancestors.map{ |e| Biblio::Referencation.new(entry: e, repository: repository, creator: current_person) unless repository.references.include?(e) }
+    authorize! :add_reference, Biblio::Referencation.new(repository: repository)
+    repository.referencations << referencations.compact
     respond_to do |format|
-      if reference.save
+      if repository.references.include?(entry)
         format.html { redirect_to entry, notice: "Successfully added to #{repository.name}." }
         format.js
       else
-        format.html { redirect_to entry, alert: "#{reference.errors}." }
+        format.html { redirect_to entry, alert: "An error occured. Reference not added." }
         format.js
       end
     end
   end
 
-  def add_entry
-    # auf diesem weg fehlen die ancestor elemente, die auch zu der repo-biblio hinzugefügt werden müssen
+  def add_entry # from repository
     @entry = Biblio::Entry.friendly.find(ref_params[:entry_id])
     authorize! :add_reference, Biblio::Referencation.new(repository: @repository)
-    @reference = Biblio::Referencation.new(entry_id: @entry.id, repository_id: @repository.id, creator_id: current_person.id)
+    referencations = @entry.self_and_ancestors.map{ |e| Biblio::Referencation.new(entry: e, repository: @repository, creator: current_person) unless @repository.references.include?(e) }
+    @repository.referencations << referencations.compact
     respond_to do |format|
-      if @reference.save
+      if @repository.references.include?(@entry)
         format.html { redirect_to namespace_repository_biblio_references_url(@namespace, @repository), notice: "#{@entry.citation} successfully added to #{@repository.name}." }
         format.js
       else
-        format.html { redirect_to namespace_repository_biblio_references_url(@namespace, @repository), alert: "#{@reference.errors.messages}." }
+        format.html { redirect_to namespace_repository_biblio_references_url(@namespace, @repository), alert: "An error occured. Reference not added." }
         format.js
       end
     end
@@ -67,7 +67,7 @@ class Biblio::ReferencationsController < ApplicationController
     @reference.destroy
     respond_to do |format|
       format.html { redirect_to namespace_repository_biblio_references_url(@namespace, @repository), notice: "Reference successfully removed from your repository." }
-      format.json { head :no_content }
+      format.js
     end
   end
 
