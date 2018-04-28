@@ -2,31 +2,20 @@
 
 <% content_for :container do %>
   <div class="wrapper biblio">
-    <div class="row">
-      <div class="col-md-9">
-        <%= content_tag :h4, class: '--spacing-20 --spacious-20' do %>
+    <div class="row --spacing-20 --spacious-10">
+      <div class="col-md-9 col-xs-7">
+        <%= content_tag :h4, class: '' do %>
           <%= link_to yield(:title), biblio_entries_path %>
         <% end %>
       </div>
-      <div class="col-md-3">
-        <%= content_tag :p, 'Add references through personal or group repositories.', class: 'text-muted text-small --spacious-10 text-right' if current_person %>
+      <div class="col-md-3 col-xs-5">
+        <%= content_tag :p, 'Add references through personal or group repositories.', class: 'text-muted text-small text-right' if current_person %>
       </div>
     </div>
-    <div class="row --spacious-10">
-      <div class="col-sm-12 col-md-8 main">
-        <div id='entries'>
-          <table class="table table-simple">
-            <tbody>
-              <%= render @results %>
-            </tbody>
-          </table>
-        </div>
-        <div id="pagination-results">
-          <%= will_paginate @results, renderer: BootstrapPagination::Rails %>
-        </div>
-      </div>
-      <%= content_tag :div, class: 'col-md-4 sidebar' do %>
-        <div class="biblio-search">
+
+    <div class="row">
+      <%= content_tag :div, class: 'col-md-4 col-md-push-8 sidebar' do %>
+        <div class="biblio-search clearfix">
           <%= form_tag biblio_entries_path, method: :get, class: "" do %>
             <%= search_field_tag 'q', params[:q], placeholder: "Search for references ...", class: "form-control", autofocus: true %>
             <%= select_tag 'sorted_by', options_for_select(Biblio::Entry.options_for_sorted_by, params[:sorted_by]), style: 'width:50%;', class: 'pull-right form-control --spacing-10', onchange: "this.form.submit()" %>
@@ -37,22 +26,37 @@
             <%= content_tag :p, 'Results: '+@results.total_entries.to_s, class: 'text-small text-muted' if params[:q].present? %>
           <% end %>
         </div>
-        <%= content_tag :div, class: "list-group --spacious" do %>
+        <%= content_tag :div, class: "list-group hidden-sm hidden-xs --spacious-20" do %>
           <%= link_to 'Journals', biblio_journals_path, class: 'list-group-item' %>
           <%= link_to 'Series', biblio_series_path, class: 'list-group-item' %>
         <% end %>
 
-        <p class="text-small text-grey">
+        <p class="text-small text-grey --spacious-20">
           Die projektübergreifende Bibliographie entwickelt sich mit den Projektbibliographien.  
           Hinweise, Ergänzungen, sowie Berichtigungen werden dankbar entgegengenommen.
         </p>
+
+      <% end %>
+
+      <div class="col-md-8 col-md-pull-4 main">
+        <div id='entries'>
+          <table class="table table-simple">
+            <tbody>
+              <%= render @results %>
+            </tbody>
+          </table>
+        </div>
+        <div id="pagination-results">
+          <%= will_paginate @results, renderer: BootstrapPagination::Rails %>
+        </div>
+
         <%= content_tag :div, link_to('Get an overview.', biblio_path, class: 'text-small'), class: 'links --spacious-10' %>
 
-        <%= content_tag :div, class: 'hint text-muted text-small --spacious' do %>
+        <%= content_tag :div, class: 'hint text-muted text-small --spacious-20' do %>
           <p>The default size of results per page is 50. You can change this and the citations format on your 
           <%= link_to 'settings pages', settings_path %>.</p>
         <% end if user_signed_in? %>
-      <% end %>
+      </div>
     </div>
   </div>
 <% end %>

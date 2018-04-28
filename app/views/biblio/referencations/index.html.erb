@@ -1,4 +1,4 @@
-<div class="row">
+<%= content_tag :div, class: "row hidden-xs hidden-sm" do %>
   <div class="col-md-8">
     <%= render 'biblio/referencations/add_entry', namespace: @namespace, repository: @repository %>
   </div>
@@ -29,11 +29,32 @@
         <li role="separator" class="divider"></li>
         <%= content_tag :li, link_to('Import', new_biblio_import_path(repo_id: @repository.id)) %>
       </ul>
-    <% end if can?(:add_reference, Biblio::Referencation.new(repository: @repository)) %>
+    <% end %>
   </div>
-</div>
+<% end if can?(:add_reference, Biblio::Referencation.new(repository: @repository)) %>
+
     <div class="row --spacious-20">
-      <div class="col-sm-12 col-md-8 main">
+      <%= content_tag :div, class: 'col-md-4 col-md-push-8 sidebar' do %>
+        <div class="biblio-search clearfix">
+          <%= form_tag namespace_repository_biblio_references_path(@namespace, @repository), method: :get, class: "" do %>
+            <%= search_field_tag 'q', params[:q], placeholder: "Search for references in #{@repository.name}...", class: "form-control", autofocus: true %>
+            <%= select_tag 'sorted_by', options_for_select(Biblio::Entry.options_for_sorted_by, params[:sorted_by]), style: 'width:50%;', class: 'pull-right form-control --spacing-10', onchange: "this.form.submit()" %>
+          <% end %>
+          <%= content_tag :div, class: 'links --spacious-10' do %>
+            <%= content_tag :span, 'Total: '+ @entries.count.to_s, class: 'text-small' %>
+            <%= ('- ' + link_to('View all', namespace_repository_biblio_references_path(@namespace, @repository), class: 'text-small')).html_safe if params[:q] %>
+            <%= content_tag :p, 'Results: '+@results.total_entries.to_s, class: 'text-small text-muted' if params[:q].present? %>
+          <% end %>
+        </div>
+        <div class="--spacious-20">
+          <p class="text-small text-grey">
+            Diese Bibliographie ist work in progress. Sie umfasst Referenzen zum Forschungsthema dieses Repositoriums. Umfang und Genauigkeit der Daten entwickeln sich mit dem Voranschreiten des Projekts. 
+            Hinweise, Ergänzungen, sowie Berichtigungen werden dankbar entgegengenommen.
+          </p>
+        </div>
+      <% end %>
+
+      <div class="col-md-8 col-md-pull-4 main">
         
         <div id='entries'>
           <table class="table table-simple">
@@ -47,28 +68,10 @@
         <div id="pagination-results">
           <%= will_paginate @results, renderer: BootstrapPagination::Rails %>
         </div>
+        <%= content_tag :div, class: 'links --spacious-10' do %>
+          <%= link_to('Get an overview', biblio_path, class: 'text-small') %> | 
+          <%= link_to('View all bibliographic references', biblio_entries_path, class: 'text-small') %>
+        <% end %>
       </div>
-      <%= content_tag :div, class: 'col-md-4 sidebar' do %>
-        <div class="biblio-search clearfix">
-          <%= form_tag namespace_repository_biblio_references_path(@namespace, @repository), method: :get, class: "" do %>
-            <%= search_field_tag 'q', params[:q], placeholder: "Search for references in #{@repository.name}...", class: "form-control", autofocus: true %>
-            <%= select_tag 'sorted_by', options_for_select(Biblio::Entry.options_for_sorted_by, params[:sorted_by]), style: 'width:50%;', class: 'pull-right form-control --spacing-10', onchange: "this.form.submit()" %>
-          <% end %>
-          <%= content_tag :div, class: 'links --spacious-10' do %>
-            <%= content_tag :span, 'Total: '+ @entries.count.to_s, class: 'text-small' %> - 
-            <%= link_to('View all', namespace_repository_biblio_references_path(@namespace, @repository), class: 'text-small') %>
-            <%= content_tag :p, 'Results: '+@results.total_entries.to_s, class: 'text-small text-muted' if params[:q].present? %>
-          <% end %>
-        </div>
-        <div class="--spacious">
-          <p class="text-small text-grey">
-            Diese Bibliographie ist work in progress. Sie umfasst Referenzen zum Forschungsthema dieses Repositoriums. Umfang und Genauigkeit der Daten entwickeln sich mit dem Voranschreiten des Projekts. 
-            Hinweise, Ergänzungen, sowie Berichtigungen werden dankbar entgegengenommen.
-          </p>
-          <%= content_tag :div, class: 'links --spacious-10' do %>
-            <%= link_to('Get an overview', biblio_path, class: 'text-small') %> | 
-            <%= link_to('View all bibliographic references', biblio_entries_path, class: 'text-small') %>
-          <% end %>
-        </div>
-      <% end %>
+
     </div>
