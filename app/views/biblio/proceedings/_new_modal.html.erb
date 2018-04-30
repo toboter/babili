@@ -6,13 +6,17 @@
           <h4 class="modal-title" id="myLargeModalLabel">Create a new Proceeding</h4>
         </div>
         <div class="modal-body biblio">
-          <%= simple_form_for Biblio::Proceeding.new(referencations: [Biblio::Referencation.new(repository_id: @repository.id, creator_id: current_person.id)]), html: {id: 'new_biblio_proceeding'} do |f| %>
+          <%= simple_form_for Biblio::Proceeding.new(referencations: [Biblio::Referencation.new(creator_id: current_person.id)]), html: {id: 'new_biblio_proceeding'} do |f| %>
             <div class="row">
               <div class="col-md-12">
                 <%= f.error_notification %>
 
                 <%= f.simple_fields_for :referencations do |r| %>
-                  <%= r.hidden_field :repository_id %>
+                  <%= r.input :repository_id, 
+                    collection: current_person.all_repos, 
+                    label_method: :name, value_method: :id, 
+                    selected: f.object.new_record? ? @repository : nil,
+                    label: 'Repository to add to' %>
                   <%= r.hidden_field :creator_id %>
                 <% end %>
 
