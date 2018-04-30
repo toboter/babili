@@ -32,7 +32,7 @@ class Locate::Place < ApplicationRecord
       type: type,
       description: description,
       name: default_name,
-      datings: datings.map{ |d| d.concept.default_name }
+      datings: datings.map{ |d| d.try(:concept).try(:default_name) }
     }
   end
 

@@ -7,12 +7,12 @@
         <%= f.input :dating_id, collection: Vocab::Concept.all, label_method: :default_name, value_method: :id %>
 
         <h4 class="subhead">Toponyms</h4>
-        <div id="place-<%= @place.id %>-dating-<%= f.object.id %>-toponyms">
+        <div id="place-<%= f.object.id %>-dating-<%= f.object.id %>-toponyms">
           <%= f.simple_fields_for :toponyms do |m| %>
-            <%= render 'toponym_fields', f: m %>
+            <%= render 'locate/places/toponym_fields', f: m %>
           <% end %>
           <div class="links">
-            <%= link_to_add_association fa_icon('plus', text: 'Toponym'), f, :toponyms, class: 'btn btn-default btn-sm' %>
+            <%= link_to_add_association fa_icon('plus', text: 'Toponym'), f, :toponyms, class: 'btn btn-default btn-sm', partial: 'locate/places/toponym_fields' %>
           </div>
         </div>
       </div>

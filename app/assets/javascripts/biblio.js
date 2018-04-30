@@ -26,7 +26,7 @@ $(document).on("turbolinks:load", function()  {
     });
   });
 
-  $(".journal-selectize").selectize({
+  $(".biblio_journal_selectize").selectize({
     create: function(input, callback) {
       selectizeCallback = callback;
 
@@ -61,7 +61,7 @@ $(document).on("turbolinks:load", function()  {
     });
   });
 
-  $(".serie-selectize").selectize({
+  $(".biblio_series_selectize").selectize({
     create: function(input, callback) {
       selectizeCallback = callback;
 
@@ -70,12 +70,117 @@ $(document).on("turbolinks:load", function()  {
     }
   });
 
-  $('.repo-selectize').selectize({
-    placeholder: 'Add to repository...'
+
+  $(".book-modal").on("hide.bs.modal", function(e) {
+    if (selectizeCallback != null) {
+      selectizeCallback();
+      selecitzeCallback = null;
+    }
+
+    $("#new_biblio_book").trigger("reset");
+    $.rails.enableFormElements($("#new_biblio_book"));
+  });
+
+  $("#new_biblio_book").on("submit", function(e) {
+    e.preventDefault();
+    $.ajax({
+      method: "POST",
+      url: $(this).attr("action") + '.json',
+      data: $(this).serialize(),
+      success: function(response) {
+        console.log(response);
+        selectizeCallback({value: response.id, text: response.citation});
+        selectizeCallback = null;
+
+        $(".book-modal").modal('toggle');
+      }
+    });
+  });
+
+  $(".biblio_book_selectize").selectize({
+    create: function(input, callback) {
+      selectizeCallback = callback;
+
+      $(".book-modal").modal();
+      $("#biblio_book_title").val(input);
+    }
   });
 
 
-  $('.biblio-entry-selectize').selectize({
+  $(".collection-modal").on("hide.bs.modal", function(e) {
+    if (selectizeCallback != null) {
+      selectizeCallback();
+      selecitzeCallback = null;
+    }
+
+    $("#new_biblio_collection").trigger("reset");
+    $.rails.enableFormElements($("#new_biblio_collection"));
+  });
+
+  $("#new_biblio_collection").on("submit", function(e) {
+    e.preventDefault();
+    $.ajax({
+      method: "POST",
+      url: $(this).attr("action") + '.json',
+      data: $(this).serialize(),
+      success: function(response) {
+        console.log(response);
+        selectizeCallback({value: response.id, text: response.citation});
+        selectizeCallback = null;
+
+        $(".collection-modal").modal('toggle');
+      }
+    });
+  });
+
+  $(".biblio_collection_selectize").selectize({
+    create: function(input, callback) {
+      selectizeCallback = callback;
+
+      $(".collection-modal").modal();
+      $("#biblio_collection_title").val(input);
+    }
+  });
+
+
+  $(".proceeding-modal").on("hide.bs.modal", function(e) {
+    if (selectizeCallback != null) {
+      selectizeCallback();
+      selecitzeCallback = null;
+    }
+
+    $("#new_biblio_proceeding").trigger("reset");
+    $.rails.enableFormElements($("#new_biblio_proceeding"));
+  });
+
+  $("#new_biblio_proceeding").on("submit", function(e) {
+    e.preventDefault();
+    $.ajax({
+      method: "POST",
+      url: $(this).attr("action") + '.json',
+      data: $(this).serialize(),
+      success: function(response) {
+        console.log(response);
+        selectizeCallback({value: response.id, text: response.citation});
+        selectizeCallback = null;
+
+        $(".proceeding-modal").modal('toggle');
+      }
+    });
+  });
+
+  $(".biblio_proceeding_selectize").selectize({
+    create: function(input, callback) {
+      selectizeCallback = callback;
+
+      $(".proceeding-modal").modal();
+      $("#biblio_proceeding_title").val(input);
+    }
+  });
+
+  
+
+  $('.biblio_entries_selectize').selectize({
     placeholder: 'Add reference...',
     valueField: 'id',
     labelField: 'citation',
@@ -102,9 +207,6 @@ $(document).on("turbolinks:load", function()  {
                '</div>'
       }
     }
-  });
-
-
-  
+  });  
 
 });

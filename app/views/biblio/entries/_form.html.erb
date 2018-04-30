@@ -17,7 +17,7 @@
     input_html: {
       multiple: true, 
       id: 'creators_names',
-      class: 'creators-selectize'
+      class: 'zensus_appellations_selectize'
     } if @entry.fields.include?(:author_ids) %>
   
   <%= f.input :editor_ids, 
@@ -29,7 +29,7 @@
     input_html: {
       multiple: true, 
       id: 'creators_names',
-      class: 'creators-selectize'
+      class: 'zensus_appellations_selectize'
     } if @entry.fields.include?(:editor_ids) %>
   
   <%= f.input :year if @entry.fields.include?(:year) %>
@@ -41,11 +41,11 @@
     collection: @publishers, 
     label_method: :name, 
     value_method: :id, 
-    include_blank: false, 
+    include_blank: true, 
     label: "Publisher", 
     selected: @entry.publisher_id, 
     input_html: {
-      class: 'publisher-selectize'
+      class: 'zensus_appellations_selectize'
     } if @entry.fields.include?(:publisher_id) %>
 
   <%= f.input :howpublished, as: :text if @entry.fields.include?(:howpublished) %>
@@ -57,9 +57,8 @@
     label: 'Places', 
     selected: @entry.place_ids, 
     input_html: {
-      multiple: true, 
-      id: 'places_names',
-      class: 'places-selectize'
+      multiple: true,
+      class: 'locate_places_selectize'
     } if @entry.fields.include?(:place_ids) %>
 
   <hr>
@@ -68,12 +67,11 @@
     collection: @journals, 
     label_method: :name_abbr, 
     value_method: :id, 
-    include_blank: false, 
+    include_blank: true, 
     label: "Journal", 
     selected: @entry.journal.try(:id), 
     input_html: {
-      id: 'journal_name',
-      class: 'journal-selectize'
+      class: 'biblio_journal_selectize'
     } if @entry.fields.include?(:journal) %>
   
   <%= f.input :serie, 
@@ -84,44 +82,40 @@
     label: "Serie", 
     selected: @entry.serie.try(:id), 
     input_html: {
-      id: 'serie_title',
-      class: 'serie-selectize'
+      class: 'biblio_series_selectize'
     } if @entry.fields.include?(:serie) %>
   
   <%= f.input :book_id, 
     collection: @books, 
     label_method: :citation, 
     value_method: :id, 
-    include_blank: false, 
+    include_blank: true, 
     label: "Book", 
     selected: @entry.book.try(:id), 
     input_html: {
-      id: 'book_name',
-      class: 'book-selectize'
+      class: 'biblio_book_selectize'
     } if @entry.fields.include?(:book_id) %>
 
   <%= f.input :collection_id, 
     collection: @collections,
     label_method: :citation, 
     value_method: :id, 
-    include_blank: false, 
+    include_blank: true, 
     label: "Collection", 
     selected: @entry.collection.try(:id), 
     input_html: {
-      id: 'collection_name',
-      class: 'collection-selectize'
+      class: 'biblio_collection_selectize'
     } if @entry.fields.include?(:collection_id) %>
   
   <%= f.input :proceeding_id, 
     collection: @proceedings, 
     label_method: :citation, 
     value_method: :id, 
-    include_blank: false, 
+    include_blank: true, 
     label: "Proceeding", 
     selected: @entry.proceeding.try(:id), 
     input_html: {
-      id: 'proceeding_name',
-      class: 'proceeding-selectize'
+      class: 'biblio_proceeding_selectize'
     } if @entry.fields.include?(:proceeding_id) %>
   
   <%= f.input :volume if @entry.fields.include?(:volume) %>
@@ -140,7 +134,7 @@
     label: "Organization", 
     selected: @entry.organization_id, 
     input_html: {
-      class: 'organization-selectize'
+      class: 'zensus_appellations_selectize'
     } if @entry.fields.include?(:organization_id) %>
   
   <%= f.input :school_id, 
@@ -151,7 +145,7 @@
     label: "School", 
     selected: @entry.school_id, 
     input_html: {
-      class: 'appellation-create-selectize'
+      class: 'zensus_appellations_selectize'
     } if @entry.fields.include?(:school_id) %>
 
   <%= f.input :subtype, label: 'Type' if @entry.fields.include?(:subtype) %>
@@ -164,7 +158,7 @@
     label: "Institution", 
     selected: @entry.institution_id, 
     input_html: {
-      class: 'appellation-create-selectize'
+      class: 'zensus_appellations_selectize'
     } if @entry.fields.include?(:institution_id) %>
 
   <%= f.input :note %>
@@ -202,4 +196,5 @@
   <%= render 'biblio/books/new_modal' if @entry.fields.include?(:book_id) %>
   <%= render 'biblio/collections/new_modal' if @entry.fields.include?(:collection_id) %>
   <%= render 'biblio/proceedings/new_modal' if @entry.fields.include?(:proceeding_id) %>
+  <%= render 'locate/places/new_modal' if @entry.fields.include?(:place_ids) %>
 <% end %>

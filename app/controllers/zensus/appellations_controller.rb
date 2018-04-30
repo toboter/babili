@@ -23,7 +23,6 @@ class Zensus::AppellationsController < ApplicationController
   end
 
   def create
-    @appellation.creator = current_person
     respond_to do |format|
       if @appellation.save
         format.html { redirect_to zensus_name_url(@appellation), notice: 'Name was successfully created.' }

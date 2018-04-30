@@ -84,7 +84,7 @@ class Biblio::EntriesController < ApplicationController
     respond_to do |format|
       if @entry.save
         format.html { redirect_to namespace_repository_biblio_references_path(@repository.owner, @repository), notice: "#{@type.demodulize} was successfully created. #{view_context.link_to('Show '+@entry.citation, @entry, class: 'text-strong')}".html_safe }
-        format.json { render :show, status: :created, location: @entry }
+        format.json { render json: @entry }
       else
         format.html { render :new }
         format.json { render json: @entry.errors, status: :unprocessable_entity }

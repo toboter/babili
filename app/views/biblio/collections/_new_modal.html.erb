@@ -6,19 +6,25 @@
           <h4 class="modal-title" id="myLargeModalLabel">Create a new collection</h4>
         </div>
         <div class="modal-body biblio">
-          <%= simple_form_for Biblio::Collection.new, html: {id: 'new_modal_biblio_collection'} do |f| %>
+          <%= simple_form_for Biblio::Collection.new(referencations: [Biblio::Referencation.new(repository_id: @repository.id, creator_id: current_person.id)]), html: {id: 'new_biblio_collection'} do |f| %>
             <div class="row">
               <div class="col-md-12">
                 <%= f.error_notification %>
+
+                <%= f.simple_fields_for :referencations do |r| %>
+                  <%= r.hidden_field :repository_id %>
+                  <%= r.hidden_field :creator_id %>
+                <% end %>
+
   <%= f.input :editor_ids, 
-    collection: Zensus::Appellation.all.eager_load(:appellation_parts), 
+    collection: @editors, 
     label_method: :name, 
     value_method: :id, 
     label: 'Editors',
     required: true,
     input_html: {
       multiple: true, 
-      class: 'load-creators-selectize'
+      class: 'zensus_appellations_selectize'
     } %>
   
   <%= f.input :year %>
@@ -27,50 +33,48 @@
   <%= f.input :title, as: :text %>
 
   <%= f.input :publisher_id, 
-    collection: Zensus::Appellation.all.eager_load(:appellation_parts), 
+    collection: @publishers, 
     label_method: :name, 
     value_method: :id, 
     include_blank: false, 
     label: "Publisher",
     input_html: {
-      class: 'publisher-selectize'
+      class: 'zensus_appellations_selectize'
     } %>
   
   <hr>
   
   <%= f.input :place_ids, 
-    collection: Locate::Toponym.all, 
+    collection: @toponyms, 
     label_method: :given, 
     value_method: :id, 
     label: 'Places',
     input_html: {
       multiple: true, 
-      id: 'places_names',
-      class: 'places-selectize'
+      class: 'locate_places_selectize'
     } %>
   
   <%= f.input :serie, 
-    collection: Biblio::Serie.all, 
+    collection: @series, 
     label_method: :title, 
     value_method: :id, 
     include_blank: true, 
     label: "Serie",
     input_html: {
-      id: 'serie_title',
-      class: 'serie-selectize'
+      class: 'biblio_series_selectize'
     } %>
   
   <%= f.input :volume %>
   <%= f.input :edition %>
 
   <%= f.input :organization_id, 
-    collection: Zensus::Appellation.all.eager_load(:appellation_parts), 
+    collection: @organizations, 
     label_method: :name, 
     value_method: :id, 
     include_blank: true, 
     label: "Organization",
     input_html: {
-      class: 'organization-selectize'
+      class: 'zensus_appellations_selectize'
     } %>
 
               </div>

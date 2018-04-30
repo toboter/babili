@@ -1,0 +1,37 @@
+  <div class="modal fade place-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-md" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+          <h4 class="modal-title" id="myLargeModalLabel">Create a new place</h4>
+        </div>
+        <div class="modal-body biblio">
+          <%= simple_form_for Locate::Place.new do |f| %>
+            <div class="row">
+              <div class="col-md-12">
+                <%= f.error_notification %>
+                <h3 class="subhead">Properties</h3>
+                <%= f.input :type, collection: Locate::Place::TYPES %>
+                <%= f.input :description %>
+                default_name, default_location
+
+                <h3 class="subhead --spacious">Datings</h3>
+                <div id="datings">
+                  <%= f.simple_fields_for :datings do |m| %>
+                    <%= render 'locate/places/dating_fields', f: m %>
+                  <% end %>
+                  <div class="links">
+                    <%= link_to_add_association fa_icon('plus', text: 'Dating'), f, :datings, class: 'btn btn-default btn-sm', partial: 'locate/places/dating_fields' %>
+                  </div>
+                </div>
+
+              </div>
+              <div class="col-md-12 actions --spacious">
+                <%= f.submit class: 'btn btn-primary' %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>

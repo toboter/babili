@@ -96,7 +96,8 @@ $(document).on('turbolinks:load', function(){
     placeholder: 'Type to select or add appellations...'
   });
 
-  $(".creators-selectize").selectize({
+
+  $(".zensus_appellations_selectize").selectize({
     create: function(input, callback) {
       selectizeCallback = callback;
 
@@ -104,6 +105,7 @@ $(document).on('turbolinks:load', function(){
       $('#zensus_name_name').val(input);
     }
   });
+  
 
   $('.zensus_activity_actable').selectize({
     sortField: 'text',
