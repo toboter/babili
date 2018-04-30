@@ -13,21 +13,21 @@ Rails.application.routes.draw do
        post :add_repositories, to: 'referencations#add_repository', on: :member
     end
     resources :series, type: 'Biblio::Serie'
-    resources :books, type: 'Biblio::Book', except: :index
-    resources :in_books, type: 'Biblio::InBook', except: :index
-    resources :collections, type: 'Biblio::Collection', except: :index
-    resources :in_collections, type: 'Biblio::InCollection', except: :index
-    resources :proceedings, type: 'Biblio::Proceeding', except: :index
-    resources :in_proceedings, type: 'Biblio::InProceeding', except: :index
     resources :journals, type: 'Biblio::Journal'
-    resources :articles, type: 'Biblio::Article', except: :index
-    resources :miscs, type: 'Biblio::Misc', except: :index
-    resources :manuals, type: 'Biblio::Manual', except: :index
-    resources :booklets, type: 'Biblio::Booklet', except: :index
-    resources :mastertheses, type: 'Biblio::Masterthesis', except: :index
-    resources :phdtheses, type: 'Biblio::Phdthesis', except: :index
-    resources :techreports, type: 'Biblio::Techreport', except: :index
-    resources :unpublisheds, type: 'Biblio::Unpublished', except: :index
+    resources :books, controller: 'entries', type: 'Biblio::Book', except: :index
+    resources :in_books, controller: 'entries', type: 'Biblio::InBook', except: :index
+    resources :collections, controller: 'entries', type: 'Biblio::Collection', except: :index
+    resources :in_collections, controller: 'entries', type: 'Biblio::InCollection', except: :index
+    resources :proceedings, controller: 'entries', type: 'Biblio::Proceeding', except: :index
+    resources :in_proceedings, controller: 'entries', type: 'Biblio::InProceeding', except: :index
+    resources :articles, controller: 'entries', type: 'Biblio::Article', except: :index
+    resources :miscs, controller: 'entries', type: 'Biblio::Misc', except: :index
+    resources :manuals, controller: 'entries', type: 'Biblio::Manual', except: :index
+    resources :booklets, controller: 'entries', type: 'Biblio::Booklet', except: :index
+    resources :mastertheses, controller: 'entries', type: 'Biblio::Masterthesis', except: :index
+    resources :phdtheses, controller: 'entries', type: 'Biblio::Phdthesis', except: :index
+    resources :techreports, controller: 'entries', type: 'Biblio::Techreport', except: :index
+    resources :unpublisheds, controller: 'entries', type: 'Biblio::Unpublished', except: :index
     resource :import
   end
 

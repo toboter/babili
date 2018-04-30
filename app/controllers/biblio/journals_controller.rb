@@ -1,4 +1,5 @@
-class Biblio::JournalsController < Biblio::EntriesController
+class Biblio::JournalsController < ApplicationController
+  load_and_authorize_resource
 
   def index
     @journals = Biblio::Journal.order(citation_raw: :asc).all   
@@ -13,7 +14,7 @@ class Biblio::JournalsController < Biblio::EntriesController
     @entry = @journal
 
     respond_to do |format|
-      format.html
+      format.html { render 'biblio/entries/show' }
       format.json { render json: @journal, serializer: Biblio::JournalSerializer }
     end
   end

@@ -16,6 +16,9 @@ class Biblio::Collection < Biblio::Entry
 
   CREATOR_TYPES = %w(Editor)
   DESCRIPTION = 'A book with an editor and explicit publisher.'
+  def fields
+    [:editor_ids, :title, :publisher_id, :year, :month, :serie, :volume, :place_ids, :organization_id, :edition, :print_isbn, :note, :key, :url, :doi, :abstract, :tag_list]
+  end
   def icon
     'book'
   end

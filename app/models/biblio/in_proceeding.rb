@@ -16,6 +16,9 @@ class Biblio::InProceeding < Biblio::Entry
 
   CREATOR_TYPES = %w(Author)
   DESCRIPTION = 'An article in the proceedings of a conference.'
+  def fields
+    [:author_ids, :title, :proceeding_id, :pages, :note, :key, :url, :doi, :abstract, :tag_list]
+  end
   def icon
     'file'
   end

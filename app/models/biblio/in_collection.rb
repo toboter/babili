@@ -16,6 +16,9 @@ class Biblio::InCollection < Biblio::Entry
 
   CREATOR_TYPES = %w(Author)
   DESCRIPTION = 'A part of a book with its own title.'
+  def fields
+    [:author_ids, :title, :collection_id, :pages, :note, :key, :url, :doi, :abstract, :tag_list]
+  end
   def icon
     'file'
   end

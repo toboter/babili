@@ -17,6 +17,9 @@ class Biblio::Article < Biblio::Entry
   
   CREATOR_TYPES = %w(Author)
   DESCRIPTION = 'An article from a journal or magazine.'
+  def fields
+    [:author_ids, :title, :year, :month, :journal, :volume, :number, :pages, :note, :key, :url, :doi, :abstract, :tag_list]
+  end
   def icon
     'file'
   end

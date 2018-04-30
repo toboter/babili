@@ -1,13 +1,12 @@
-<% title "New #{@type.demodulize.capitalize}" %>
+<% title "#{@entry.citation}" %>
 
 <% content_for :container do %>
   <div class="wrapper biblio">
     <div class="row">
       <div class="col-md-12">
         <%= content_tag :h4, class: 'h-condensed --spacing-20 --spacious-20' do %>
-          <%= @type.demodulize.pluralize %>:
-          <%= yield :title %><br>
-          <%= content_tag :span, "Will be added to #{@entry.referencations.map{|r| content_tag :em, r.repository.name}.join(' and ')} and the main bibliography".html_safe, class: 'text-gray text-small' %>
+          <%= 'Journals' %>:
+          <%= yield :title %>
         <% end %>
         <hr>
       </div>

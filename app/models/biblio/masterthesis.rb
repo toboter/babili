@@ -16,6 +16,9 @@ class Biblio::Masterthesis < Biblio::Entry
 
   CREATOR_TYPES = %w(Author)
   DESCRIPTION = "A Master's thesis."
+  def fields
+    [:author_ids, :title, :school_id, :place_ids, :year, :month, :note, :key, :url, :doi, :abstract, :tag_list]
+  end
   def icon
     'book'
   end

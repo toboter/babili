@@ -18,6 +18,10 @@ class Biblio::Entry < ApplicationRecord
 
   accepts_nested_attributes_for :referencations, reject_if: :all_blank, allow_destroy: true
 
+  def self.types
+    authored_types + edited_types
+  end
+
   def self.authored_types
     [
       'Biblio::Article',

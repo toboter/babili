@@ -16,6 +16,9 @@ class Biblio::Manual < Biblio::Entry
 
   CREATOR_TYPES = %w(Author)
   DESCRIPTION = 'Technical documentation.'
+  def fields
+    [:author_ids, :title, :organization_id, :place_ids, :edition, :year, :month, :note, :key, :url, :doi, :abstract, :tag_list]
+  end
   def icon
     'file'
   end

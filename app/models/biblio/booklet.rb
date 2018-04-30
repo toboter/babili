@@ -16,6 +16,9 @@ class Biblio::Booklet < Biblio::Entry
 
   CREATOR_TYPES = %w(Author)
   DESCRIPTION = 'A work that is printed and bound, but without a named publisher or sponsoring institution.'
+  def fields
+    [:author_ids, :title, :howpublished, :year, :month, :place_ids, :note, :key, :url, :doi, :abstract, :tag_list]
+  end
   def icon
     'book'
   end

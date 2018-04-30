@@ -16,6 +16,9 @@ class Biblio::Misc < Biblio::Entry
 
   CREATOR_TYPES = %w(Author)
   DESCRIPTION = 'Use this type when nothing else seems appropriate.'
+  def fields
+    [:author_ids, :title, :howpublished, :year, :month, :note, :key, :url, :doi, :abstract, :tag_list]
+  end
   def icon
     'file'
   end

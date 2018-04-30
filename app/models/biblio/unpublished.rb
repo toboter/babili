@@ -16,6 +16,9 @@ class Biblio::Unpublished < Biblio::Entry
 
   CREATOR_TYPES = %w(Author)
   DESCRIPTION = 'A document with an author and title, but not formally published.'
+  def fields
+    [:author_ids, :title, :year, :month, :note, :key, :url, :doi, :abstract, :tag_list]
+  end
   def icon
     'file'
   end

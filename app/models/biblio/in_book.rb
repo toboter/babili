@@ -16,6 +16,9 @@ class Biblio::InBook < Biblio::Entry
 
   CREATOR_TYPES = %w(Author)
   DESCRIPTION = 'A part of a book, which may be a chapter and/or a range of pages.'
+  def fields
+    [:author_ids, :title, :book_id, :chapter, :pages, :note, :key, :url, :doi, :abstract, :tag_list]
+  end
   def icon
     'file'
   end

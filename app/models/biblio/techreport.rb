@@ -16,6 +16,9 @@ class Biblio::Techreport < Biblio::Entry
 
   CREATOR_TYPES = %w(Author)
   DESCRIPTION = 'A report published by a school or other institution, usually numbered within a series.'
+  def fields
+    [:author_ids, :title, :institution_id, :serie, :volume, :subtype, :place_ids, :year, :month, :note, :key, :url, :doi, :abstract, :tag_list]
+  end
   def icon
     'file'
   end

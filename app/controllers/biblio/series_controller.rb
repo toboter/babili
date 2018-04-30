@@ -1,4 +1,5 @@
-class Biblio::SeriesController < Biblio::EntriesController
+class Biblio::SeriesController < ApplicationController
+  load_and_authorize_resource
 
   def index
     @serials = Biblio::Serie.order(citation_raw: :asc).all
@@ -12,7 +13,7 @@ class Biblio::SeriesController < Biblio::EntriesController
   def show
     @entry = @serie
     respond_to do |format|
-      format.html
+      format.html { render 'biblio/entries/show' }
       format.json { render json: @serie, serializer: Biblio::SerieSerializer }
     end
   end
