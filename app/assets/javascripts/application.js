@@ -25,6 +25,7 @@
 
 $(function () {
   $('[data-toggle="tooltip"]').tooltip();
+  $('.with-tooltip').tooltip();
   $('.about-content img, .post-content img').tooltip({
       placement: 'bottom'
   });
