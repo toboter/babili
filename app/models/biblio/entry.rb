@@ -83,7 +83,7 @@ class Biblio::Entry < ApplicationRecord
   end
 
   def creators_citation
-    creators = self.respond_to?(:authors) ? authors : editors
+    creators = self.new_record? ? (self.respond_to?(:authors) ? authors : editors) : creators_name_list
     names = creators.map{ |a| a.name(reverse: true).split(', ').first }
     creators.compact.count > 3 ? [names.take(3).join(', ')].push('et al.').reject(&:blank?) : [names.join(', ')]
   end

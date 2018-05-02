@@ -11,12 +11,13 @@
               <div class="col-md-12">
                 <%= f.error_notification %>
 
-                <%= f.simple_fields_for :referencations do |r| %>
+                 <%= f.simple_fields_for :referencations do |r| %>
                   <%= r.input :repository_id, 
                     collection: current_person.all_repos, 
                     label_method: :name, value_method: :id, 
-                    selected: f.object.new_record? ? @repository : nil,
-                    label: 'Repository to add to' %>
+                    selected: @repository ? @repository.id : nil,
+                    label: 'Repository to add to',
+                    as: @repository ? :hidden : :select %>
                   <%= r.hidden_field :creator_id %>
                 <% end %>
 
