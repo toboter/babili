@@ -1,7 +1,16 @@
 <ul class="list-inline pull-right">
+  <%= content_tag :li, class: 'btn-group' do %>
+    <%= link_to '', class: "dropdown-toggle text-gray", data: {toggle: "dropdown"}, aria: {haspopup: "true", expanded: "false"}, title: 'Add to repository' do %>
+      <%= fa_icon('table') %>
+    <% end %>
+    <ul class="dropdown-menu" id="biblio-entry-<%= entry.id %>-actions-add-repository">
+      <%= render 'biblio/shared/actions_add_repository', entry: entry %>
+    </ul>
+  <% end if can?(:add_repository, Biblio::Referencation.new) %>
   <%= content_tag :li, link_to(fa_icon('trash'), namespace_repository_biblio_reference_path(referencation.repository.owner, referencation.repository, referencation), 
     method: :delete, 
     remote: true,
     data: { confirm: 'Are you sure?' }, 
+    title: "Remove from #{referencation.repository.name}",
     class: 'text-gray') if local_assigns[:referencation] && can?(:destroy, referencation) %>
 </ul>

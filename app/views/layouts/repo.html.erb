@@ -8,8 +8,6 @@
           <%= fa_icon('table') %>
           <%= link_to @namespace.name, @namespace, class: '' %> / 
           <%= link_to @repository.name, [@namespace, @repository], class: 'text-strong' %>
-
-          <%= link_to 'Copy', 'copy', title: "Copy the datasets of #{@repository.name} to your account.", class: 'btn btn-default btn-sm pull-right' %>
         <% end %>
         <ul class="nav nav-tabs" role="tablist">
           <%= content_tag :li, link_to('Data', [@namespace, @repository]), class: "#{'active text-strong' if current_page?([@namespace, @repository]) || request.path.include?("#{url_for([@namespace, @repository])}/data")}" %>

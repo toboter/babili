@@ -13,7 +13,7 @@ class Biblio::ReferencationsController < ApplicationController
 
     per_page = current_user.try(:person).try(:per_page).present? ? current_user.person.per_page : DEFAULT_PER_PAGE
     per_page = nil if params[:format] == 'bibtex'
-    
+
     @results = Biblio::Entry.search(query, 
       fields: [{citation: :exact}, :entry_type, :author, :editor, :title, :booktitle, :journal, :series, {year: :exact}, :publisher, :address, "tag^10", 
         :volume, :number, :note, :isbn, :url, :doi, :abstract],
@@ -32,17 +32,17 @@ class Biblio::ReferencationsController < ApplicationController
   end
 
   def add_repository # from entry
-    repository = Repository.find(ref_params[:repository_id])
-    entry = Biblio::Entry.friendly.find(ref_params[:id])
-    referencations = entry.self_and_ancestors.map{ |e| Biblio::Referencation.new(entry: e, repository: repository, creator: current_person) unless repository.references.include?(e) }
-    authorize! :add_reference, Biblio::Referencation.new(repository: repository)
-    repository.referencations << referencations.compact
+    @repository = Repository.find(ref_params[:repository_id])
+    @entry = Biblio::Entry.friendly.find(ref_params[:id])
+    referencations = @entry.self_and_ancestors.map{ |e| Biblio::Referencation.new(entry: e, repository: @repository, creator: current_person) unless @repository.references.include?(e) }
+    authorize! :add_reference, Biblio::Referencation.new(repository: @repository)
+    @repository.referencations << referencations.compact
     respond_to do |format|
-      if repository.references.include?(entry)
-        format.html { redirect_to entry, notice: "Successfully added to #{repository.name}." }
+      if @repository.references.include?(@entry)
+        format.html { redirect_to @entry, notice: "Successfully added to #{@repository.name}." }
         format.js
       else
-        format.html { redirect_to entry, alert: "An error occured. Reference not added." }
+        format.html { redirect_to @entry, alert: "An error occured. Reference not added." }
         format.js
       end
     end

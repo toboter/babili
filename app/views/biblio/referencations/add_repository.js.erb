@@ -1,0 +1,2 @@
+toastr["success"]("Added <%= @entry.citation %> to <%= escape_javascript(content_tag :strong, link_to(@repository.name, namespace_repository_biblio_references_path(@repository.owner, @repository))) %>!");
+$("#biblio-entry-<%= @entry.id %>-actions-add-repository").html("<%= escape_javascript(render 'biblio/shared/actions_add_repository', entry: @entry) %>");
