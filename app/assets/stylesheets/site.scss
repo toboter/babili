@@ -444,8 +444,9 @@ aside {
 }
 
 footer {
+    border-top: 1px solid #e1e4e8; 
+    background-color: #fafbfc;
     .container {
-        border-top: 1px solid #eeeeee;
         padding: 40px 15px 40px 15px;
         margin: 0 15px;
     }
@@ -459,6 +460,8 @@ footer {
 
 @media (min-width: 768px) {
     footer {
+        border-top: 1px solid #e1e4e8; 
+        background-color: #fafbfc;
         .container {
             margin: 0 auto;
         }

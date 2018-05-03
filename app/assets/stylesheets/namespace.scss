@@ -57,6 +57,14 @@
       color: #0366d6;
     }
   }
+  .nav-tabs {
+    border-bottom: none;
+    li {
+      a {
+        color: #444;
+      }
+    }
+  }
 }
 
 .repo {
