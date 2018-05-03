@@ -40,7 +40,7 @@
         <div class="page-header borderless">
           <p class="text-muted ">
             Having 100 years of research history means having multiple naming conventions. <%= link_to 'Vocabularies', vocab_path, class: 'text-strong' %> shall 
-            assist each researcher or team with an idea of a common wording and term translations as well as giving 
+            assist each researcher or team with an idea of a common wording and term translations of topics and concepts as well as giving 
             anyone the possibility to name things in a heterogenus way, while still acting with a common idea.
           </p>
         </div>
@@ -52,9 +52,10 @@
         </div>
         <div class="page-header borderless">
           <p class="text-muted ">
-            <%= link_to 'Bibliography', biblio_path, class: 'text-strong' %> integrates the scientific workflow idea into repositories. The entries are like vocabulary terms scoped to, not only 
-            a Person or Group but even to their repositories. And can be queried along the data. As a repository forms the discourse universe
-            of a scientific idea, refernces are an elementary service and make up a bibliography of that matter in question. 
+            <%= link_to 'Bibliography', biblio_path, class: 'text-strong' %> integrates the scientific workflow idea into repositories. The entries 
+            are like vocabulary terms scoped to, not only a Person or Group but even to their repositories. And can be queried along the data. 
+            As a repository forms the discourse universe of a scientific idea, refernces are an elementary service and make up a bibliography 
+            of that matter in question. 
           </p>
         </div>
         
@@ -67,9 +68,8 @@
         </div>
         <div class="page-header borderless">
           <p class="text-muted">
-            Babylon-Online integrates different data pools (repositories). From different materials 
-            and techniques to objects (like figurines), culture or excavation documentations and publications. 
-            Learn more on the <%= link_to 'settings page', settings_oread_enrollments_path %>.
+            Repos are workspaces for studies: They integrate baskets for various versioned data items as well as a bibliography and the users or groups
+            vocabularies. A board for disccussions and a reports section offer a track over the repositories objectives.
           </p>
           <div class="--spacious --spacing">
             <%= render @repositories.limit(3), namespace: true %>

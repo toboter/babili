@@ -1,0 +1,16 @@
+  <div class="row">
+    <div class="col-sm-12 col-md-3 sidebar">
+
+    </div>
+    <div class="col-sm-12 col-md-9 main">
+      <h3 class="subhead">Settings</h3>
+      <%= simple_form_for [@namespace, @repository] do |f| %>
+        <%= f.error_notification %>
+        <%= f.input :name, label: 'Repository name' %>
+
+        <div class="actions --spacious">
+          <%= f.submit class: 'btn btn-primary' %>
+        </div>
+      <% end %>
+    </div>
+  </div>

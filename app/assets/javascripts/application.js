@@ -18,6 +18,7 @@
 //= require cocoon
 //= require dropzone
 //= require selectize
+//= require trix
 //= require bootstrap
 //= require turbolinks
 //= require turbolinks-compatibility

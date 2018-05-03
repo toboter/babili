@@ -10,7 +10,17 @@
     <div class="row names">
       <div class="col-sm-12 col-md-8 main">
         <div class="list-group">
-          <%= render @appellations.sort_by(&:name) %>
+          <%= render @appellations %>
+        </div>
+        <div id='names'>
+          <table class="table table-simple">
+            <tbody>
+
+            </tbody>
+          </table>
+        </div>
+        <div id="pagination-results">
+          <%= will_paginate @appellations, renderer: BootstrapPagination::Rails %>
         </div>
       </div>
       <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>

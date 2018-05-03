@@ -10,6 +10,10 @@ class Repository < ApplicationRecord
   friendly_id :name, :use => :scoped, :scope => :owner
   acts_as_ordered_taggable_on :topics
 
+  def should_generate_new_friendly_id?
+    name_changed? || super
+  end
+
   belongs_to :owner, class_name: 'Namespace', foreign_key: :namespace_id
   belongs_to :creator, class_name: 'Person'
   
@@ -22,7 +26,7 @@ class Repository < ApplicationRecord
   has_many :referencations, class_name: 'Biblio::Referencation', dependent: :destroy
   has_many :references, through: :referencations, class_name: 'Biblio::Entry', source: :entry
 
-  validates :name, 
+  validates :name, :description,
     presence: true
   validates :name, 
     uniqueness: { 
@@ -31,7 +35,7 @@ class Repository < ApplicationRecord
     }
   validates :name, 
     exclusion: { 
-      in: %w(vocabularies people search repositories applications lists),
+      in: %w(vocabularies people search repositories applications lists bibliography bibliographies data),
       message: "%{value} is reserved."
     }
 

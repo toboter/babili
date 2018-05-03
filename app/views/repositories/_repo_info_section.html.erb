@@ -1,0 +1,8 @@
+<%= content_tag :div, repository.description, class: 'text-gray --spacing' %>
+<hr>
+<% if repository.readme.present? %>
+  <h4>Documentation</h4>
+  <%= sanitize(repository.readme) %>
+<% else %>
+  <%= content_tag(:div, 'No documentation provided', class: 'text-italic text-muted') %>
+<% end %>

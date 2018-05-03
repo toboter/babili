@@ -10,9 +10,12 @@
           <%= link_to @repository.name, [@namespace, @repository], class: 'text-strong' %>
         <% end %>
         <ul class="nav nav-tabs" role="tablist">
-          <%= content_tag :li, link_to('Data', [@namespace, @repository]), class: "#{'active text-strong' if current_page?([@namespace, @repository]) || request.path.include?("#{url_for([@namespace, @repository])}/data")}" %>
+          <%= content_tag :li, link_to('Overview', [@namespace, @repository]), class: "#{'active text-strong' if current_page?([@namespace, @repository]) || current_page?([:edit, @namespace, @repository])}" %>
+          <%= content_tag :li, link_to('Data', [@namespace, @repository, :aggregation, :items]), class: "#{'active text-strong' if current_page?([@namespace, @repository, :aggregation, :items])}" %>
           <%= content_tag :li, link_to('Discussions', [@namespace, @repository, :issues]), class: "#{'active text-strong' if current_page?([@namespace, @repository, :issues])}" %>
+          <%= content_tag :li, link_to('Reports', [@namespace, @repository, :reports]), class: "#{'active text-strong' if current_page?([@namespace, @repository, :reports])}" %>
           <%= content_tag :li, link_to('Bibliography', [@namespace, @repository, :biblio, :references]), class: "#{'active text-strong' if current_page?([@namespace, @repository, :biblio, :references])}" %>
+          <%= content_tag :li, link_to('Settings', [:settings, @namespace, @repository]), class: "#{'active text-strong' if current_page?([:settings, @namespace, @repository])}" if can?(:settings, @repository) %>
         
         </ul>
       </div>

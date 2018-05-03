@@ -1,10 +1,17 @@
 class Zensus::AppellationsController < ApplicationController
   load_and_authorize_resource
+  DEFAULT_PER_PAGE = 50
 
   def index
-    if params[:q]
-      @appellations = Zensus::Appellation.search(params[:q], fields: [:name])
-    end
+    query = params[:q].presence || '*'
+    per_page = current_user.try(:person).try(:per_page).present? ? current_user.person.per_page : DEFAULT_PER_PAGE
+
+    @appellations = Zensus::Appellation.search(query, 
+      fields: [:name],
+      misspellings: {below: 2},
+      order: {order_name: :asc}, 
+      page: params[:page], 
+      per_page: per_page)
 
     respond_to do |format|
       format.html

@@ -438,6 +438,8 @@ GEM
     tilt (2.0.8)
     toastr-rails (1.0.3)
       railties (>= 3.1.0)
+    trix (0.11.1)
+      rails (> 4.1, < 5.2)
     turbolinks (5.1.0)
       turbolinks-source (~> 5.1)
     turbolinks-source (5.1.0)
@@ -534,6 +536,7 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.0)
   therubyracer
   toastr-rails
+  trix
   turbolinks (~> 5)
   tzinfo-data
   uglifier (>= 1.3.0)

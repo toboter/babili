@@ -14,6 +14,10 @@ class RepositoriesController < ApplicationController
   end
 
   def edit
+    respond_to do |format|
+      format.html { render :edit, layout: 'repo' }
+      format.js
+    end
   end
 
   def edit_topics
@@ -21,6 +25,10 @@ class RepositoriesController < ApplicationController
       format.html { render :edit }
       format.js
     end
+  end
+
+  def settings
+    render layout: 'repo'
   end
 
   def create
@@ -41,6 +49,7 @@ class RepositoriesController < ApplicationController
       if @repository.update(repository_params)
         format.html { redirect_to [@namespace, @repository], notice: "Repo was successfully updated." }
         format.json { render :show, status: :ok, location: @repository }
+        format.js
       else
         format.html { render :edit }
         format.json { render json: @repository.errors, status: :unprocessable_entity }
@@ -71,6 +80,7 @@ class RepositoriesController < ApplicationController
     params.require(:repository).permit(
       :name, 
       :description,
+      :readme,
       :topic_list
     )
   end

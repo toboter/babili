@@ -93,6 +93,7 @@ class Zensus::Appellation < ApplicationRecord
   def search_data
     {
       name: name(prefix: true, suffix: true, preferred: false),
+      order_name: name(reverse: true),
       agent: (agent.default_name if agent)
     }
   end

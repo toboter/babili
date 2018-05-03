@@ -287,6 +287,7 @@ Rails.application.routes.draw do
       end
     end
     resources :repositories do
+      get :settings, on: :member
       get :edit_topics, on: :member
       put :update_topics, on: :member
       namespace :biblio, path: '/bibliography' do
@@ -302,11 +303,12 @@ Rails.application.routes.draw do
         resources :events, only: [:index, :destroy] do
           put 'commit', on: :member, to: 'events#commit'
         end
-        resources :items, only: :show do 
+        resources :items, only: [:index, :show] do 
           resources :commits, only: [:index, :show]
         end
       end
       resources :issues
+      resources :reports
     end
   end
 end
