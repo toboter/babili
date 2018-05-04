@@ -56,7 +56,7 @@
         <% elsif organization.members.joins(:memberships).where(memberships: {verified: false}).include?(current_person) %>
           <%= link_to fa_icon('user', text: 'Awaiting confirmation'), settings_organizations_path, class: 'btn btn-default btn-sm text-strong' %>
         <% else %>
-          <%= link_to fa_icon('group', text: 'In your organizations'), settings_organizations_path, class: 'btn btn-default btn-sm text-strong' %>
+          <%= link_to fa_icon('check', text: 'In your teams'), settings_organizations_path, class: 'btn btn-default btn-sm text-strong' %>
         <% end %>
       <% end if user_signed_in? && local_assigns[:actions] %>
     </div>

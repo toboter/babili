@@ -44,21 +44,11 @@
             anyone the possibility to name things in a heterogenus way, while still acting with a common idea.
           </p>
         </div>
+        <div class="--spacious --spacing">
+          <%= render @vocabularies.take(3), namespace: true %>
+          <%= link_to 'View more', vocab_path, class: 'text-small' %>
+        </div>
 
-        <div class="page-header">
-          <h2>
-            Bibliographies
-          </h2>
-        </div>
-        <div class="page-header borderless">
-          <p class="text-muted ">
-            <%= link_to 'Bibliography', biblio_path, class: 'text-strong' %> integrates the scientific workflow idea into repositories. The entries 
-            are like vocabulary terms scoped to, not only a Person or Group but even to their repositories. And can be queried along the data. 
-            As a repository forms the discourse universe of a scientific idea, refernces are an elementary service and make up a bibliography 
-            of that matter in question. 
-          </p>
-        </div>
-        
 
         <div class="page-header">
           <h2>
@@ -73,9 +63,11 @@
           </p>
           <div class="--spacious --spacing">
             <%= render @repositories.limit(3), namespace: true %>
-            <%= link_to 'View more.', repositories_path %>
+            <%= link_to 'View more', repositories_path, class: 'text-small' %>
           </div>
         </div>
+
+
         <div class="row">
           <% for application in @oread_applications.limit(3) do %>
             <div class="col-md-12">
@@ -84,7 +76,7 @@
           <% end if can? :read, Oread::Application %>
         </div>
         <div class="row">
-          <%= link_to 'View all.', collections_path, class: 'col-md-12' %>
+          <%= link_to 'View all', collections_path, class: 'col-md-12' %>
         </div>
 
       </div>
@@ -93,6 +85,18 @@
 
         <div class="page-header">
           <h2>Services</h2>
+        </div>
+
+        <div class="page-header borderless">
+          <h3>
+            Bibliographies
+          </h3>
+          <p class="text-muted ">
+            <%= link_to 'Bibliography', biblio_path, class: 'text-strong' %> integrates the scientific workflow idea into repositories. The entries 
+            are like vocabulary terms scoped to, not only a Person or Group but even to their repositories. And can be queried along the data. 
+            As a repository forms the discourse universe of a scientific idea, refernces are an elementary service and make up a bibliography 
+            of that matter in question. 
+          </p>
         </div>
 
         <div class="page-header borderless">

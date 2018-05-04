@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row --spacing">
   <div class="col-md-4">
     <div class="topics --spacing-20" id="info-for-<%= @repository.id %>">
       <% if @repository.topics.any? %>
@@ -22,7 +22,7 @@
     <div id="repo-info-section">
       <%= render 'repo_info_section', repository: @repository %>
     </div>
-    <%= simple_form_for [@namespace, @repository], method: :put, remote: true, html: {class: 'hidden --spacing', id: "edit_repository_#{@repository.id}"} do |f| %>
+    <%= simple_form_for [@namespace, @repository], method: :put, remote: true, html: {class: 'hidden', id: "edit_repository_#{@repository.id}"} do |f| %>
       <%= f.input :description %>
       <strong>Readme</strong>
       <div class="readme-field">

@@ -76,8 +76,8 @@
         <div class="col-md-4 col-md-offset-1">
           <div class="page-header">
             <%= content_tag :h1, link_to('Explore', explore_path) %>
-            
           </div>
+          <%= render @exploreables, namespace: true %>
         </div>
       </div>
     </div>

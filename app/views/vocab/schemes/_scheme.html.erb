@@ -1,8 +1,14 @@
-<%= link_to namespace_vocab_scheme_path(scheme.namespace, scheme), class: 'list-group-item' do %>
-  <p>
-    <%= content_tag :span, scheme.namespace.name, class: 'text-strong' %>
-    <%= content_tag :span, ' # ', class: 'text-gray' %>
-    <%= content_tag :span, scheme.abbr, class: 'text-strong' %>
-  </p>
-  <%= content_tag :span, polymorphic_url([scheme.namespace, :vocab, scheme]), class: 'text-small no-link' %>
-<% end %>
+<div class="vocab">
+  <%= content_tag :h4 do %>
+    <% if local_assigns[:namespace] %>
+      <%= link_to(scheme.namespace.name, scheme.namespace) %>
+      <%= content_tag :span, ' # ', class: 'text-gray' %>
+    <% end %>
+    <%= link_to(scheme.abbr, namespace_vocab_scheme_path(scheme.namespace, scheme), class: 'h-condensed text-strong') %>
+  <% end %>
+  <%= content_tag :p, polymorphic_url([scheme.namespace, :vocab, scheme]), class: 'text-gray no-link' %>
+    <%= content_tag :p, class: 'meta-item text-small' do %>
+      Updated <%= content_tag :abbr, time_ago_in_words(scheme.updated_at), title: scheme.updated_at, data: {toggle: "tooltip", placement: "bottom"} %> ago
+    <% end %>
+  <hr>
+</div>

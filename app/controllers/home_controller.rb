@@ -2,6 +2,7 @@ class HomeController < ApplicationController
   
   def index
     @blog_pages = CMS::BlogPage.featured.order(created_at: :desc).limit(5)
+    @exploreables = (Repository.take(3) + Vocab::Scheme.take(3)).shuffle
   end
   
   def api

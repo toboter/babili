@@ -86,6 +86,17 @@ a.no-link {
     border-left: 1px solid #ddd;
 }
 
+.nav-tabs {
+    li {
+      a {
+        color: #444;
+      }
+    }
+    li.active {
+        font-weight: bold;
+    }
+}
+
 .navbar-default {
     font-weight: bold;
 }

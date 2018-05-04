@@ -16,9 +16,9 @@
               <%= content_tag :span, 'Inactive', class: 'text-italic text-strong text-gray' if !@person.user %>
             </h4>
             <%= content_tag :ul, class: 'list-unstyled' do %>
-              <%= content_tag :li, fa_icon('map-marker', text: @person.location) if @person.location.present? %>
-              <%= content_tag :li, fa_icon('university', text: @person.institution) if @person.institution.present? %>
-              <%= content_tag :li, fa_icon('link', text: link_to(@person.url, @person.url)) if @person.url.present? %>
+              <%= content_tag :li, fa_icon('map-marker', text: @person.location, style: 'width:18px;') if @person.location.present? %>
+              <%= content_tag :li, fa_icon('university', text: @person.institution, style: 'width:18px;') if @person.institution.present? %>
+              <%= content_tag :li, fa_icon('link', text: link_to(@person.url, @person.url), style: 'width:18px;') if @person.url.present? %>
             <% end %>
             <%= content_tag :p, @person.about_me, style: 'margin-top:20px;margin-bottom:20px;' if @person.about_me.present? %>
             <%= link_to fa_icon('edit', text: 'Edit your profile'), edit_settings_person_path, class: 'btn btn-sm btn-default text-strong' if @person.is?(current_person) %>
@@ -41,12 +41,11 @@
       <div class="col-md-8">
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
-          <li role="presentation" class="active"><a href="#overview" aria-controls="overview" role="tab" data-toggle="tab">Overview</a></li>
-          <li role="presentation"><a href="#repos" aria-controls="repos" role="tab" data-toggle="tab">Repositories</a></li>
-          <li role="presentation"><a href="#vocabs" aria-controls="vocabs" role="tab" data-toggle="tab">Vocabularies</a></li>
-          <li role="presentation"><a href="#apps" aria-controls="apps" role="tab" data-toggle="tab">Applications</a></li>
-          <li role="presentation"><a href="#lists" aria-controls="lists" role="tab" data-toggle="tab">Lists</a></li>
-          <li role="presentation"><a href="#publs" aria-controls="publs" role="tab" data-toggle="tab">Publications</a></li>
+          <%= content_tag :li, link_to(fa_icon('object-group', text: 'Overview'), '#overview', aria: {controls: 'overview'}, data: {toggle: 'tab'}, role: 'tab'), class: 'active', role: 'presentation' %>
+          <%= content_tag :li, link_to(fa_icon('archive', text: 'Personal repositories'), '#repos', aria: {controls: 'repos'}, data: {toggle: 'tab'}, role: 'tab'), class: '', role: 'presentation' %>
+          <%= content_tag :li, link_to(fa_icon('sitemap', text: 'Vocabularies'), '#vocabs', aria: {controls: 'vocabs'}, data: {toggle: 'tab'}, role: 'tab'), class: '', role: 'presentation' %>
+          <%= content_tag :li, link_to(fa_icon('code-fork', text: 'Applications'), '#apps', aria: {controls: 'apps'}, data: {toggle: 'tab'}, role: 'tab'), class: '', role: 'presentation' %>
+          <%= content_tag :li, link_to(fa_icon('list', text: 'Lists'), '#lists', aria: {controls: 'lists'}, data: {toggle: 'tab'}, role: 'tab'), class: '', role: 'presentation' %>
         </ul>
 
         <!-- Tab panes -->
@@ -92,22 +91,22 @@
             </div>
           </div>
           <div role="tabpanel" class="tab-pane" id="apps">
-            <% if @person.oauth_applications.any? %>
-              <% @person.oauth_grants.each do |grant| %>
-                <%= render grant.application %>
-                <%= render partial: 'oauth_accessibilities/grant_panel', locals: {grant: grant} %>
+            <div class="--spacious-20">
+              <% if @person.oauth_applications.any? %>
+                <% @person.oauth_grants.each do |grant| %>
+                  <%= render grant.application %>
+                  <%= render partial: 'oauth_accessibilities/grant_panel', locals: {grant: grant} %>
+                <% end %>
+              <% else %>
+                <p class="text-muted">
+                  none assigned
+                </p>
               <% end %>
-            <% else %>
-              <p class="text-muted">
-                none assigned
-              </p>
-            <% end %>
+            </div>
           </div>
+
           <div role="tabpanel" class="tab-pane" id="lists">
             Lists
-          </div>
-          <div role="tabpanel" class="tab-pane" id="publs">
-            Publications
           </div>
         </div>
 

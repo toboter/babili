@@ -5,20 +5,20 @@
     <div class="col-md-5 --spacious">
       <%= render 'organizations/organization', organization: @organization, banner: true, actions: true, no_description: true %>
       <div class="list-group-menu --spacious">
-        <%= link_to namespace_repositories_path(@organization.namespace), class: 'list-group-item' do %>
-          <%= fa_icon('angle-double-right', text: 'Repositories') %>
+        <%= link_to namespace_repositories_path(@organization.namespace), class: 'list-group-item text-gray' do %>
+          <%= fa_icon('archive', text: 'Repositories', style: 'width:18px;') %>
           <%= content_tag :span, @organization.namespace.repositories.count, class: 'badge' %>
         <% end %>
-        <%= link_to namespace_vocab_schemes_path(@organization.namespace), class: 'list-group-item' do %>
-          <%= fa_icon('angle-double-right', text: 'Vocabularies') %>
+        <%= link_to namespace_vocab_schemes_path(@organization.namespace), class: 'list-group-item text-gray' do %>
+          <%= fa_icon('sitemap', text: 'Vocabularies', style: 'width:18px;') %>
           <%= content_tag :span, @organization.namespace.schemes.count, class: 'badge' %>
         <% end %>
-        <%= link_to namespace_members_path(@organization.namespace), class: 'list-group-item' do %>
-          <%= fa_icon('angle-double-right', text: 'People') %>
+        <%= link_to namespace_members_path(@organization.namespace), class: 'list-group-item text-gray' do %>
+          <%= fa_icon('users', text: 'People', style: 'width:18px;') %>
           <%= content_tag :span, @organization.memberships.count, class: 'badge' %>
         <% end %>
-        <%= link_to namespace_applications_path(@organization.namespace), class: 'list-group-item' do %>
-          <%= fa_icon('angle-double-right', text: 'Applications') %>
+        <%= link_to namespace_applications_path(@organization.namespace), class: 'list-group-item text-gray' do %>
+          <%= fa_icon('code-fork', text: 'Applications', style: 'width:18px;') %>
           <%= content_tag :span, @organization.oauth_accessibilities.count, class: 'badge' %>
         <% end %>
       </div>
@@ -26,7 +26,7 @@
         <div class="col-md-12 org-top-repos repos">
           <h4 class="--spacing-20">
             <%= link_to namespace_repositories_path(@organization.namespace), style: 'color: #586069;' do %>
-              Repositories
+              <%= fa_icon('archive', text: 'Repositories') %>
             <% end %>
           </h4>
           <%= render @organization.namespace.repositories.limit(3) %>
@@ -36,7 +36,7 @@
         <div class="col-md-8 member-avatar-group">
           <h4>
             <%= link_to namespace_members_path(@organization.namespace), style: 'color: #586069;' do %>
-              People
+              <%= fa_icon('users', text: 'People') %>
               <%= content_tag :span, @organization.memberships.count, class: 'pull-right no-link' %>
             <% end %>
           </h4>

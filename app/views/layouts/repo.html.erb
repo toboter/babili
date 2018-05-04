@@ -5,17 +5,17 @@
     <div class="pagehead" style="padding-top: 60px; border-bottom: 1px solid #e1e4e8; background-color: #fafbfc;">
       <div class="container">
         <%= content_tag :h4, class: 'h-condensed --spacing-20 --spacious-20' do %>
-          <%= fa_icon('table', class: 'text-gray') %>
+          <%= fa_icon('archive', class: 'text-gray') %>
           <%= link_to @namespace.name, @namespace, class: '' %> / 
           <%= link_to @repository.name, [@namespace, @repository], class: 'text-strong' %>
         <% end %>
         <ul class="nav nav-tabs" role="tablist">
-          <%= content_tag :li, link_to(fa_icon('object-group', text: 'Overview'), [@namespace, @repository]), class: "#{'active text-strong' if current_page?([@namespace, @repository]) || current_page?([:edit, @namespace, @repository])}" %>
-          <%= content_tag :li, link_to(fa_icon('table', text: 'Data'), [@namespace, @repository, :aggregation, :items]), class: "#{'active text-strong' if current_page?([@namespace, @repository, :aggregation, :items])}" %>
-          <%= content_tag :li, link_to(fa_icon('comments', text: 'Discussions'), [@namespace, @repository, :issues]), class: "#{'active text-strong' if current_page?([@namespace, @repository, :issues])}" %>
-          <%= content_tag :li, link_to(fa_icon('file-text', text: 'Reports'), [@namespace, @repository, :reports]), class: "#{'active text-strong' if current_page?([@namespace, @repository, :reports])}" %>
-          <%= content_tag :li, link_to(fa_icon('book', text: 'Bibliography'), [@namespace, @repository, :biblio, :references]), class: "#{'active text-strong' if current_page?([@namespace, @repository, :biblio, :references])}" %>
-          <%= content_tag :li, link_to(fa_icon('cog', text: 'Settings'), [:settings, @namespace, @repository]), class: "#{'active text-strong' if current_page?([:settings, @namespace, @repository])}" if can?(:settings, @repository) %>
+          <%= content_tag :li, link_to(fa_icon('object-group', text: 'Overview'), [@namespace, @repository]), class: "#{'active' if current_page?([@namespace, @repository]) || current_page?([:edit, @namespace, @repository])}" %>
+          <%= content_tag :li, link_to(fa_icon('table', text: 'Data'), [@namespace, @repository, :aggregation, :items]), class: "#{'active' if current_page?([@namespace, @repository, :aggregation, :items])}" %>
+          <%= content_tag :li, link_to(fa_icon('comments', text: 'Discussions'), [@namespace, @repository, :issues]), class: "#{'active' if current_page?([@namespace, @repository, :issues])}" %>
+          <%= content_tag :li, link_to(fa_icon('file-text', text: 'Reports'), [@namespace, @repository, :reports]), class: "#{'active' if current_page?([@namespace, @repository, :reports])}" %>
+          <%= content_tag :li, link_to(fa_icon('book', text: 'Bibliography'), [@namespace, @repository, :biblio, :references]), class: "#{'active' if current_page?([@namespace, @repository, :biblio, :references])}" %>
+          <%= content_tag :li, link_to(fa_icon('cog', text: 'Settings'), [:settings, @namespace, @repository]), class: "#{'active' if current_page?([:settings, @namespace, @repository])}" if can?(:settings, @repository) %>
         </ul>
       </div>
     </div>
