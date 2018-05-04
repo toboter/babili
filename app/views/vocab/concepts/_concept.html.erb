@@ -1,4 +1,11 @@
-<%= link_to namespace_vocab_scheme_concept_path(concept.scheme.namespace, concept.scheme, concept), class: 'list-group-item' do %>
-  <%= content_tag :span, concept.name(@language), class: 'text-strong', style: '' %>
-  <%= content_tag :span, '(' + concept.ancestors.reverse.map{|a| a.name(@language)}.join(', ') + ')', class: 'text-muted text-small', style: 'margin-left:5px;' if !concept.root? %>
-<% end %>
+<tr id="concept-entry-<%= concept.id %>">
+  <td width="5%">
+    <%= content_tag :span, fa_icon('font'), title: 'Concept' %>
+  </td>
+  <td>
+    <%= link_to namespace_vocab_scheme_concept_path(concept.scheme.namespace, concept.scheme, concept), class: '' do %>
+      <%= content_tag :span, concept.name(@language), class: 'text-strong', style: '' %>
+    <% end %><br>
+    <%= content_tag :span, concept.ancestors.reverse.map{|a| a.name(@language)}.join(', '), class: 'text-muted text-small' if !concept.root? %>
+  </td>
+</tr>

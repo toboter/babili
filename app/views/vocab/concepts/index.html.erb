@@ -26,9 +26,11 @@
             <% end %>
           </div>
           <% if @flat %>
-            <div class="list-group">
-              <%= render @concepts %>
-            </div>
+            <table class="table table-simple table-responsive">
+              <tbody>
+                <%= render @concepts %>
+              </tbody>
+            </table>
           <% else %>
             <table class="table table-simple">
               <thead>

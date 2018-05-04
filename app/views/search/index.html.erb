@@ -6,14 +6,12 @@
     
   </div>
 </div>
-
-
-    <table class="table table-bordered table-responsive">
-      <thead>
-        <tr>
-          <th></th>
-        </tr>
-      </thead>
+    <table class="table table-simple table-responsive">
+      <tbody>
+        <%= render @local_results if @local_results %>
+      </tbody>
+    </table>
+    <table class="table table-simple table-responsive">
       <tbody>
         <% @results.each do |result| %>
           <% result.each do |r| %>

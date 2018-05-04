@@ -24,6 +24,10 @@ class SearchController < ApplicationController
           @results << JSON.parse(response) if response
         end
       end
+      @local_results = Searchkick.search(params[:q], 
+        fields: [{citation: :exact}, :author, :editor, :title, :booktitle, :journal, :series, {year: :exact}, :publisher, :address, "tag^10", 
+          :volume, :number, :note, :isbn, :url, :doi, :abstract, :type, 'narrower^4', :scheme, 'labels^10', :broader, :notes, :matches],
+        index_name: [Vocab::Concept, Biblio::Entry])
     end
   end
 end

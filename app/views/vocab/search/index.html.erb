@@ -9,9 +9,11 @@
   <div class="vocab">
     <div class="row --spacious">
       <div class="col-sm-12 col-md-8 main">
-        <div class="list-group">
-          <%= render @results %>
-        </div>
+        <table class="table table-simple table-responsive">
+          <tbody>
+            <%= render @results %>
+          </tbody>
+        </table>
       </div>
       <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
         <div class="vocab-search">
