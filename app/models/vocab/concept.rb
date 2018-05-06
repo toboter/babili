@@ -27,6 +27,7 @@ class Vocab::Concept < ApplicationRecord
   friendly_id :uuid, use: :slugged
   # broaderTransitive -> https://www.w3.org/TR/2009/NOTE-skos-primer-20090818/#sectransitivebroader
   # paper_trail into changeNote
+  after_commit :reindex_matches
 
   belongs_to :scheme, touch: true
   has_one :namespace, through: :scheme
@@ -41,6 +42,12 @@ class Vocab::Concept < ApplicationRecord
 
   validates :status, :type, :creator, :scheme, :uuid, :labels, presence: true
 
+  # surpress double entries in search, only show the original
+  scope :search_import, -> { matches.where.not(associatable_type: "Vocab::Concept", property: "exact") }
+  def should_index?
+    !matches.where(associatable_type: "Vocab::Concept", property: "exact").exists?
+  end
+
   def search_data
     {
       broader: broader_concepts.map(&:name).join(' '),
@@ -50,6 +57,11 @@ class Vocab::Concept < ApplicationRecord
       notes: notes.map(&:body).join(' '),
       matches: matches.map{|m| [m.property, m.associatable.name] }.join(' ')
     }
+  end
+
+  def reindex_matches
+    assocs = matches.where(associatable_type: "Vocab::Concept").map(&:associatable)
+    assocs.each(&:reindex)
   end
 
   def preferred_label(lang=nil)
