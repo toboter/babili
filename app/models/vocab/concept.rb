@@ -54,7 +54,7 @@ class Vocab::Concept < ApplicationRecord
       scheme: scheme.title,
       labels: labels.map(&:body).join(' '),
       notes: notes.map(&:body).join(' '),
-      matches: matches.map{|m| [m.property, m.associatable.name] }.join(' ')
+      matches: matches.map{|m| [m.property, m.associatable.try(:name)] }.join(' ')
     }
   end
 

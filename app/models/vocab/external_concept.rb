@@ -3,7 +3,7 @@
 # t.string    :label
 
 class Vocab::ExternalConcept < ApplicationRecord
-  has_many :object_matches, as: :associatable
+  has_many :object_matches, as: :associatable, class_name: 'AssociativeRelation'
 
   validates :uri, presence: true
 
