@@ -6,7 +6,7 @@ class Aggregation::Item < ApplicationRecord
   extend FriendlyId
   friendly_id :name, :use => :scoped, :scope => :repository
 
-  TYPES = %w(CustomResource DocumentationResource ExcavatedResource BibliographicResource)
+  TYPES = %w(CustomResource DocumentationResource ExcavatedResource)
 
   belongs_to :repository
   belongs_to :pref_identifier, class_name: 'Aggregation::Identifier'
