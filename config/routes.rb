@@ -58,7 +58,6 @@ Rails.application.routes.draw do
   
   get '/search', to: 'search#index'
   get '/about', to: 'home#about'
-  get '/contact', to: 'home#contact'
   get '/explore', to: 'home#explore'
   get '/research', to: 'home#research'
   get '/research/people', to: 'home#people', as: :people
@@ -274,6 +273,9 @@ Rails.application.routes.draw do
     end
   end
   # end doorkeeper paths
+
+  get '/contact', to: 'contact_messages#new'
+  post '/contacts', to: 'contact_messages#create'
 
   root to: "home#index"
   

@@ -347,6 +347,8 @@ GEM
       rdf (~> 3.0)
     rdf-xsd (3.0.0)
       rdf (~> 3.0)
+    recaptcha (4.8.0)
+      json
     redcarpet (3.4.0)
     redis (4.0.1)
     ref (2.0.0)
@@ -518,6 +520,7 @@ DEPENDENCIES
   rails (~> 5.1)
   rails-assets-dropzone!
   rails-bootstrap-markdown
+  recaptcha
   redcarpet
   rest-client
   rgeo

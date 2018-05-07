@@ -102,6 +102,7 @@ gem 'hashie'
 # gem "jsonb_accessor", "~> 1.0.0"
 gem 'json_attribute', git: 'https://github.com/jrochkind/json_attribute.git'
 gem 'trix'
+gem "recaptcha", require: "recaptcha/rails"
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-dropzone'

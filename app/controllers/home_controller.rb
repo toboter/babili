@@ -13,9 +13,6 @@ class HomeController < ApplicationController
   
   def imprint
   end
-  
-  def contact
-  end
 
   def research
     @people = Person.order("RANDOM()").limit(6).sort_by {|p| p.name}

@@ -1,0 +1,20 @@
+<% title "Contact" %>
+
+<% content_for :container do %>
+  <div class="row">
+    <div class="col-md-7 col-centered">
+    <h3 class="subhead">Contact</h3>
+    <p>If you have questions or ideas for improvements please contact us.</p>
+
+
+    <%= simple_form_for @message, url: contacts_path, html: {class: '--spacious'} do |f| %>
+      <%= f.error_notification %>
+      <%= f.input :name, placeholder: 'Your name', label: false %>
+      <%= f.input :email, as: :email, placeholder: 'email@domain.com', label: false, hint: 'You will receive a receipt of your message.' %>
+      <%= f.input :body, as: :text, placeholder: "Your Message", input_html: {rows: 10}, label: false %>
+      <%= recaptcha_tags %>
+      <%= f.submit 'Send message', class: 'btn btn-default text-strong --spacious-20' %>
+    <% end %>
+    </div>
+  </div>
+<% end %>
