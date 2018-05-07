@@ -43,7 +43,6 @@ class Vocab::Concept < ApplicationRecord
   validates :status, :type, :creator, :scheme, :uuid, :labels, presence: true
 
   # surpress double entries in search, only show the original
-  scope :search_import, -> { matches.where.not(associatable_type: "Vocab::Concept", property: "exact") }
   def should_index?
     !matches.where(associatable_type: "Vocab::Concept", property: "exact").exists?
   end
