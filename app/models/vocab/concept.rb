@@ -49,8 +49,8 @@ class Vocab::Concept < ApplicationRecord
 
   def search_data
     {
-      broader: broader_concepts.map(&:name).join(' '),
-      narrower: narrower_concepts.map(&:name).join(' '),
+      broader: broader_concepts.map{|b| b.labels.map(&:body).join(' ') }.join(' '),
+      narrower: narrower_concepts.map{|n| n.labels.map(&:body).join(' ') }.join(' '),
       scheme: scheme.title,
       labels: labels.map(&:body).join(' '),
       notes: notes.map(&:body).join(' '),
