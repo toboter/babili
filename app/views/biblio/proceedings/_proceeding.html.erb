@@ -2,8 +2,8 @@
   <td width="5%">
     <%= content_tag :span, fa_icon(proceeding.icon), title: 'Proceeding' %>
   </td>
-  <td>
-    <%= render 'biblio/shared/actions', entry: proceeding, referencation: local_assigns[:referencation] %>
+  <td width="95%">
+    <%= render 'biblio/shared/actions', entry: proceeding, referencation: local_assigns[:referencation], actions: local_assigns[:actions] %>
     <%= content_tag :span, link_to(proceeding.citation, proceeding), class: 'text-strong' %><br>
     <%= content_tag :span, proceeding.bibliographic(current_user.try(:person).try(:csl), 'en-US'), class: 'text-small' %>
   </td>
