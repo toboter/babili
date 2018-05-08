@@ -3,6 +3,7 @@ class HomeController < ApplicationController
   def index
     @blog_pages = CMS::BlogPage.featured.order(created_at: :desc).limit(5)
     @exploreables = (Repository.take(3) + Vocab::Scheme.take(3)).shuffle
+    @latest_references = Biblio::Entry.where("data->>'year' IS NOT NULL").order("(data ->> 'year') DESC").take(5)
   end
   
   def api

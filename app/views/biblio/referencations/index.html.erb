@@ -60,7 +60,7 @@
           <table class="table table-simple">
             <tbody>
               <% @results.each do |result| %>
-                <%= render result, referencation: result.referencations.select{|r| r.repository_id == @repository.id}.first %>
+                <%= render result, referencation: result.referencations.select{|r| r.repository_id == @repository.id}.first, actions: true %>
               <% end %>
             </tbody>
           </table>

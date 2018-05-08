@@ -70,6 +70,16 @@ h6 {
     border: 1px solid #ddd;
 }
 
+.table-borderless {
+    tbody {
+        tr {
+            td {
+                border-top: none;
+            }
+        }
+    }
+}
+
 a.no-link {
     text-decoration: none;
     color: inherit;
