@@ -103,6 +103,7 @@ gem 'hashie'
 gem 'json_attribute', git: 'https://github.com/jrochkind/json_attribute.git'
 gem 'trix'
 gem "recaptcha", require: "recaptcha/rails"
+gem 'rack-cors', require: 'rack/cors'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-dropzone'

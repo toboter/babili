@@ -49,12 +49,12 @@ class Vocab::Concept < ApplicationRecord
 
   def search_data
     {
-      broader: broader_concepts.map{|b| b.labels.map(&:body).join(' ') }.join(' '),
-      narrower: narrower_concepts.map{|n| n.labels.map(&:body).join(' ') }.join(' '),
+      broader: broader_concepts.map{|b| b.labels.map(&:body).join(' ') },
+      narrower: narrower_concepts.map{|n| n.labels.map(&:body).join(' ') },
       scheme: scheme.title,
-      labels: labels.map(&:body).join(' '),
-      notes: notes.map(&:body).join(' '),
-      matches: matches.map{|m| [m.property, m.associatable.try(:name)] }.join(' ')
+      labels: labels.map(&:body),
+      notes: notes.map(&:body),
+      matches: matches.map{|m| [m.property, m.associatable.try(:name)] }
     }
   end
 
