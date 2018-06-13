@@ -3,7 +3,7 @@
     <%= content_tag :span, fa_icon(book.icon), title: 'Book' %>
   </td>
   <td width="95%">
-    <%= render 'biblio/shared/actions', entry: book, referencation: local_assigns[:referencation], actions: local_assigns[:actions] %>
+    <%= content_tag :div, render('biblio/shared/actions', entry: book, referencation: local_assigns[:referencation], actions: local_assigns[:actions]), class: 'pull-right' %>
     <%= content_tag :span, link_to(book.citation, book), class: 'text-strong' %><br>
     <%= content_tag :span, book.bibliographic(current_user.try(:person).try(:csl), 'en-US'), class: 'text-small' %>
   </td>

@@ -3,7 +3,7 @@
     <%= content_tag :span, fa_icon(masterthesis.icon), title: 'Masterthesis' %>
   </td>
   <td width="95%">
-    <%= render 'biblio/shared/actions', entry: masterthesis, referencation: local_assigns[:referencation], actions: local_assigns[:actions] %>
+    <%= content_tag :div, render('biblio/shared/actions', entry: masterthesis, referencation: local_assigns[:referencation], actions: local_assigns[:actions]), class: 'pull-right' %>
     <%= content_tag :span, link_to(masterthesis.citation, masterthesis), class: 'text-strong' %><br>
     <%= content_tag :span, masterthesis.bibliographic(current_user.try(:person).try(:csl), 'en-US'), class: 'text-small' %>
   </td>

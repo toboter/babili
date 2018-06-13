@@ -1,8 +1,8 @@
 <% if local_assigns[:actions] == true %>
-  <ul class="list-inline pull-right">
+  <ul class="list-inline" style="float:left;">
     <%= content_tag :li, class: 'btn-group' do %>
       <%= link_to '', class: "dropdown-toggle text-gray with-tooltip", data: {toggle: "dropdown"}, aria: {haspopup: "true", expanded: "false"}, title: 'Add to repository' do %>
-        <%= fa_icon('table') %>
+        <%= fa_icon('share-alt') %>
       <% end %>
       <ul class="dropdown-menu" id="biblio-entry-<%= entry.id %>-actions-add-repository">
         <%= render 'biblio/shared/actions_add_repository', entry: entry %>
