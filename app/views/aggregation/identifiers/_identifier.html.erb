@@ -1,0 +1,9 @@
+<tr id="data-identifier-<%= identifier.id %>">
+  <td width="5%">
+    <%= content_tag :span, fa_icon('data'), title: 'Object' %>
+  </td>
+  <td width="95%">
+    <%= content_tag :span, link_to(identifier.name, identifier), class: 'text-strong' %><br>
+    <%= content_tag :span, identifier.others.map(&:name).join(', '), class: 'text-muted text-small' %>
+  </td>
+</tr>

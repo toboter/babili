@@ -1,0 +1,26 @@
+<% title "Data identifiers" %>
+
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, link_to('Identify ::data', aggregation_path) %>
+  <%= content_tag :li, yield(:title), class: 'active' %>
+<% end %>
+
+<% content_for :container do %>
+  <div class="zensus">
+    <div class="row --spacious">
+      <div class="col-sm-12 col-md-8 main">
+        <table class="table table-simple">
+          <tbody>
+            <%= render @identifiers %>
+          </tbody>
+        </table>
+      </div>
+      <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
+        <div class="list-group">
+          render 'zensus/search/box' %>
+
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

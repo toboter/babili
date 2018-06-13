@@ -1,0 +1,14 @@
+<tr>
+  <%= content_tag :td, width: '30%' do %>
+    <%= link_to(item.pref_identifier.origin_id, namespace_repository_aggregation_item_path(item.repository.owner, item.repository, item), class: 'text-strong') %><br>
+    <%= content_tag :span, "[#{item.pref_identifier.origin_type}]", class: 'text-small text-gray' %>
+  <% end %>
+  <%= content_tag :td, link_to(item.commits.last.event.note, [item.commits.last.event.repository.owner, item.commits.last.event.repository, item.commits.last.event]), class: 'text-small' if item.commits.any? %>
+  <%= content_tag :td, content_tag(:span, "#{time_ago_in_words(item.commits.last.created_at)} ago", title: item.commits.last.created_at, data: {toggle: "tooltip", placement: "bottom"}, class: 'pull-right text-small') if item.commits.any? %>
+</tr>
+</tr>
+  <%= content_tag :td, class: 'text-small', colspan: 3 do %>
+    <%= item.commits.last.inspect if item.commits.any? %>
+    <strong><%= pluralize(item.commits.count, 'version') %></strong>
+  <% end %>
+</tr>

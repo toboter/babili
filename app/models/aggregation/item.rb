@@ -2,6 +2,12 @@
 # t.integer  :pref_identifier_id #()
 # t.string   :type # Artifact, Literature, Archival
 
+# Item hat keinen Type. Item ist das Object, was in einem repo existiert und sich identifiern bedient. 
+# Die eigentlichen Daten und Formate befinden sich im Commit.
+
+#todo: remove type column
+
+# RepoItem, das eigentlich item befindet sich zwischen identifier und diesem.
 class Aggregation::Item < ApplicationRecord
   extend FriendlyId
   friendly_id :name, :use => :scoped, :scope => :repository
@@ -18,6 +24,6 @@ class Aggregation::Item < ApplicationRecord
     message: "only one item" }
 
   def name
-    "#{pref_identifier.origin_type}-#{pref_identifier.origin_id}"
+    pref_identifier.name
   end
 end

@@ -1,0 +1,7 @@
+<%= @identifier.inspect %>
+<br>
+<%= @identifier.items.map{|i| link_to(i.name, [i.repository.owner, i.repository, i] )}.join(', ').html_safe %>
+<hr>
+<%= @identifier.others.inspect %>
+<br>
+<%= @identifier.others_items.map{|i| link_to(i.name, [i.repository.owner, i.repository, i] )}.join(', ').html_safe %>

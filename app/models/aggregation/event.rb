@@ -13,7 +13,7 @@
 
 class Aggregation::Event < ApplicationRecord
   extend FriendlyId
-  friendly_id :name, :use => :scoped, :scope => :repository
+  friendly_id :slug_name, :use => :scoped, :scope => :repository
   TYPES = %w(FileUpload ApiRequest ListTransform)
   attr_accessor :files
 
@@ -28,10 +28,10 @@ class Aggregation::Event < ApplicationRecord
   scope :pending, -> {where(commited_at: nil)}
   scope :commited, -> {where.not(commited_at: nil)}
 
-  def commit_items(resource_type, data)
+  def commit_items(data)
     if !data.is_a?(Array)
       identifier = Aggregation::Identifier.where(origin_id: data[:identifier][:value], origin_type: data[:identifier][:type], origin_agent_id: data[:identifier][:source]).first_or_create
-      item = Aggregation::Item.where(pref_identifier_id: identifier.id, repository_id: self.repository_id, type: resource_type).first_or_create
+      item = Aggregation::Item.where(pref_identifier_id: identifier.id, repository_id: self.repository_id).first_or_create
       item.identifiers << identifier unless item.identifiers.include?(identifier)
       data[:changeset] = item.commits.any? ? HashDiff.diff(data[:payload], JSON.parse( item.commits.last.try(:data).try(:[], 'payload').to_json, {:symbolize_names => true} )) : []
       commit = (data[:changeset].present? || item.commits.empty?) ? Aggregation::Commit.create(type: 'Aggregation::Commit::Legacy', item_id: item.id, event_id: self.id, creator_id: self.creator_id, data: data) : item.commits.last
@@ -41,7 +41,7 @@ class Aggregation::Event < ApplicationRecord
       commits = []
       data.each do |element|
         identifier = Aggregation::Identifier.where(origin_id: element[:identifier][:value], origin_type: element[:identifier][:type], origin_agent_id: element[:identifier][:source]).first_or_create
-        item = Aggregation::Item.where(pref_identifier: identifier, repository_id: self.repository_id, type: resource_type).first_or_create
+        item = Aggregation::Item.where(pref_identifier: identifier, repository_id: self.repository_id).first_or_create
         item.identifiers << identifier unless item.identifiers.include?(identifier)
         element[:changeset] = item.commits.any? ? HashDiff.diff(element[:payload], item.commits.last.try(:data).try(:[], 'payload')) : []
         commit = Aggregation::Commit.new(type: 'Aggregation::Commit::Legacy', item_id: item.id, event_id: self.id, creator_id: self.creator_id, data: element)
@@ -55,7 +55,7 @@ class Aggregation::Event < ApplicationRecord
     commited_at.present?
   end
 
-  def name
+  def slug_name
     Time.now.to_formatted_s(:iso8601) 
   end
 

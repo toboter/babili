@@ -39,7 +39,7 @@ class Aggregation::Event::UploadEvent < Aggregation::Event
     json = JSON.parse(JSON.generate(doc.root))
     if is_xml?(json, 'lido-schema')
       json = extract_lido(json, 'lidoRecID')
-      commit_items('Aggregation::Item::ExcavatedResource', json)
+      commit_items(json)
     end
   end
 
@@ -50,6 +50,6 @@ class Aggregation::Event::UploadEvent < Aggregation::Event
     (2..sheet.last_row).each do |i|
       json << extract_row(Hash[[header, sheet.row(i)].transpose], 'bab_rel')
     end
-    commit_items('Aggregation::Item::ExcavatedResource', json)
+    commit_items(json)
   end
 end
