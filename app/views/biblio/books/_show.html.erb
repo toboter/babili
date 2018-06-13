@@ -19,8 +19,8 @@
     <%= book.tag_list.map{|tag| content_tag(:span, tag, class: 'label label-default')}.join(' ').html_safe %>
   </div>
   <div class="col-md-4">
-    <%= render 'biblio/referencations/add_repository', entry: book %>
     <%= book.repositories.map{|repo| content_tag(:span, link_to(repo.name, namespace_repository_biblio_references_path(repo.owner, repo), style: 'color: white;'), class: 'label label-default')}.join(' ').html_safe %>
+    <%= content_tag :div, render('biblio/shared/actions', entry: book, referencation: false, actions: true) %>
   </div>
 </div>
 
