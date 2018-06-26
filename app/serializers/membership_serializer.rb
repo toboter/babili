@@ -18,6 +18,7 @@ class MembershipSerializer < ActiveModel::Serializer
     {
       name: object.organization.try(:name),
       url: url_for([:api, object.organization]),
+      html_url: namespace_url(object.organization.namespace),
       id: object.organization.try(:id),
       members_url: api_organization_members_url(object.organization),
       avatar_url: object.organization.image_url(:original),
@@ -29,7 +30,7 @@ class MembershipSerializer < ActiveModel::Serializer
     {
       username: object.person.try(:username),
       url: url_for([:api, object.person]),
-      html_url: person_url(object.person),
+      html_url: namespace_url(object.person.namespace),
       id: object.person.try(:id),
       avatar_url: object.person.image_url(:original),
       type: 'Person'
