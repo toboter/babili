@@ -6,10 +6,9 @@
       <%= content_tag :span, @item.name, class: '' %>
     <% end %>
     <ul class="list-unstyled">
-      <li>Id: <%= @item.pref_identifier.origin_id %></li>
+      <li>Id: <%= link_to @item.pref_identifier.origin_id, @item.pref_identifier %></li>
       <li>Label/Type: <%= @item.pref_identifier.origin_type %></li>
       <li>Originator: <%= @item.pref_identifier.origin_agent_id %></li>
-      <li>Object type: <%= @item.type %></li>
     </ul>
   </div>
 </div>

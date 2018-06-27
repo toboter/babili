@@ -181,6 +181,7 @@ Rails.application.routes.draw do
     resource :user, only: [:show], controller: 'user' do     # was get 'me', to: 'users#me'
       get 'repositories', on: :member                        # was get 'searchable', to: 'users#my_search_abilities'
       get 'organizations', on: :member
+      get 'repos', on: :member
     end
 
     # Organizations

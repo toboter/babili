@@ -12,6 +12,11 @@ class Api::UserController < Api::BaseController
     render json: repositories, each_serializer: CollectionSerializer
   end
 
+  def repos
+    repos = current_user.try(:person).try(:namespace).try(:repositories)
+    render json: repos
+  end
+
   def organizations
     organizations = current_user.person.organizations.where(private: false).order(id: :asc)
     render json: organizations, each_serializer: OrganizationSerializer
