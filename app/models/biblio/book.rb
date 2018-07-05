@@ -17,7 +17,7 @@ class Biblio::Book < Biblio::Entry
   CREATOR_TYPES = %w(Author)
   DESCRIPTION = 'A book with an author and explicit publisher.'
   def fields
-    [:author_ids, :title, :publisher_id, :year, :month, :serie, :volume, :place_ids, :organization_id, :edition, :print_isbn, :note, :key, :url, :doi, :abstract, :tag_list]
+    [:author_ids, :title, :publisher_id, :year, :month, :serie, :volume, :number, :place_ids, :organization_id, :edition, :print_isbn, :note, :key, :url, :doi, :abstract, :tag_list]
   end
   def icon
     'book'
@@ -30,6 +30,7 @@ class Biblio::Book < Biblio::Entry
   json_attribute :year, :string
 
   json_attribute :volume, :string
+  json_attribute :number, :string
   belongs_to :serie, class_name: 'Biblio::Serie', foreign_key: :parent_id, optional: true
 
   json_attribute :place_ids, :integer, array: true
@@ -78,6 +79,7 @@ class Biblio::Book < Biblio::Entry
       address: places.map(&:given).join(' '),
       tag: tag_list.join(' '),
       volume: volume,
+      number: number,
       note: note,
       isbn: print_isbn,
       url: url,
@@ -98,6 +100,7 @@ class Biblio::Book < Biblio::Entry
       :month => month,
       :series => serie.try(:title),
       :volume => volume,
+      :number => number,
       :edition => edition,
       :note => note,
       :isbn => print_isbn,
@@ -124,6 +127,7 @@ class Biblio::Book < Biblio::Entry
       obj.month = bibtex.try(:month)
       obj.serie = Biblio::Serie.jsonb_contains(title: bibtex.series).first.try(:id) || Biblio::Serie.create(title: bibtex.series, print_issn: bibtex.try(:issn)).id
       obj.volume = bibtex.try(:volume)
+      obj.number = bibtex.try(:number)
       obj.edition = bibtex.try(:edition)
       obj.note = bibtex.try(:note)
       obj.abstract = bibtex.try(:abstract)

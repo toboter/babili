@@ -116,7 +116,7 @@ class Biblio::Entry < ApplicationRecord
   end
 
   def bibtex_citation
-    citation.gsub(/[,()]/ ,"")
+    citation.gsub(/[,()]/ ,"").parameterize
   end
 
   def citation
