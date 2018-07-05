@@ -57,7 +57,7 @@ Rails.application.routes.draw do
   namespace :aggregation, path: 'data' do
     get '/', to: 'home#index'
     get '/search', to: 'search#index'
-    resources :identifiers, only: [:index, :show]
+    resources :identifiers, only: [:index, :show], path: 'boi'
   end
 
   devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}, :controllers => { :registrations => :registrations }
