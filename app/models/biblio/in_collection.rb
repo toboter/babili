@@ -83,7 +83,7 @@ class Biblio::InCollection < Biblio::Entry
       :year => year,
       :address => places.map(&:given).join('; '),
       :series => serie.try(:title),
-      :volume => volume,
+      :volume => collection.volume,
       :organization => organization.try(:name)
     })
   end
