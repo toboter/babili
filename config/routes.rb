@@ -299,7 +299,7 @@ Rails.application.routes.draw do
       get :settings, on: :member
       get :edit_topics, on: :member
       put :update_topics, on: :member
-      namespace :biblio, path: '/bibliography' do
+      namespace :biblio, path: 'bibliography' do
         resources :references, controller: 'referencations', only: [:index, :destroy] do
           post :add_entry, to: 'referencations#add_entry', on: :collection
         end

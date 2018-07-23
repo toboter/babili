@@ -37,7 +37,7 @@ class Aggregation::Event < ApplicationRecord
       commit = (data[:changeset].present? || item.commits.empty?) ? Aggregation::Commit.create(type: 'Aggregation::Commit::Legacy', item_id: item.id, event_id: self.id, creator_id: self.creator_id, data: data) : item.commits.last
       return commit
     elsif data.is_a?(Array)
-      # data is a array. import through AcitveRecord.import
+      # data is a array. import through ActiveRecord.import
       commits = []
       data.each do |element|
         identifier = Aggregation::Identifier.where(origin_id: element[:identifier][:value], origin_type: element[:identifier][:type], origin_agent_id: element[:identifier][:source]).first_or_create

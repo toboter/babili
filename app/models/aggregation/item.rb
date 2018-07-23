@@ -18,7 +18,8 @@ class Aggregation::Item < ApplicationRecord
   belongs_to :pref_identifier, class_name: 'Aggregation::Identifier'
   has_and_belongs_to_many :identifiers, join_table: "aggregation_identifications", foreign_key: :item_id
   has_many :commits, dependent: :destroy
-  has_many :commit_events, through: :commits, class_name: 'Aggregation::Event'
+  has_many :commit_events, through: :commits, class_name: 'Aggregation::Event', source: :event
+  #has_one :repository, through: :commit_events
 
   validates :pref_identifier_id, uniqueness: { scope: :repository_id,
     message: "only one item" }
