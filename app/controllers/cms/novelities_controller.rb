@@ -23,7 +23,7 @@ class CMS::NovelitiesController < ApplicationController
   # POST /novelities.json
   def create
     @novelity = CMS::Novelity.new(novelity_params)
-    @novelity.author = current_user
+    @novelity.author = current_user.try(:person)
 
     respond_to do |format|
       if @novelity.save
