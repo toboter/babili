@@ -1,15 +1,49 @@
 class PersonSerializer < ActiveModel::Serializer
-  attributes :username, :id
-  attributes :name, :image_thumb_50
+  include Rails.application.routes.url_helpers
+  type :person
 
-  def image_thumb_50
+  attributes :name, :id, :namespace, :avatar_url, :url, :html_url, :organizations_url, :repositories_url, :vocabularies_url, :applications_url, :type, :site_admin
+
+  def avatar_url
     "http://#{Rails.application.routes.default_url_options[:host]}
     #{':'+Rails.application.routes.default_url_options[:port].to_s if Rails.application.routes.default_url_options[:port]}
     #{object.image_url(:small_thumb)}".squish.gsub(/\s+/, "")
   end
 
-  def username
+  def namespace
     object.namespace.name
+  end
+
+  def url
+    api_person_url(object)
+  end
+
+  def html_url
+    namespace_url(object.namespace)
+  end
+
+  def organizations_url
+    organizations_api_person_url(object)
+  end
+
+  def repositories_url
+    api_namespace_repositories_url(object.namespace)
+  end
+
+  def vocabularies_url
+    api_namespace_vocab_schemes_url(object.namespace)
+  end
+
+  def applications_url
+    nil
+  end
+
+  def type
+    'Person'
+  end
+
+  def site_admin
+    object.is_admin?
   end
 
 end

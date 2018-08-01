@@ -14,26 +14,6 @@ class MembershipSerializer < ActiveModel::Serializer
     api_organization_url(object.organization)
   end
 
-  attribute :organization do
-    {
-      name: object.organization.try(:name),
-      url: url_for([:api, object.organization]),
-      html_url: namespace_url(object.organization.namespace),
-      id: object.organization.try(:id),
-      members_url: api_organization_members_url(object.organization),
-      avatar_url: object.organization.image_url(:original),
-      type: 'Organization'
-    }
-  end
-
-  attribute :person do
-    {
-      username: object.person.try(:username),
-      url: url_for([:api, object.person]),
-      html_url: namespace_url(object.person.namespace),
-      id: object.person.try(:id),
-      avatar_url: object.person.image_url(:original),
-      type: 'Person'
-    }
-  end
+  belongs_to :organization
+  belongs_to :person
 end

@@ -176,12 +176,12 @@ Rails.application.routes.draw do
     # People
     resources :people, only: [:index, :show] do
       get 'organizations', on: :member
+      get 'memberships', on: :member
       get 'repositories', on: :member
     end
     resource :user, only: [:show], controller: 'user' do     # was get 'me', to: 'users#me'
       get 'repositories', on: :member                        # was get 'searchable', to: 'users#my_search_abilities'
       get 'organizations', on: :member
-      get 'repos', on: :member
     end
 
     # Organizations
@@ -225,6 +225,29 @@ Rails.application.routes.draw do
       resources :places, only: [:index, :show]
     end
 
+    # biblio
+
+    namespace :biblio, path: 'bibliography' do
+      resources :entries, only: :index
+      resources :series, type: 'Biblio::Serie'
+      resources :journals, type: 'Biblio::Journal'
+      resources :books, controller: 'entries', type: 'Biblio::Book', except: :index
+      resources :in_books, controller: 'entries', type: 'Biblio::InBook', except: :index
+      resources :collections, controller: 'entries', type: 'Biblio::Collection', except: :index
+      resources :in_collections, controller: 'entries', type: 'Biblio::InCollection', except: :index
+      resources :proceedings, controller: 'entries', type: 'Biblio::Proceeding', except: :index
+      resources :in_proceedings, controller: 'entries', type: 'Biblio::InProceeding', except: :index
+      resources :articles, controller: 'entries', type: 'Biblio::Article', except: :index
+      resources :miscs, controller: 'entries', type: 'Biblio::Misc', except: :index
+      resources :manuals, controller: 'entries', type: 'Biblio::Manual', except: :index
+      resources :booklets, controller: 'entries', type: 'Biblio::Booklet', except: :index
+      resources :mastertheses, controller: 'entries', type: 'Biblio::Masterthesis', except: :index
+      resources :phdtheses, controller: 'entries', type: 'Biblio::Phdthesis', except: :index
+      resources :techreports, controller: 'entries', type: 'Biblio::Techreport', except: :index
+      resources :unpublisheds, controller: 'entries', type: 'Biblio::Unpublished', except: :index
+    end
+
+
     scope path: :search do
       get '/', to: 'search#index'               # global
       get :agents, to: 'zensus/agents#search'
@@ -233,8 +256,9 @@ Rails.application.routes.draw do
       get :concepts, to: 'vocab/concepts#search'
     end
 
+    resources :identifiers, only: [:index, :show], path: 'boi', module: 'aggregation'
 
-    resources :namespaces, only: [:index, :show], path: '' do
+    resources :namespaces, only: [], path: '' do
       # vocab
       namespace :vocab do
         resources :schemes, only: [:index, :show] do
@@ -244,9 +268,16 @@ Rails.application.routes.draw do
       end
       # repos
       resources :repositories, only: [:index, :show] do
-        namespace :datum, path: 'data' do
-          resources :commits
-          resources :sets, only: [:index, :show]
+        namespace :biblio, path: 'bibliography' do
+          resources :references, controller: 'referencations', only: :index, path: ''
+        end
+        namespace :aggregation, path: 'data' do
+          resources :events do
+            resources :commits, module: 'event'
+          end
+          resources :items, only: [:index, :show] do
+            resources :commits, module: 'item'
+          end
         end
       end
     end

@@ -16,4 +16,8 @@ class UserSerializer < ActiveModel::Serializer
   def is_current_user?
     object.id == current_user.id
   end
+
+  def username
+    object.person.namespace.name
+  end
 end

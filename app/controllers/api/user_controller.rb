@@ -8,13 +8,8 @@ class Api::UserController < Api::BaseController
   end
 
   def repositories
-    repositories = current_user.oread_enrolled_applications.order(id: :asc)
-    render json: repositories, each_serializer: CollectionSerializer
-  end
-
-  def repos
-    repos = current_user.try(:person).try(:namespace).try(:repositories)
-    render json: repos
+    collections = current_user.oread_enrolled_applications.order(id: :asc)
+    render json: collections, each_serializer: CollectionSerializer
   end
 
   def organizations
@@ -22,7 +17,7 @@ class Api::UserController < Api::BaseController
     render json: organizations, each_serializer: OrganizationSerializer
   end
 
-    # deprecated
+  # deprecated
     def me #user
       render json: current_user
     end

@@ -39,4 +39,8 @@ class Repository < ApplicationRecord
       message: "%{value} is reserved."
     }
 
+  def name_tree
+    [owner.name, name]
+  end
+
 end

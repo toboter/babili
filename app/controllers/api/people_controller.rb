@@ -11,16 +11,18 @@ class Api::PeopleController < Api::BaseController
   end
 
   def organizations
-    organizations = @person.organizations.order(id: :asc)
-    render json: organizations
+    organizations = @person.organizations.where(private: false).order(id: :asc)
+    render json: organizations, each_serializer: OrganizationSerializer, adapter: :json
+  end
+
+  def memberships
+    memberships = @person.memberships
+    render json: memberships, each_serializer: MembershipSerializer
   end
 
   def repositories
     repositories = @person.user.oread_enrolled_applications.order(id: :asc)
     render json: repositories, each_serializer: CollectionSerializer
   end
-
-
-
 
 end

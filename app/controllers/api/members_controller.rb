@@ -4,7 +4,7 @@ class Api::MembersController < Api::BaseController
 
   def index
     members = @members.order(id: :asc).joins(:memberships).where(memberships: {verified: true}).uniq
-    render json: members
+    render json: members, each_serializer: PersonSerializer
   end
 
   def show

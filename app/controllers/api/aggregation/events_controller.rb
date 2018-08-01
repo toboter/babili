@@ -6,9 +6,13 @@ class Api::Aggregation::EventsController < Api::BaseController
   def index
     render json: @events
   end
+  def index
+    @events = @events.paginate(page: params[:page], per_page: params[:per_page] || 30)
+    render json: @events, meta: pagination_dict(@events), each_serializer: Aggregation::EventSerializer, adapter: :json
+  end
 
   def show
-    render json: @event
+    render json: @event, serializer: Aggregation::EventSerializer, adapter: :json
   end
 
   def create
@@ -18,10 +22,6 @@ class Api::Aggregation::EventsController < Api::BaseController
     else
       render json: @event.errors, status: :unprocessable_entity
     end
-  end
-
-  def commit
-    # commit the new items from origin, by processing to the repo.
   end
 
 
