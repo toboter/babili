@@ -10,9 +10,9 @@
 # Optional fields: editor, publisher, organization, address, month, note, key
 
 class Biblio::Proceeding < Biblio::Entry
-  include JsonAttribute::Record
-  include JsonAttribute::Record::QueryScopes
-  self.default_json_container_attribute = 'data'
+  include AttrJson::Record
+  include AttrJson::Record::QueryScopes
+  attr_json_config(default_container_attribute: :data)
 
   CREATOR_TYPES = %w(Editor)
   DESCRIPTION = 'The proceedings of a conference.'
@@ -23,25 +23,25 @@ class Biblio::Proceeding < Biblio::Entry
     'book'
   end
 
-  json_attribute :title, :string
-  json_attribute :year, :string
+  attr_json :title, :string
+  attr_json :year, :string
 
   has_many :creatorships, dependent: :destroy, class_name: 'Biblio::Creatorship', foreign_key: :entry_id
   has_many :editors, through: :creatorships, source: :agent_appellation
-  json_attribute :publisher_id, :integer
-  json_attribute :organization_id, :integer
-  json_attribute :place_ids, :integer, array: true
-  json_attribute :month, :string
-  json_attribute :note, :string
-  json_attribute :key, :string
+  attr_json :publisher_id, :integer
+  attr_json :organization_id, :integer
+  attr_json :place_ids, :integer, array: true
+  attr_json :month, :string
+  attr_json :note, :string
+  attr_json :key, :string
 
-  json_attribute :volume, :string
+  attr_json :volume, :string
   belongs_to :serie, class_name: 'Biblio::Serie', foreign_key: :parent_id, optional: true
 
-  json_attribute :print_isbn, :string
-  json_attribute :url, :string
-  json_attribute :doi, :string
-  json_attribute :abstract, :string
+  attr_json :print_isbn, :string
+  attr_json :url, :string
+  attr_json :doi, :string
+  attr_json :abstract, :string
 
   validates :title, :year, presence: true
 

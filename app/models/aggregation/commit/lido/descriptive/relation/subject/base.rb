@@ -6,9 +6,9 @@
 # (interpretation).
 
 class Aggregation::Commit::Lido::Descriptive::Relation::Subject::Base
-  include JsonAttribute::Model
+  include AttrJson::Model
 
-  json_attribute :display, Aggregation::Commit::Lido::Concerns::Types::Note.to_type, array: true # 0..n, uniq: {scope: :lang}
-  json_attribute :detail, Aggregation::Commit::Lido::Descriptive::Relation::Subject::Detail.to_type # 0..1
+  attr_json :display, Aggregation::Commit::Lido::Concerns::Types::Note.to_type, array: true # 0..n, uniq: {scope: :lang}
+  attr_json :detail, Aggregation::Commit::Lido::Descriptive::Relation::Subject::Detail.to_type # 0..1
 
 end

@@ -11,9 +11,9 @@
 
 class Biblio::Article < Biblio::Entry
   include ActionView::Helpers::TagHelper
-  include JsonAttribute::Record
-  include JsonAttribute::Record::QueryScopes
-  self.default_json_container_attribute = 'data'
+  include AttrJson::Record
+  include AttrJson::Record::QueryScopes
+  attr_json_config(default_container_attribute: :data)
   
   CREATOR_TYPES = %w(Author)
   DESCRIPTION = 'An article from a journal or magazine.'
@@ -25,20 +25,20 @@ class Biblio::Article < Biblio::Entry
   end
 
   has_many :authors, -> { order 'biblio_creatorships.id asc' }, through: :creatorships, source: :agent_appellation
-  json_attribute :title, :string
+  attr_json :title, :string
   belongs_to :journal, class_name: 'Biblio::Journal', foreign_key: :parent_id
-  json_attribute :year, :string
+  attr_json :year, :string
 
-  json_attribute :volume, :string
-  json_attribute :number, :string
-  json_attribute :pages, :string
-  json_attribute :month, :string
-  json_attribute :note, :string
-  json_attribute :key, :string
+  attr_json :volume, :string
+  attr_json :number, :string
+  attr_json :pages, :string
+  attr_json :month, :string
+  attr_json :note, :string
+  attr_json :key, :string
 
-  json_attribute :url, :string
-  json_attribute :doi, :string
-  json_attribute :abstract, :string
+  attr_json :url, :string
+  attr_json :doi, :string
+  attr_json :abstract, :string
 
   validates :authors, :title, :journal, :year, presence: true
   

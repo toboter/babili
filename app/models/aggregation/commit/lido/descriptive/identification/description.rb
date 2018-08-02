@@ -7,11 +7,11 @@
 # description may be given in description identifier.
 
 class Aggregation::Commit::Lido::Descriptive::Identification::Description
-  include JsonAttribute::Model
-  json_attribute :type, :string
-  json_attribute :sortorder, :integer
+  include AttrJson::Model
+  attr_json :type, :string
+  attr_json :sortorder, :integer
 
-  json_attribute :concepts, Aggregation::Commit::Lido::Concerns::Types::Identifier.to_type, array: true # 0..n
-  json_attribute :notes, Aggregation::Commit::Lido::Concerns::Types::Note.to_type, array: true # 0..n uniq: {scope: lang}
-  json_attribute :sources, Aggregation::Commit::Lido::Concerns::Types::Note.to_type, array: true # 0..n
+  attr_json :concepts, Aggregation::Commit::Lido::Concerns::Types::Identifier.to_type, array: true # 0..n
+  attr_json :notes, Aggregation::Commit::Lido::Concerns::Types::Note.to_type, array: true # 0..n uniq: {scope: lang}
+  attr_json :sources, Aggregation::Commit::Lido::Concerns::Types::Note.to_type, array: true # 0..n
 end

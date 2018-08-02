@@ -3,7 +3,7 @@
 # How to record: Example values: oval, round, square, rectangular, and irregular
 
 class Aggregation::Commit::Lido::Descriptive::Identification::Measurement::Shape
-  include JsonAttribute::Model
-  json_attribute :sortorder, :integer
-  json_attribute :value, :string
+  include AttrJson::Model
+  attr_json :sortorder, :integer
+  attr_json :value, :string
 end

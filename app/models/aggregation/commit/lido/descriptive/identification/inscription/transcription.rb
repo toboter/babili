@@ -3,7 +3,7 @@
 # How to record: Repeat this element only for language variants.
 
 # class Aggregation::Commit::Lido::Descriptive::Identification::Inscription::Transcription
-#   include JsonAttribute::Model
+#   include AttrJson::Model
 # 
 #   # -> Aggregation::Commit::Lido::Concerns::Types::Note
 # end

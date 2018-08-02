@@ -4,9 +4,9 @@
 # How to record: Repeat this element only for language variants.
 
 class Aggregation::Commit::Lido::Concerns::Types::Name
-  include JsonAttribute::Model
-  json_attribute :value, :string
-  json_attribute :label, :string
-  json_attribute :lang, :string
-  json_attribute :pref, :string # preferred, alternate
+  include AttrJson::Model
+  attr_json :value, :string
+  attr_json :label, :string
+  attr_json :lang, :string
+  attr_json :pref, :string # preferred, alternate
 end

@@ -5,8 +5,8 @@
 # displayObject)
 
 class Aggregation::Commit::Lido::Concerns::Types::Note
-  include JsonAttribute::Model
-  json_attribute :value, :string
-  json_attribute :label, :string
-  json_attribute :lang, :string
+  include AttrJson::Model
+  attr_json :value, :string
+  attr_json :label, :string
+  attr_json :lang, :string
 end

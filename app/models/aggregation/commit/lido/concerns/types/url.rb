@@ -2,10 +2,10 @@
 # General: Weblink of the institution or person referred to as legal body.
 
 class Aggregation::Commit::Lido::Concerns::Types::Url
-  include JsonAttribute::Model
-  json_attribute :value, :string
-  json_attribute :label, :string
-  json_attribute :lang, :string
-  json_attribute :pref, :string # preferred, alternate
-  json_attribute :format, :string # text/html, text/xml, image/jpeg, audio/mpeg, video/mpeg, application/pdf
+  include AttrJson::Model
+  attr_json :value, :string
+  attr_json :label, :string
+  attr_json :lang, :string
+  attr_json :pref, :string # preferred, alternate
+  attr_json :format, :string # text/html, text/xml, image/jpeg, audio/mpeg, video/mpeg, application/pdf
 end

@@ -5,20 +5,20 @@
 # creation place, the material and techniques used are recorded here, qualified by the event type “creation”.
 
 class Aggregation::Commit::Lido::Descriptive::Event::Detail
-  include JsonAttribute::Model
+  include AttrJson::Model
 
-  json_attribute :identifiers, Aggregation::Commit::Lido::Concerns::Types::Identifier.to_type, array: true # 0..n
-  json_attribute :types, Aggregation::Commit::Lido::Descriptive::Event::Type.to_type # 1
-  json_attribute :in_roles, Aggregation::Commit::Lido::Descriptive::Event::InRole.to_type, array: true # 0..n
-  json_attribute :names, Aggregation::Commit::Lido::Concerns::Appellation.to_type, array: true # 0..n
-  json_attribute :actors, Aggregation::Commit::Lido::Concerns::Actor::Base.to_type, array: true # 0..n
-  json_attribute :cultures, Aggregation::Commit::Lido::Descriptive::Event::Culture.to_type, array: true  # 0..n
-  json_attribute :date, Aggregation::Commit::Lido::Concerns::Date.to_type # 1
-  json_attribute :periods, Aggregation::Commit::Lido::Descriptive::Event::Period.to_type, array: true  # 0..n
-  json_attribute :places, Aggregation::Commit::Lido::Concerns::Place.to_type, array: true  # 0..n
-  json_attribute :methods, Aggregation::Commit::Lido::Descriptive::Event::Method.to_type, array: true # 0..n
-  json_attribute :materials_techniques, Aggregation::Commit::Lido::Descriptive::Event::MaterialTechnique::Base.to_type, array: true # 0..n
-  json_attribute :things, Aggregation::Commit::Lido::Concerns::Thing.to_type, array: true # 0..n
-  json_attribute :related_events, Aggregation::Commit::Lido::Descriptive::Event::RelatedEvent::Base.to_type, array: true # 0..n
-  json_attribute :descriptions, Aggregation::Commit::Lido::Descriptive::Event::Description.to_type, array: true  # 0..n
+  attr_json :identifiers, Aggregation::Commit::Lido::Concerns::Types::Identifier.to_type, array: true # 0..n
+  attr_json :types, Aggregation::Commit::Lido::Descriptive::Event::Type.to_type # 1
+  attr_json :in_roles, Aggregation::Commit::Lido::Descriptive::Event::InRole.to_type, array: true # 0..n
+  attr_json :names, Aggregation::Commit::Lido::Concerns::Appellation.to_type, array: true # 0..n
+  attr_json :actors, Aggregation::Commit::Lido::Concerns::Actor::Base.to_type, array: true # 0..n
+  attr_json :cultures, Aggregation::Commit::Lido::Descriptive::Event::Culture.to_type, array: true  # 0..n
+  attr_json :date, Aggregation::Commit::Lido::Concerns::Date.to_type # 1
+  attr_json :periods, Aggregation::Commit::Lido::Descriptive::Event::Period.to_type, array: true  # 0..n
+  attr_json :places, Aggregation::Commit::Lido::Concerns::Place.to_type, array: true  # 0..n
+  attr_json :methods, Aggregation::Commit::Lido::Descriptive::Event::Method.to_type, array: true # 0..n
+  attr_json :materials_techniques, Aggregation::Commit::Lido::Descriptive::Event::MaterialTechnique::Base.to_type, array: true # 0..n
+  attr_json :things, Aggregation::Commit::Lido::Concerns::Thing.to_type, array: true # 0..n
+  attr_json :related_events, Aggregation::Commit::Lido::Descriptive::Event::RelatedEvent::Base.to_type, array: true # 0..n
+  attr_json :descriptions, Aggregation::Commit::Lido::Descriptive::Event::Description.to_type, array: true  # 0..n
 end

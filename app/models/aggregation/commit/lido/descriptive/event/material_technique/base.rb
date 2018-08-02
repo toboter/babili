@@ -4,8 +4,8 @@
 # How to record: Will be used most often within a production event, but also others such as excavation, restoration, etc.
 
 class Aggregation::Commit::Lido::Descriptive::Event::MaterialTechnique::Base
-  include JsonAttribute::Model
-  json_attribute :sortorder, :integer
-  json_attribute :display, Aggregation::Commit::Lido::Concerns::Types::Note.to_type, array: true # 0..n, uniq: {scope: :lang}
-  json_attribute :detail, Aggregation::Commit::Lido::Descriptive::Event::MaterialTechnique::Detail.to_type # 0..1
+  include AttrJson::Model
+  attr_json :sortorder, :integer
+  attr_json :display, Aggregation::Commit::Lido::Concerns::Types::Note.to_type, array: true # 0..n, uniq: {scope: :lang}
+  attr_json :detail, Aggregation::Commit::Lido::Descriptive::Event::MaterialTechnique::Detail.to_type # 0..1
 end

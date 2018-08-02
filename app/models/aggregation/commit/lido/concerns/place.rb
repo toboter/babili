@@ -1,9 +1,9 @@
 # subjectPlace, 
 
 class Aggregation::Commit::Lido::Concerns::Place
-  include JsonAttribute::Model
+  include AttrJson::Model
 
-  json_attribute :sortorder, :integer
-  json_attribute :display, Aggregation::Commit::Lido::Concerns::Types::Note.to_type, array: true # 0..n, uniq: {scope: :lang}
-  json_attribute :detail, Aggregation::Commit::Lido::Concerns::Place::Base.to_type
+  attr_json :sortorder, :integer
+  attr_json :display, Aggregation::Commit::Lido::Concerns::Types::Note.to_type, array: true # 0..n, uniq: {scope: :lang}
+  attr_json :detail, Aggregation::Commit::Lido::Concerns::Place::Base.to_type
 end

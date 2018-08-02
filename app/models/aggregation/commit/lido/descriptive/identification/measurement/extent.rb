@@ -5,7 +5,7 @@
 # window of mat, secondary support, frame, and mount
 
 class Aggregation::Commit::Lido::Descriptive::Identification::Measurement::Extent
-  include JsonAttribute::Model
-  json_attribute :sortorder, :integer
-  json_attribute :value, :string
+  include AttrJson::Model
+  attr_json :sortorder, :integer
+  attr_json :value, :string
 end

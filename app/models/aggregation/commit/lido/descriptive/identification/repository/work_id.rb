@@ -3,11 +3,11 @@
 # of custody.
 
 class Aggregation::Commit::Lido::Descriptive::Identification::Repository::WorkId
-  include JsonAttribute::Model
+  include AttrJson::Model
 
-  json_attribute :value, :string
-  json_attribute :type, :string
-  json_attribute :sortorder, :integer
-  json_attribute :label, :string
+  attr_json :value, :string
+  attr_json :type, :string
+  attr_json :sortorder, :integer
+  attr_json :label, :string
 
 end
