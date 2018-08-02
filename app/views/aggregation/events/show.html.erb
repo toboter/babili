@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="col-md-12">
+    <%= content_tag :h4, "Data event: #{@event.slug}" %>
+    <div class="row">
+      <div class="col-sm-3">
+        <%= link_to(background_image_div(@event.creator, :small_thumb, {class: 'site-user-avatar'}), @event.creator.namespace) %>
+        <%= content_tag :p, link_to(@event.creator.name, @event.creator.namespace, class: 'text-strong') %>
+      </div>
+      <div class="col-sm-9">
+        <p>
+          <%= @event.note %>
+          <%= content_tag :span, @event.description, class: 'text-small text-muted' if @event.type == 'Aggregation::Event::UploadEvent' && @event.description %>
+        </p>
+
+        <% if @event.locked? %>
+          <h4>Commits</h4>
+          <%= render partial: 'aggregation/commits/commit', collection: @event.commits, locals: {view: 'event'} %>
+        <% else %>
+          <%= @event.uploads.inspect if @event.type == 'Aggregation::Event::UploadEvent' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= link_to 'Commit data', commit_namespace_repository_aggregation_event_path(@namespace, @repository, @event), method: :put, class: 'btn btn-success text-strong' unless @event.locked? %>
+<%= link_to 'remove', namespace_repository_aggregation_event_path(@namespace, @repository, @event), method: :delete unless @event.locked? %>

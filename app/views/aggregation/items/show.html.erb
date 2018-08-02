@@ -6,9 +6,9 @@
       <%= content_tag :span, @item.name, class: '' %>
     <% end %>
     <ul class="list-unstyled">
-      <li>Id: <%= link_to @item.pref_identifier.origin_id, @item.pref_identifier %></li>
-      <li>Label/Type: <%= @item.pref_identifier.origin_type %></li>
-      <li>Originator: <%= @item.pref_identifier.origin_agent_id %></li>
+      <li>Id: <%= link_to @item.identifier.origin_id, @item.identifier %></li>
+      <li>Label/Type: <%= @item.identifier.origin_type %></li>
+      <li>Originator: <%= @item.identifier.origin_agent_id %></li>
     </ul>
   </div>
 </div>
@@ -23,6 +23,6 @@
   </div>
   <div class="col-md-5 col-md-offset-1">
     <div class="row">
-      <%= render partial: 'aggregation/commits/commit', collection: @item.commits, locals: {view: 'item'} %>
+      <%= render partial: 'aggregation/commits/commit', collection: @item.commits.order(created_at: :desc), locals: {view: 'item'} %>
   </div>
 </div>

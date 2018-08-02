@@ -28,6 +28,8 @@ class Aggregation::Event < ApplicationRecord
   scope :pending, -> {where(commited_at: nil)}
   scope :commited, -> {where.not(commited_at: nil)}
 
+  accepts_nested_attributes_for :commits, allow_destroy: false
+
   def commit_items(data)
     if !data.is_a?(Array)
       identifier = Aggregation::Identifier.where(origin_id: data[:identifier][:value], origin_type: data[:identifier][:type], origin_agent_id: data[:identifier][:source]).first_or_create
@@ -41,7 +43,7 @@ class Aggregation::Event < ApplicationRecord
       commits = []
       data.each do |element|
         identifier = Aggregation::Identifier.where(origin_id: element[:identifier][:value], origin_type: element[:identifier][:type], origin_agent_id: element[:identifier][:source]).first_or_create
-        item = Aggregation::Item.where(pref_identifier: identifier, repository_id: self.repository_id).first_or_create
+        item = Aggregation::Item.where(pref_identifier_id: identifier.id, repository_id: self.repository_id).first_or_create
         item.identifiers << identifier unless item.identifiers.include?(identifier)
         element[:changeset] = item.commits.any? ? HashDiff.diff(element[:payload], item.commits.last.try(:data).try(:[], 'payload')) : []
         commit = Aggregation::Commit.new(type: 'Aggregation::Commit::Legacy', item_id: item.id, event_id: self.id, creator_id: self.creator_id, data: element)

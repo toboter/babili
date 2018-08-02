@@ -9,7 +9,7 @@
           <% if view == 'event' %>
             <%= link_to commit.item.name, namespace_repository_aggregation_item_path(@namespace, @repository, commit.item), class: 'text-small' %>
           <% elsif view == 'item' %>  
-            <%= link_to commit.event.note, [@namespace, @repository, commit.event], class: 'text-small' %>
+            <%= link_to commit.event.note, namespace_repository_aggregation_event_path(@namespace, @repository, commit.event), class: 'text-small' %>
           <% end %><br>
           <%= link_to commit.data['changeset'], namespace_repository_aggregation_item_commit_path(commit.item.repository.owner, commit.item.repository, commit.item, commit) %>
           <hr>

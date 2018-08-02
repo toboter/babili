@@ -1,3 +1,3 @@
 class Aggregation::Commit::Legacy < Aggregation::Commit
-  store_accessor :data, :payload, :identifier, :changeset
+  store_accessor :data, :payload, :changeset
 end

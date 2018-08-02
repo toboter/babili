@@ -6,7 +6,7 @@ class RepositoriesController < ApplicationController
   end
 
   def show
-    @items = @repository.items.joins(:pref_identifier).order('aggregation_identifiers.origin_id asc')
+    @items = @repository.items.joins(:identifier).order('aggregation_identifiers.origin_id asc')
     render layout: 'repo'
   end
 

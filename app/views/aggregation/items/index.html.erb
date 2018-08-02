@@ -19,7 +19,7 @@
     <div style="display:inline;">
       <%= link_to (background_image_div(@repository.events.commited.last.creator, :small_thumb, {class: 'site-user-avatar'})), @repository.events.commited.last.creator.namespace if @repository.events.commited.any? %>
       <%= link_to @repository.events.commited.last.creator.name, @repository.events.commited.last.creator.namespace, class: 'text-strong' if @repository.events.commited.any? %>
-      <%= content_tag :span, "#{link_to @repository.events.commited.last.note, [@namespace, @repository, @repository.events.commited.last]}".html_safe if @repository.events.commited.any? %>
+      <%= content_tag :span, "#{link_to @repository.events.commited.last.note, namespace_repository_aggregation_event_path(@namespace, @repository, @repository.events.commited.last)}".html_safe if @repository.events.commited.any? %>
     </div>
     <% if @repository.events.any? %>
       <%= content_tag :span, "Last data event #{link_to @repository.events.last.created_at, [@namespace, @repository, :aggregation, :events]}".html_safe, class: 'pull-right' %>

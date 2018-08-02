@@ -5,6 +5,7 @@ class Aggregation::ItemsController < ApplicationController
   layout 'repo'
 
   def index
+    @items = @items.order(slug: :asc)
   end
 
   def show

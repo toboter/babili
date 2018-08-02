@@ -9,6 +9,9 @@ class Aggregation::EventsController < ApplicationController
     @events = @events.order(updated_at: :desc)
   end
 
+  def show
+  end
+
   def commit
     respond_to do |format|
       if @event.locked? 

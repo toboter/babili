@@ -337,10 +337,10 @@ Rails.application.routes.draw do
       end
       namespace :aggregation, path: 'data' do
         namespace :event, path: 'events' do
-          resources :upload_events, path: 'upload', only: [:new, :show, :create]
+          resources :upload_events, path: 'upload', only: [:new, :create]
           # resources :list_transforms, only: [:new, :create] # gehört an lists/:id/transform
         end
-        resources :events, only: [:index, :destroy] do
+        resources :events, only: [:index, :show, :destroy] do
           put 'commit', on: :member, to: 'events#commit'
         end
         resources :items, only: [:index, :show] do 

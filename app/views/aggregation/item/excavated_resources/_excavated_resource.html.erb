@@ -1,7 +1,7 @@
 <tr>
   <%= content_tag :td, width: '30%' do %>
-    <%= link_to(excavated_resource.pref_identifier.origin_id, namespace_repository_aggregation_item_path(excavated_resource.repository.owner, excavated_resource.repository, excavated_resource), class: 'text-strong') %><br>
-    <%= content_tag :span, "[#{excavated_resource.pref_identifier.origin_type}]", class: 'text-small text-gray' %>
+    <%= link_to(excavated_resource.identifier.origin_id, namespace_repository_aggregation_item_path(excavated_resource.repository.owner, excavated_resource.repository, excavated_resource), class: 'text-strong') %><br>
+    <%= content_tag :span, "[#{excavated_resource.identifier.origin_type}]", class: 'text-small text-gray' %>
   <% end %>
   <%= content_tag :td, link_to(excavated_resource.commits.last.event.note, [excavated_resource.commits.last.event.repository.owner, excavated_resource.commits.last.event.repository, excavated_resource.commits.last.event]), class: 'text-small' if excavated_resource.commits.any? %>
   <%= content_tag :td, content_tag(:span, "#{time_ago_in_words(excavated_resource.commits.last.created_at)} ago", title: excavated_resource.commits.last.created_at, data: {toggle: "tooltip", placement: "bottom"}, class: 'pull-right text-small') if excavated_resource.commits.any? %>
