@@ -18,7 +18,7 @@ GIT
       activerecord (> 4.0)
 
 GEM
-  remote: https://gems.ruby-china.org/
+  remote: https://rubygems.org/
   remote: https://rails-assets.org/
   specs:
     actioncable (5.1.4)
