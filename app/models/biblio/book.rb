@@ -10,9 +10,9 @@
 # Optional fields: volume, series, address, edition, month, note, key
 
 class Biblio::Book < Biblio::Entry
-  include JsonAttribute::Record
-  include JsonAttribute::Record::QueryScopes
-  self.default_json_container_attribute = 'data'
+  include AttrJson::Record
+  include AttrJson::Record::QueryScopes
+  attr_json_config(default_container_attribute: :data)
 
   CREATOR_TYPES = %w(Author)
   DESCRIPTION = 'A book with an author and explicit publisher.'
@@ -25,25 +25,25 @@ class Biblio::Book < Biblio::Entry
 
   has_many :creatorships, dependent: :destroy, class_name: 'Biblio::Creatorship', foreign_key: :entry_id
   has_many :authors, through: :creatorships, source: :agent_appellation
-  json_attribute :title, :string
-  json_attribute :publisher_id, :integer
-  json_attribute :year, :string
+  attr_json :title, :string
+  attr_json :publisher_id, :integer
+  attr_json :year, :string
 
-  json_attribute :volume, :string
-  json_attribute :number, :string
+  attr_json :volume, :string
+  attr_json :number, :string
   belongs_to :serie, class_name: 'Biblio::Serie', foreign_key: :parent_id, optional: true
 
-  json_attribute :place_ids, :integer, array: true
-  json_attribute :organization_id, :integer
-  json_attribute :edition, :string
-  json_attribute :month, :string
-  json_attribute :note, :string
-  json_attribute :key, :string
+  attr_json :place_ids, :integer, array: true
+  attr_json :organization_id, :integer
+  attr_json :edition, :string
+  attr_json :month, :string
+  attr_json :note, :string
+  attr_json :key, :string
 
-  json_attribute :print_isbn, :string
-  json_attribute :url, :string
-  json_attribute :doi, :string
-  json_attribute :abstract, :string
+  attr_json :print_isbn, :string
+  attr_json :url, :string
+  attr_json :doi, :string
+  attr_json :abstract, :string
 
   validates :authors, :title, :publisher_id, :year, presence: true
 

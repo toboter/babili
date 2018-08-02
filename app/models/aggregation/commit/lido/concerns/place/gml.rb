@@ -4,10 +4,10 @@
 # to http://www.opengis.net/gml/.
 
 class Aggregation::Commit::Lido::Concerns::Place::Gml
-  include JsonAttribute::Model
+  include AttrJson::Model
 
-  json_attribute :lang, :string
-  json_attribute :point, :string
-  json_attribute :line_string, :string
-  json_attribute :polygon, :string
+  attr_json :lang, :string
+  attr_json :point, :string
+  attr_json :line_string, :string
+  attr_json :polygon, :string
 end

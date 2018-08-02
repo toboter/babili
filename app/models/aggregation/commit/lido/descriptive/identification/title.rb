@@ -5,9 +5,9 @@
 # history e.g. the object name given here and the object typ
 
 class Aggregation::Commit::Lido::Descriptive::Identification::Title
-  include JsonAttribute::Model
-  json_attribute :type, :string
-  json_attribute :sortorder, :integer
-  json_attribute :appellations, Aggregation::Commit::Lido::Concerns::Types::Name.to_type, array: true # 1..n uniq: {scope: lang}
-  json_attribute :sources, Aggregation::Commit::Lido::Concerns::Types::Note.to_type, array: true # 0..n
+  include AttrJson::Model
+  attr_json :type, :string
+  attr_json :sortorder, :integer
+  attr_json :appellations, Aggregation::Commit::Lido::Concerns::Types::Name.to_type, array: true # 1..n uniq: {scope: lang}
+  attr_json :sources, Aggregation::Commit::Lido::Concerns::Types::Note.to_type, array: true # 0..n
 end

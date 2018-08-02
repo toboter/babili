@@ -1,9 +1,9 @@
 class Aggregation::Event::ApiRequest < Aggregation::Event
-  include JsonAttribute::Record
-  include JsonAttribute::Record::QueryScopes
+  include AttrJson::Record
+  include AttrJson::Record::QueryScopes
+  attr_json_config(default_container_attribute: :origin)
 
-  self.default_json_container_attribute = 'origin'
-  json_attribute :request_url, :string
+  attr_json :request_url, :string
 
 
   def process

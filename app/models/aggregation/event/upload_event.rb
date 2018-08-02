@@ -1,18 +1,18 @@
 class Aggregation::Event::UploadEvent < Aggregation::Event
   require 'roo'
-  include JsonAttribute::Record
-  include JsonAttribute::Record::QueryScopes
+  include AttrJson::Record
+  include AttrJson::Record::QueryScopes
   include LidoExtraction, SheetExtraction
 
   SCHEMA_TYPES = %w(Lido Tabular)
 
-  self.default_json_container_attribute = 'origin'
-  json_attribute :description, :string
-  json_attribute :content_type, :string
-  json_attribute :schema, :string
+  attr_json_config(default_container_attribute: :origin)
+  attr_json :description, :string
+  attr_json :content_type, :string
+  attr_json :schema, :string
 
-  json_attribute :primary_id_label, :string, container_attribute: "processor"
-  json_attribute :other_identificator_labels, :string, container_attribute: "processor"
+  attr_json :primary_id_label, :string, container_attribute: "processor"
+  attr_json :other_identificator_labels, :string, container_attribute: "processor"
 
   has_many :uploads, class_name: 'Aggregation::Upload', foreign_key: :event_id, dependent: :destroy
   accepts_nested_attributes_for :uploads, reject_if: :all_blank, allow_destroy: true

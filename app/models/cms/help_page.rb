@@ -1,13 +1,13 @@
 class CMS::HelpPage < CMS::Content
-  include JsonAttribute::Record
-  include JsonAttribute::Record::QueryScopes
+  include AttrJson::Record
+  include AttrJson::Record::QueryScopes
 
   before_validation :set_slug
   extend FriendlyId
   friendly_id :slug, use: [:slugged, :scoped], scope: :type
 
-  self.default_json_container_attribute = 'type_details'
-  json_attribute :abstract, :string
+  attr_json_config(default_container_attribute: :type_details)
+  attr_json :abstract, :string
 
   belongs_to :category, class_name: 'CMS::HelpCategory'
 

@@ -5,9 +5,9 @@
 # in Display Materials/Techniques.
 
 class Aggregation::Commit::Lido::Descriptive::Identification::Inscription::Base
-  include JsonAttribute::Model
-  json_attribute :type, :string
-  json_attribute :sortorder, :integer
-  json_attribute :transcriptions, Aggregation::Commit::Lido::Concerns::Types::Note.to_type, array: true # 0..n
-  json_attribute :descriptions, Aggregation::Commit::Lido::Descriptive::Identification::Inscription::Description.to_type, array: true # 0..n
+  include AttrJson::Model
+  attr_json :type, :string
+  attr_json :sortorder, :integer
+  attr_json :transcriptions, Aggregation::Commit::Lido::Concerns::Types::Note.to_type, array: true # 0..n
+  attr_json :descriptions, Aggregation::Commit::Lido::Descriptive::Identification::Inscription::Description.to_type, array: true # 0..n
 end

@@ -1,4 +1,4 @@
 class Aggregation::Commit::Lido::Administrative::Resource
-  include JsonAttribute::Model
+  include AttrJson::Model
 
 end

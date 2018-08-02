@@ -7,7 +7,7 @@
 # the equation). Notes Used for studies, record drawings, models, and other representations drawn or constructed to scale.
 
 class Aggregation::Commit::Lido::Descriptive::Identification::Measurement::Scale
-  include JsonAttribute::Model
-  json_attribute :sortorder, :integer
-  json_attribute :value, :string
+  include AttrJson::Model
+  attr_json :sortorder, :integer
+  attr_json :value, :string
 end

@@ -5,7 +5,7 @@
 # Man-Made Feature (http://www.cidoc-crm.org/crmconcepts/E25), Collection (http://www.cidoc-crm.org/crmconcepts/E78).
 
 class Aggregation::Commit::Lido::Category
-  include JsonAttribute::Model
-  json_attribute :concept, Aggregation::Commit::Lido::Concerns::Types::Identifier.to_type, array: true # 0..n
-  json_attribute :term, Aggregation::Commit::Lido::Concerns::Types::Term.to_type, array: true # 0..n
+  include AttrJson::Model
+  attr_json :concept, Aggregation::Commit::Lido::Concerns::Types::Identifier.to_type, array: true # 0..n
+  attr_json :term, Aggregation::Commit::Lido::Concerns::Types::Term.to_type, array: true # 0..n
 end

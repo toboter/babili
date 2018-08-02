@@ -3,8 +3,8 @@
 # this object was collected.
 
 class Aggregation::Commit::Lido::Descriptive::Event::RelatedEvent::Base
-  include JsonAttribute::Model
+  include AttrJson::Model
 
-  json_attribute :event, Aggregation::Commit::Lido::Descriptive::Event::Base.to_type # 0..1
-  json_attribute :relationship_type, Aggregation::Commit::Lido::Descriptive::Event::RelatedEvent::RelationshipType.to_type # 0..1
+  attr_json :event, Aggregation::Commit::Lido::Descriptive::Event::Base.to_type # 0..1
+  attr_json :relationship_type, Aggregation::Commit::Lido::Descriptive::Event::RelatedEvent::RelationshipType.to_type # 0..1
 end

@@ -5,7 +5,7 @@
 # prints and drawings, natural science, numismatics, or local history).
 
 class Aggregation::Commit::Lido::Descriptive::Classification::Base
-  include JsonAttribute::Model
-  json_attribute :work_types, Aggregation::Commit::Lido::Descriptive::Classification::WorkType.to_type, array: true # 1..n
-  json_attribute :classifications, Aggregation::Commit::Lido::Descriptive::Classification::Classification.to_type, array: true # 0..n
+  include AttrJson::Model
+  attr_json :work_types, Aggregation::Commit::Lido::Descriptive::Classification::WorkType.to_type, array: true # 1..n
+  attr_json :classifications, Aggregation::Commit::Lido::Descriptive::Classification::Classification.to_type, array: true # 0..n
 end

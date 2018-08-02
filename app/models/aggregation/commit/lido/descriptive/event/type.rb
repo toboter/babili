@@ -6,7 +6,7 @@
 # Part addition, Part removal, Performance, Planning, Production, Provenance, Publication, Restor
 
 class Aggregation::Commit::Lido::Descriptive::Event::Type
-  include JsonAttribute::Model
-  json_attribute :concept, Aggregation::Commit::Lido::Concerns::Types::Identifier.to_type, array: true # 0..n
-  json_attribute :term, Aggregation::Commit::Lido::Concerns::Types::Term.to_type, array: true # 0..n
+  include AttrJson::Model
+  attr_json :concept, Aggregation::Commit::Lido::Concerns::Types::Identifier.to_type, array: true # 0..n
+  attr_json :term, Aggregation::Commit::Lido::Concerns::Types::Term.to_type, array: true # 0..n
 end

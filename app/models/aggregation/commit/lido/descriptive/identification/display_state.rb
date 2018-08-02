@@ -2,9 +2,9 @@
 # General: A wrapper for the state and edition of the object / work.
 
 class Aggregation::Commit::Lido::Descriptive::Identification::DisplayState
-  include JsonAttribute::Model
+  include AttrJson::Model
 
-  json_attribute :states, Aggregation::Commit::Lido::Concerns::Types::Note.to_type, array: true # 0..n
-  json_attribute :editions, Aggregation::Commit::Lido::Concerns::Types::Note.to_type, array: true # 0..n
-  json_attribute :sources, Aggregation::Commit::Lido::Concerns::Types::Note.to_type, array: true # 0..n
+  attr_json :states, Aggregation::Commit::Lido::Concerns::Types::Note.to_type, array: true # 0..n
+  attr_json :editions, Aggregation::Commit::Lido::Concerns::Types::Note.to_type, array: true # 0..n
+  attr_json :sources, Aggregation::Commit::Lido::Concerns::Types::Note.to_type, array: true # 0..n
 end

@@ -6,10 +6,10 @@
 # specifying the lang attribute on the text level.
 
 class Aggregation::Commit::Lido::Descriptive::Base
-  include JsonAttribute::Model
-  json_attribute :lang, :string
-  json_attribute :classification, Aggregation::Commit::Lido::Descriptive::Classification::Base.to_type # 1
-  json_attribute :identification, Aggregation::Commit::Lido::Descriptive::Identification::Base.to_type # 1
-  json_attribute :events, Aggregation::Commit::Lido::Descriptive::Event::Base.to_type, array: true # 0..n
-  json_attribute :relation, Aggregation::Commit::Lido::Descriptive::Relation::Base.to_type # 0..1
+  include AttrJson::Model
+  attr_json :lang, :string
+  attr_json :classification, Aggregation::Commit::Lido::Descriptive::Classification::Base.to_type # 1
+  attr_json :identification, Aggregation::Commit::Lido::Descriptive::Identification::Base.to_type # 1
+  attr_json :events, Aggregation::Commit::Lido::Descriptive::Event::Base.to_type, array: true # 0..n
+  attr_json :relation, Aggregation::Commit::Lido::Descriptive::Relation::Base.to_type # 0..1
 end

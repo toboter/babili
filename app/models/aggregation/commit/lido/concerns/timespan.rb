@@ -1,5 +1,5 @@
 class Aggregation::Commit::Lido::Concerns::Timespan
-  include JsonAttribute::Model
-  json_attribute :earliest, Aggregation::Commit::Lido::Concerns::Types::Date.to_type # 0..1
-  json_attribute :latest, Aggregation::Commit::Lido::Concerns::Types::Date.to_type # 0..1
+  include AttrJson::Model
+  attr_json :earliest, Aggregation::Commit::Lido::Concerns::Types::Date.to_type # 0..1
+  attr_json :latest, Aggregation::Commit::Lido::Concerns::Types::Date.to_type # 0..1
 end

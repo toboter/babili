@@ -7,8 +7,8 @@
 # Relationship Type is often different on either side of the relationship.
 
 class Aggregation::Commit::Lido::Descriptive::Event::RelatedEvent::RelationshipType
-  include JsonAttribute::Model
+  include AttrJson::Model
 
-  json_attribute :concepts, Aggregation::Commit::Lido::Concerns::Types::Identifier.to_type, array: true # 0..n
-  json_attribute :terms, Aggregation::Commit::Lido::Concerns::Types::Term.to_type, array: true # 0..n
+  attr_json :concepts, Aggregation::Commit::Lido::Concerns::Types::Identifier.to_type, array: true # 0..n
+  attr_json :terms, Aggregation::Commit::Lido::Concerns::Types::Term.to_type, array: true # 0..n
 end
