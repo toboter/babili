@@ -159,129 +159,131 @@ Rails.application.routes.draw do
 
 
   namespace :api do
-    # deprecated start
-      get 'me', to: 'user#me'
-      scope :my do
-        scope :accessibilities do
-          get 'searchable', to: 'user#my_search_abilities'
-          get 'crud/:uid', to: 'user#my_crud_abilities'
-          get 'projects/:uid', to: 'user#my_app_organizations'
+  #constraints subdomain: 'api' do
+  #  scope module: 'api', as: 'api' do
+      # deprecated start
+        get 'me', to: 'user#me'
+        scope :my do
+          scope :accessibilities do
+            get 'searchable', to: 'user#my_search_abilities'
+            get 'crud/:uid', to: 'user#my_crud_abilities'
+            get 'projects/:uid', to: 'user#my_app_organizations'
+          end
         end
+        resources :oread_applications, only: [] do
+          post 'set_access_token', to: 'oread_access_tokens#create', on: :collection
+        end
+      # deprecated end
+
+      # People
+      resources :people, only: [:index, :show] do
+        get 'organizations', on: :member
+        get 'memberships', on: :member
+        get 'repositories', on: :member
       end
-      resources :oread_applications, only: [] do
-        post 'set_access_token', to: 'oread_access_tokens#create', on: :collection
+      resource :user, only: [:show], controller: 'user' do     # was get 'me', to: 'users#me'
+        get 'repositories', on: :member                        # was get 'searchable', to: 'users#my_search_abilities'
+        get 'organizations', on: :member
       end
-    # deprecated end
 
-    # People
-    resources :people, only: [:index, :show] do
-      get 'organizations', on: :member
-      get 'memberships', on: :member
-      get 'repositories', on: :member
-    end
-    resource :user, only: [:show], controller: 'user' do     # was get 'me', to: 'users#me'
-      get 'repositories', on: :member                        # was get 'searchable', to: 'users#my_search_abilities'
-      get 'organizations', on: :member
-    end
-
-    # Organizations
-    resources :organizations, only: [:index, :show] do
-      resources :members, only: [:index, :show]
-      resources :memberships, only: :show
-      get :search, on: :collection
-    end
-
-    # Collections
-    resources :collections, only: [:index, :show] do
-      get 'resources/:uid', to: 'collections#resource_host', on: :collection
-      resources :access_tokens, controller: 'collection_access_tokens', path: 'tokens' # was post 'set_access_token', to: 'oread_access_tokens#create'
-    end
-
-    # Applications
-    resources :applications, only: [:index, :show] do
-      collection do
-        resources :grants, controller: 'applications_grants'
+      # Organizations
+      resources :organizations, only: [:index, :show] do
+        resources :members, only: [:index, :show]
+        resources :memberships, only: :show
+        get :search, on: :collection
       end
-    end
-    resources :authorizations, controller: 'applications_authorizations' do
-      get 'clients/:uid', to: 'applications_authorizations#client', on: :collection
-    end
 
-    # Zensus
-    namespace :zensus do
-      resources :agents, only: [:index, :show] do
+      # Collections
+      resources :collections, only: [:index, :show] do
+        get 'resources/:uid', to: 'collections#resource_host', on: :collection
+        resources :access_tokens, controller: 'collection_access_tokens', path: 'tokens' # was post 'set_access_token', to: 'oread_access_tokens#create'
+      end
+
+      # Applications
+      resources :applications, only: [:index, :show] do
         collection do
-          resources :people, controller: 'agents', type: 'Zensus::Person'
-          resources :groups, controller: 'agents', type: 'Zensus::Group'
+          resources :grants, controller: 'applications_grants'
         end
       end
-      resources :events, only: [:index, :show]
-      resources :properties, only: [:index, :show]
-      resources :names, controller: 'appellations', only: [:index, :show, :create]
-    end
-
-    # locate
-    namespace :locate do
-      resources :places, only: [:index, :show]
-    end
-
-    # biblio
-
-    namespace :biblio, path: 'bibliography' do
-      resources :entries, only: :index
-      resources :series, type: 'Biblio::Serie'
-      resources :journals, type: 'Biblio::Journal'
-      resources :books, controller: 'entries', type: 'Biblio::Book', except: :index
-      resources :in_books, controller: 'entries', type: 'Biblio::InBook', except: :index
-      resources :collections, controller: 'entries', type: 'Biblio::Collection', except: :index
-      resources :in_collections, controller: 'entries', type: 'Biblio::InCollection', except: :index
-      resources :proceedings, controller: 'entries', type: 'Biblio::Proceeding', except: :index
-      resources :in_proceedings, controller: 'entries', type: 'Biblio::InProceeding', except: :index
-      resources :articles, controller: 'entries', type: 'Biblio::Article', except: :index
-      resources :miscs, controller: 'entries', type: 'Biblio::Misc', except: :index
-      resources :manuals, controller: 'entries', type: 'Biblio::Manual', except: :index
-      resources :booklets, controller: 'entries', type: 'Biblio::Booklet', except: :index
-      resources :mastertheses, controller: 'entries', type: 'Biblio::Masterthesis', except: :index
-      resources :phdtheses, controller: 'entries', type: 'Biblio::Phdthesis', except: :index
-      resources :techreports, controller: 'entries', type: 'Biblio::Techreport', except: :index
-      resources :unpublisheds, controller: 'entries', type: 'Biblio::Unpublished', except: :index
-    end
-
-
-    scope path: :search do
-      get '/', to: 'search#index'               # global
-      get :agents, to: 'zensus/agents#search'
-      get :events, to: 'zensus/events#search'
-      get :names, to: 'zensus/appellations#search'
-      get :concepts, to: 'vocab/concepts#search'
-    end
-
-    resources :identifiers, only: [:index, :show], path: 'boi', module: 'aggregation'
-
-    resources :namespaces, only: [], path: '' do
-      # vocab
-      namespace :vocab do
-        resources :schemes, only: [:index, :show] do
-          resources :concepts, only: [:index, :show]
-        end
-        get :concepts, to: 'concepts#full_index'
+      resources :authorizations, controller: 'applications_authorizations' do
+        get 'clients/:uid', to: 'applications_authorizations#client', on: :collection
       end
-      # repos
-      resources :repositories, only: [:index, :show] do
-        namespace :biblio, path: 'bibliography' do
-          resources :references, controller: 'referencations', only: :index, path: ''
-        end
-        namespace :aggregation, path: 'data' do
-          resources :events do
-            resources :commits, module: 'event'
-          end
-          resources :items, only: [:index, :show] do
-            resources :commits, module: 'item'
+
+      # Zensus
+      namespace :zensus do
+        resources :agents, only: [:index, :show] do
+          collection do
+            resources :people, controller: 'agents', type: 'Zensus::Person'
+            resources :groups, controller: 'agents', type: 'Zensus::Group'
           end
         end
+        resources :events, only: [:index, :show]
+        resources :properties, only: [:index, :show]
+        resources :names, controller: 'appellations', only: [:index, :show, :create]
       end
-    end
 
+      # locate
+      namespace :locate do
+        resources :places, only: [:index, :show]
+      end
+
+      # biblio
+
+      namespace :biblio, path: 'bibliography' do
+        resources :entries, only: :index
+        resources :series, type: 'Biblio::Serie'
+        resources :journals, type: 'Biblio::Journal'
+        resources :books, controller: 'entries', type: 'Biblio::Book', except: :index
+        resources :in_books, controller: 'entries', type: 'Biblio::InBook', except: :index
+        resources :collections, controller: 'entries', type: 'Biblio::Collection', except: :index
+        resources :in_collections, controller: 'entries', type: 'Biblio::InCollection', except: :index
+        resources :proceedings, controller: 'entries', type: 'Biblio::Proceeding', except: :index
+        resources :in_proceedings, controller: 'entries', type: 'Biblio::InProceeding', except: :index
+        resources :articles, controller: 'entries', type: 'Biblio::Article', except: :index
+        resources :miscs, controller: 'entries', type: 'Biblio::Misc', except: :index
+        resources :manuals, controller: 'entries', type: 'Biblio::Manual', except: :index
+        resources :booklets, controller: 'entries', type: 'Biblio::Booklet', except: :index
+        resources :mastertheses, controller: 'entries', type: 'Biblio::Masterthesis', except: :index
+        resources :phdtheses, controller: 'entries', type: 'Biblio::Phdthesis', except: :index
+        resources :techreports, controller: 'entries', type: 'Biblio::Techreport', except: :index
+        resources :unpublisheds, controller: 'entries', type: 'Biblio::Unpublished', except: :index
+      end
+
+
+      scope path: :search do
+        get '/', to: 'search#index'               # global
+        get :agents, to: 'zensus/agents#search'
+        get :events, to: 'zensus/events#search'
+        get :names, to: 'zensus/appellations#search'
+        get :concepts, to: 'vocab/concepts#search'
+      end
+
+      resources :identifiers, only: [:index, :show], path: 'boi', module: 'aggregation'
+
+      resources :namespaces, only: [], path: '' do
+        # vocab
+        namespace :vocab do
+          resources :schemes, only: [:index, :show] do
+            resources :concepts, only: [:index, :show]
+          end
+          get :concepts, to: 'concepts#full_index'
+        end
+        # repos
+        resources :repositories, only: [:index, :show] do
+          namespace :biblio, path: 'bibliography' do
+            resources :references, controller: 'referencations', only: :index, path: ''
+          end
+          namespace :aggregation, path: 'data' do
+            resources :events do
+              resources :commits, module: 'event'
+            end
+            resources :items, only: [:index, :show] do
+              resources :commits, module: 'item'
+            end
+          end
+        end
+      end
+#    end
   end
 
   # doorkeeper paths

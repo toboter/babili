@@ -8,9 +8,14 @@ Bundler.require(*Rails.groups)
 
 module Babili
   class Application < Rails::Application
+    # Initialize configuration defaults for originally generated Rails version.
+    config.load_defaults 5.0
+
     # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration should go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded.
+    # Application configuration can go into files in config/initializers
+    # -- all .rb files in that directory are automatically loaded after loading
+    # the framework and any gems in your application.
+
     config.active_job.queue_adapter = :sidekiq
     
     config.to_prepare do
@@ -22,16 +27,6 @@ module Babili
     
       # Only Authorized Applications
       Doorkeeper::AuthorizedApplicationsController.layout "settings"
-    end
-
-    # Rack::Cors provides support for Cross-Origin Resource Sharing (CORS) for Rack compatible web applications.
-    # This will allow GET, POST or OPTIONS requests from any origin on any resource.
-    # cf https://github.com/cyu/rack-cors
-    config.middleware.insert_before 0, Rack::Cors do
-      allow do
-        origins '*'
-        resource '*', :headers => :any, :methods => [:get, :post, :options]
-      end
     end
 
   end
