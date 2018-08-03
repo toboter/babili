@@ -80,7 +80,7 @@ class Vocab::Concept < ApplicationRecord
   end
 
   def api_uri
-    url_for([:api, scheme.namespace, :vocab, scheme, self])
+    url_for([:v1, scheme.namespace, :vocab, scheme, self])
   end
 
   # Hierarchy, Concept, GuideTerm? -> Collections
