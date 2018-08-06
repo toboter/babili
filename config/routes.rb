@@ -164,8 +164,10 @@ Rails.application.routes.draw do
   end
 
   constraints subdomain: 'api' do
+    get '/', to: redirect("/help/categories/api")
     scope module: 'api' do
       namespace :v1 do
+        get '/', to: redirect("/help/categories/api")
         # deprecated start
           get 'me', to: 'user#me'
           scope :my do
@@ -328,7 +330,7 @@ Rails.application.routes.draw do
       end
     end
   end
-  
+
   # end doorkeeper paths
 
   get '/contact', to: 'contact_messages#new'
