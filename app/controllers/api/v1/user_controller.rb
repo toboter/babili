@@ -26,7 +26,7 @@ module Api::V1
       def my_crud_abilities #applications_authorizations_client_url(uid)(user_permissions)
         application = Doorkeeper::Application.find_by_uid(params[:uid])
         grant = application.grants(current_user.person)
-        render json: grant, serializer: ApplicationsGrantSerializer
+        render json: grant, each_serializer: ApplicationsGrantSerializer
       end
 
       # /api/my/accessibilities/searchable
