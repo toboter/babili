@@ -292,21 +292,29 @@ Rails.application.routes.draw do
       # namespace :v2 do
       # end
     end
+    use_doorkeeper do
+      # use_doorkeeper :tokens, :authorizations
+      skip_controllers :applications, :authorized_applications
+    end
   end
 
   # doorkeeper paths
+  # tokens => api.host/...
+  # authorizations => api.host/...
+  # authorized_applications => /settings/oauth/authorized_applications
+  # applications => /settings/developer/oauth/applications
+
   scope 'oauth' do
     resources :applications, as: :oauth_application, only: [:destroy, :show], controller: 'doorkeeper/applications'
   end
-  use_doorkeeper do
-    skip_controllers :applications, :authorized_applications #tokens, authorizations
-  end
   scope path: '/settings' do
     use_doorkeeper do
+      # use_doorkeeper :authorized_applications
       skip_controllers :tokens, :applications, :authorizations
     end
     scope path: 'developer' do
       use_doorkeeper do
+        # use_doorkeeper :applications
         skip_controllers :authorizations, :tokens, :authorized_applications
       end
       scope :oauth do
@@ -320,6 +328,7 @@ Rails.application.routes.draw do
       end
     end
   end
+  
   # end doorkeeper paths
 
   get '/contact', to: 'contact_messages#new'
