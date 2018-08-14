@@ -1,173 +1,16 @@
 Rails.application.routes.draw do
-  require 'sidekiq/web'
-
-  namespace :vocab, path: :vocabularies do
-    get '/', to: 'home#index'
-    get '/search', to: 'search#index'
-    get '/search/terms', to: 'search#terms'
-  end
-
-  namespace :biblio, path: 'bibliography' do
-    get '/', to: 'home#index'
-    resources :entries, only: :index do
-       post :add_repositories, to: 'referencations#add_repository', on: :member
-    end
-    resources :series, type: 'Biblio::Serie'
-    resources :journals, type: 'Biblio::Journal'
-    resources :books, controller: 'entries', type: 'Biblio::Book', except: :index
-    resources :in_books, controller: 'entries', type: 'Biblio::InBook', except: :index
-    resources :collections, controller: 'entries', type: 'Biblio::Collection', except: :index
-    resources :in_collections, controller: 'entries', type: 'Biblio::InCollection', except: :index
-    resources :proceedings, controller: 'entries', type: 'Biblio::Proceeding', except: :index
-    resources :in_proceedings, controller: 'entries', type: 'Biblio::InProceeding', except: :index
-    resources :articles, controller: 'entries', type: 'Biblio::Article', except: :index
-    resources :miscs, controller: 'entries', type: 'Biblio::Misc', except: :index
-    resources :manuals, controller: 'entries', type: 'Biblio::Manual', except: :index
-    resources :booklets, controller: 'entries', type: 'Biblio::Booklet', except: :index
-    resources :mastertheses, controller: 'entries', type: 'Biblio::Masterthesis', except: :index
-    resources :phdtheses, controller: 'entries', type: 'Biblio::Phdthesis', except: :index
-    resources :techreports, controller: 'entries', type: 'Biblio::Techreport', except: :index
-    resources :unpublisheds, controller: 'entries', type: 'Biblio::Unpublished', except: :index
-    resource :import
-  end
-
-  namespace :zensus do
-    get '/', to: 'home#index'
-    get :search, to: 'search#index'
-    resources :names, controller: 'appellations'
-    resources :agents do
-      collection do
-        resources :people, controller: 'agents', type: 'Zensus::Person'
-        resources :groups, controller: 'agents', type: 'Zensus::Group'
-      end
-    end
-    resources :events do
-      resources :activities
-    end
-  end
-
-  namespace :locate do
-    get '/', to: 'home#index'
-    get '/search', to: 'search#index'
-    resources :places do
-      resources :locations
-    end
-  end
-
-  namespace :aggregation, path: 'data' do
-    get '/', to: 'home#index'
-    get '/search', to: 'search#index'
-    resources :identifiers, only: [:index, :show], path: 'boi'
-  end
-
-  devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}, :controllers => { :registrations => :registrations }
-  
-  get '/search', to: 'search#index'
-  get '/about', to: 'home#about'
-  get '/explore', to: 'home#explore'
-  get '/research', to: 'home#research'
-  get '/research/people', to: 'home#people', as: :people
-  get '/research/organizations', to: 'home#organizations', as: :organizations
-  get '/repositories', to: 'home#repositories'
-  get '/collections/applications', to: 'home#collections', as: :collections
-
-  namespace :oread, path: 'collections' do
-    resources :applications, only: :show
-  end
-
-  namespace :settings do
-    get '/', to: redirect("/settings/person")
-    resources :organizations, only: [:index, :new, :create, :edit, :update, :destroy] do
-      resources :memberships, only: [:create, :destroy]
-      resource :namespace, only: [:edit, :update], type: 'Organization', path_names: { edit: 'change' }
-    end
-    resource :person, only: [:edit, :update], path_names: { edit: '' } do
-      resource :namespace, only: [:edit, :update], type: 'Person', path_names: { edit: 'change' }
-    end
-    resource :security, only: :show do
-      resources :user_sessions, only: :destroy
-    end
-  end
-
-  scope path: '/settings' do
-    
-    devise_scope :user do
-      get "/account" => "devise/registrations#edit"
-    end
-
-    # '/security/revoke_user_session/', to: 'security#revoke_user_session', as: :settings_security_user_session_revoke
-    # get '/collections', to: 'oread/access_enrollments#index', as: :settings_collections
-    namespace :oread, as: :settings_oread do
-      resources :access_enrollments, only: [:index, :create, :destroy], as: :enrollments, path: 'enrollments' do
-        get 'restore_default', on: :collection
-      end
-      resources :oread_applications, only: [], as: :applications, path: 'applications' do
-        resources :access_tokens,
-        only: [:new, :create, :destroy], 
-        as: :tokens, 
-        path: 'tokens'
-      end
-    end
-
-    get '/admin', to: redirect("/settings/admin/users"), as: 'admin_settings'
-    scope path: 'admin' do
-      resources :users, only: [:index, :update] do
-        patch :approve, on: :member
-        patch :make_admin, on: :member
-      end
-      namespace :oread, as: :settings_admin_oread do
-        resources :applications, except: :show
-      end
-      namespace :cms, path: nil do
-        namespace :admin, path: nil do
-          resources :help_categories, except: :show do
-            put :move, on: :member
-          end
-          resources :blog_categories, except: :show
-        end
-      end 
-    end
-
-    get '/developer', to: redirect("/settings/developer/oauth/applications"), as: 'developer_settings'
-    scope path: 'developer' do
-      resources :personal_access_tokens, except: :show
-    end
-  end
-
-
-
-  namespace :cms, path: nil do
-    resources :blog_pages, path: :blog, only: :index
-    scope path: :blog do
-      resources :blog_categories, only: :show, path: 'categories' do
-        get 'all', on: :collection
-        get 'unpublished', to: 'blog_categories#unpublished_blogs', on: :collection
-      end
-      resources :blog_pages, path: '', except: :index
-    end
-    resources :help_pages, path: :help, only: [:index, :create]
-    scope path: :help do
-      resources :help_categories, only: :show, path: 'categories'
-      resources :help_pages, path: :articles, except: [:index, :create]
-    end
-    resources :novelities, path: :news, except: :show
-  end
-
-  authenticate :user, lambda { |u| u.is_admin } do
-    mount Sidekiq::Web => '/sidekiq'
-  end
-
   constraints subdomain: 'raw' do
-    scope module: 'raw' do
-      
+    scope module: 'raw', as: 'raw' do
+      get '/', to: redirect(subdomain: false, path: '/')
+      resources :file_uploads, path: '', except: :index
     end
   end
 
   constraints subdomain: 'api' do
-    get '/', to: redirect("/help/categories/api")
+    get '/', to: redirect(subdomain: false, path: "/help/categories/api")
     scope module: 'api' do
       namespace :v1 do
-        get '/', to: redirect("/help/categories/api")
+        get '/', to: redirect(subdomain: false, path: "/help/categories/api")
         # deprecated start
           get 'me', to: 'user#me'
           scope :my do
@@ -300,76 +143,250 @@ Rails.application.routes.draw do
     end
   end
 
-  # doorkeeper paths
-  # tokens => api.host/...
-  # authorizations => api.host/...
-  # authorized_applications => /settings/oauth/authorized_applications
-  # applications => /settings/developer/oauth/applications
+  constraints lambda { |r| r.subdomain != 'raw' && r.subdomain != 'api' } do
 
-  scope 'oauth' do
-    resources :applications, as: :oauth_application, only: [:destroy, :show], controller: 'doorkeeper/applications'
-  end
-  scope path: '/settings' do
-    use_doorkeeper do
-      # use_doorkeeper :authorized_applications
-      skip_controllers :tokens, :applications, :authorizations
+    # doorkeeper paths
+    # tokens => api.host/...
+    # authorizations => api.host/...
+    # authorized_applications => /settings/oauth/authorized_applications
+    # applications => /settings/developer/oauth/applications
+
+    scope 'oauth' do
+      resources :applications, as: :oauth_application, only: [:destroy, :show], controller: 'doorkeeper/applications'
     end
-    scope path: 'developer' do
+    scope path: '/settings' do
       use_doorkeeper do
-        # use_doorkeeper :applications
-        skip_controllers :authorizations, :tokens, :authorized_applications
+        # use_doorkeeper :authorized_applications
+        skip_controllers :tokens, :applications, :authorizations
       end
-      scope :oauth do
-        resources :applications, as: :oauth_application, except: [:destroy, :show] do
-          resources :oauth_accessibilities, 
-            except: :show, 
-            as: :accessibilities, 
-            path: 'accessibilities'
-          get 'send_accessibilities_to_clients', to: 'oauth_accessibilities#send_accessibilities_to_app'
+      scope path: 'developer' do
+        use_doorkeeper do
+          # use_doorkeeper :applications
+          skip_controllers :authorizations, :tokens, :authorized_applications
+        end
+        scope :oauth do
+          resources :applications, as: :oauth_application, except: [:destroy, :show] do
+            resources :oauth_accessibilities, 
+              except: :show, 
+              as: :accessibilities, 
+              path: 'accessibilities'
+            get 'send_accessibilities_to_clients', to: 'oauth_accessibilities#send_accessibilities_to_app'
+          end
         end
       end
     end
-  end
 
-  # end doorkeeper paths
+    # end doorkeeper paths
 
-  get '/contact', to: 'contact_messages#new'
-  post '/contacts', to: 'contact_messages#create'
+    require 'sidekiq/web'
 
-  root to: "home#index"
-  
-  resources :namespaces, only: :show, path: '' do
-    resources :members, only: :index
-    resources :applications
-    namespace :vocab, path: 'vocabularies' do
-      resources :schemes, path: '' do
-        get :search, to: 'concepts#index'
-        resources :concepts
+    concern :discussable do
+      namespace 'discussion', path: '' do
+        resources :threads, path: :discussions, controller: '/discussion/threads' do
+          member do
+            put 'close'
+            put 'toggle_lock'
+          end
+          resources :comments, controller: '/discussion/comments', except: [:index]
+        end
       end
     end
-    resources :repositories do
-      get :settings, on: :member
-      get :edit_topics, on: :member
-      put :update_topics, on: :member
-      namespace :biblio, path: 'bibliography' do
-        resources :references, controller: 'referencations', only: [:index, :destroy] do
-          post :add_entry, to: 'referencations#add_entry', on: :collection
+
+    namespace :vocab, path: :vocabularies do
+      get '/', to: 'home#index'
+      get '/search', to: 'search#index'
+      get '/search/terms', to: 'search#terms'
+    end
+
+    namespace :biblio, path: 'bibliography' do
+      get '/', to: 'home#index'
+      resources :entries, only: :index do
+        post :add_repositories, to: 'referencations#add_repository', on: :member
+      end
+      resources :series, type: 'Biblio::Serie'
+      resources :journals, type: 'Biblio::Journal'
+      resources :books, controller: 'entries', type: 'Biblio::Book', except: :index, concerns: :discussable
+      resources :in_books, controller: 'entries', type: 'Biblio::InBook', except: :index, concerns: :discussable
+      resources :collections, controller: 'entries', type: 'Biblio::Collection', except: :index, concerns: :discussable
+      resources :in_collections, controller: 'entries', type: 'Biblio::InCollection', except: :index, concerns: :discussable
+      resources :proceedings, controller: 'entries', type: 'Biblio::Proceeding', except: :index, concerns: :discussable
+      resources :in_proceedings, controller: 'entries', type: 'Biblio::InProceeding', except: :index, concerns: :discussable
+      resources :articles, controller: 'entries', type: 'Biblio::Article', except: :index, concerns: :discussable
+      resources :miscs, controller: 'entries', type: 'Biblio::Misc', except: :index, concerns: :discussable
+      resources :manuals, controller: 'entries', type: 'Biblio::Manual', except: :index, concerns: :discussable
+      resources :booklets, controller: 'entries', type: 'Biblio::Booklet', except: :index, concerns: :discussable
+      resources :mastertheses, controller: 'entries', type: 'Biblio::Masterthesis', except: :index, concerns: :discussable
+      resources :phdtheses, controller: 'entries', type: 'Biblio::Phdthesis', except: :index, concerns: :discussable
+      resources :techreports, controller: 'entries', type: 'Biblio::Techreport', except: :index, concerns: :discussable
+      resources :unpublisheds, controller: 'entries', type: 'Biblio::Unpublished', except: :index, concerns: :discussable
+      resource :import
+    end
+
+    namespace :zensus do
+      get '/', to: 'home#index'
+      get :search, to: 'search#index'
+      resources :names, controller: 'appellations'
+      resources :agents do
+        collection do
+          resources :people, controller: 'agents', type: 'Zensus::Person'
+          resources :groups, controller: 'agents', type: 'Zensus::Group'
         end
       end
-      namespace :aggregation, path: 'data' do
-        namespace :event, path: 'events' do
-          resources :upload_events, path: 'upload', only: [:new, :create]
-          # resources :list_transforms, only: [:new, :create] # gehört an lists/:id/transform
+      resources :events do
+        resources :activities
+      end
+    end
+
+    namespace :locate do
+      get '/', to: 'home#index'
+      get '/search', to: 'search#index'
+      resources :places do
+        resources :locations
+      end
+    end
+
+    namespace :aggregation, path: 'data' do
+      get '/', to: 'home#index'
+      get '/search', to: 'search#index'
+      resources :identifiers, only: [:index, :show], path: 'boi'
+    end
+
+    devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}, :controllers => { :registrations => :registrations }
+    
+    get '/search', to: 'search#index'
+    get '/about', to: 'home#about'
+    get '/explore', to: 'home#explore'
+    get '/research', to: 'home#research'
+    get '/research/people', to: 'home#people', as: :people
+    get '/research/organizations', to: 'home#organizations', as: :organizations
+    get '/repositories', to: 'home#repositories'
+    get '/collections/applications', to: 'home#collections', as: :collections
+
+    namespace :oread, path: 'collections' do
+      resources :applications, only: :show
+    end
+
+    namespace :settings do
+      get '/', to: redirect("/settings/person")
+      resources :organizations, only: [:index, :new, :create, :edit, :update, :destroy] do
+        resources :memberships, only: [:create, :destroy]
+        resource :namespace, only: [:edit, :update], type: 'Organization', path_names: { edit: 'change' }
+      end
+      resource :person, only: [:edit, :update], path_names: { edit: '' } do
+        resource :namespace, only: [:edit, :update], type: 'Person', path_names: { edit: 'change' }
+      end
+      resource :security, only: :show do
+        resources :user_sessions, only: :destroy
+      end
+    end
+
+    scope path: '/settings' do
+      
+      devise_scope :user do
+        get "/account" => "devise/registrations#edit"
+      end
+
+      # '/security/revoke_user_session/', to: 'security#revoke_user_session', as: :settings_security_user_session_revoke
+      # get '/collections', to: 'oread/access_enrollments#index', as: :settings_collections
+      namespace :oread, as: :settings_oread do
+        resources :access_enrollments, only: [:index, :create, :destroy], as: :enrollments, path: 'enrollments' do
+          get 'restore_default', on: :collection
         end
-        resources :events, only: [:index, :show, :destroy] do
-          put 'commit', on: :member, to: 'events#commit'
-        end
-        resources :items, only: [:index, :show] do 
-          resources :commits, only: [:index, :show]
+        resources :oread_applications, only: [], as: :applications, path: 'applications' do
+          resources :access_tokens,
+          only: [:new, :create, :destroy], 
+          as: :tokens, 
+          path: 'tokens'
         end
       end
-      resources :issues
-      resources :reports
+
+      get '/admin', to: redirect("/settings/admin/users"), as: 'admin_settings'
+      scope path: 'admin' do
+        resources :users, only: [:index, :update] do
+          patch :approve, on: :member
+          patch :make_admin, on: :member
+        end
+        namespace :oread, as: :settings_admin_oread do
+          resources :applications, except: :show
+        end
+        namespace :cms, path: nil do
+          namespace :admin, path: nil do
+            resources :help_categories, except: :show do
+              put :move, on: :member
+            end
+            resources :blog_categories, except: :show
+          end
+        end 
+      end
+
+      get '/developer', to: redirect("/settings/developer/oauth/applications"), as: 'developer_settings'
+      scope path: 'developer' do
+        resources :personal_access_tokens, except: :show
+      end
+    end
+
+
+
+    namespace :cms, path: nil do
+      resources :blog_pages, path: :blog, only: :index
+      scope path: :blog do
+        resources :blog_categories, only: :show, path: 'categories' do
+          get 'all', on: :collection
+          get 'unpublished', to: 'blog_categories#unpublished_blogs', on: :collection
+        end
+        resources :blog_pages, path: '', except: :index
+      end
+      resources :help_pages, path: :help, only: [:index, :create]
+      scope path: :help do
+        resources :help_categories, only: :show, path: 'categories'
+        resources :help_pages, path: :articles, except: [:index, :create]
+      end
+      resources :novelities, path: :news, except: :show
+    end
+
+    authenticate :user, lambda { |u| u.is_admin } do
+      mount Sidekiq::Web => '/sidekiq'
+    end
+
+
+
+    get '/contact', to: 'contact_messages#new'
+    post '/contacts', to: 'contact_messages#create'
+
+    root to: "home#index"
+    
+    resources :namespaces, only: :show, path: '' do
+      resources :members, only: :index
+      resources :applications
+      namespace :vocab, path: 'vocabularies' do
+        resources :schemes, path: '' do
+          get :search, to: 'concepts#index'
+          resources :concepts
+        end
+      end
+      resources :repositories, concerns: :discussable do
+        get :settings, on: :member
+        get :edit_topics, on: :member
+        put :update_topics, on: :member
+        namespace :biblio, path: 'bibliography' do
+          resources :references, controller: 'referencations', only: [:index, :destroy] do
+            post :add_entry, to: 'referencations#add_entry', on: :collection
+          end
+        end
+        namespace :aggregation, path: 'data' do
+          namespace :event, path: 'events' do
+            resources :upload_events, path: 'upload', only: [:new, :create]
+            # resources :list_transforms, only: [:new, :create] # gehört an lists/:id/transform
+          end
+          resources :events, only: [:index, :show, :destroy] do
+            put 'commit', on: :member, to: 'events#commit'
+          end
+          resources :items, only: [:index, :show] do 
+            resources :commits, only: [:index, :show]
+          end
+        end
+        resources :reports
+      end
     end
   end
 end

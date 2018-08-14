@@ -16,6 +16,8 @@ class Biblio::Entry < ApplicationRecord
   has_many :referencations, class_name: 'Biblio::Referencation', dependent: :destroy
   has_many :repositories, through: :referencations
 
+  has_many :threads, as: :discussable, class_name: 'Discussion::Thread'
+
   accepts_nested_attributes_for :referencations, reject_if: :all_blank, allow_destroy: true
 
   def self.types
@@ -121,6 +123,10 @@ class Biblio::Entry < ApplicationRecord
 
   def citation
     "#{citation_raw}#{numeric_to_alph(sequential_id) if sequential_id > 1 && !self.type.in?(['Biblio::Serie', 'Biblio::Journal'])}"
+  end
+
+  def name
+    citation
   end
 
   def bibliographic(style='apa', locale='de')

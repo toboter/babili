@@ -9,6 +9,7 @@ class Ability
     cannot :read, [CMS::HelpCategory, CMS::BlogCategory]
     cannot :read, CMS::BlogPage, published_at: nil
     cannot :read, Organization, private: true
+    cannot :read, Raw::FileUpload
 
     if user.approved?
       can :manage, :all
@@ -77,6 +78,21 @@ class Ability
         acc.in?(user.person.oauth_accessibilities) && user.person.oauth_accessibilities.where(oauth_application: acc.oauth_application).map{|a| a.can_manage }.include?(true)
       end
       can [:read], OauthAccessibility
+
+      cannot :manage, Discussion::Comment
+      can :manage, Discussion::Comment do |comment|
+        user.person == comment.author && !comment.thread.locked?
+      end
+      can :create, Discussion::Comment do |comment|
+        !comment.thread.locked?
+      end
+      can :read, Discussion::Comment
+
+      cannot :manage, Discussion::Thread
+      can [:update, :close, :toggle_lock, :destroy], Discussion::Thread do |thread|
+        user.person.in?(thread.moderators)
+      end
+      can [:read, :create], Discussion::Thread
       
     end
 

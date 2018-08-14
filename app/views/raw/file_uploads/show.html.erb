@@ -1,0 +1,13 @@
+<p id="notice"><%= notice %></p>
+
+<div>
+  <%= render @file_upload %>
+</div>
+<p>
+  <strong>Upload data:</strong>
+  <%= @file_upload.file_data %>
+</p>
+
+<p>by <%= @file_upload.uploader.name %>
+
+<%= link_to 'Remove', raw_file_upload_path(@file_upload), method: :delete, data: { confirm: 'Are you sure?' } %>

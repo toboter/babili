@@ -1,0 +1,26 @@
+<tr id="thread-<%= thread.id %>">
+  <td>
+    <%= content_tag :span, fa_stacked_icon(thread.current_state.last, base: "circle-o", class: 'pull-left text-small', style: 'margin-top: 3px;font-size:.7em;') %>
+    <%= content_tag :div, style: 'padding-left:30px;' do %>
+      <%= content_tag :h4, style: 'margin-top:3px; margin-bottom:5px;' do %>
+        <%= link_to [@namespace, thread.discussable, :discussion, thread] do %>
+          <%= content_tag :span, thread.title, class: 'text-strong' %>
+          <%= content_tag :span, "#{fa_icon('comments')} #{thread.comments_count}".html_safe, class: 'text-small pull-right', style: 'padding-right:20px;' if thread.comments_count > 1 %>
+        <% end %>
+      <% end %>
+      <%= content_tag :p, style: 'margin-bottom:2px;' do %>
+        <% if thread.current_state.first == 'open' %>
+          #<%= thread.sequential_id %>
+          <%= content_tag :span, 'opend' %>
+          on <%= content_tag :span, thread.created_at.to_date.to_formatted_s(:long), title: thread.created_at %>
+          by <%= link_to thread.author.name, thread.author.namespace %>
+        <% elsif thread.current_state.first == 'closed' %>
+          #<%= thread.sequential_id %>
+          by <%= link_to thread.author.name, thread.author.namespace %>
+          was <%= content_tag :span, 'closed' %>
+          <%= distance_of_time_in_words(thread.states.last.created_at, Time.now) %> ago
+        <% end %>
+      <% end %>
+    <% end %>
+  </td>
+</tr>

@@ -1,0 +1,7 @@
+  <div class="row">
+    <div class="col-sm-12">
+      Write a new comment on <%= link_to @thread.title, [@namespace, @thread.discussable, :discussion, @thread], class: 'text-strong' %>
+      <hr>
+      <%= render 'new', comment: @comment, remote: false %>
+    </div>
+  </div>

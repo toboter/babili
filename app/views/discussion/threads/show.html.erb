@@ -1,0 +1,68 @@
+<%= content_tag :div, class: "row" do %>
+  <div class="col-md-10">
+    <%= content_tag :h2, "#{@thread.title} #{content_tag :span, "##{@thread.sequential_id}", class: 'text-muted'}".html_safe, style: 'margin-top:0px;' %>
+    <%= content_tag :div do %>
+      <%= content_tag :h3, style: 'display:inline;' do %>
+        <%= content_tag :span, "#{fa_stacked_icon(@thread.current_state.last, base: "circle-o", style: 'font-size:.5em;')} #{content_tag :span, @thread.current_state.first.try(:capitalize), style: 'font-size:.9em;'}".html_safe, class: "label label-#{@thread.current_state.first == 'open' ? 'success' : 'danger'}" %>
+      <% end %>
+      <%= content_tag :div, class: 'text-gray', style: 'display: inline;' do %>
+        <%= link_to @thread.author.name, @thread.author.namespace, class: 'text-strong no-link' %>
+        opend this discussion 
+        <%= content_tag :span, "#{distance_of_time_in_words(@thread.created_at, Time.now)} ago", title: @thread.created_at %>
+        · <%= pluralize(@thread.comments_count, 'comment')%>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="col-md-2">
+    <%= link_to 'New Discussion', [:new, @namespace, @thread.discussable, :discussion, :thread], class: 'btn btn-default text-strong pull-right' if can?(:create, Discussion::Thread) %>
+  </div>
+<% end %>
+
+<div class="row --spacious-20">
+  <%= content_tag :div, class: 'col-md-3 col-md-push-9 sidebar' do %>
+    <div class="">
+    </div>
+    <div class="--spacious-20">
+      <div class="assignees">
+        <h5 class="text-strong text-gray text-small">Assignees</h5>
+        no one assigned <%= fa_icon('cog', class: 'pull-right')%>
+      </div>
+
+
+      
+      <div class="participants" style="border-top:1px solid #F5F5F5;margin-top:20px;padding-top:10px;">
+        <h5 class="text-strong text-gray text-small"><%= pluralize(@thread.participants.count, 'Participant') %></h5>
+        <% @thread.participants.each do |participant| %>
+          <%= link_to background_image_div(participant, :small_thumb, {class: 'media-object organization-member-avatar', style: 'height:20px;width:20px; background-position:center;'}), participant.namespace %>
+        <% end %>
+      </div>
+      <%= content_tag :div, class: "options", style: "border-top:1px solid #F5F5F5;margin-top:20px;padding-top:10px;" do %>
+        <ul class="text-strong text-gray text-small list-unstyled">
+          <%= content_tag :li, link_to((@thread.locked? ? fa_icon('unlock', text: 'Unlock discussion') : fa_icon('lock', text: 'Lock discussion')), [:toggle_lock, @namespace, @thread.discussable, :discussion, @thread], method: :put) if can?(:toggle_lock, @thread) %>
+          <%= content_tag :li, link_to(fa_icon('times', text: 'Remove discussion'), [@namespace, @thread.discussable, :discussion, @thread], method: :delete, remote: true, data: { confirm: 'Are you sure?' }) if can?(:destroy, @thread) %>
+          <%= content_tag :li, link_to(fa_icon('edit', text: 'Edit title'), [:edit, @namespace, @thread.discussable, :discussion, @thread]) if can?(:update, @thread) %>
+        </ul>
+      <% end if can?(:toggle_lock, @thread) || can?(:destroy, @thread) %>
+
+    </div>
+  <% end %>
+  <%= content_tag :div, class: 'col-md-9 col-md-pull-3 main' do %>
+    <%= content_tag :div, id: 'items' do %>
+      <% @items.each do |item| %>
+        <%= render item %>
+      <% end %>
+    <% end %>
+
+    <hr>
+    <%= render 'discussion/comments/new', comment: @thread.comments.build, remote: true if can?(:create, @thread.comments.build) %>
+
+    <%= simple_form_for [:close, @namespace, @thread.discussable, :discussion, @thread], method: :put do |f| %>
+      <hr>
+      <%= f.submit 'Close this discussion', class: 'btn btn-default text-strong pull-right' %>
+    <% end if can?(:close, @thread) %>
+    
+    <div id="pagination-results">
+    </div>
+
+  <% end %>
+</div>

@@ -19,6 +19,12 @@ gem 'jbuilder', '~> 2.5'
 # gem 'capistrano-rails', group: :development
 
 gem 'mini_magick', '~> 4.8'
+gem 'image_processing', '~> 1.2'
+gem 'down'
+gem 'shrine'
+gem 'marcel'
+gem 'fastimage'
+gem 'exiftool_vendored'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'rack-cors', require: 'rack/cors'
 gem 'active_model_serializers', '~> 0.10.0'
@@ -51,52 +57,48 @@ gem "font-awesome-rails"
 gem 'simple_form'
 gem 'will_paginate-bootstrap'
 gem 'cocoon'
+gem 'toastr-rails'
 
-gem 'redcarpet'
 gem 'acts_as_list'
 gem 'closure_tree'
-gem 'toastr-rails'
+gem 'acts_as_dag', git: 'https://github.com/toboter/acts_as_dag.git'
+# gem 'acts_as_dag', path: '/home/tschmidt/dev/gem_dev/acts_as_dag'
+gem 'acts-as-taggable-on'
+gem 'sequenced'
+# gem "jsonb_accessor", "~> 1.0.0"
+# gem 'json_attribute', git: 'https://github.com/jrochkind/json_attribute.git'
+gem 'attr_json'
+
+gem 'searchkick'
+gem 'redcarpet'
 gem 'friendly_id'
 gem 'browser'
-gem 'shrine'
-gem 'image_processing'
-gem 'fastimage'
-gem 'down'
 gem 'rails-bootstrap-markdown'
 gem 'geo_pattern'  # https://github.com/jasonlong/geo_pattern
 gem 'inline_svg'   # https://github.com/jamesmartin/inline_svg
 gem "selectize-rails"
 gem 'chronic'
-gem 'searchkick'
 gem "rgeo"
 gem "rgeo-proj4"
-gem 'acts-as-taggable-on'
 gem 'roo'
 gem 'activerecord-import'
 gem 'xml-to-json'
 gem 'hashdiff'
-gem 'sequenced'
 gem 'citeproc-ruby'
 gem 'csl-styles'
 gem 'unicode_utils'
 gem 'bibtex-ruby'
 gem 'namae'
-
 gem 'rest-client'
 gem 'sidekiq'
 gem 'sinatra', git: 'https://github.com/sinatra/sinatra.git'
 gem 'sparql-client'
 gem 'linkeddata'
-gem 'acts_as_dag', git: 'https://github.com/toboter/acts_as_dag.git'
-# gem 'acts_as_dag', path: '/home/tschmidt/dev/gem_dev/acts_as_dag'
 gem 'language_list'
 gem 'hashie'
-# gem "jsonb_accessor", "~> 1.0.0"
-# gem 'json_attribute', git: 'https://github.com/jrochkind/json_attribute.git'
-gem 'attr_json'
 gem 'trix'
 gem "recaptcha", require: "recaptcha/rails"
 
-source 'http://insecure.rails-assets.org' do
+source 'https://rails-assets.org' do
   gem 'rails-assets-dropzone'
 end

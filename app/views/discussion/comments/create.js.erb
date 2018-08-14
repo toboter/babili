@@ -1,0 +1,3 @@
+toastr["success"]("Comment created.");
+$("<%= escape_javascript(render @comment) %>").appendTo("#items");
+$("#discussion-comment-new").replaceWith("<%= escape_javascript(render 'discussion/comments/new', comment: @thread.comments.build, remote: true) %>");
