@@ -112,6 +112,9 @@ module Discussion
 
     def search_data
       {
+        created_at: created_at,
+        updated_at: updated_at,
+        comments_count: comments_count,
         discussable_type: discussable_type,
         discussable_id: discussable_id,
         title: title,
@@ -121,6 +124,31 @@ module Discussion
         # assignee:
         # mentions:
       }
+    end
+
+    def self.sorted_by(sort_option)
+      direction = ((sort_option =~ /desc$/) ? 'desc' : 'asc').to_sym
+      case sort_option.to_s
+      when /^created_/
+        { created_at: direction }
+      when /^comments_/
+        { comments_count: direction }
+      when /^updated_/
+        { updated_at: direction }
+      else
+        raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
+      end
+    end
+  
+    def self.options_for_sorted_by
+      [
+        ['Newest', 'created_desc'],
+        ['Oldest', 'created_asc'],
+        ['Most commented', 'comments_desc'],
+        ['Least commented', 'comments_asc'],
+        ['Recently updated', 'updated_desc'],
+        ['Least recently updated', 'updated_asc']
+      ]
     end
 
   end

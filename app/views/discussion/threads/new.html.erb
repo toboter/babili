@@ -1,9 +1,6 @@
   <div class="row">
-    <div class="col-sm-12">
+    <div class="col-md-9">
       <%= simple_form_for [@namespace, @thread.discussable, :discussion, @thread] do |f| %>
-        <%= f.error_notification %>
-        <%= f.input :title %>
-
         <div class="media" id="discussion-comment-new">
           <div class="media-left">
             <%= link_to current_user.person.namespace do %>
@@ -11,17 +8,26 @@
             <% end %>
           </div>
           <div class="media-body">
-            <%= f.simple_fields_for :comments, f.object.comments.build do |c| %>
-              <%= c.simple_fields_for :versions, c.object.versions.build do |v| %>
-                <%= v.input :body, label: false, as: :hidden, input_html: { id: 'comment_body' } %>
-              <% end %>
-            <% end %>
-            <trix-editor input='comment_body'></trix-editor>
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <%= f.error_notification %>
+                <%= f.input :title, label: false, placeholder: 'Title', autofocus: true %>
+                <%= f.simple_fields_for :comments, f.object.comments.build do |c| %>
+                  <%= c.simple_fields_for :versions, c.object.versions.build do |v| %>
+                    <%= v.input :body, label: false, as: :hidden, input_html: { id: 'comment_body' } %>
+                  <% end %>
+                <% end %>
+                <div class="--spacious-20">
+                  <trix-editor input='comment_body' placeholder="Leave a comment"></trix-editor>
+                </div>
+                <div class="actions --spacious-10">
+                  <%= f.submit class: 'btn btn-success pull-right text-strong' %>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="actions --spacious-20">
-          <%= f.submit class: 'btn btn-success pull-right text-strong' %>
-           </div>
+
       <% end %>
     </div>
   </div>

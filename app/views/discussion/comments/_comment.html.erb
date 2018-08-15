@@ -11,8 +11,9 @@
         <%= content_tag :span, class: 'text-gray' do %>
           commented on <%= link_to comment.created_at.to_date.to_formatted_s(:long), [@namespace, @thread.discussable, :discussion, @thread, anchor: "discussion-comment-#{comment.id}"], title: comment.created_at, class: 'no-link' %>
           <%= content_tag :div, class: "dropdown", style: "display:inline;" do %>
-            <a class="dropdown-toggle no-link" id="comment-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              • edited
+            • 
+            <a class="dropdown-toggle no-link" id="comment-options" style="cursor: pointer;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              edited
               <%= fa_icon('caret-down') %>
             </a>
             <ul class="dropdown-menu" aria-labelledby="comment-options">
@@ -27,7 +28,7 @@
       <div class="panel-heading-right pull-right">
         <%= content_tag :span, comment.author_role, class: 'label label-panel-heading', title: "The person is #{comment.author_role.try(:downcase)} of #{comment.thread.discussable.name}." %>
         <%= content_tag :div, class: "dropdown", style: "display:inline;" do %>
-          <a class="dropdown-toggle no-link" id="comment-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <a class="dropdown-toggle no-link" id="comment-options" style="cursor: pointer;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             ...
           </a>
           <ul class="dropdown-menu" aria-labelledby="comment-options">

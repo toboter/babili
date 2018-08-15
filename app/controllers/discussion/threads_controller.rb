@@ -25,14 +25,15 @@ module Discussion
     def index
       parent = @entry.presence || @repository
       query = params[:q].presence || '*'
-      #sorted_by = params[:sorted_by] ||= (params[:q].present? ? 'score_desc' : 'year_asc')
-      #sort_order = Biblio::Entry.sorted_by(sorted_by) if @all_entries.any?
+      sorted_by = params[:sorted_by] ||= 'created_desc'
+      sort_order = Discussion::Thread.sorted_by(sorted_by) if @threads.any?
   
       per_page = current_user.try(:person).try(:per_page).present? ? current_user.person.per_page : DEFAULT_PER_PAGE
   
       @results = Discussion::Thread.search(query, 
         fields: [:is, :title, :author],
-        where: { discussable_type: parent.class.name, discussable_id: parent.id },
+        where: { discussable_type: parent.class.base_class.name, discussable_id: parent.id },
+        order: sort_order,
         page: params[:page], 
         per_page: per_page
         ) do |body|
@@ -52,6 +53,10 @@ module Discussion
     end
 
     def edit
+      respond_to do |format|
+        format.html { render layout: 'repo' if @repository.present? }
+        format.js
+      end
     end
 
     def create
@@ -80,6 +85,7 @@ module Discussion
         else
           format.html { render :edit }
           format.json { render json: @thread.errors, status: :unprocessable_entity }
+          format.js
         end
       end
     end

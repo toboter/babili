@@ -1,6 +1,6 @@
 <%= content_tag :div, class: "row" do %>
   <div class="col-md-10">
-    <%= content_tag :h2, "#{@thread.title} #{content_tag :span, "##{@thread.sequential_id}", class: 'text-muted'}".html_safe, style: 'margin-top:0px;' %>
+    <%= content_tag :h2, "#{@thread.title} #{content_tag :span, "##{@thread.sequential_id}", class: 'text-muted'}".html_safe, style: 'margin-top:0px;', id: 'title' %>
     <%= content_tag :div do %>
       <%= content_tag :h3, style: 'display:inline;' do %>
         <%= content_tag :span, "#{fa_stacked_icon(@thread.current_state.last, base: "circle-o", style: 'font-size:.5em;')} #{content_tag :span, @thread.current_state.first.try(:capitalize), style: 'font-size:.9em;'}".html_safe, class: "label label-#{@thread.current_state.first == 'open' ? 'success' : 'danger'}" %>
@@ -38,9 +38,9 @@
       </div>
       <%= content_tag :div, class: "options", style: "border-top:1px solid #F5F5F5;margin-top:20px;padding-top:10px;" do %>
         <ul class="text-strong text-gray text-small list-unstyled">
-          <%= content_tag :li, link_to((@thread.locked? ? fa_icon('unlock', text: 'Unlock discussion') : fa_icon('lock', text: 'Lock discussion')), [:toggle_lock, @namespace, @thread.discussable, :discussion, @thread], method: :put) if can?(:toggle_lock, @thread) %>
-          <%= content_tag :li, link_to(fa_icon('times', text: 'Remove discussion'), [@namespace, @thread.discussable, :discussion, @thread], method: :delete, remote: true, data: { confirm: 'Are you sure?' }) if can?(:destroy, @thread) %>
-          <%= content_tag :li, link_to(fa_icon('edit', text: 'Edit title'), [:edit, @namespace, @thread.discussable, :discussion, @thread]) if can?(:update, @thread) %>
+          <%= content_tag :li, link_to((@thread.locked? ? fa_icon('unlock fw', text: 'Unlock discussion') : fa_icon('lock fw', text: 'Lock discussion')), [:toggle_lock, @namespace, @thread.discussable, :discussion, @thread], method: :put) if can?(:toggle_lock, @thread) %>
+          <%= content_tag :li, link_to(fa_icon('times fw', text: 'Remove discussion'), [@namespace, @thread.discussable, :discussion, @thread], method: :delete, remote: true, data: { confirm: 'Are you sure?' }) if can?(:destroy, @thread) %>
+          <%= content_tag :li, link_to(fa_icon('edit fw', text: 'Edit title'), [:edit, @namespace, @thread.discussable, :discussion, @thread], remote: true), id: 'edit-title-link' if can?(:update, @thread) %>
         </ul>
       <% end if can?(:toggle_lock, @thread) || can?(:destroy, @thread) %>
 

@@ -5,15 +5,19 @@
     <% end %>
   </div>
   <div class="media-body">
-    <%= simple_form_for [@namespace, @thread.discussable, :discussion, @thread, comment], remote: remote do |f| %>
-      <%= f.error_notification %>
-      <%= f.simple_fields_for :versions, f.object.versions.build do |v| %>
-        <%= v.input :body, label: false, as: :hidden, input_html: { id: 'comment_body' } %>
-      <% end %>
-      <trix-editor input='comment_body'></trix-editor>
-      <div class="actions --spacious-20">
-        <%= f.submit 'Comment', class: 'btn btn-success pull-right text-strong' %>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <%= simple_form_for [@namespace, @thread.discussable, :discussion, @thread, comment], remote: remote do |f| %>
+          <%= f.error_notification %>
+          <%= f.simple_fields_for :versions, f.object.versions.build do |v| %>
+            <%= v.input :body, label: false, as: :hidden, input_html: { id: 'comment_body' } %>
+          <% end %>
+          <trix-editor input='comment_body' placeholder="Leave a comment"></trix-editor>
+          <div class="actions --spacious-10">
+            <%= f.submit 'Comment', class: 'btn btn-success pull-right text-strong' %>
+          </div>
+        <% end %>
       </div>
-    <% end %>
+    </div>
   </div>
 </div>
