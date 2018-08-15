@@ -1,6 +1,6 @@
 module Discussion
   class ThreadsController < ApplicationController
-    DEFAULT_PER_PAGE = 50
+    DEFAULT_PER_PAGE = 1
     load_resource :namespace
     load_resource :repository
 

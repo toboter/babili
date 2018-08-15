@@ -39,10 +39,10 @@
       <%= content_tag :div, class: "options", style: "border-top:1px solid #F5F5F5;margin-top:20px;padding-top:10px;" do %>
         <ul class="text-strong text-gray text-small list-unstyled">
           <%= content_tag :li, link_to((@thread.locked? ? fa_icon('unlock fw', text: 'Unlock discussion') : fa_icon('lock fw', text: 'Lock discussion')), [:toggle_lock, @namespace, @thread.discussable, :discussion, @thread], method: :put) if can?(:toggle_lock, @thread) %>
-          <%= content_tag :li, link_to(fa_icon('times fw', text: 'Remove discussion'), [@namespace, @thread.discussable, :discussion, @thread], method: :delete, remote: true, data: { confirm: 'Are you sure?' }) if can?(:destroy, @thread) %>
+          <%= content_tag :li, link_to(fa_icon('times fw', text: 'Remove discussion'), [@namespace, @thread.discussable, :discussion, @thread], method: :delete, data: { confirm: 'Are you sure?' }) if can?(:destroy, @thread) %>
           <%= content_tag :li, link_to(fa_icon('edit fw', text: 'Edit title'), [:edit, @namespace, @thread.discussable, :discussion, @thread], remote: true), id: 'edit-title-link' if can?(:update, @thread) %>
         </ul>
-      <% end if can?(:toggle_lock, @thread) || can?(:destroy, @thread) %>
+      <% end if can?(:toggle_lock, @thread) || can?(:destroy, @thread) || can?(:update, @thread) %>
 
     </div>
   <% end %>

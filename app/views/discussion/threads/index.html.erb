@@ -2,7 +2,7 @@
   <div class="col-md-5">
     <%= form_tag [@namespace, @repository, @entry, :discussion, :threads], method: :get, class: "" do %>
       <%= search_field_tag 'q', params[:q], placeholder: "Search discussions", class: "form-control", autofocus: true %>
-      <%= hidden_field_tag 'sort_by', params[:sort_by] if params[:sort_by] %>
+      <%= hidden_field_tag 'sorted_by', params[:sorted_by] if params[:sort_by] %>
     <% end %>
     <%= content_tag :div, style: 'margin-top:10px;' do %>
       <%= link_to fa_stacked_icon('inverse times', base: 'square', text: 'Clear current search query, and sorts', style: 'font-size:.6em;'), [@namespace, @repository, @entry, :discussion, :threads], class: 'no-link text-strong text-small', style: 'color:#565656;' %>
@@ -37,7 +37,7 @@
                 <%= content_tag :li, "Sort by", class: 'dropdown-header', style: 'margin-left:10px;' %>
                 <% Discussion::Thread.options_for_sorted_by.each do |sort_option| %>
                   <%= content_tag :li do %>
-                    <%= link_to("#{fa_icon((params[:sort_by] == sort_option.last) ? 'check' : '', style: 'margin-left:-10px;width:2rem;')}#{sort_option.first}".html_safe, [@namespace, @repository, @entry, :discussion, :threads, sort_by: sort_option.last, q: params[:q]]) %>
+                    <%= link_to("#{fa_icon((params[:sorted_by] == sort_option.last) ? 'check' : '', style: 'margin-left:-10px;width:2rem;')}#{sort_option.first}".html_safe, [@namespace, @repository, @entry, :discussion, :threads, sorted_by: sort_option.last, q: params[:q]]) %>
                   <% end %>
                 <% end %>
               </ul>
@@ -52,6 +52,7 @@
       </table>
     </div>
     <div id="pagination-results">
+      <%= will_paginate @results, renderer: BootstrapPagination::Rails %>
     </div>
   </div>
 </div>
