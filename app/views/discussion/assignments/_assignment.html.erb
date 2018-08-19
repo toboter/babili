@@ -1,0 +1,5 @@
+<li class="list-group-item" id="thread-assignment-<%= assignment.id %>">
+  <%= background_image_div(assignment.assignee.subclass, :small_thumb, {class: 'media-object organization-member-avatar', style: 'height:20px;width:20px; background-position:center;'}) %>
+  <%= assignment.assignee.subclass.name %>
+  <%= link_to fa_icon('times'), [@namespace, @thread.discussable, :discussion, @thread, assignment], remote: remote, method: :delete, data: { confirm: 'Are you sure?' }, class: 'pull-right', title: 'remove' if can?(:destroy, assignment) %>
+</li>

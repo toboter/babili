@@ -1,2 +1,0 @@
-module Raw::FileUploadsHelper
-end

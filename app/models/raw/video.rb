@@ -8,4 +8,8 @@ module  Raw
       video/webm
     ]
   end
+  
+  def default_url
+    file.url
+  end
 end

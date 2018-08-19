@@ -11,7 +11,7 @@ module Discussion
     belongs_to :thread, touch: true
     belongs_to :setter, class_name: 'Person'
 
-    TYPES = %w(open close lock)
+    TYPES = %w(open close lock unlock)
 
   end
 end

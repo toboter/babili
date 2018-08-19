@@ -194,15 +194,15 @@ ActiveRecord::Schema.define(version: 2018_08_10_114252) do
     t.index ["slug"], name: "index_cms_help_categories_on_slug", unique: true
   end
 
-  create_table "discussion_assignees", force: :cascade do |t|
+  create_table "discussion_assignments", force: :cascade do |t|
     t.integer "thread_id"
-    t.integer "namespace_id"
+    t.integer "assignee_id"
     t.integer "assigner_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["assigner_id"], name: "index_discussion_assignees_on_assigner_id"
-    t.index ["namespace_id"], name: "index_discussion_assignees_on_namespace_id"
-    t.index ["thread_id"], name: "index_discussion_assignees_on_thread_id"
+    t.index ["assignee_id"], name: "index_discussion_assignments_on_assignee_id"
+    t.index ["assigner_id"], name: "index_discussion_assignments_on_assigner_id"
+    t.index ["thread_id"], name: "index_discussion_assignments_on_thread_id"
   end
 
   create_table "discussion_comments", force: :cascade do |t|
@@ -213,25 +213,6 @@ ActiveRecord::Schema.define(version: 2018_08_10_114252) do
     t.datetime "updated_at", null: false
     t.index ["author_id"], name: "index_discussion_comments_on_author_id"
     t.index ["thread_id"], name: "index_discussion_comments_on_thread_id"
-  end
-
-  create_table "discussion_mentionees", force: :cascade do |t|
-    t.integer "comment_id"
-    t.integer "namespace_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["comment_id"], name: "index_discussion_mentionees_on_comment_id"
-    t.index ["namespace_id"], name: "index_discussion_mentionees_on_namespace_id"
-  end
-
-  create_table "discussion_references", force: :cascade do |t|
-    t.integer "comment_id"
-    t.integer "referenceabel_id"
-    t.string "referenceable_type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["comment_id"], name: "index_discussion_references_on_comment_id"
-    t.index ["referenceabel_id", "referenceable_type"], name: "index_discussion_references_on_referenceabel"
   end
 
   create_table "discussion_states", force: :cascade do |t|
@@ -352,6 +333,18 @@ ActiveRecord::Schema.define(version: 2018_08_10_114252) do
     t.integer "person_id"
     t.index ["organization_id"], name: "index_memberships_on_organization_id"
     t.index ["person_id"], name: "index_memberships_on_person_id"
+  end
+
+  create_table "mentions", force: :cascade do |t|
+    t.integer "mentionable_id"
+    t.string "mentionable_type"
+    t.integer "mentionee_id"
+    t.integer "mentioner_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["mentionable_id", "mentionable_type"], name: "index_mentions_on_mentionable_id_and_mentionable_type"
+    t.index ["mentionee_id"], name: "index_mentions_on_mentionee_id"
+    t.index ["mentioner_id"], name: "index_mentions_on_mentioner_id"
   end
 
   create_table "namespaces", force: :cascade do |t|
@@ -523,6 +516,19 @@ ActiveRecord::Schema.define(version: 2018_08_10_114252) do
     t.index ["file_signature"], name: "index_raw_file_uploads_on_file_signature"
     t.index ["slug"], name: "index_raw_file_uploads_on_slug"
     t.index ["type"], name: "index_raw_file_uploads_on_type"
+  end
+
+  create_table "references", force: :cascade do |t|
+    t.integer "referencing_id"
+    t.string "referencing_type"
+    t.integer "referenceable_id"
+    t.string "referenceable_type"
+    t.integer "referencor_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["referenceable_id", "referenceable_type"], name: "index_references_on_referenceable_id_and_referenceable_type"
+    t.index ["referencing_id", "referencing_type"], name: "index_references_on_referencing_id_and_referencing_type"
+    t.index ["referencor_id"], name: "index_references_on_referencor_id"
   end
 
   create_table "repositories", force: :cascade do |t|

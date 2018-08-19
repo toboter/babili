@@ -21,7 +21,8 @@ module Discussion
 
     belongs_to :discussable, polymorphic: true
     belongs_to :author, class_name: 'Person'
-    has_many :assignees, dependent: :destroy
+    has_many :assignments, dependent: :destroy
+    has_many :assignees, through: :assignments
     has_many :comments, dependent: :destroy
     has_many :states, dependent: :destroy
     has_many :titles, dependent: :destroy
@@ -68,7 +69,7 @@ module Discussion
     def moderators # gives an array of people who are allowed to do changes on the thread object
       mods = []
       mods << author
-      # mods << assignees
+      mods << assignees.map(&:accessors)
       if discussable_type == 'Repository'
         if discussable.owner.subclass.class.name == 'Person'
           mods << discussable.owner.accessors

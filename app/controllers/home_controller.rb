@@ -33,6 +33,10 @@ class HomeController < ApplicationController
 
   def people
     @people = Person.order(family_name: :asc)
+    respond_to do |format|
+      format.html
+      format.json { render json: @people, each_serializer: PeopleSerializer  }
+    end
   end
 
   def organizations

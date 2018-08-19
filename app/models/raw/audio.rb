@@ -8,4 +8,8 @@ module  Raw
       audio/webm
     ]
   end
+
+  def default_url
+    file.url
+  end
 end

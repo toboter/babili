@@ -1,6 +1,6 @@
 <h1>New Upload</h1>
 
-<%= simple_form_for(@file_upload, url: raw_file_uploads_path, as: :raw_file_upload) do |f| %>
+<%= simple_form_for(@file_upload, url: raw_file_uploads_path, as: :upload) do |f| %>
   <% if @file_upload.errors.any? %>
       <div id="error_explanation">
         <h2><%= pluralize(@file_upload.errors.count, "error") %> prohibited this upload from being saved:</h2>

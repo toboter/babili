@@ -1,21 +1,43 @@
 class CreateDiscussion < ActiveRecord::Migration[5.2]
   def change
-    create_table :discussion_assignees do |t|
-      t.integer     :thread_id
-      t.integer     :namespace_id
-      t.integer     :assigner_id
-
+    create_table :mentions do |t|
+      t.integer     :mentionable_id
+      t.string      :mentionable_type
+      t.integer     :mentionee_id #namespace
+      t.integer     :mentioner_id
       t.timestamps
     end
-    add_index :discussion_assignees, :thread_id
-    add_index :discussion_assignees, :namespace_id
-    add_index :discussion_assignees, :assigner_id
+    add_index :mentions, [:mentionable_id, :mentionable_type]
+    add_index :mentions, :mentionee_id
+    add_index :mentions, :mentioner_id
+  
+    create_table :references do |t|
+      t.integer     :referencing_id
+      t.string      :referencing_type
+      t.integer     :referenceable_id
+      t.string      :referenceable_type
+      t.integer     :referencor_id
+      t.timestamps
+    end
+    add_index :references, [:referencing_id, :referencing_type]
+    add_index :references, [:referenceable_id, :referenceable_type]
+    add_index :references, :referencor_id
+
+      
+    create_table :discussion_assignments do |t|
+      t.integer     :thread_id
+      t.integer     :assignee_id
+      t.integer     :assigner_id
+      t.timestamps
+    end
+    add_index :discussion_assignments, :thread_id
+    add_index :discussion_assignments, :assignee_id
+    add_index :discussion_assignments, :assigner_id
 
     create_table :discussion_comments do |t|
       t.integer     :thread_id
       t.integer     :author_id
       t.integer     :versions_count, default: 0
-
       t.timestamps
     end
     add_index :discussion_comments, :thread_id
@@ -25,31 +47,11 @@ class CreateDiscussion < ActiveRecord::Migration[5.2]
       t.integer     :thread_id
       t.integer     :setter_id
       t.string      :content, default: 'open'
-
       t.timestamps
     end
     add_index :discussion_states, :thread_id
     add_index :discussion_states, :setter_id
     add_index :discussion_states, :content
-
-    create_table :discussion_mentionees do |t|
-      t.integer     :comment_id
-      t.integer     :namespace_id
-
-      t.timestamps
-    end
-    add_index :discussion_mentionees, :comment_id
-    add_index :discussion_mentionees, :namespace_id
-
-    create_table :discussion_references do |t|
-      t.integer     :comment_id
-      t.integer     :referenceabel_id
-      t.string      :referenceable_type
-
-      t.timestamps
-    end
-    add_index :discussion_references, :comment_id
-    add_index :discussion_references, [:referenceabel_id, :referenceable_type], name: 'index_discussion_references_on_referenceabel'
 
     create_table :discussion_threads do |t|
       t.integer     :discussable_id
@@ -58,7 +60,6 @@ class CreateDiscussion < ActiveRecord::Migration[5.2]
       t.integer     :sequential_id, null: false
       t.string      :state
       t.integer     :comments_count, default: 0
-
       t.timestamps
     end
     add_index :discussion_threads, [:discussable_id, :discussable_type]
@@ -71,7 +72,6 @@ class CreateDiscussion < ActiveRecord::Migration[5.2]
       t.integer     :author_id
       t.string      :content
       t.string      :changed_content
-
       t.timestamps
     end
     add_index :discussion_titles, :thread_id
@@ -80,7 +80,6 @@ class CreateDiscussion < ActiveRecord::Migration[5.2]
     create_table :discussion_versions do |t|
       t.integer     :comment_id
       t.text        :body
-
       t.timestamps
     end
     add_index :discussion_versions, :comment_id

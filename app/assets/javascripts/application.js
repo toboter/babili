@@ -15,10 +15,11 @@
 //= require jquery_ujs
 //= require toastr
 //= require bootstrap-markdown-bundle
+//= require trix
 //= require cocoon
 //= require dropzone
 //= require selectize
-//= require trix
+//= require jquery.atwho
 //= require bootstrap
 //= require turbolinks
 //= require turbolinks-compatibility

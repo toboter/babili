@@ -3,6 +3,15 @@ module ApplicationHelper
     content_for(:title) { h(page_title.to_s) }
     @show_title = show_title
   end
+
+  def commentify(content)
+    pipeline_context = { whitelist: Sanitize::Config::RELAXED }
+    pipeline = HTML::Pipeline.new [
+      # HTML::Pipeline::MarkdownFilter,
+      HTML::Pipeline::SanitizationFilter
+    ], pipeline_context
+    pipeline.call(content)[:output].to_s.html_safe
+  end
  
   def markdown(text)
     renderer = Redcarpet::Render::HTML.new(hard_wrap: true, filter_html: false, with_toc_data: true)

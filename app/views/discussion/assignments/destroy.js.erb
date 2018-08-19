@@ -1,0 +1,3 @@
+toastr["success"]("Removed assignee from <%= @thread.title %>!");
+$("#thread-assignment-<%= @assignment.id %>").fadeOut();
+$("#new_assignment").replaceWith("<%= escape_javascript(render 'new', assignment: @thread.assignments.build(assigner_id: current_user.person.id), assignees: @assignees, remote: true) if can?(:assign, @thread) %>");

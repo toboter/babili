@@ -1,9 +1,7 @@
 Rails.application.routes.draw do
-  constraints subdomain: 'raw' do
-    scope module: 'raw', as: 'raw' do
-      get '/', to: redirect(subdomain: false, path: '/')
-      resources :file_uploads, path: '', except: :index
-    end
+  namespace :raw do
+    get '/', to: redirect(subdomain: false, path: '/')
+    resources :file_uploads, path: 'files', except: :index
   end
 
   constraints subdomain: 'api' do
@@ -188,6 +186,7 @@ Rails.application.routes.draw do
             put 'toggle_lock'
           end
           resources :comments, controller: '/discussion/comments', except: [:index]
+          resources :assignments, controller: '/discussion/assignments', only: [:index, :new, :create, :destroy]
         end
       end
     end
@@ -205,20 +204,20 @@ Rails.application.routes.draw do
       end
       resources :series, type: 'Biblio::Serie'
       resources :journals, type: 'Biblio::Journal'
-      resources :books, controller: 'entries', type: 'Biblio::Book', except: :index, concerns: :discussable
-      resources :in_books, controller: 'entries', type: 'Biblio::InBook', except: :index, concerns: :discussable
-      resources :collections, controller: 'entries', type: 'Biblio::Collection', except: :index, concerns: :discussable
-      resources :in_collections, controller: 'entries', type: 'Biblio::InCollection', except: :index, concerns: :discussable
-      resources :proceedings, controller: 'entries', type: 'Biblio::Proceeding', except: :index, concerns: :discussable
-      resources :in_proceedings, controller: 'entries', type: 'Biblio::InProceeding', except: :index, concerns: :discussable
-      resources :articles, controller: 'entries', type: 'Biblio::Article', except: :index, concerns: :discussable
-      resources :miscs, controller: 'entries', type: 'Biblio::Misc', except: :index, concerns: :discussable
-      resources :manuals, controller: 'entries', type: 'Biblio::Manual', except: :index, concerns: :discussable
-      resources :booklets, controller: 'entries', type: 'Biblio::Booklet', except: :index, concerns: :discussable
-      resources :mastertheses, controller: 'entries', type: 'Biblio::Masterthesis', except: :index, concerns: :discussable
-      resources :phdtheses, controller: 'entries', type: 'Biblio::Phdthesis', except: :index, concerns: :discussable
-      resources :techreports, controller: 'entries', type: 'Biblio::Techreport', except: :index, concerns: :discussable
-      resources :unpublisheds, controller: 'entries', type: 'Biblio::Unpublished', except: :index, concerns: :discussable
+      resources :books, controller: 'entries', type: 'Biblio::Book', except: :index
+      resources :in_books, controller: 'entries', type: 'Biblio::InBook', except: :index
+      resources :collections, controller: 'entries', type: 'Biblio::Collection', except: :index
+      resources :in_collections, controller: 'entries', type: 'Biblio::InCollection', except: :index
+      resources :proceedings, controller: 'entries', type: 'Biblio::Proceeding', except: :index
+      resources :in_proceedings, controller: 'entries', type: 'Biblio::InProceeding', except: :index
+      resources :articles, controller: 'entries', type: 'Biblio::Article', except: :index
+      resources :miscs, controller: 'entries', type: 'Biblio::Misc', except: :index
+      resources :manuals, controller: 'entries', type: 'Biblio::Manual', except: :index
+      resources :booklets, controller: 'entries', type: 'Biblio::Booklet', except: :index
+      resources :mastertheses, controller: 'entries', type: 'Biblio::Masterthesis', except: :index
+      resources :phdtheses, controller: 'entries', type: 'Biblio::Phdthesis', except: :index
+      resources :techreports, controller: 'entries', type: 'Biblio::Techreport', except: :index
+      resources :unpublisheds, controller: 'entries', type: 'Biblio::Unpublished', except: :index
       resource :import
     end
 

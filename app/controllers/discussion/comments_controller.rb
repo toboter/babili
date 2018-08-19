@@ -2,23 +2,7 @@ module Discussion
   class CommentsController < ApplicationController
     load_resource :namespace
     load_resource :repository
-
-    load_resource :book, class: 'Biblio::Entry', instance_name: :entry
-    load_resource :in_book, class: 'Biblio::Entry', instance_name: :entry
-    load_resource :collections, class: 'Biblio::Entry', instance_name: :entry
-    load_resource :in_collections, class: 'Biblio::Entry', instance_name: :entry
-    load_resource :proceedings, class: 'Biblio::Entry', instance_name: :entry
-    load_resource :in_proceedings, class: 'Biblio::Entry', instance_name: :entry
-    load_resource :article, class: 'Biblio::Entry', instance_name: :entry
-    load_resource :miscs, class: 'Biblio::Entry', instance_name: :entry
-    load_resource :manuals, class: 'Biblio::Entry', instance_name: :entry
-    load_resource :booklets, class: 'Biblio::Entry', instance_name: :entry
-    load_resource :mastertheses, class: 'Biblio::Entry', instance_name: :entry
-    load_resource :phdtheses, class: 'Biblio::Entry', instance_name: :entry
-    load_resource :techreports, class: 'Biblio::Entry', instance_name: :entry
-    load_resource :unpublisheds, class: 'Biblio::Entry', instance_name: :entry
-
-    load_and_authorize_resource :thread, through: [:repository, :entry], find_by: :sequential_id
+    load_and_authorize_resource :thread, through: :repository, find_by: :sequential_id
     load_and_authorize_resource :comment, through: :thread
 
     def new

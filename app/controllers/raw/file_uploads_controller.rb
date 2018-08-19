@@ -1,8 +1,8 @@
 class Raw::FileUploadsController < ApplicationController
   before_action :set_klass, only: :create
-  load_and_authorize_resource except: :create
+  load_and_authorize_resource except: :create, find_by: :slug
   layout 'raw'
-
+  
   # GET /raw/file_uploads/1
   # GET /raw/file_uploads/1.json
   def show
@@ -20,10 +20,13 @@ class Raw::FileUploadsController < ApplicationController
     @file_upload.uploader = current_user.person
     authorize! :create, @file_upload
 
+    # if a file already exists with the same md5 checksum, this will be returned.
+    @existing = Raw::FileUpload.find_by_file_signature(@file_upload.file_signature)
+
     respond_to do |format|
-      if @file_upload.save
+      if @existing.present? ? (@file_upload = @existing) : @file_upload.save
         format.html { redirect_to raw_file_upload_path(@file_upload), notice: 'File was successfully created.' }
-        format.json { render :show, status: :created, location: @file_upload }
+        format.json { render json: @file_upload, status: :created, serializer: Raw::FileUploadSerializer }
       else
         format.html { render :new }
         format.json { render json: @file_upload.errors, status: :unprocessable_entity }
@@ -44,7 +47,7 @@ class Raw::FileUploadsController < ApplicationController
   private
     # Never trust parameters from the scary internet, only allow the white list through.
     def resource_params
-      params.require(:raw_file_upload).permit(:file, :creator, :file_copyright)
+      params.require(:upload).permit(:file, :creator, :file_copyright)
     end
 
     def set_klass

@@ -3,10 +3,10 @@
 <div>
   <%= render @file_upload %>
 </div>
-<p>
-  <strong>Upload data:</strong>
-  <%= @file_upload.file_data %>
-</p>
+
+<% @file_upload.references.each do |reference| %>
+  <%= reference.inspect %>
+<% end %>
 
 <p>by <%= @file_upload.uploader.name %>
 

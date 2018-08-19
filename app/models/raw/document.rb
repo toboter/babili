@@ -13,5 +13,9 @@ module  Raw
       text/richtext
       text/rtf
     ]
+
+    def default_url
+      file.url
+    end
   end
 end

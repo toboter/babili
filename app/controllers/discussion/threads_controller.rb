@@ -1,29 +1,12 @@
 module Discussion
   class ThreadsController < ApplicationController
-    DEFAULT_PER_PAGE = 1
+    DEFAULT_PER_PAGE = 50
     load_resource :namespace
     load_resource :repository
-
-    load_resource :book, class: 'Biblio::Entry', instance_name: :entry
-    load_resource :in_book, class: 'Biblio::Entry', instance_name: :entry
-    load_resource :collections, class: 'Biblio::Entry', instance_name: :entry
-    load_resource :in_collections, class: 'Biblio::Entry', instance_name: :entry
-    load_resource :proceedings, class: 'Biblio::Entry', instance_name: :entry
-    load_resource :in_proceedings, class: 'Biblio::Entry', instance_name: :entry
-    load_resource :article, class: 'Biblio::Entry', instance_name: :entry
-    load_resource :miscs, class: 'Biblio::Entry', instance_name: :entry
-    load_resource :manuals, class: 'Biblio::Entry', instance_name: :entry
-    load_resource :booklets, class: 'Biblio::Entry', instance_name: :entry
-    load_resource :mastertheses, class: 'Biblio::Entry', instance_name: :entry
-    load_resource :phdtheses, class: 'Biblio::Entry', instance_name: :entry
-    load_resource :techreports, class: 'Biblio::Entry', instance_name: :entry
-    load_resource :unpublisheds, class: 'Biblio::Entry', instance_name: :entry
-
     load_and_authorize_resource :thread, through: [:repository, :entry], find_by: :sequential_id
     
   
     def index
-      parent = @entry.presence || @repository
       query = params[:q].presence || '*'
       sorted_by = params[:sorted_by] ||= 'created_desc'
       sort_order = Discussion::Thread.sorted_by(sorted_by) if @threads.any?
@@ -32,7 +15,7 @@ module Discussion
   
       @results = Discussion::Thread.search(query, 
         fields: [:is, :title, :author],
-        where: { discussable_type: parent.class.base_class.name, discussable_id: parent.id },
+        where: { discussable_type: @repository.class.name, discussable_id: @repository.id },
         order: sort_order,
         page: params[:page], 
         per_page: per_page

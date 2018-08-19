@@ -1,4 +1,4 @@
-<div class="media" id="full-discussion-comment-<%= comment.id %>" style="overflow: visible;">
+<div class="media comment" id="full-discussion-comment-<%= comment.id %>" style="overflow: visible;">
   <div class="media-left">
     <%= link_to comment.author.try(:namespace) do %>
       <%= background_image_div(comment.author, :small_thumb, {class: 'media-object organization-member-avatar', style: 'height:50px;width:50px; background-position:center;'}) %>
@@ -39,7 +39,8 @@
       </div>
     </div>
     <div class="panel-body">
-      <%= sanitize(comment.current_body) %>
+      <%= commentify(comment.current_body) %>
+      <%= comment.files.inspect %>
     </div>
   </div>
 </div>

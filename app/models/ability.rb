@@ -89,10 +89,14 @@ class Ability
       can :read, Discussion::Comment
 
       cannot :manage, Discussion::Thread
-      can [:update, :close, :toggle_lock, :destroy], Discussion::Thread do |thread|
+      can [:update, :close, :toggle_lock, :destroy, :assign], Discussion::Thread do |thread|
         user.person.in?(thread.moderators)
       end
       can [:read, :create], Discussion::Thread
+
+      can [:destroy, :create], Discussion::Assignment do |assign|
+        user.person.in?(assign.thread.moderators)
+      end
       
     end
 

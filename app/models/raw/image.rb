@@ -9,5 +9,9 @@ module  Raw
       image/tiff
       image/webp
     ]
+
+    def default_url
+      file[:large].url
+    end
   end
 end

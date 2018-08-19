@@ -1,0 +1,1 @@
+Trix.config.attachments.preview.caption = { name: true, size: false } 

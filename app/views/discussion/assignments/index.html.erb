@@ -1,0 +1,11 @@
+<div class="row">
+  <div class="col-sm-12">
+    Manage assignments for <%= link_to @thread.title, [@namespace, @thread.discussable, :discussion, @thread], class: 'text-strong' %>
+    <hr>
+    <ul class="list-group">
+      <%= render @assignments, remote: false %>
+    </ul>
+    <%= link_to 'Add assignee', [:new, @namespace, @thread.discussable, :discussion, @thread, :assignment], class: 'btn btn-default text-strong pull-right' if can?(:create, Discussion::Assignment) %>
+  </div>
+</div>
+

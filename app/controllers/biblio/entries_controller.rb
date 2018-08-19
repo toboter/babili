@@ -29,7 +29,7 @@ class Biblio::EntriesController < ApplicationController
     
     respond_to do |format|
       format.html
-      format.json { render json: @results, each_serializer: Biblio::EntrySerializer }
+      format.json { render json: @results, each_serializer: EntrySerializer }
       format.bibtex { render plain: (BibTeX::Bibliography.new << @results.map(&:to_bib))  }
     end
   

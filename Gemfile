@@ -58,6 +58,14 @@ gem 'simple_form'
 gem 'will_paginate-bootstrap'
 gem 'cocoon'
 gem 'toastr-rails'
+gem 'trix-rails', require: 'trix'
+gem 'html-pipeline', '~> 2.8', '>= 2.8.4'
+gem 'commonmarker', '~> 0.17.11'
+gem 'github-markup', '~> 2.0', '>= 2.0.1'
+gem 'sanitize', '~> 4.6', '>= 4.6.6'
+gem 'rails-bootstrap-markdown' #
+gem 'redcarpet' #
+gem 'jquery-atwho-rails'
 
 gem 'acts_as_list'
 gem 'closure_tree'
@@ -70,10 +78,8 @@ gem 'sequenced'
 gem 'attr_json'
 
 gem 'searchkick'
-gem 'redcarpet'
 gem 'friendly_id'
 gem 'browser'
-gem 'rails-bootstrap-markdown'
 gem 'geo_pattern'  # https://github.com/jasonlong/geo_pattern
 gem 'inline_svg'   # https://github.com/jamesmartin/inline_svg
 gem "selectize-rails"
@@ -96,7 +102,6 @@ gem 'sparql-client'
 gem 'linkeddata'
 gem 'language_list'
 gem 'hashie'
-gem 'trix'
 gem "recaptcha", require: "recaptcha/rails"
 
 source 'https://rails-assets.org' do
