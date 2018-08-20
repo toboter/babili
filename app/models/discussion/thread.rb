@@ -122,9 +122,9 @@ module Discussion
         title: title,
         author: [author.name, author.namespace.name],
         is: [state],
-        comments: comments.map{ |c| c.current_body },
-        assignee: assignees.map{ |a| [a.name, a.subclass.name] },
-        mentions: mentionees.map{ |a| [a.name, a.subclass.name] }
+        body: comments.map{ |c| ActionController::Base.helpers.strip_tags(c.current_body) }.join(' '),
+        assignee: assignees.map(&:accessors).flatten.uniq.map{ |a| [a.name, a.namespace.name] }.concat(assignees.map{ |a| [a.subclass.name, a.name] }).uniq,
+        mentions: mentionees.map(&:accessors).flatten.uniq.map{ |a| [a.name, a.namespace.name] }.concat(mentionees.map{ |a| [a.subclass.name, a.name] }).uniq
       }
     end
 

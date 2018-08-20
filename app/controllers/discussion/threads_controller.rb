@@ -14,7 +14,7 @@ module Discussion
       per_page = current_user.try(:person).try(:per_page).present? ? current_user.person.per_page : DEFAULT_PER_PAGE
   
       @results = Discussion::Thread.search(query, 
-        fields: [:is, :title, :author],
+        fields: [:is, :title, :author, :mentions, :assignee, :body],
         where: { discussable_type: @repository.class.name, discussable_id: @repository.id },
         order: sort_order,
         page: params[:page], 

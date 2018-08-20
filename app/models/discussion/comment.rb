@@ -16,6 +16,7 @@ module Discussion
     has_many :files, through: :references, source_type: 'Raw::FileUpload', source: :referenceable
 
     before_validation :extract_attachments
+    after_commit :reindex_thread
 
     accepts_nested_attributes_for :versions, allow_destroy: false
 
@@ -49,6 +50,7 @@ module Discussion
       end
       set_mentions(mentions)
       set_references(references)
+      reindex_thread
     end
 
     def set_mentions(values)
@@ -67,6 +69,10 @@ module Discussion
       if attached_references.present?
         references << attached_references.map{|r| r unless r.referenceable.in?(references.map(&:referenceable).compact.flatten)}.compact
       end
+    end
+
+    def reindex_thread
+      thread.reindex
     end
   
   end
