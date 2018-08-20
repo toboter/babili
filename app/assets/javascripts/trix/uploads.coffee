@@ -28,8 +28,8 @@ $ ->
         response = JSON.parse(xhr.responseText)
         return attachment.setAttributes(
           url: response.file_url
-          id: response.id
-          type: response.type
+          gid: response.gid
+          type: 'File'
           href: response.html_url)
       return
 

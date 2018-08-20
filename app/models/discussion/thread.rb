@@ -24,6 +24,7 @@ module Discussion
     has_many :assignments, dependent: :destroy
     has_many :assignees, through: :assignments
     has_many :comments, dependent: :destroy
+    has_many :mentionees, through: :comments
     has_many :states, dependent: :destroy
     has_many :titles, dependent: :destroy
 
@@ -120,10 +121,10 @@ module Discussion
         discussable_id: discussable_id,
         title: title,
         author: [author.name, author.namespace.name],
-        is: [state]
-        # comments
-        # assignee:
-        # mentions:
+        is: [state],
+        comments: comments.map{ |c| c.current_body },
+        assignee: assignees.map{ |a| [a.name, a.subclass.name] },
+        mentions: mentionees.map{ |a| [a.name, a.subclass.name] }
       }
     end
 

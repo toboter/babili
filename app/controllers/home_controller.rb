@@ -33,10 +33,6 @@ class HomeController < ApplicationController
 
   def people
     @people = Person.order(family_name: :asc)
-    respond_to do |format|
-      format.html
-      format.json { render json: @people, each_serializer: PeopleSerializer  }
-    end
   end
 
   def organizations
@@ -45,6 +41,26 @@ class HomeController < ApplicationController
 
   def repositories
     @repositories = Repository.order(created_at: :desc)
+  end
+
+  def discussions
+    repository_ids = Repository.all.ids
+    @threads = Discussion::Thread.where(discussable_type: 'Repository', discussable_id: repository_ids)
+    query = params[:q].presence || '*'
+    sorted_by = params[:sorted_by] ||= 'created_desc'
+    sort_order = Discussion::Thread.sorted_by(sorted_by)
+
+    per_page = current_user.try(:person).try(:per_page).present? ? current_user.person.per_page : DEFAULT_PER_PAGE
+
+    @results = Discussion::Thread.search(query, 
+      fields: [:is, :title, :author],
+      where: { discussable_type: 'Repository', discussable_id: repository_ids },
+      order: sort_order,
+      page: params[:page], 
+      per_page: per_page
+      ) do |body|
+      body[:query][:bool][:must] = { query_string: { query: query, default_operator: "and" } }
+    end
   end
   
 end

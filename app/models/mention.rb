@@ -11,7 +11,7 @@
 # person.mentions: mentionable_type/mentionable_id
 
 
-class Metion < ApplicationRecord
+class Mention < ApplicationRecord
   belongs_to :mentionable, polymorphic: true
   belongs_to :mentionee, class_name: 'Namespace'
   belongs_to :mentioner, class_name: 'Person'

@@ -10,11 +10,12 @@ module Discussion
     belongs_to :thread, counter_cache: true, autosave: true, touch: true
     belongs_to :author, class_name: 'Person'
     has_many :versions, dependent: :destroy
-    has_many :mentions, as: :mentionable
+    has_many :mentions, as: :mentionable, dependent: :destroy
+    has_many :mentionees, through: :mentions
     has_many :references, as: :referencing, dependent: :destroy
     has_many :files, through: :references, source_type: 'Raw::FileUpload', source: :referenceable
 
-    before_validation :extract_references
+    before_validation :extract_attachments
 
     accepts_nested_attributes_for :versions, allow_destroy: false
 
@@ -34,17 +35,38 @@ module Discussion
       end
     end
 
-    def extract_references
-      # das gilt für references vom type Raw::*
-      # gilt nicht für Person als Mention
+    def extract_attachments
       doc = Nokogiri::HTML(current_body)
-      attachments = []
+      mentions = []
+      references = []
       doc.css("[data-trix-attachment]").each do |attachment_node|
         attachment = JSON.parse(attachment_node.attribute('data-trix-attachment'))
-        attachments << Reference.new(referenceable: attachment['type'].classify.constantize.friendly.find(attachment['id']), referencor: author)
+        if attachment['type'] == 'Mention'
+          mentions << attachment
+        elsif attachment['type'] == 'File'
+          references << attachment
+        end
       end
-      references.destroy(references.map{|r| r unless r.in?(attachments)})
-      references << attachments.map{|a| a unless a.in?(references)}
+      set_mentions(mentions)
+      set_references(references)
+    end
+
+    def set_mentions(values)
+      attached_mentionees = values.map{|v| GlobalID::Locator.locate(v['gid']) }.uniq
+      mentions.where.not(mentionee: attached_mentionees).destroy_all
+      attached_mentions = attached_mentionees.map{|m| Mention.new(mentionee: m, mentioner: author)}
+      if attached_mentions.present?
+        mentions << attached_mentions.map{|m| m unless m.mentionee.in?(mentionees) }.compact
+      end
+    end
+
+    def set_references(values)
+      attached_referenceables = values.map{|v| GlobalID::Locator.locate(v['gid']) }.uniq
+      references.where.not(referenceable: attached_referenceables).destroy_all
+      attached_references = attached_referenceables.map{|r| Reference.new(referenceable: r, referencor: author)}
+      if attached_references.present?
+        references << attached_references.map{|r| r unless r.referenceable.in?(references.map(&:referenceable).compact.flatten)}.compact
+      end
     end
   
   end

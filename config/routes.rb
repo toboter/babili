@@ -178,6 +178,7 @@ Rails.application.routes.draw do
 
     require 'sidekiq/web'
 
+    get '/discussions', to: 'home#discussions'
     concern :discussable do
       namespace 'discussion', path: '' do
         resources :threads, path: :discussions, controller: '/discussion/threads' do
@@ -354,6 +355,7 @@ Rails.application.routes.draw do
 
     root to: "home#index"
     
+    get '/api/namespaces', to: 'namespaces#index'
     resources :namespaces, only: :show, path: '' do
       resources :members, only: :index
       resources :applications

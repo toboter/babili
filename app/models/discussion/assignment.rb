@@ -9,7 +9,7 @@
 
 module Discussion
   class Assignment < ApplicationRecord
-    belongs_to :thread
+    belongs_to :thread, touch: true
     belongs_to :assigner, class_name: 'Person'
     belongs_to :assignee, class_name: 'Namespace'
   

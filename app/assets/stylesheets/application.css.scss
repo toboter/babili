@@ -12,7 +12,6 @@
  *= require dropzone
  *= require bootstrap-markdown
  *= require trix
- *= require jquery.atwho 
  */
 
 @import "bootstrap-sprockets";
@@ -26,5 +25,7 @@
 @import "settings";
 @import "namespace";
 @import "toastr";
+@import "trix/rich-content";
+@import "trix/toolbar";
 @import 'selectize';
 @import 'selectize.bootstrap3';

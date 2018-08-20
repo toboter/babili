@@ -3,7 +3,8 @@
     <%= content_tag :span, fa_stacked_icon(thread.current_state.last, base: "circle-o", class: 'pull-left text-small', style: 'margin-top: 3px;font-size:.7em;') %>
     <%= content_tag :div, style: 'padding-left:30px;' do %>
       <%= content_tag :h4, style: 'margin-top:3px; margin-bottom:5px;' do %>
-        <%= link_to [@namespace, thread.discussable, :discussion, thread] do %>
+        <%= link_to thread.discussable.name_tree.join('/'), [thread.discussable.try(:owner), thread.discussable] if name_tree %>
+        <%= link_to [thread.discussable.owner, thread.discussable, :discussion, thread] do %>
           <%= content_tag :span, thread.title, class: 'text-strong' %>
           <%= content_tag :span, "#{fa_icon('comments')} #{thread.comments_count}".html_safe, class: 'text-small pull-right', style: 'padding-right:20px;' if thread.comments_count > 1 %>
         <% end %>

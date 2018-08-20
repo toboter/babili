@@ -9,7 +9,7 @@
 
 class Reference < ApplicationRecord
   belongs_to :referencing, polymorphic: true # from
-  belongs_to :referenceable, polymorphic: true # to
+  belongs_to :referenceable, polymorphic: true, counter_cache: true # to
   belongs_to :referencor, class_name: 'Person'
   
 end

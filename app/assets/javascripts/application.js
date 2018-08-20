@@ -19,7 +19,6 @@
 //= require cocoon
 //= require dropzone
 //= require selectize
-//= require jquery.atwho
 //= require bootstrap
 //= require turbolinks
 //= require turbolinks-compatibility

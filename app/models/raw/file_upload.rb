@@ -4,7 +4,6 @@ module Raw
     friendly_id :uuid, use: :slugged
     belongs_to :uploader, class_name: 'Person'
     has_many :references, as: :referenceable
-    # references_count? and if references_count == 0 delete file?
 
     validates :type, :file, presence: true
     # validates :container, presence: true
