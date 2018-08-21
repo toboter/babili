@@ -7,7 +7,6 @@
 # to determine what character was typed, and position the autocomplete options using 
 # editor.getClientRectAtPosition().
 
-
 $ ->
   document.addEventListener "trix-initialize", (event) =>
     TrixMentions.prepare($(event.target))
@@ -34,48 +33,58 @@ $ ->
         $trix.after("<trix-mentions id='trix-mentions-"+  $trix.attr('trix-id') + "'><input id='trix-mentions-input-" + $trix.attr('trix-id') + "'></input></trix-mentions>")
 
       initializeMentionsSelectize = ($trix) ->
-        $.getJSON $trix.data(MENTIONS_PATH), (result) ->
-          console.log result
-          mentionsInputForTrix($trix).selectize
-            valueField: 'gid'
-            labelField: 'name'
-            searchField: 'name'
-            sortField: 'name'
-            options: result
-            selectOnTab: true
-            onInitialize: ->
-              @.disable()
-              mentionsSelectizeForTrix($trix).css('left', -1000)
-            onItemAdd: (value, $item) ->
-              embed = "<span class='mention'>@" + $item.text() + "</span>"
-              attachment = new Trix.Attachment
-                content: embed
-                'type': 'Mention'
-                'gid': $item.data('value')
+        mentionsInputForTrix($trix).selectize
+          valueField: 'gid'
+          labelField: 'name'
+          searchField: ['name', 'namespace']
+          sortField: 'name'
+          options: []
+          selectOnTab: true
+          load: (query, callback) ->
+            if !query.length
+              callback()
+            $.ajax
+              url: $trix.data(MENTIONS_PATH)
+              data: {q: query}
+              dataType: 'json'
+              type: 'GET'
+              error: (result) ->
+                callback()
+              success: (result) ->
+                callback result['mentionees']
+          onInitialize: ->
+            @.disable()
+            mentionsSelectizeForTrix($trix).css('left', -1000)
+          onItemAdd: (value, $item) ->
+            embed = "<span class='mention'>@" + $item.text() + "</span>"
+            attachment = new Trix.Attachment
+              content: embed
+              'type': 'Mention'
+              'gid': $item.data('value')
+            $trix[0].editor.setSelectedRange([$trix.data('last-position') - 1, $trix.data('last-position')])
+            $trix[0].editor.deleteInDirection('forward')
+            $trix[0].editor.insertAttachment attachment
+            mentionsDivForTrix($trix).hide()
+          onBlur: ->
+            mentionsDivForTrix($trix).hide()
+            @.disable()
+            mentionsSelectizeForTrix($trix).css('left', -1000)
+            $trix.focus()
+            if @.items.length == 0
               $trix[0].editor.setSelectedRange([$trix.data('last-position') - 1, $trix.data('last-position')])
               $trix[0].editor.deleteInDirection('forward')
-              $trix[0].editor.insertAttachment attachment
-              mentionsDivForTrix($trix).hide()
-            onBlur: ->
-              mentionsDivForTrix($trix).hide()
-              @.disable()
-              mentionsSelectizeForTrix($trix).css('left', -1000)
-              $trix.focus()
-              if @.items.length == 0
-                $trix[0].editor.setSelectedRange([$trix.data('last-position') - 1, $trix.data('last-position')])
-                $trix[0].editor.deleteInDirection('forward')
-            onDropdownClose: ->
-              mentionsDivForTrix($trix).hide()
-            onDropdownOpen: ($dropdown) ->
-              rect = $trix[0].editor.getClientRectAtPosition($trix[0].editor.getPosition())
-              if rect != undefined
-                $dropdown.css('top', 34)
-                if rect.left + 200 > $trix.offset().left + $trix.width()
-                  $dropdown.css('left', $trix.offset().left + $trix.width() - (rect.left + 210))
-            onType: (str) ->
-              rect = $trix[0].editor.getClientRectAtPosition($trix[0].editor.getPosition())
+          onDropdownClose: ->
+            mentionsDivForTrix($trix).hide()
+          onDropdownOpen: ($dropdown) ->
+            rect = $trix[0].editor.getClientRectAtPosition($trix[0].editor.getPosition())
+            if rect != undefined
+              $dropdown.css('top', 34)
               if rect.left + 200 > $trix.offset().left + $trix.width()
-                mentionsSelectizeDropdownForTrix($trix).css('left', $trix.offset().left + $trix.width() - (rect.left + 210))
+                $dropdown.css('left', $trix.offset().left + $trix.width() - (rect.left + 210))
+          onType: (str) ->
+            rect = $trix[0].editor.getClientRectAtPosition($trix[0].editor.getPosition())
+            if rect.left + 200 > $trix.offset().left + $trix.width()
+              mentionsSelectizeDropdownForTrix($trix).css('left', $trix.offset().left + $trix.width() - (rect.left + 210))
 
       openMentionsSelectize = ($trix, editor) ->
         $trix.data 'last-position', editor.getPosition()
@@ -92,9 +101,9 @@ $ ->
         mentionsInput[0].selectize.focus()
 
       if $trix.data(MENTIONS_PATH).length > 0
-        createMentionsDivForTrix($trix)
-        initializeMentionsSelectize($trix)
         $trix.on 'trix-change', ->
           editor = @.editor
           char = editor.getDocument().toString().charAt(editor.getPosition() - 1)
+          createMentionsDivForTrix($trix)
+          initializeMentionsSelectize($trix)
           openMentionsSelectize($(@), editor) if char == '@'

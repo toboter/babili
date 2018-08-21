@@ -355,7 +355,8 @@ Rails.application.routes.draw do
 
     root to: "home#index"
     
-    get '/api/namespaces', to: 'namespaces#index'
+    get '/internal/mentionees', to: 'mentions#mentionees'
+    
     resources :namespaces, only: :show, path: '' do
       resources :members, only: :index
       resources :applications

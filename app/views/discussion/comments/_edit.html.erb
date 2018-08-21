@@ -12,7 +12,7 @@
           <%= f.simple_fields_for :versions, f.object.versions.last do |v| %>
             <%= v.input :body, label: false, as: :hidden, input_html: { id: 'comment_body' } %>
           <% end %>
-          <trix-editor input='comment_body' id="trix_comment_body" class="trix-content" data-mentions-path="/api/namespaces.json"></trix-editor>
+          <trix-editor input='comment_body' id="trix_comment_body" class="trix-content" data-mentions-path="/internal/mentionees.json"></trix-editor>
           <div class="actions --spacious-10">
             <%= f.submit 'Update', class: 'btn btn-success pull-right text-strong' %>
             <%= link_to 'Cancel', [@namespace, @thread.discussable, :discussion, @thread], class: 'btn btn-default pull-right', style: 'margin-right:10px;' %>

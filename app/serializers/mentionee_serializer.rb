@@ -1,9 +1,9 @@
 # Used by Discussion::Comment.mentions
 
-class NamespaceSerializer < ActiveModel::Serializer
+class MentioneeSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
   include ApplicationHelper
-  type :namespace
+  type :mentionee
 
   attribute :gid do
     object.to_global_id.uri

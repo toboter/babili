@@ -63,6 +63,7 @@ gem 'html-pipeline', '~> 2.8', '>= 2.8.4'
 gem 'commonmarker', '~> 0.17.11'
 gem 'github-markup', '~> 2.0', '>= 2.0.1'
 gem 'sanitize', '~> 4.6', '>= 4.6.6'
+gem "selectize-rails"
 gem 'rails-bootstrap-markdown' #
 gem 'redcarpet' #
 
@@ -81,7 +82,6 @@ gem 'friendly_id'
 gem 'browser'
 gem 'geo_pattern'  # https://github.com/jasonlong/geo_pattern
 gem 'inline_svg'   # https://github.com/jamesmartin/inline_svg
-gem "selectize-rails"
 gem 'chronic'
 gem "rgeo"
 gem "rgeo-proj4"
