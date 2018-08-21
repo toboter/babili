@@ -15,8 +15,7 @@ class Biblio::Entry < ApplicationRecord
   belongs_to :creator, class_name: 'Person'
   has_many :referencations, class_name: 'Biblio::Referencation', dependent: :destroy
   has_many :repositories, through: :referencations
-
-  has_many :threads, as: :discussable, class_name: 'Discussion::Thread'
+  has_many :references, as: :referenceable
 
   accepts_nested_attributes_for :referencations, reject_if: :all_blank, allow_destroy: true
 
@@ -130,16 +129,19 @@ class Biblio::Entry < ApplicationRecord
   end
 
   def bibliographic(style='apa', locale='de')
-    csl_style = CSL::Style.load(style)
-    csl_locale = CSL::Locale.load(locale)
+    unless type == 'Biblio::Journal' || type == 'Biblio::Serie'
+      csl_style = CSL::Style.load(style)
+      csl_locale = CSL::Locale.load(locale)
 
-    citation_item = CiteProc::CitationItem.new(id: self.bibtex_citation) do |c|
-      c.data = CiteProc::Item.new(self.to_bib.to_citeproc)
+      citation_item = CiteProc::CitationItem.new(id: self.bibtex_citation) do |c|
+        c.data = CiteProc::Item.new(self.to_bib.to_citeproc)
+      end
+
+      cpr = CiteProc::Ruby::Renderer.new(:format => 'html', :style => csl_style, :locale => csl_locale)
+      cpr.render(citation_item, csl_style.bibliography).html_safe
+    else
+      nil
     end
-
-    cpr = CiteProc::Ruby::Renderer.new(:format => 'html', :style => csl_style, :locale => csl_locale)
-    cpr.render(citation_item, csl_style.bibliography).html_safe
-
   end
 
   Alpha26 = ("a".."z").to_a

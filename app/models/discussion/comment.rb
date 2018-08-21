@@ -16,7 +16,7 @@ module Discussion
     has_many :files, through: :references, source_type: 'Raw::FileUpload', source: :referenceable
 
     before_validation :extract_attachments
-    after_commit :reindex_thread
+    after_commit :reindex_thread, on: [:update, :destroy]
 
     accepts_nested_attributes_for :versions, allow_destroy: false
 
@@ -44,7 +44,7 @@ module Discussion
         attachment = JSON.parse(attachment_node.attribute('data-trix-attachment'))
         if attachment['type'] == 'Mention'
           mentions << attachment
-        elsif attachment['type'] == 'File'
+        elsif attachment['type'] == 'File' || attachment['type'] == 'Reference'
           references << attachment
         end
       end

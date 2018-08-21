@@ -12,4 +12,11 @@ class Reference < ApplicationRecord
   belongs_to :referenceable, polymorphic: true, counter_cache: true # to
   belongs_to :referencor, class_name: 'Person'
   
+
+  def url
+    case referenceable_type
+      when 'Vocab::Concept' then [referenceable.try(:scheme).try(:namespace), :vocab, referenceable.try(:scheme), referenceable]
+      else [referenceable]
+    end
+  end
 end

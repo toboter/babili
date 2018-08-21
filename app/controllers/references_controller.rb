@@ -3,8 +3,9 @@ class ReferencesController < ApplicationController
 
   def referenceables
     query = params[:q]
-    @mentionees = Namespace.search(query)
-    render json: @mentionees, each_serializer: MentioneeSerializer, adapter: :json
+    @referenceables = Searchkick.search(params[:q], 
+      index_name: [Vocab::Concept, Biblio::Entry])
+    render json: @referenceables, each_serializer: ReferenceableSerializer, adapter: :json
   end
 
 end

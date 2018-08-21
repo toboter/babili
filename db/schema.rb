@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_19_124904) do
+ActiveRecord::Schema.define(version: 2018_08_21_163447) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -120,6 +120,7 @@ ActiveRecord::Schema.define(version: 2018_08_19_124904) do
     t.datetime "updated_at", null: false
     t.string "citation_raw"
     t.integer "sequential_id"
+    t.integer "references_count"
     t.index ["citation_raw", "sequential_id"], name: "index_biblio_entries_on_citation_raw_and_sequential_id", unique: true
     t.index ["creator_id"], name: "index_biblio_entries_on_creator_id"
     t.index ["data"], name: "index_biblio_entries_on_data", using: :gin
@@ -638,6 +639,7 @@ ActiveRecord::Schema.define(version: 2018_08_19_124904) do
     t.string "slug"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "references_count"
     t.index ["creator_id"], name: "index_vocab_concepts_on_creator_id"
     t.index ["scheme_id"], name: "index_vocab_concepts_on_scheme_id"
     t.index ["slug"], name: "index_vocab_concepts_on_slug", unique: true

@@ -13,10 +13,6 @@ class MentioneeSerializer < ActiveModel::Serializer
     object.subclass.try(:name).presence || object.name
   end
 
-  attribute :html_url do
-    namespace_url(object)
-  end
-
   attribute :namespace do
     object.name
   end

@@ -63,6 +63,7 @@ module Discussion
       items << comments
       items << states.order(created_at: :asc).to_a.drop(1)
       items << titles.order(created_at: :asc).to_a.drop(1)
+      items << comments.map{ |c| c.references.map{|r| r unless r.referenceable_type.in?(%w[Raw::FileUpload])}.compact }
 
       items.flatten.uniq
     end

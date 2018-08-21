@@ -1,11 +1,14 @@
 [data-trix-attachment] {
   display: inline-block;
 }
+
+span.trix-reference + figcaption,
 span.trix-mention + figcaption {
   display: none;
 }
 
-trix-mentions {
+trix-mentions, 
+trix-references {
   .selectize-control {
     position: fixed
   }
@@ -14,14 +17,27 @@ trix-mentions {
     background: none !important;
     box-shadow: none !important;
   }
-  .selectize-control, .selectize-dropdown {
+}
+
+trix-mentions {
+  .selectize-control, 
+  .selectize-dropdown {
     width: 200px !important;
     z-index: 9999;
   }
 }
 
+trix-references {
+  .selectize-control, 
+  .selectize-dropdown {
+    width: 300px !important;
+    z-index: 9999;
+  }
+}
+
 figure {
-  span.mention {
+  span.mention, 
+  span.reference {
     @extend .text-strong;
   }
 }
@@ -34,7 +50,8 @@ figure.attachment--content {
 }
 
 .comment, trix-editor {
-  figure.attachment--jpg, figure.attachment--png {
+  figure.attachment--jpg, 
+  figure.attachment--png {
       background-color: #FAFBFC;
       border: 1px dashed #0366d6;
       border-radius: 3px;

@@ -35,6 +35,7 @@ class Vocab::Concept < ApplicationRecord
   has_many :labels, class_name: 'Vocab::Label', dependent: :destroy, inverse_of: :concept
   has_many :notes, dependent: :destroy, inverse_of: :concept
   has_many :definitions, -> { where type: 'Definition' }, class_name: 'Note'
+  has_many :references, as: :referenceable
 
   accepts_nested_attributes_for :labels, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :notes, reject_if: :all_blank, allow_destroy: true
