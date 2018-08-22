@@ -47,7 +47,7 @@ class HomeController < ApplicationController
     sorted_by = params[:sorted_by] ||= 'created_desc'
     sort_order = Discussion::Thread.sorted_by(sorted_by)
 
-    per_page = current_user.try(:person).try(:per_page).present? ? current_user.person.per_page : DEFAULT_PER_PAGE
+    per_page = current_user.try(:person).try(:per_page).present? ? current_user.person.per_page : 50
 
     @results = Discussion::Thread.search(query, 
       fields: [:is, :title, :author, :mentions, :assignee, :body],
