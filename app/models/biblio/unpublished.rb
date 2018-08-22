@@ -46,10 +46,10 @@ class Biblio::Unpublished < Biblio::Entry
       title: title,
       note: note,
       year: year,
-      tag: tag_list.join(' '),
       url: url,
       doi: doi,
-      abstract: abstract
+      abstract: abstract,
+      tags: tag_list
     }
   end
 

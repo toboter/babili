@@ -52,11 +52,11 @@ class Biblio::Booklet < Biblio::Entry
       title: title,
       year: year,
       address: places.present? ? places.map(&:given).join(' ') : '',
-      tag: tag_list.join(' '),
       note: note,
       url: url,
       doi: doi,
-      abstract: abstract
+      abstract: abstract,
+      tags: tag_list
     }
   end
 

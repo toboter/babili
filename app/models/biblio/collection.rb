@@ -26,7 +26,7 @@ class Biblio::Collection < Biblio::Entry
   end
 
   has_many :creatorships, dependent: :destroy, class_name: 'Biblio::Creatorship', foreign_key: :entry_id
-  has_many :editors, through: :creatorships, source: :agent_appellation
+  has_many :editors, -> { order 'biblio_creatorships.id asc' }, through: :creatorships, source: :agent_appellation
   attr_json :title, :string
   attr_json :publisher_id, :integer
   attr_json :year, :string
@@ -79,7 +79,6 @@ class Biblio::Collection < Biblio::Entry
       series: [serie.try(:title), serie.try(:abbr), serie.try(:print_issn)].join(' '),
       year: year,
       address: places.map(&:given).join(' '),
-      tag: tag_list.join(' '),
       volume: volume,
       number: number,
       note: note,
@@ -87,7 +86,8 @@ class Biblio::Collection < Biblio::Entry
       url: url,
       doi: doi,
       abstract: abstract,
-      organization: organization.try(:name)
+      organization: organization.try(:name),
+      tags: tag_list
     }
   end
 

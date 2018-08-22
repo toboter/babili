@@ -65,11 +65,11 @@ class Biblio::Techreport < Biblio::Entry
       series: [serie.try(:title), serie.try(:abbr), serie.try(:print_issn)].join(' '),
       number: number,
       address: places.map(&:given).join(' '),
-      tag: tag_list.join(' '),
       note: note,
       url: url,
       doi: doi,
-      abstract: abstract
+      abstract: abstract,
+      tags: tag_list
     }
   end
 

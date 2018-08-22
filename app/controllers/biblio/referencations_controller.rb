@@ -15,13 +15,16 @@ class Biblio::ReferencationsController < ApplicationController
     per_page = nil if params[:format] == 'bibtex'
 
     @results = Biblio::Entry.search(query, 
-      fields: [{citation: :exact}, :entry_type, :author, :editor, :title, :booktitle, :journal, :series, {year: :exact}, :publisher, :address, "tag^10", 
+      fields: [{citation: :exact}, :entry_type, :author, :editor, :title, :booktitle, :journal, :series, {year: :exact}, :publisher, :address, "tags^10", 
         :volume, :number, :note, :isbn, :url, :doi, :abstract],
       where: { id: @entries },
       misspellings: {below: 1},
       order: sort_order, 
       page: params[:page], 
-      per_page: per_page)
+      per_page: per_page
+      ) do |body|
+        body[:query][:bool][:must] = { query_string: { query: query, default_operator: "and" } }
+      end
 
     respond_to do |format|
       format.html
@@ -37,8 +40,9 @@ class Biblio::ReferencationsController < ApplicationController
     referencations = @entry.self_and_ancestors.map{ |e| Biblio::Referencation.new(entry: e, repository: @repository, creator: current_person) unless @repository.references.include?(e) }
     authorize! :add_reference, Biblio::Referencation.new(repository: @repository)
     @repository.referencations << referencations.compact
+    @referencation = @entry.referencations.find_by_repository_id(@repository.id)
     respond_to do |format|
-      if @repository.references.include?(@entry)
+      if @referencation.present?
         format.html { redirect_to @entry, notice: "Successfully added to #{@repository.name}." }
         format.js
       else

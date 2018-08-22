@@ -1,5 +1,5 @@
 <% (current_person.all_repos-entry.repositories).each do |repo| %>
   <%= content_tag :li do %>
-    <%= link_to(repo.name, add_repositories_biblio_entry_path(entry, repository_id: repo.id), method: :post, remote: true) %>
+    <%= link_to(repo.name_tree.join('/'), add_repositories_biblio_entry_path(entry, repository_id: repo.id), method: :post, remote: true) %>
   <% end %>
 <% end %>

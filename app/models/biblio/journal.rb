@@ -17,6 +17,9 @@ class Biblio::Journal < Biblio::Entry
   validates :name, presence: true
 
   has_many :articles, class_name: 'Biblio::Article', foreign_key: :parent_id
+  def icon
+    'files'
+  end
 
   def name_abbr
     "#{name} #{abbr ? '('+abbr+')' : ''}"

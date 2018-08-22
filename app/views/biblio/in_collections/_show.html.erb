@@ -1,38 +1,70 @@
-<div class="row">
-  <div class="col-md-8">
-    <h3>
-      <%= in_collection.title %><br>
-      <small>by <%= in_collection.creators_name_list.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %> <%= in_collection.year %> <%= '(' + in_collection.month + ')' if in_collection.month.present? %></small>
-    </h3>
-    <ul class="list-unstyled">
-        <%= content_tag :li, book_for(in_collection) %> 
-        <%= content_tag :li, "Pages: #{in_collection.pages}" if in_collection.pages.present? %>     
-        <%= content_tag :li, doi_url(in_collection), class: 'text-small' if in_collection.doi || in_collection.url %>
-    </ul>
-    <%= content_tag :p, class: "text-gray" do %>
-      <%= content_tag :span, 'Note: ', class: 'text-strong' %> <%= in_collection.note %>
-    <% end if in_collection.note.present? %>
+<table class="table table-bordered table-striped">
+  <tbody>
+    <%= content_tag :tr do %>
+      <%= content_tag :th, 'Title' %>
+      <%= content_tag :td, in_collection.title %>
+    <% end %>
+    <%= content_tag :tr do %>
+      <%= content_tag :th, 'Author'.pluralize(in_collection.creators.count) %>
+      <%= content_tag :td, in_collection.creators_name_list.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %>
+    <% end %>
+    <%= content_tag :tr do %>
+      <%= content_tag :th, 'Pages' %>
+      <%= content_tag :td, in_collection.pages %>
+    <% end %>
+    <%= content_tag :tr do %>
+      <%= content_tag :th, 'Collection' %>
+      <%= content_tag :td, in_collection.parent.title %>
+    <% end %>
+    <%= content_tag :tr do %>
+      <%= content_tag :th, 'Editor'.pluralize(in_collection.parent.creators.count) %>
+      <%= content_tag :td, in_collection.parent.creators_name_list.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %>
+    <% end %>
+    <%= content_tag :tr do %>
+      <%= content_tag :th, 'Place/Publisher/Year' %>
+      <%= content_tag :td do %>
+        <%= content_tag(:span, in_collection.places.map{ |p| p.place ? link_to(p.given, p.try(:place)) : p.given }.join(', ').html_safe) %>
+        <%= content_tag(:span, in_collection.publisher) %>
+        <%= content_tag(:span, in_collection.year) %>
+        <%= content_tag(:span, in_collection.month) %>
+      <% end %>
+    <% end %>
+    <%= content_tag :tr do %>
+      <%= content_tag :th, 'Organization' %>
+      <%= content_tag :td, in_collection.organization %>
+    <% end %>
+    <%= content_tag :tr do %>
+      <%= content_tag :th, 'Serie' %>
+      <%= content_tag :td do %>
+        <%= content_tag(:span, in_collection.serie.try(:title)) %>
+        <%= content_tag(:span, in_collection.volume) %>
+      <% end %>
+    <% end %>
+    <%= content_tag :tr do %>
+      <%= content_tag :th, 'Tags' %>
+      <%= content_tag :td, in_collection.tag_list.map{|tag| content_tag(:span, tag, class: 'label label-default')}.join(' ').html_safe %>
+    <% end %>
+    <%= content_tag :tr do %>
+      <%= content_tag :th, 'Url' %>
+      <%= content_tag :td, in_collection.url %>
+    <% end %>
+    <%= content_tag :tr do %>
+      <%= content_tag :th, 'DOI' %>
+      <%= content_tag :td, 'https://doi.org/' + in_collection.doi %>
+    <% end %>
+    <%= content_tag :tr do %>
+      <%= content_tag :th, 'Note' %>
+      <%= content_tag :td, in_collection.note %>
+    <% end %>
+    <%= content_tag :tr do %>
+      <%= content_tag :th, 'Abstract' %>
+      <%= content_tag :td, in_collection.abstract %>
+    <% end %>
+    <%= content_tag :tr do %>
+      <%= content_tag :th, 'Contents' %>
+      <%= content_tag :td, pluralize(in_collection.children.count, 'Record') %>
+    <% end %>
+  </tbody>
+</table>
 
-    <%= in_collection.tag_list.map{|tag| content_tag(:span, tag, class: 'label label-default')}.join(' ').html_safe %>
-  </div>
-  <div class="col-md-4">
-    <%= in_collection.repositories.map{|repo| content_tag(:span, link_to(repo.name, namespace_repository_biblio_references_path(repo.owner, repo), style: 'color: white;'), class: 'label label-default')}.join(' ').html_safe %>
-    <%= content_tag :div, render('biblio/shared/actions', entry: in_collection, referencation: false, actions: true) %>
-  </div>
-</div>
-
-<%= content_for :contents do %>
-  <div class='in_collection-contents'>
-    <div class="row">
-      <div class="col-md-7">
-        <p class="text-gray text-small">
-          <%= in_collection.bibliographic(current_user.try(:person).try(:csl), 'en-US') %>
-        </p>
-        <%= content_tag :p, in_collection.abstract %>
-      </div>
-      <div class="col-md-4 col-md-offset-1">
-        <%= content_tag :pre, in_collection.to_bib, style: 'font-size:smaller;' %>
-      </div>
-    </div>
-  </div>
-<% end %>
+<%= render in_collection.children %>

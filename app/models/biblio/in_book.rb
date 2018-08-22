@@ -56,13 +56,13 @@ class Biblio::InBook < Biblio::Entry
       address: places.map(&:given).join(' '),
       series: [serie.try(:title), serie.try(:abbr), serie.try(:print_issn)].join(' '),
       year: year,
-      tag: tag_list.join(' '),
       chapter: chapter,
       pages: pages,
       note: note,
       url: url,
       doi: doi,
-      abstract: abstract
+      abstract: abstract,
+      tags: tag_list
     }
   end
 

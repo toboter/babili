@@ -58,11 +58,11 @@ class Biblio::Manual < Biblio::Entry
       year: year,
       address: places.map(&:given).join(' '),
       organization: organization.try(:name),
-      tag: tag_list.join(' '),
       note: note,
       url: url,
       doi: doi,
-      abstract: abstract
+      abstract: abstract,
+      tags: tag_list
     }
   end
 

@@ -106,7 +106,7 @@ class Biblio::Entry < ApplicationRecord
     elsif self.type == 'Biblio::Serie'
       self.citation_raw = key.present? ? key : title
     elsif self.type == 'Biblio::Journal'
-      self.citation_raw = key.present? ? key : (name + "#{' [' + abbr + ']' if abbr.present?}")
+      self.citation_raw = key.present? ? key : name
     end
   end
 

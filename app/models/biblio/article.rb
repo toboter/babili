@@ -54,14 +54,14 @@ class Biblio::Article < Biblio::Entry
       title: title,
       journal: [journal.name, journal.abbr, journal.print_issn].join(' '),
       year: year,
-      tag: tag_list.join(' '),
       volume: volume,
       number: number,
       pages: pages,
       note: note,
       url: url,
       doi: doi,
-      abstract: abstract
+      abstract: abstract,
+      tags: tag_list
     }
   end
 

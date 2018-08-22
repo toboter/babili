@@ -75,14 +75,14 @@ class Biblio::Proceeding < Biblio::Entry
       series: [serie.try(:title), serie.try(:abbr), serie.try(:print_issn)].join(' '),
       year: year,
       address: places.map(&:given).join('; '),
-      tag: tag_list.join(' '),
       volume: volume,
       note: note,
       isbn: print_isbn,
       url: url,
       doi: doi,
       abstract: abstract,
-      organization: organization.try(:name)
+      organization: organization.try(:name),
+      tags: tag_list
     }
   end
 

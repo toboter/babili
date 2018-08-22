@@ -105,6 +105,10 @@
                 <% end %>
               <% end %>
             </div>
+            <%= content_tag :div, id: 'discussions' do %>
+              <h4 class='subhead --spacious'>Discussions</h4>
+              <%= render partial: 'references/reference', collection: @concept.references.where(referencing_type: 'Discussion::Comment') %>
+            <% end if @concept.references.any? %>
           </div>
           <%= content_tag :div, class: 'col-md-4 sidebar' do %>
             <div class="list-group" id="representations">

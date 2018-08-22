@@ -44,11 +44,11 @@ class Biblio::Misc < Biblio::Entry
       title: title,
       year: year,
       howpublished: howpublished,
-      tag: tag_list.join(' '),
       note: note,
       url: url,
       doi: doi,
-      abstract: abstract
+      abstract: abstract,
+      tags: tag_list
     }
   end
 

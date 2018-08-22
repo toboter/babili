@@ -56,12 +56,12 @@ class Biblio::Masterthesis < Biblio::Entry
       title: title,
       note: note,
       year: year,
-      tag: tag_list.join(' '),
       url: url,
       doi: doi,
       abstract: abstract,
       address: places.map(&:given).join('; '),
-      school: school.try(:name)
+      school: school.try(:name),
+      tags: tag_list
     }
   end
 
