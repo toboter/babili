@@ -256,7 +256,6 @@ Rails.application.routes.draw do
     get '/search', to: 'search#index'
     get '/about', to: 'home#about'
     get '/explore', to: 'home#explore'
-    get '/research', to: 'home#research'
     get '/research/people', to: 'home#people', as: :people
     get '/research/organizations', to: 'home#organizations', as: :organizations
     get '/repositories', to: 'home#repositories'

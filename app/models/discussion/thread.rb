@@ -117,7 +117,7 @@ module Discussion
       {
         created_at: created_at,
         updated_at: updated_at,
-        comments_count: comments_count,
+        comments: comments_count,
         discussable_type: discussable_type,
         discussable_id: discussable_id,
         title: title,

@@ -15,11 +15,6 @@ class HomeController < ApplicationController
   def imprint
   end
 
-  def research
-    @people = Person.order("RANDOM()").limit(6).sort_by {|p| p.name}
-    @organizations = Organization.order("RANDOM()").limit(4).sort_by {|p| p.name}
-  end
-
   def collections
     @collection_apps = Oread::Application.order(name: :asc)
   end
@@ -29,6 +24,8 @@ class HomeController < ApplicationController
     @showcased = Oread::Application.order("RANDOM()").first
     @vocabularies = Vocab::Scheme.order(created_at: :desc)
     @repositories = Repository.order(created_at: :desc)
+    @people = Person.order("RANDOM()").limit(6).sort_by {|p| p.name}
+    @organizations = Organization.order("RANDOM()").limit(4).sort_by {|p| p.name}
   end
 
   def people
