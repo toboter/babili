@@ -5,7 +5,7 @@
       <%= hidden_field_tag 'sorted_by', params[:sorted_by] if params[:sort_by] %>
     <% end %>
     <%= content_tag :div, style: 'margin-top:10px;' do %>
-      <%= link_to fa_stacked_icon('inverse times', base: 'square', text: 'Clear current search query, and sorts', style: 'font-size:.6em;'), [@namespace, @repository, @entry, :discussion, :threads], class: 'no-link text-strong text-small', style: 'color:#565656;' %>
+      <%= link_to fa_stacked_icon('inverse times', base: 'square', text: 'Clear current search query, and sorting', style: 'font-size:.6em;'), [@namespace, @repository, @entry, :discussion, :threads], class: 'no-link text-strong text-small', style: 'color:#565656;' %>
     <% end if params[:q] %>
   </div>
   <div class="col-md-2 col-md-offset-5">
@@ -20,19 +20,19 @@
         <thead style="background-color:#F5F5F5;">
         <tr>
           <th style="font-weight: normal;">
-            <%= link_to [@namespace, @repository, @entry, :discussion, :threads, q: 'is:open'], class: "no-link#{' text-strong' if params[:q] && params[:q].include?('is:open')}" do %>
+            <%= link_to [@namespace, @repository, @entry, :discussion, :threads, q: 'is:open'], style: 'color:#565656;', class: "no-link#{' text-strong' if params[:q] && params[:q].include?('is:open')}" do %>
               <%= fa_stacked_icon('exclamation', base: "circle-o", class: 'text-small', style: 'font-size:.7em;') %>
               <%= @threads.opend.count %> Open
             <% end %>
-            <%= link_to [@namespace, @repository, @entry, :discussion, :threads, q: 'is:closed'], class: "no-link#{' text-strong' if params[:q] && params[:q].include?('is:closed')}", style: 'margin-left:10px;' do %>
+            <%= link_to [@namespace, @repository, @entry, :discussion, :threads, q: 'is:closed'], style: 'color:#565656;margin-left:10px;', class: "no-link#{' text-strong' if params[:q] && params[:q].include?('is:closed')}" do %>
               <%= fa_stacked_icon('check', base: "circle-o", class: 'text-small', style: 'font-size:.7em;') %>
               <%= @threads.closed.count %> Closed
             <% end %>
             <%= content_tag :div, class: "dropdown pull-right", style: "display:inline;" do %>
-              <a class="dropdown-toggle no-link text-strong" style="cursor: pointer;" id="sort-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <%= link_to '', class: "dropdown-toggle no-link text-strong", style: "cursor: pointer;color:#565656;", id: "sort-options", data: {toggle: "dropdown"}, aria: {haspopup: "true", expanded: "false"} do %>
                 Sort
                 <span class="caret"></span>
-              </a>
+              <% end %>
               <ul class="dropdown-menu" aria-labelledby="sort-options">
                 <%= content_tag :li, "Sort by", class: 'dropdown-header', style: 'margin-left:10px;' %>
                 <% Discussion::Thread.options_for_sorted_by.each do |sort_option| %>

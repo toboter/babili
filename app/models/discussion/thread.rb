@@ -135,7 +135,7 @@ module Discussion
       when /^created_/
         { created_at: direction }
       when /^comments_/
-        { comments_count: direction }
+        { comments: direction }
       when /^updated_/
         { updated_at: direction }
       else
