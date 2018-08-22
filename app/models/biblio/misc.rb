@@ -40,7 +40,7 @@ class Biblio::Misc < Biblio::Entry
     {
       citation: citation,
       entry_type: type.demodulize,
-      author: authors.map(&:name).join(' '),
+      author: authors.map(&:name),
       title: title,
       year: year,
       howpublished: howpublished,

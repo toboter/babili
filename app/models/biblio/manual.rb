@@ -53,10 +53,10 @@ class Biblio::Manual < Biblio::Entry
     {
       citation: citation,
       entry_type: type.demodulize,
-      author: authors.map(&:name).join(' '),
+      author: authors.map(&:name),
       title: title,
       year: year,
-      address: places.map(&:given).join(' '),
+      address: places.map(&:given),
       organization: organization.try(:name),
       note: note,
       url: url,

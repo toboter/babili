@@ -42,7 +42,7 @@ class Biblio::Unpublished < Biblio::Entry
     {
       citation: citation,
       entry_type: type.demodulize,
-      author: authors.map(&:name).join(' '),
+      author: authors.map(&:name),
       title: title,
       note: note,
       year: year,

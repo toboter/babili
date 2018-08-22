@@ -48,10 +48,10 @@ class Biblio::Booklet < Biblio::Entry
     {
       citation: citation,
       entry_type: type.demodulize,
-      author: authors.map(&:name).join(' '),
+      author: authors.map(&:name),
       title: title,
       year: year,
-      address: places.present? ? places.map(&:given).join(' ') : '',
+      address: places.map(&:given),
       note: note,
       url: url,
       doi: doi,

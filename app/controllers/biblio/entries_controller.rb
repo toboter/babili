@@ -26,11 +26,11 @@ class Biblio::EntriesController < ApplicationController
       order: sort_order, 
       page: params[:page], 
       per_page: per_page,
-      aggs: [:author, :tags, :editor]
+      aggs: [:author, :tags, :editor, :publisher]
       ) do |body|
         body[:query][:bool][:must] = { query_string: { query: query, default_operator: "and" } }
       end
-    
+
     respond_to do |format|
       format.html
       format.json { render json: @results, each_serializer: EntrySerializer }

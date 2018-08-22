@@ -50,9 +50,9 @@ class Biblio::Article < Biblio::Entry
     {
       citation: citation,
       entry_type: type.demodulize,
-      author: authors.map(&:name).join(' '),
+      author: authors.map(&:name),
       title: title,
-      journal: [journal.name, journal.abbr, journal.print_issn].join(' '),
+      journal: [journal.name, journal.abbr, journal.print_issn].compact,
       year: year,
       volume: volume,
       number: number,

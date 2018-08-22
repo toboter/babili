@@ -52,14 +52,14 @@ class Biblio::Phdthesis < Biblio::Entry
     {
       citation: citation,
       entry_type: type.demodulize,
-      author: authors.map(&:name).join(' '),
+      author: authors.map(&:name),
       title: title,
       note: note,
       year: year,
       url: url,
       doi: doi,
       abstract: abstract,
-      address: places.map(&:given).join('; '),
+      address: places.map(&:given),
       school: school.try(:name),
       tags: tag_list
     }
