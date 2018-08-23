@@ -294,6 +294,10 @@ Rails.application.routes.draw do
       # namespace :v2 do
       # end
     end
+    use_doorkeeper do
+      # use_doorkeeper :tokens, :authorizations
+      skip_controllers :applications, :authorized_applications
+    end
   end
 
   # doorkeeper paths
@@ -301,10 +305,7 @@ Rails.application.routes.draw do
   # authorizations => api.host/...
   # authorized_applications => /settings/oauth/authorized_applications
   # applications => /settings/developer/oauth/applications
-  use_doorkeeper do
-    # use_doorkeeper :tokens, :authorizations
-    skip_controllers :applications, :authorized_applications
-  end
+
   scope 'oauth' do
     resources :applications, as: :oauth_application, only: [:destroy, :show], controller: 'doorkeeper/applications'
   end
