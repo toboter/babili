@@ -68,7 +68,7 @@
     <%= simple_form_for [:close, @namespace, @thread.discussable, :discussion, @thread], method: :put do |f| %>
       <hr>
       <%= f.submit 'Close this discussion', class: 'btn btn-default text-strong pull-right' %>
-    <% end if can?(:close, @thread) %>
+    <% end if can?(:close, @thread) && !@thread.closed? %>
 
   <% end %>
 </div>

@@ -1,0 +1,11 @@
+<div class="hovercard-head clearfix" style="width:380px">
+  <%= link_to background_image_div(person, :thumb, {class: 'img-rounded', style: 'float:left;height:60px;width:60px;background-position:center;'}), person.namespace %>
+  <div style="margin-left: 80px;">
+    <%= link_to person.name, person.namespace %><br>
+    <%= link_to person.namespace.name, person.namespace, style: 'font-weight: normal;' %>
+  </div>
+</div>
+<hr style="margin-top:15px;margin-bottom:15px;">
+<div class="hovercard-foot">
+
+</div>

@@ -58,6 +58,10 @@ module Discussion
       current_state.first == 'locked'
     end
 
+    def closed?
+      current_state.first == 'closed'
+    end
+
     def items
       items = []
       items << comments

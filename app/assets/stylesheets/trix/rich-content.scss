@@ -38,6 +38,7 @@ trix-references {
 figure {
   span.mention, 
   span.reference {
+    color: #444;
     @extend .text-strong;
   }
 }
@@ -47,6 +48,52 @@ figure.attachment--content {
   figcaption {
     display: inline;
   }
+}
+
+.media {
+  .media-body-event {
+    @extend .media-body;
+    overflow: visible;
+    .icon-pre {
+      font-size:.7em;
+      margin-left:10px;
+      @extend .text-small;
+      @extend .pull-left;
+    }
+    .event {
+      margin-left:40px;
+      a {
+        color: #555;
+        @extend .text-strong;
+        div.author-avatar {
+          @extend .media-object;
+          @extend .organization-member-avatar;
+          height:20px;
+          width:20px; 
+          background-position:center;
+        }
+      }
+      a:hover {
+        text-decoration: none;
+        color: #222;
+      }
+      .author {
+        color: #444;
+        @extend .text-strong;
+      }
+      .title {
+        color: #444;
+        @extend .text-strong;
+      }
+      .date {
+      }
+    }
+  }
+}
+
+.popover {
+  max-width: 380px !important;
+  border-radius: 2px;
 }
 
 .comment, trix-editor {

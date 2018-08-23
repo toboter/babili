@@ -14,7 +14,7 @@
           <% end %>
           <trix-editor input='comment_body' placeholder="Leave a comment" id="trix_comment_body" class="trix-content" data-mentions-path="/internal/mentionees.json" data-references-path="/internal/referenceables.json"></trix-editor>
           <div class="actions --spacious-10">
-            <%= f.submit 'Comment', class: 'btn btn-success pull-right text-strong' %>
+            <%= f.submit "Comment #{'and reopen' if @thread.closed?}", class: 'btn btn-success pull-right text-strong' %>
           </div>
         <% end %>
       </div>
