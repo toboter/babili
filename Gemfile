@@ -97,6 +97,6 @@ gem 'attr_json'
 gem 'trix'
 gem "recaptcha", require: "recaptcha/rails"
 
-source 'http://insecure.rails-assets.org' do
+source 'https://rails-assets.org' do
   gem 'rails-assets-dropzone'
 end
