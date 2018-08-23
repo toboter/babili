@@ -1,6 +1,6 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
-  Rails.application.routes.default_url_options = { host: 'babili.toboter.de' }
+  Rails.application.routes.default_url_options = { host: Rails.application.secrets.host }
 
   # Code is not reloaded between requests.
   config.cache_classes = true
@@ -96,12 +96,7 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: Rails.application.secrets.host }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address: "smtp.gmail.com",
-    port: 587,
-    domain: "babylon-online.org",
-    authentication: "plain",
-    enable_starttls_auto: true,
-    user_name: Rails.application.secrets.MailUsername,
-    password: Rails.application.secrets.MailPassword
+    address: 'localhost',
+    port: 25
   }
 end
