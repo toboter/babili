@@ -4,3 +4,4 @@ module Api::V1::Biblio
     attribute :abbr
 
   end
+end

@@ -4,7 +4,7 @@ class PersonalAccessToken < ApplicationRecord
 
   has_secure_token :access_token
 
-  self.default_json_container_attribute = 'scope'
+  attr_json_config(default_container_attribute: :scope)
   attr_json :collections, :boolean
   attr_json :search, :boolean
   attr_json :notifications, :boolean
