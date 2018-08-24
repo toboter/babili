@@ -11,4 +11,4 @@ Ref count: <%= @file_upload.references_count %>
 
 <p>by <%= @file_upload.uploader.name %></p>
 
-<%= link_to 'Remove', raw_file_upload_path(@file_upload), method: :delete, data: { confirm: 'Are you sure?' } %>
+<%= link_to 'Remove', raw_file_upload_path(@file_upload), method: :delete, data: { confirm: 'Are you sure?' } if can?(:destroy, @file_upload) %>
