@@ -36,6 +36,22 @@
           Hinweise, Ergänzungen, sowie Berichtigungen werden dankbar entgegengenommen.
         </p>
 
+        <h4 class="subhead --spacious">Filter</h4>
+        <% @results.aggs.each do |k,v| %>
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <%= content_tag :span, k.capitalize.pluralize, class: 'text-strong text-gray' %>
+            </div>
+            <ul class="list-group">
+            <% v['buckets'].take(5).each do |entry| %>
+              <%= content_tag :li, class: 'list-group-item' do %>
+                <%= content_tag :span, link_to(entry['key'], biblio_entries_path(q: "#{params[:q]} #{k}:#{'"'+entry['key']+'"'}") ) %>
+                <%= content_tag :span, entry['doc_count'], class: 'badge' %>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+
       <% end %>
 
       <div class="col-md-8 col-md-pull-4 main">

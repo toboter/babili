@@ -15,10 +15,10 @@
 //= require jquery_ujs
 //= require toastr
 //= require bootstrap-markdown-bundle
+//= require trix
 //= require cocoon
 //= require dropzone
 //= require selectize
-//= require trix
 //= require bootstrap
 //= require turbolinks
 //= require turbolinks-compatibility
@@ -30,8 +30,22 @@ $(function () {
   $('.about-content img, .post-content img').tooltip({
       placement: 'bottom'
   });
-  $('[data-toggle="popover"]').popover();
+
+  $('.hovercard').each(function () {
+    var $this = $(this);
+    $this.popover({
+        trigger: 'hover',
+        html: true,
+        content: 'Content Here',
+        container: $this,
+        placement: 'top'
+    })
+  });
+
+
+  $('.popover').popover();
 })
+
 
 // fixing changing width of a panel while affix-scrolling
 $(document).on('affixed.bs.affix',function(e){

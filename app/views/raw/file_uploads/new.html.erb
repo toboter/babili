@@ -1,0 +1,24 @@
+<h1>New Upload</h1>
+
+<%= simple_form_for(@file_upload, url: raw_file_uploads_path, as: :upload) do |f| %>
+  <% if @file_upload.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@file_upload.errors.count, "error") %> prohibited this upload from being saved:</h2>
+
+        <ul>
+        <% @file_upload.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+  <% end %>
+
+  <div class="form-inputs">
+    <%= f.hidden_field :file, value: @file_upload.cached_file_data if @file_upload.file_data.present? %>
+    <%= f.file_field :file %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, 'Upload' %>
+  </div>
+<% end %>

@@ -16,6 +16,9 @@ class Biblio::Serie < Biblio::Entry
   attr_json :print_issn, :string
 
   validates :title, presence: true
+  def icon
+    'files'
+  end
 
   def serials
     children.where(type: ['Biblio::Book', 'Biblio::Collection', 'Biblio::Proceeding'])

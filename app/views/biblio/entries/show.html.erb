@@ -1,31 +1,195 @@
 <% title @entry.citation %>
 
 <% content_for :container do %>
-  <div class="wrapper biblio">
+  <div class="wrapper biblio" id="biblio-entry-<%= @entry.id %>">
     <div class="row">
       <div class="col-md-12">
-        <%= content_tag :h4, class: 'h-condensed --spacing-20 --spacious-20' do %>
-          <%= link_to 'References', biblio_entries_path %><%= content_tag :span, ' / ' + @entry.citation, class: 'text-gray' %>
-          <%= content_tag :span, class: 'pull-right' do %>
+        <%= content_tag :h4, class: 'h-condensed --spacious-20' do %>
+          <%= link_to 'References', biblio_entries_path %>
+          <%= content_tag :span, ' / ', class: 'text-gray' %>
+          <%= content_tag :span, @entry.citation, class: 'text-gray text-strong' %>
+          <%= content_tag :div, class: 'pull-right' do %>
+            <div class="btn-group">
+              <%= link_to '', class: 'btn btn-default btn-sm text-strong dropdown-toggle', data: { toggle: 'dropdown' }, aria: { haspopup: true, expanded: false } do %>
+                <%= fa_icon('download', text: 'Export') %> <span class="caret"></span>
+              <% end %>
+              <ul class="dropdown-menu">
+                <li><%= link_to 'BibTEX', [@entry, format: 'bibtex'] %></li>
+                <li><%= link_to 'JSON', [@entry, format: 'json'] %></li>
+              </ul>
+            </div>
             <%= link_to fa_icon('edit', text: 'Edit'), [:edit, @entry], class: 'btn btn-default btn-sm text-strong' if can?(:update, @entry) %>
-            <%= link_to fa_icon('trash', text: 'Delete'), @entry, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default btn-sm text-strong', style: 'margin-left:5px;' if can?(:destroy, @entry) %>
+            <%= link_to fa_icon('trash', text: 'Delete'), @entry, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default btn-sm text-strong' if can?(:destroy, @entry) %>
           <% end %>
         <% end %>
+        <div class="row">
+          <%= content_tag :div, class: 'col-md-8' do %>
+            <%= content_tag :p, @entry.bibliographic(current_user.try(:person).try(:csl), 'en-US'), style: 'margin-bottom:0px;' %>
+            <%= content_tag :span, link_to(fa_icon(@entry.icon, text: @entry.class.name.demodulize), biblio_entries_path(q: "entry_type:#{'"'+@entry.class.name.demodulize+'"'}"), class: 'no-link', style: 'color:#fff;'), class: 'label label-default' %>
+          <% end %>
+        </div>
         <hr>
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-12 col-md-12">
-        <div id="biblio-entry-<%= @entry.id %>">
-          <div class="heading-block --spacing">
-            <%= render "#{@entry.class.name.underscore.pluralize}/show", @entry.class.name.demodulize.underscore.to_sym => @entry %>
+      <div class="col-sm-12 col-md-7">
+        <table class="table table-bordered table-striped">
+          <tbody>
+            <%= content_tag :tr do %>
+              <%= content_tag :th, 'Title', style: 'width:30%' %>
+              <%= content_tag :td, @entry.title %>
+            <% end if @entry.try(:title).present? %>
+            <%= content_tag :tr do %>
+              <%= content_tag :th, 'Abbr' %>
+              <%= content_tag :td, @entry.abbr %>
+            <% end if @entry.try(:abbr).present? %>
+            <%= content_tag :tr do %>
+              <%= content_tag :th, (@entry.try(:authors) ? 'Author' : 'Editor').pluralize(@entry.creators.count) %>
+              <%= content_tag :td, @entry.creators_name_list.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %>
+            <% end if @entry.try(:creators).present? %>
+            <%= content_tag :tr do %>
+              <%= content_tag :th, 'Pages' %>
+              <%= content_tag :td, @entry.pages %>
+            <% end if @entry.try(:pages).present? %>
+            <%= content_tag :tr do %>
+              <%= content_tag :th, 'Chapter' %>
+              <%= content_tag :td, @entry.chapter %>
+            <% end if @entry.try(:chapter).present? %>
+            <%= content_tag :tr do %>
+              <%= content_tag :th, @entry.parent.class.name.demodulize %>
+              <%= content_tag :td, link_to(@entry.parent.title, @entry.parent) %>
+            <% end if @entry.try(:parent).present? && !@entry.parent.class.name.in?(['Biblio::Serie', 'Biblio::Journal']) %>
+            <%= content_tag :tr do %>
+              <%= content_tag :th, 'Number' %>
+              <%= content_tag :td, @entry.number %>
+            <% end if @entry.try(:number).present? %>
+            <%= content_tag :tr do %>
+              <%= content_tag :th, (@entry.try(:parent).try(:authors) ? 'Author' : 'Editor').pluralize(@entry.parent.creators.count) %>
+              <%= content_tag :td, @entry.parent.creators_name_list.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %>
+            <% end if @entry.try(:parent).present? && !@entry.parent.class.name.in?(['Biblio::Serie', 'Biblio::Journal']) %>
+            <%= content_tag :tr do %>
+              <%= content_tag :th, "
+                #{'Place'.pluralize(@entry.places.count)+'/' if @entry.try(:places).try(:any?)}
+                #{'Publisher'+'/' if @entry.try(:publisher)}
+                #{'Year' if @entry.try(:year)}
+              " %>
+              <%= content_tag :td do %>
+                <%= content_tag(:span, @entry.places.map{ |p| p.place ? link_to(p.given, p.try(:place)) : p.given }.join(', ').html_safe) + ' : ' if @entry.try(:places).try(:any?) %>
+                <%= content_tag(:span, link_to(@entry.publisher.try(:name), zensus_name_path(@entry.publisher))) + ', ' if @entry.try(:publisher).present? %>
+                <%= content_tag(:span, @entry.year) if @entry.try(:year).present? %>
+                <%= content_tag(:span, @entry.month) if @entry.try(:month).present? %>
+              <% end %>
+            <% end if @entry.try(:places).try(:any?) || @entry.try(:publisher) || @entry.try(:year) %>
+            <%= content_tag :tr do %>
+              <%= content_tag :th, 'Howpublished' %>
+              <%= content_tag :td, @entry.howpublished %>
+            <% end if @entry.try(:howpublished).present? %>
+            <%= content_tag :tr do %>
+              <%= content_tag :th, 'Edition' %>
+              <%= content_tag :td, @entry.edition %>
+            <% end if @entry.try(:edition).present? %>
+            <%= content_tag :tr do %>
+              <%= content_tag :th, 'Organization' %>
+              <%= content_tag :td, link_to(@entry.organization.try(:name), zensus_name_path(@entry.organization)) %>
+            <% end if @entry.try(:organization).present? %>
+            <%= content_tag :tr do %>
+              <%= content_tag :th, 'School' %>
+              <%= content_tag :td, link_to(@entry.school.try(:name), zensus_name_path(@entry.school)) %>
+            <% end if @entry.try(:school).present? %>
+            <%= content_tag :tr do %>
+              <%= content_tag :th, 'Institution' %>
+              <%= content_tag :td, link_to(@entry.institution.try(:name), zensus_name_path(@entry.institution)) %>
+            <% end if @entry.try(:institution).present? %>
+            <%= content_tag :tr do %>
+              <%= content_tag :th, "#{(@entry.try(:journal) ? 'Journal' : 'Serie')+'/' if @entry.try(:serie).present? || @entry.try(:journal).present?}Volume" %>
+              <%= content_tag :td do %>
+                <%= content_tag(:span, link_to(@entry.journal.name, @entry.journal)) if @entry.try(:journal).present? %>
+                <%= content_tag(:span, link_to(@entry.serie.title, @entry.serie)) if @entry.try(:serie).present? %>
+                <%= content_tag(:span, @entry.volume) if @entry.try(:volume).present? %>
+              <% end %>
+            <% end if @entry.try(:serie).present? || @entry.try(:journal).present? || @entry.try(:volume).present? %>
+            <%= content_tag :tr do %>
+              <%= content_tag :th, 'Tags' %>
+              <%= content_tag :td, @entry.tag_list.map{|tag| content_tag(:span, link_to(tag, biblio_entries_path(q: "tags:#{'"'+tag+'"'}"), class: 'no-link', style: 'color:#fff;'), class: 'label label-default')}.join(' ').html_safe %>
+            <% end if @entry.tags.any? %>
+            <%= content_tag :tr do %>
+              <%= content_tag :th, 'Print ISBN' %>
+              <%= content_tag :td, @entry.print_isbn %>
+            <% end if @entry.try(:print_isbn).present? %>
+            <%= content_tag :tr do %>
+              <%= content_tag :th, 'Print ISSN' %>
+              <%= content_tag :td, @entry.print_issn %>
+            <% end if @entry.try(:print_issn).present? %>
+            <%= content_tag :tr do %>
+              <%= content_tag :th, 'Url' %>
+              <%= content_tag :td, @entry.url %>
+            <% end if @entry.try(:url).present? %>
+            <%= content_tag :tr do %>
+              <%= content_tag :th, 'DOI' %>
+              <%= content_tag :td, 'https://doi.org/' + @entry.doi %>
+            <% end if @entry.try(:doi).present? %>
+            <%= content_tag :tr do %>
+              <%= content_tag :th, 'Note' %>
+              <%= content_tag :td, @entry.note %>
+            <% end if @entry.try(:note).present? %>
+            <%= content_tag :tr do %>
+              <%= content_tag :th, 'Abstract' %>
+              <%= content_tag :td, @entry.abstract %>
+            <% end if @entry.try(:abstract).present? %>
+            <%= content_tag :tr do %>
+              <%= content_tag :th, 'Contents' %>
+              <%= content_tag :td, pluralize(@entry.children.count, 'Record') %>
+            <% end %>
+          </tbody>
+        </table>
+
+        <%= content_tag :div, id: 'contents' do %>
+          <h4 class="subhead --spacious">Contents</h4>
+          <table class="table table-simple">
+            <tbody>
+              <%= render @entry.class.name.in?(['Biblio::Serie', 'Biblio::Journal']) ? @entry.children.sort_by(&:year) : @entry.children.sort_by(&:pages) if @entry.children.any? %>
+            </tbody>
+          </table>
+        <% end if @entry.children.any? %>
+
+        <%= content_tag :div, id: 'similar-objects' do %>
+          <h4 class="subhead --spacious">Similar readings for <%= content_tag :span, @entry.citation, class: 'text-gray' %></h4>
+          <table class="table table-simple">
+            <tbody>
+              <%= render @entry.similar(fields: ['tags^10', 'author^5', :title], limit: 7) %>
+            </tbody>
+          </table>
+        <% end %>
+      </div>
+
+      <div class="col-sm-12 col-md-5">
+        <div class="panel panel-default">
+          <div class="panel-heading text-strong text-gray">
+            <%= fa_icon('archive') %> Repositories
+            <%= content_tag :div, render('biblio/shared/actions', entry: @entry, referencation: false, actions: true), class: 'clearfix pull-right' %>
           </div>
-          <hr>
+          <ul class="list-group" id="referencations">
+            <%= render @entry.referencations %>
+          </ul>
         </div>
-        <div class="--spacious">
-          <%= yield :contents if content_for?(:contents) %>
-          <%= yield :cited_by if content_for?(:cited_by) %>
-          <%= yield :referenced_by if content_for?(:referenced_by) %>
+        <div class="panel panel-default">
+          <div class="panel-heading text-strong text-gray">
+            <%= fa_icon('comments') %> Discussions
+            <%= content_tag :span, @entry.references_count, class: 'badge pull-right', style: 'background-color:#777;' %>
+          </div>
+          <% if @discussions.any? %>
+            <ul class="list-group" id="discussions">
+              <% @discussions.each do |reference| %>
+                <%= content_tag :li, class: 'list-group-item' do %>
+                  <%= render partial: 'references/reference', object: reference %>
+                <% end %>
+              <% end %>
+            </ul>
+          <% else %>
+            <div class="panel-body">
+              <p class="text-italic">no discussions yet</p>
+            </div>
+          <% end %>
         </div>
       </div>
       

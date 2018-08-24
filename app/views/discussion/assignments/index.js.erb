@@ -1,0 +1,3 @@
+$('#assignment-options').modal();
+$("<%= escape_javascript(render @assignments, remote: true) if can?(:read, @assignments) %>").appendTo("#assignments");
+$("<%= escape_javascript(render 'new', assignment: @thread.assignments.build(assigner_id: current_user.person.id), assignees: @assignees, remote: true) if can?(:assign, @thread) %>").appendTo("#new-assignment");

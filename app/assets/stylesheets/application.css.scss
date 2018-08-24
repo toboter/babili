@@ -9,8 +9,8 @@
  * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
  * files in this directory. Styles in this file should be added after the last require_* statement.
  * It is generally better to create a new file per style scope.
- *= require bootstrap-markdown
  *= require dropzone
+ *= require bootstrap-markdown
  *= require trix
  */
 
@@ -25,5 +25,7 @@
 @import "settings";
 @import "namespace";
 @import "toastr";
+@import "trix/rich-content";
+@import "trix/toolbar";
 @import 'selectize';
 @import 'selectize.bootstrap3';

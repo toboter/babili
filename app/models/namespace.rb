@@ -8,6 +8,7 @@
 class Namespace < ApplicationRecord
   extend FriendlyId
   friendly_id :name, use: :slugged
+  searchkick
 
   belongs_to :subclass, polymorphic: true
   has_many :repositories, dependent: :destroy
@@ -34,4 +35,10 @@ class Namespace < ApplicationRecord
     name_changed? || super
   end
 
+  def search_data
+    {
+      ns_name: name,
+      name: subclass.try(:name),
+    }
+  end
 end

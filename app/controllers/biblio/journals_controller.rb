@@ -12,7 +12,7 @@ class Biblio::JournalsController < ApplicationController
 
   def show
     @entry = @journal
-
+    @discussions = @entry.references.where(referencing_type: 'Discussion::Comment')
     respond_to do |format|
       format.html { render 'biblio/entries/show' }
       format.json { render json: @journal, serializer: Biblio::JournalSerializer }
@@ -41,6 +41,7 @@ class Biblio::JournalsController < ApplicationController
   end
 
   def update
+    @entry = @journal
     respond_to do |format|
       if @journal.update(journal_params)
         format.html { redirect_to @journal, notice: "Journal was successfully updated." }

@@ -1,0 +1,7 @@
+<%= simple_form_for [@namespace, @thread.discussable, :discussion, @thread, assignment], remote: remote do |f| %>
+  <%= f.error_notification %>
+  <%= f.input :assignee_id, label: 'Person or group', collection: assignees, label_method: :name, value_method: :id %>
+  <div class="actions --spacious-10">
+    <%= f.submit 'Assign!', class: 'btn btn-success text-strong' %>
+  </div>
+<% end %>

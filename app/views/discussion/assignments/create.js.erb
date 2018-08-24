@@ -1,0 +1,2 @@
+$("<%= escape_javascript(render @assignment, remote: true) %>").appendTo("#assignments");
+$("#new_assignment").replaceWith("<%= escape_javascript(render 'new', assignment: @thread.assignments.build(assigner_id: current_user.person.id), assignees: @assignees, remote: true) if can?(:assign, @thread) %>");

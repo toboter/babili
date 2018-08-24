@@ -1,8 +1,8 @@
 require "image_processing/mini_magick"
 
 class ImageUploader < Shrine
-  include ImageProcessing::MiniMagick
   plugin :processing
+  plugin :determine_mime_type
   plugin :versions   # enable Shrine to handle a hash of files
   plugin :delete_raw # delete processed files after uploading
   # plugin :default_url
@@ -12,27 +12,22 @@ class ImageUploader < Shrine
   end
   
   process(:store) do |io, context|
-    original = io.download
-
-    size_800 = resize_to_limit!(original, 800, 800)
-    size_500 = resize_to_limit(size_800,  500, 500)
-    size_300 = resize_to_limit(size_500,  300, 300)
-    size_800_250 = resize_to_fill(size_800, 800, 250)
-    size_650_350 = resize_to_fill(size_800, 650, 350)
-    thumb_200 = resize_to_fill(size_300, 200, 200)
-    thumb_100 = resize_to_fill(thumb_200, 100, 100)
-    thumb_50 = resize_to_fill(thumb_100, 50, 50)
-
-    {
-      original: io, 
-      large: size_800, 
-      medium: size_500, 
-      small: size_300,
-      banner: size_800_250,
-      small_banner: size_650_350,
-      big_thumb: thumb_200,
-      thumb: thumb_100,
-      small_thumb: thumb_50
-    }
+    versions = { original: io } # retain original
+  
+    io.download do |original|
+      pipeline = ImageProcessing::MiniMagick.source(original)
+  
+      versions[:large]        = pipeline.resize_to_limit!(800, 800)
+      versions[:medium]       = pipeline.resize_to_limit!(500, 500)
+      versions[:small]        = pipeline.resize_to_limit!(300, 300)
+      versions[:banner]       = pipeline.resize_to_fill!(800, 250)
+      versions[:small_banner] = pipeline.resize_to_fill!(650, 350)
+      versions[:big_thumb]    = pipeline.resize_to_fill!(200, 200)
+      versions[:thumb]        = pipeline.resize_to_fill!(100, 100)
+      versions[:small_thumb]  = pipeline.resize_to_fill!(50, 50)
+    end
+  
+    versions
   end
+
 end

@@ -1,0 +1,150 @@
+[data-trix-attachment] {
+  display: inline-block;
+}
+
+.popover {
+  max-width: 380px !important;
+  border-radius: 2px;
+}
+
+span.trix-reference + figcaption,
+span.trix-mention + figcaption {
+  display: none;
+}
+
+trix-mentions, 
+trix-references {
+  .selectize-control {
+    position: fixed
+  }
+  .selectize-input {
+    border: none !important;
+    background: none !important;
+    box-shadow: none !important;
+  }
+}
+
+trix-mentions {
+  .selectize-control, 
+  .selectize-dropdown {
+    width: 200px !important;
+    z-index: 9999;
+  }
+}
+
+trix-references {
+  .selectize-control, 
+  .selectize-dropdown {
+    width: 300px !important;
+    z-index: 9999;
+  }
+}
+
+.thread-element {
+  @extend .media;
+  overflow: visible;
+  .comment-left {
+    @extend .media-left;
+  }
+  .event-left {
+    @extend .media-left;
+    min-width: 60px;
+  }
+  a {
+    color: #555;
+    @extend .text-strong;
+    div.author-avatar {
+      @extend .media-object;
+      @extend .organization-member-avatar;
+      height:20px;
+      width:20px; 
+      background-position:center;
+    }
+  }
+  a:hover {
+    text-decoration: none;
+    color: #222;
+  }
+  .author {
+    color: #444;
+    @extend .text-strong;
+  }
+  .title {
+    color: #444;
+    @extend .text-strong;
+  }
+  .date {
+    font-weight: normal;
+  }
+
+  .comment-body {
+    @extend .media-body;
+    @extend .panel;
+    @extend .panel-default;
+    overflow: visible;
+  }
+  .event-body {
+    @extend .media-body;
+    overflow: visible;
+    .icon-pre {
+      font-size:.7em;
+      margin-left:10px;
+      @extend .text-small;
+      @extend .pull-left;
+    }
+    .event {
+      margin-left:40px;
+    }
+  }
+}
+
+.comment-content, trix-editor {
+  a {
+    font-weight: normal;
+    color: #0366d6;
+  }
+  figure.attachment--jpg, 
+  figure.attachment--png {
+      background-color: #FAFBFC;
+      border: 1px dashed #0366d6;
+      border-radius: 3px;
+      img {
+          @extend .img-responsive;
+          margin-left: auto;
+          margin-right: auto;
+      }
+      figcaption {
+          @extend .text-center;
+          padding-bottom: 2px;
+      }
+  }
+  figure.attachment--pdf {
+      border: 1px dashed #0366d6;
+      border-radius: 3px;
+      display: inline-block;
+      margin-bottom:10px;
+      figcaption {
+          padding: 2px 7px;
+          span.attachment__size {
+              @extend .text-small;
+          }
+      }
+      :hover {
+          background-color: #F5F5F5;
+      }
+  }
+  figure {
+    span.mention, 
+    span.reference {
+      color: #444;
+      @extend .text-strong;
+    }
+  }
+  
+  figure.attachment--content {
+    display: inline;
+    figcaption {
+      display: inline;
+    }
+  }
+}

@@ -1,8 +1,8 @@
 <% if local_assigns[:actions] == true %>
   <ul class="list-inline" style="float:left;">
     <%= content_tag :li, class: 'btn-group' do %>
-      <%= link_to '', class: "dropdown-toggle text-gray with-tooltip", data: {toggle: "dropdown"}, aria: {haspopup: "true", expanded: "false"}, title: 'Add to repository' do %>
-        <%= fa_icon('share-alt') %>
+      <%= link_to '', style:'box-shadow: none;', class: "dropdown-toggle text-gray text-small text-strong", data: {toggle: "dropdown"}, aria: {haspopup: "true", expanded: "false"} do %>
+        <%= fa_icon('plus', text: "#{'Add to repo' if !local_assigns[:referencation]}") %>
       <% end %>
       <ul class="dropdown-menu" id="biblio-entry-<%= entry.id %>-actions-add-repository">
         <%= render 'biblio/shared/actions_add_repository', entry: entry %>

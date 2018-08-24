@@ -1,0 +1,4 @@
+toastr["success"]("Title updated.");
+$("#edit-title-link").show();
+$("#edit_thread_<%= @thread.sequential_id %>").replaceWith("<%= escape_javascript(content_tag :h2, "#{@thread.title} #{content_tag :span, "##{@thread.sequential_id}", class: 'text-muted'}".html_safe, style: 'margin-top:0px;', id: 'title') %>");
+$("<%= escape_javascript(render @thread.titles.last) %>").appendTo("#items");

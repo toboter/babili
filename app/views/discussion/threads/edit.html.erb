@@ -1,0 +1,13 @@
+  <div class="row">
+    <div class="col-sm-12">
+      <%= simple_form_for [@namespace, @thread.discussable, :discussion, @thread] do |f| %>
+        <%= f.error_notification %>
+        <%= f.input :title %>
+
+        <div class="actions --spacious-20">
+          <%= f.submit class: 'btn btn-success pull-right text-strong' %>
+          <%= link_to 'Cancel', [@namespace, @thread.discussable, :discussion, @thread], class: 'btn btn-default pull-right', style: 'margin-right:10px;' %>
+           </div>
+      <% end %>
+    </div>
+  </div>

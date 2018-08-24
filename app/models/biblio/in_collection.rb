@@ -48,20 +48,20 @@ class Biblio::InCollection < Biblio::Entry
     {
       citation: citation,
       entry_type: type.demodulize,
-      author: authors.map(&:name).join(' '),
+      author: authors.map(&:name),
       title: title,
       booktitle: collection.title,
-      editor: editors.map(&:name).join(' '),
+      editor: editors.map(&:name),
       publisher: publisher.name,
-      address: places.map(&:given).join(' '),
-      series: [serie.try(:title), serie.try(:abbr), serie.try(:print_issn)].join(' '),
+      address: places.map(&:given),
+      series: [serie.try(:title), serie.try(:abbr), serie.try(:print_issn)].compact,
       year: year,
-      tag: tag_list.join(' '),
       pages: pages,
       note: note,
       url: url,
       doi: doi,
-      abstract: abstract
+      abstract: abstract,
+      tags: tag_list
     }
   end
 

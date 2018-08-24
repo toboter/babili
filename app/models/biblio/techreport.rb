@@ -57,19 +57,19 @@ class Biblio::Techreport < Biblio::Entry
     {
       citation: citation,
       entry_type: type.demodulize,
-      author: authors.map(&:name).join(' '),
+      author: authors.map(&:name),
       title: title,
       institution: institution.try(:name),
       year: year,
       subtype: subtype,
-      series: [serie.try(:title), serie.try(:abbr), serie.try(:print_issn)].join(' '),
+      series: [serie.try(:title), serie.try(:abbr), serie.try(:print_issn)].compact,
       number: number,
-      address: places.map(&:given).join(' '),
-      tag: tag_list.join(' '),
+      address: places.map(&:given),
       note: note,
       url: url,
       doi: doi,
-      abstract: abstract
+      abstract: abstract,
+      tags: tag_list
     }
   end
 

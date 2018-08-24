@@ -1,0 +1,2 @@
+toastr["success"]("Comment updated.");
+$("#edit-discussion-comment-<%= @comment.id %>").replaceWith("<%= escape_javascript(render @comment) %>");

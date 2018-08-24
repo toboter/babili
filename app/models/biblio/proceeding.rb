@@ -69,20 +69,20 @@ class Biblio::Proceeding < Biblio::Entry
     {
       citation: citation,
       entry_type: type.demodulize,
-      author: editors.map(&:name).join(' '),
+      author: editors.map(&:name),
       title: title,
       publisher: publisher.try(:name),
-      series: [serie.try(:title), serie.try(:abbr), serie.try(:print_issn)].join(' '),
+      series: [serie.try(:title), serie.try(:abbr), serie.try(:print_issn)].compact,
       year: year,
-      address: places.map(&:given).join('; '),
-      tag: tag_list.join(' '),
+      address: places.map(&:given),
       volume: volume,
       note: note,
       isbn: print_isbn,
       url: url,
       doi: doi,
       abstract: abstract,
-      organization: organization.try(:name)
+      organization: organization.try(:name),
+      tags: tag_list
     }
   end
 

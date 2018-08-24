@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<div>
+  <%= render @file_upload %>
+</div>
+
+Ref count: <%= @file_upload.references_count %>
+<% @file_upload.references.each do |reference| %>
+  <%= reference.inspect %>
+<% end %>
+
+<p>by <%= @file_upload.uploader.name %></p>
+
+<%= link_to 'Remove', raw_file_upload_path(@file_upload), method: :delete, data: { confirm: 'Are you sure?' } %>

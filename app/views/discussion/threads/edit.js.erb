@@ -1,0 +1,2 @@
+$("#edit-title-link").hide();
+$("#title").replaceWith("<%= escape_javascript(render 'discussion/threads/edit', thread: @thread, remote: true) %>");

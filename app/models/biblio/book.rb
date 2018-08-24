@@ -24,7 +24,7 @@ class Biblio::Book < Biblio::Entry
   end
 
   has_many :creatorships, dependent: :destroy, class_name: 'Biblio::Creatorship', foreign_key: :entry_id
-  has_many :authors, through: :creatorships, source: :agent_appellation
+  has_many :authors, -> { order 'biblio_creatorships.id asc' }, through: :creatorships, source: :agent_appellation
   attr_json :title, :string
   attr_json :publisher_id, :integer
   attr_json :year, :string
@@ -71,20 +71,20 @@ class Biblio::Book < Biblio::Entry
     {
       citation: citation,
       entry_type: type.demodulize,
-      author: authors.map(&:name).join(' '),
+      author: authors.map(&:name),
       title: title,
       publisher: publisher.try(:name),
-      series: [serie.try(:title), serie.try(:abbr), serie.try(:print_issn)].join(' '),
+      series: [serie.try(:title), serie.try(:abbr), serie.try(:print_issn)].compact,
       year: year,
-      address: places.map(&:given).join(' '),
-      tag: tag_list.join(' '),
+      address: places.map(&:given),
       volume: volume,
       number: number,
       note: note,
       isbn: print_isbn,
       url: url,
       doi: doi,
-      abstract: abstract
+      abstract: abstract,
+      tags: tag_list
     }
   end
 

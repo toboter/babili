@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180503113852) do
+ActiveRecord::Schema.define(version: 2018_08_21_163447) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -120,6 +120,7 @@ ActiveRecord::Schema.define(version: 20180503113852) do
     t.datetime "updated_at", null: false
     t.string "citation_raw"
     t.integer "sequential_id"
+    t.integer "references_count"
     t.index ["citation_raw", "sequential_id"], name: "index_biblio_entries_on_citation_raw_and_sequential_id", unique: true
     t.index ["creator_id"], name: "index_biblio_entries_on_creator_id"
     t.index ["data"], name: "index_biblio_entries_on_data", using: :gin
@@ -192,6 +193,72 @@ ActiveRecord::Schema.define(version: 20180503113852) do
     t.string "slug"
     t.integer "position"
     t.index ["slug"], name: "index_cms_help_categories_on_slug", unique: true
+  end
+
+  create_table "discussion_assignments", force: :cascade do |t|
+    t.integer "thread_id"
+    t.integer "assignee_id"
+    t.integer "assigner_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["assignee_id"], name: "index_discussion_assignments_on_assignee_id"
+    t.index ["assigner_id"], name: "index_discussion_assignments_on_assigner_id"
+    t.index ["thread_id"], name: "index_discussion_assignments_on_thread_id"
+  end
+
+  create_table "discussion_comments", force: :cascade do |t|
+    t.integer "thread_id"
+    t.integer "author_id"
+    t.integer "versions_count", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_discussion_comments_on_author_id"
+    t.index ["thread_id"], name: "index_discussion_comments_on_thread_id"
+  end
+
+  create_table "discussion_states", force: :cascade do |t|
+    t.integer "thread_id"
+    t.integer "setter_id"
+    t.string "content", default: "open"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["content"], name: "index_discussion_states_on_content"
+    t.index ["setter_id"], name: "index_discussion_states_on_setter_id"
+    t.index ["thread_id"], name: "index_discussion_states_on_thread_id"
+  end
+
+  create_table "discussion_threads", force: :cascade do |t|
+    t.integer "discussable_id"
+    t.string "discussable_type"
+    t.integer "author_id"
+    t.integer "sequential_id", null: false
+    t.string "state"
+    t.integer "comments_count", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_discussion_threads_on_author_id"
+    t.index ["discussable_id", "discussable_type"], name: "index_discussion_threads_on_discussable_id_and_discussable_type"
+    t.index ["sequential_id", "discussable_id", "discussable_type"], name: "index_discussion_threads_on_sequential_id_and_discussable", unique: true
+    t.index ["state"], name: "index_discussion_threads_on_state"
+  end
+
+  create_table "discussion_titles", force: :cascade do |t|
+    t.integer "thread_id"
+    t.integer "author_id"
+    t.string "content"
+    t.string "changed_content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_discussion_titles_on_author_id"
+    t.index ["thread_id"], name: "index_discussion_titles_on_thread_id"
+  end
+
+  create_table "discussion_versions", force: :cascade do |t|
+    t.integer "comment_id"
+    t.text "body"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["comment_id"], name: "index_discussion_versions_on_comment_id"
   end
 
   create_table "friendly_id_slugs", id: :serial, force: :cascade do |t|
@@ -267,6 +334,18 @@ ActiveRecord::Schema.define(version: 20180503113852) do
     t.integer "person_id"
     t.index ["organization_id"], name: "index_memberships_on_organization_id"
     t.index ["person_id"], name: "index_memberships_on_person_id"
+  end
+
+  create_table "mentions", force: :cascade do |t|
+    t.integer "mentionable_id"
+    t.string "mentionable_type"
+    t.integer "mentionee_id"
+    t.integer "mentioner_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["mentionable_id", "mentionable_type"], name: "index_mentions_on_mentionable_id_and_mentionable_type"
+    t.index ["mentionee_id"], name: "index_mentions_on_mentionee_id"
+    t.index ["mentioner_id"], name: "index_mentions_on_mentioner_id"
   end
 
   create_table "namespaces", force: :cascade do |t|
@@ -425,6 +504,35 @@ ActiveRecord::Schema.define(version: 20180503113852) do
     t.index ["resource_owner_id"], name: "index_personal_access_tokens_on_resource_owner_id"
   end
 
+  create_table "raw_file_uploads", force: :cascade do |t|
+    t.string "slug"
+    t.string "type"
+    t.string "file_signature"
+    t.text "file_data"
+    t.integer "uploader_id"
+    t.string "creator"
+    t.string "file_copyright"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "references_count"
+    t.index ["file_signature"], name: "index_raw_file_uploads_on_file_signature"
+    t.index ["slug"], name: "index_raw_file_uploads_on_slug"
+    t.index ["type"], name: "index_raw_file_uploads_on_type"
+  end
+
+  create_table "references", force: :cascade do |t|
+    t.integer "referencing_id"
+    t.string "referencing_type"
+    t.integer "referenceable_id"
+    t.string "referenceable_type"
+    t.integer "referencor_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["referenceable_id", "referenceable_type"], name: "index_references_on_referenceable_id_and_referenceable_type"
+    t.index ["referencing_id", "referencing_type"], name: "index_references_on_referencing_id_and_referencing_type"
+    t.index ["referencor_id"], name: "index_references_on_referencor_id"
+  end
+
   create_table "repositories", force: :cascade do |t|
     t.integer "namespace_id"
     t.string "name"
@@ -531,6 +639,7 @@ ActiveRecord::Schema.define(version: 20180503113852) do
     t.string "slug"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "references_count"
     t.index ["creator_id"], name: "index_vocab_concepts_on_creator_id"
     t.index ["scheme_id"], name: "index_vocab_concepts_on_scheme_id"
     t.index ["slug"], name: "index_vocab_concepts_on_slug", unique: true

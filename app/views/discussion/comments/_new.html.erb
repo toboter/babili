@@ -1,0 +1,23 @@
+<div class="media" id="discussion-comment-new">
+  <div class="media-left">
+    <%= link_to current_user.person.namespace do %>
+      <%= background_image_div(current_user.person, :small_thumb, {class: 'media-object organization-member-avatar', style: 'height:50px;width:50px; background-position:center;'}) %>
+    <% end %>
+  </div>
+  <div class="media-body">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <%= simple_form_for [@namespace, @thread.discussable, :discussion, @thread, comment], remote: remote do |f| %>
+          <%= f.error_notification %>
+          <%= f.simple_fields_for :versions, f.object.versions.build do |v| %>
+            <%= v.input :body, label: false, as: :hidden, input_html: { id: 'comment_body', data: { container: @thread.discussable.to_global_id } } %>
+          <% end %>
+          <trix-editor input='comment_body' placeholder="Leave a comment" id="trix_comment_body" class="trix-content" data-mentions-path="/internal/mentionees.json" data-references-path="/internal/referenceables.json"></trix-editor>
+          <div class="actions --spacious-10">
+            <%= f.submit "Comment #{'and reopen' if @thread.closed?}", class: 'btn btn-success pull-right text-strong' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

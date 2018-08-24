@@ -19,23 +19,33 @@ class Biblio::EntriesController < ApplicationController
     per_page = current_user.try(:person).try(:per_page).present? ? current_user.person.per_page : DEFAULT_PER_PAGE
 
     @results = Biblio::Entry.search(query, 
-      fields: [{citation: :exact}, :entry_type, :author, :editor, :title, :booktitle, :journal, :series, {year: :exact}, :publisher, :address, "tag^10", 
+      fields: [{citation: :exact}, :entry_type, :author, :editor, :title, :booktitle, :journal, :series, {year: :exact}, :publisher, :address, "tags^10", 
         :volume, :number, :note, :isbn, :url, :doi, :abstract],
       where: { id: {not: @serials.ids} },
       misspellings: {below: 1},
       order: sort_order, 
       page: params[:page], 
-      per_page: per_page)
-    
+      per_page: per_page,
+      aggs: [:author, :tags, :editor, :publisher]
+      ) do |body|
+        body[:query][:bool][:must] = { query_string: { query: query, default_operator: "and" } }
+      end
+
     respond_to do |format|
       format.html
-      format.json { render json: @results, each_serializer: Biblio::EntrySerializer }
+      format.json { render json: @results, each_serializer: EntrySerializer }
       format.bibtex { render plain: (BibTeX::Bibliography.new << @results.map(&:to_bib))  }
     end
   
   end
 
   def show
+    @discussions = @entry.references.where(referencing_type: 'Discussion::Comment')
+    respond_to do |format|
+      format.html
+      format.json { render json: @entry, serializer: EntrySerializer }
+      format.bibtex { render plain: (BibTeX::Bibliography.new << @entry.to_bib) }
+    end
   end
 
   def new

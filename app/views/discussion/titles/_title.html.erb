@@ -1,0 +1,13 @@
+<div class="thread-element" id="full-discussion-event-<%= title.created_at %>">
+  <div class="event-left">
+  </div>
+  <div class="event-body" id="discussion-event-<%= title.created_at %>">
+    <%= fa_stacked_icon('pencil', base: "circle-o", class: 'icon-pre') %>
+    <div class="event">
+      <%= link_to background_image_div(title.author, :small_thumb, {class: 'author-avatar'}), title.author.namespace %>
+      <%= link_to title.author.name, title.author.namespace, class: 'author hovercard', data: {toggle: 'popover', content: render('people/hovercard', person: title.author)} %>
+      changed the title from <%= content_tag :span, title.changed_content, class: 'title' %> to <%= content_tag :span, title.content, class: 'title' %>
+      <%= content_tag :span, "#{distance_of_time_in_words(title.created_at, Time.now)} ago", title: title.created_at, class: 'date' %>
+    </div>
+  </div>
+</div>

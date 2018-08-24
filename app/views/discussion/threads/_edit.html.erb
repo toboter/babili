@@ -1,0 +1,13 @@
+<%= simple_form_for [@namespace, @thread.discussable, :discussion, thread], remote: true do |f| %>
+  <%= f.error_notification %>
+    <div class="input-group --spacing-20">
+      <%= f.input :title, label: false %>
+      <span class="input-group-btn">
+        <%= f.submit 'Update', class: 'btn btn-success text-strong' %>
+        <%= link_to 'or cancel', [@namespace, @thread.discussable, :discussion, thread], class: 'btn btn-default' %>
+      </span>
+    </div><!-- /input-group -->
+  
+  
+  
+<% end %>

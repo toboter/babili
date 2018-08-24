@@ -26,8 +26,11 @@ class Repository < ApplicationRecord
   has_many :referencations, class_name: 'Biblio::Referencation', dependent: :destroy
   has_many :references, through: :referencations, class_name: 'Biblio::Entry', source: :entry
 
+  has_many :threads, as: :discussable, class_name: 'Discussion::Thread'
+
   validates :name, :description,
     presence: true
+    
   validates :name, 
     uniqueness: { 
       scope: :namespace_id, 
@@ -35,7 +38,7 @@ class Repository < ApplicationRecord
     }
   validates :name, 
     exclusion: { 
-      in: %w(vocabularies people search repositories applications lists bibliography bibliographies data),
+      in: %w(discussions vocabularies people search repositories applications lists bibliography bibliographies data),
       message: "%{value} is reserved."
     }
 

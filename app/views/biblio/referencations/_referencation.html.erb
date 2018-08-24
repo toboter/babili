@@ -1,0 +1,7 @@
+<%= content_tag :li, class: 'list-group-item' do %>
+  <%= link_to referencation.repository.name_tree.join('/'), namespace_repository_biblio_references_path(referencation.repository.owner, referencation.repository), class: 'text-strong' %>
+  <div class="text-small">
+    added by <%= link_to referencation.creator.name, referencation.creator.namespace %>
+    on <%= content_tag :span, referencation.created_at.to_date.to_formatted_s(:long), title: referencation.created_at %>
+  </div>
+<% end %>

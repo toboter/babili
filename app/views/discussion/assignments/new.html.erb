@@ -1,0 +1,7 @@
+  <div class="row">
+    <div class="col-sm-12">
+      Assign a person or group to <%= link_to @thread.title, [@namespace, @thread.discussable, :discussion, @thread], class: 'text-strong' %>
+      <hr>
+      <%= render 'new', assignment: @assignment, assignees: @assignees remote: false %>
+    </div>
+  </div>

@@ -15,6 +15,7 @@ class Biblio::Entry < ApplicationRecord
   belongs_to :creator, class_name: 'Person'
   has_many :referencations, class_name: 'Biblio::Referencation', dependent: :destroy
   has_many :repositories, through: :referencations
+  has_many :references, as: :referenceable
 
   accepts_nested_attributes_for :referencations, reject_if: :all_blank, allow_destroy: true
 
@@ -105,7 +106,7 @@ class Biblio::Entry < ApplicationRecord
     elsif self.type == 'Biblio::Serie'
       self.citation_raw = key.present? ? key : title
     elsif self.type == 'Biblio::Journal'
-      self.citation_raw = key.present? ? key : (name + "#{' [' + abbr + ']' if abbr.present?}")
+      self.citation_raw = key.present? ? key : name
     end
   end
 
@@ -123,17 +124,24 @@ class Biblio::Entry < ApplicationRecord
     "#{citation_raw}#{numeric_to_alph(sequential_id) if sequential_id > 1 && !self.type.in?(['Biblio::Serie', 'Biblio::Journal'])}"
   end
 
+  def name
+    citation
+  end
+
   def bibliographic(style='apa', locale='de')
-    csl_style = CSL::Style.load(style)
-    csl_locale = CSL::Locale.load(locale)
+    unless type == 'Biblio::Journal' || type == 'Biblio::Serie'
+      csl_style = CSL::Style.load(style)
+      csl_locale = CSL::Locale.load(locale)
 
-    citation_item = CiteProc::CitationItem.new(id: self.bibtex_citation) do |c|
-      c.data = CiteProc::Item.new(self.to_bib.to_citeproc)
+      citation_item = CiteProc::CitationItem.new(id: self.bibtex_citation) do |c|
+        c.data = CiteProc::Item.new(self.to_bib.to_citeproc)
+      end
+
+      cpr = CiteProc::Ruby::Renderer.new(:format => 'html', :style => csl_style, :locale => csl_locale)
+      cpr.render(citation_item, csl_style.bibliography).html_safe
+    else
+      nil
     end
-
-    cpr = CiteProc::Ruby::Renderer.new(:format => 'html', :style => csl_style, :locale => csl_locale)
-    cpr.render(citation_item, csl_style.bibliography).html_safe
-
   end
 
   Alpha26 = ("a".."z").to_a

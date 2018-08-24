@@ -1,0 +1,35 @@
+<div class="thread-element" id="full-discussion-event-<%= state.created_at %>">
+  <div class="event-left">
+  </div>
+  <div class="event-body" id="discussion-event-<%= state.created_at %>">
+    <% if state.content == 'open' %>
+      <%= fa_stacked_icon('exclamation', base: "circle-o", class: 'icon-pre') %>
+      <div class="event">
+        <%= link_to background_image_div(state.setter, :small_thumb, {class: 'author-avatar'}), state.setter.namespace %>
+        <%= link_to state.setter.name, state.setter.namespace, class: 'author hovercard', data: {toggle: 'popover', content: render('people/hovercard', person: state.setter)} %>
+        <%= content_tag :span, 'reopend' %> this 
+        <%= content_tag :span, "#{distance_of_time_in_words(state.created_at, Time.now)} ago", title: state.created_at, class: 'date' %>
+      </div>
+    <% elsif state.content == 'close' %>
+      <%= fa_stacked_icon('check', base: "circle-o", class: 'icon-pre') %>
+      <div class="event">
+        <%= link_to background_image_div(state.setter, :small_thumb, {class: 'author-avatar'}), state.setter.namespace %>
+        <%= link_to state.setter.name, state.setter.namespace, class: 'author hovercard', data: {toggle: 'popover', content: render('people/hovercard', person: state.setter)} %>
+        <%= content_tag :span, 'closed' %> this 
+        on <%= content_tag :span, state.created_at.to_date.to_formatted_s(:long), title: state.created_at, class: 'date' %>
+      </div>
+    <% elsif state.content == 'lock' %>
+      <%= fa_stacked_icon('times', base: "circle-o", class: 'icon-pre') %>
+      <div class="event">
+        this was locked
+        on <%= content_tag :span, state.created_at.to_date.to_formatted_s(:long), title: state.created_at, class: 'date' %>
+      </div>
+    <% elsif state.content == 'unlock' %>
+      <%= fa_stacked_icon('check', base: "circle-o", class: 'icon-pre') %>
+      <div class="event">
+        this was unlocked
+        on <%= content_tag :span, state.created_at.to_date.to_formatted_s(:long), title: state.created_at, class: 'date' %>
+      </div>
+    <% end %>
+  </div>
+</div>
