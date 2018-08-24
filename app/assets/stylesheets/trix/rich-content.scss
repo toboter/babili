@@ -2,6 +2,11 @@
   display: inline-block;
 }
 
+.popover {
+  max-width: 380px !important;
+  border-radius: 2px;
+}
+
 span.trix-reference + figcaption,
 span.trix-mention + figcaption {
   display: none;
@@ -35,23 +40,50 @@ trix-references {
   }
 }
 
-figure {
-  span.mention, 
-  span.reference {
+.thread-element {
+  @extend .media;
+  overflow: visible;
+  .comment-left {
+    @extend .media-left;
+  }
+  .event-left {
+    @extend .media-left;
+    min-width: 60px;
+  }
+  a {
+    color: #555;
+    @extend .text-strong;
+    div.author-avatar {
+      @extend .media-object;
+      @extend .organization-member-avatar;
+      height:20px;
+      width:20px; 
+      background-position:center;
+    }
+  }
+  a:hover {
+    text-decoration: none;
+    color: #222;
+  }
+  .author {
     color: #444;
     @extend .text-strong;
   }
-}
-
-figure.attachment--content {
-  display: inline;
-  figcaption {
-    display: inline;
+  .title {
+    color: #444;
+    @extend .text-strong;
   }
-}
+  .date {
+    font-weight: normal;
+  }
 
-.media {
-  .media-body-event {
+  .comment-body {
+    @extend .media-body;
+    @extend .panel;
+    @extend .panel-default;
+    overflow: visible;
+  }
+  .event-body {
     @extend .media-body;
     overflow: visible;
     .icon-pre {
@@ -62,41 +94,15 @@ figure.attachment--content {
     }
     .event {
       margin-left:40px;
-      a {
-        color: #555;
-        @extend .text-strong;
-        div.author-avatar {
-          @extend .media-object;
-          @extend .organization-member-avatar;
-          height:20px;
-          width:20px; 
-          background-position:center;
-        }
-      }
-      a:hover {
-        text-decoration: none;
-        color: #222;
-      }
-      .author {
-        color: #444;
-        @extend .text-strong;
-      }
-      .title {
-        color: #444;
-        @extend .text-strong;
-      }
-      .date {
-      }
     }
   }
 }
 
-.popover {
-  max-width: 380px !important;
-  border-radius: 2px;
-}
-
-.comment, trix-editor {
+.comment-content, trix-editor {
+  a {
+    font-weight: normal;
+    color: #0366d6;
+  }
   figure.attachment--jpg, 
   figure.attachment--png {
       background-color: #FAFBFC;
@@ -126,5 +132,19 @@ figure.attachment--content {
       :hover {
           background-color: #F5F5F5;
       }
+  }
+  figure {
+    span.mention, 
+    span.reference {
+      color: #444;
+      @extend .text-strong;
+    }
+  }
+  
+  figure.attachment--content {
+    display: inline;
+    figcaption {
+      display: inline;
+    }
   }
 }

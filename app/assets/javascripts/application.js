@@ -31,28 +31,19 @@ $(function () {
       placement: 'bottom'
   });
 
-  $(".hovercard").popover({
-    trigger: 'manual',
-    html: true,
-    animation: false,
-    placement: 'top'
+  $('.hovercard').each(function () {
+    var $this = $(this);
+    $this.popover({
+        trigger: 'hover',
+        html: true,
+        content: 'Content Here',
+        container: $this,
+        placement: 'top'
     })
-    .on('mouseenter', function () {
-        var _this = this;
-        $(this).popover('show'); // hier muss ein delay rein
-        $('.popover').on('mouseleave', function () {
-            $(_this).popover('hide');
-        });
-    })
-    .on('mouseleave', function () {
-        var _this = this;
-        setTimeout(function () {
-            if (!$('.popover:hover').length) {
-                $(_this).popover('hide');
-            }
-        }, 300);
-    });
-  $('[data-toggle="popover"]').popover();
+  });
+
+
+  $('.popover').popover();
 })
 
 

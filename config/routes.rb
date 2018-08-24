@@ -387,7 +387,7 @@ Rails.application.routes.draw do
             resources :commits, only: [:index, :show]
           end
         end
-        resources :reports
+        resources :docs
       end
     end
   end

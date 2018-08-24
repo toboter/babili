@@ -1,8 +1,7 @@
-<div class="media" id="full-discussion-event-<%= title.created_at %>" style="overflow: visible;">
-  <div class="media-left">
-    <div style="width: 50px;", class='placeholder'></div>
+<div class="thread-element" id="full-discussion-event-<%= title.created_at %>">
+  <div class="event-left">
   </div>
-  <div class="media-body-event" id="discussion-event-<%= title.created_at %>">
+  <div class="event-body" id="discussion-event-<%= title.created_at %>">
     <%= fa_stacked_icon('pencil', base: "circle-o", class: 'icon-pre') %>
     <div class="event">
       <%= link_to background_image_div(title.author, :small_thumb, {class: 'author-avatar'}), title.author.namespace %>

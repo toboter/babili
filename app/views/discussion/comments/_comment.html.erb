@@ -1,15 +1,15 @@
-<div class="media comment" id="full-discussion-comment-<%= comment.id %>" style="overflow: visible;">
-  <div class="media-left">
+<div class="thread-element" id="full-discussion-comment-<%= comment.id %>">
+  <div class="comment-left">
     <%= link_to comment.author.try(:namespace) do %>
       <%= background_image_div(comment.author, :small_thumb, {class: 'media-object organization-member-avatar', style: 'height:50px;width:50px; background-position:center;'}) %>
     <% end %>
   </div>
-  <div class="media-body panel panel-default" id="discussion-comment-<%= comment.id %>" style="overflow: visible;">
+  <div class="comment-body" id="discussion-comment-<%= comment.id %>">
     <div class="panel-heading">
       <div class="panel-heading-left" style="display:inline;">
-        <%= content_tag :span, comment.author.name, class: 'text-strong' %>
+        <%= link_to comment.author.name, comment.author.namespace, class: 'author hovercard', data: {toggle: 'popover', content: render('people/hovercard', person: comment.author)} %>
         <%= content_tag :span, class: 'text-gray' do %>
-          commented on <%= link_to comment.created_at.to_date.to_formatted_s(:long), [@namespace, @thread.discussable, :discussion, @thread, anchor: "discussion-comment-#{comment.id}"], title: comment.created_at, class: 'no-link' %>
+          commented on <%= link_to comment.created_at.to_date.to_formatted_s(:long), [@namespace, @thread.discussable, :discussion, @thread, anchor: "discussion-comment-#{comment.id}"], title: comment.created_at, class: 'date' %>
           <%= content_tag :div, class: "dropdown", style: "display:inline;" do %>
             • 
             <a class="dropdown-toggle no-link" id="comment-options" style="cursor: pointer;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -38,7 +38,7 @@
         <% end if can?(:destroy, comment) || can?(:update, comment) %>
       </div>
     </div>
-    <div class="panel-body">
+    <div class="panel-body comment-content">
       <%= commentify(comment.current_body) %>
     </div>
   </div>
