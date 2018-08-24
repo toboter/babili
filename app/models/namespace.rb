@@ -38,7 +38,7 @@ class Namespace < ApplicationRecord
   def search_data
     {
       ns_name: name,
-      name: subclass.try(:name),
+      name: subclass.try(:name)
     }
   end
 end

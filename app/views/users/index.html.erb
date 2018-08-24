@@ -11,9 +11,13 @@
 <table class="table table-simple">
   <thead>
     <tr>
-      <th>Name</th>
-      <th>Email</th>
-	    <th>Roles</th>
+      <th style="vertical-align:top;">Name</th>
+      <th style="vertical-align:top;">Email</th>
+	    <th style="vertical-align:top;">Roles</th>
+      <th style="vertical-align:top;text-align:right;">
+        Remove<br>
+        <span class="text-small" style="font-weight:normal;">Be sure what you do here. This is only to remove fake accounts! Not to remove users who voted for deleting their account.</span>
+      </th>
     </tr>
   </thead>
 
@@ -24,7 +28,9 @@
           <%= content_tag :strong, user.try(:person).try(:namespace).try(:slug) %>
         </td>
         <td>
-          <%= user.email %>
+          <%= user.email %><br>
+          <%= content_tag :span, 'Email bestätigt', class: 'text-success' if user.confirmed? %>
+          <%= content_tag :span, 'Noch nicht bestätigt', class: 'text-warning text-strong' if !user.confirmed? %>
         </td>
         <%= content_tag :td do %>
           <%= simple_form_for user, url: approve_user_path(user), remote: true, html: { id: "approve_user_#{user.id}", class: 'approve_user' } do |f| %>
@@ -35,6 +41,9 @@
             <%= f.error_notification %>
             <%= f.input :is_admin, input_html: { onchange: "$(this.form).submit();", id: "user_is_admin_#{user.id}" } %>
           <% end %>
+        <% end %>
+        <%= content_tag :td do %>
+          <%= link_to(fa_icon('times fw', text: 'Destroy'), user, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-xs text-strong pull-right') if current_user.is_admin? && current_user != user && !user.approved? %>
         <% end %>
       <% end %>
     <% end %>

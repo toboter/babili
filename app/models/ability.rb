@@ -102,13 +102,13 @@ class Ability
 
     can :manage, User if user.is_admin?
     cannot :index, User unless user.is_admin?
-    can [:show, :create, :update, :destroy], User do |u|
+    can [:show, :create, :update], User do |u|
       u == user
     end
     can [:update, :edit], Person do |p|
       p.user == user
     end
 
-    cannot :manage, [Zensus::Agent, Zensus::Event, Zensus::Activity] unless user
+    cannot :manage, [Zensus::Agent, Zensus::Event, Zensus::Activity] unless user && user.approved?
   end
 end

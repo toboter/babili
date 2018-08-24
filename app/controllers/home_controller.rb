@@ -24,12 +24,12 @@ class HomeController < ApplicationController
     @showcased = Oread::Application.order("RANDOM()").first
     @vocabularies = Vocab::Scheme.order(created_at: :desc)
     @repositories = Repository.order(created_at: :desc)
-    @people = Person.order("RANDOM()").limit(6).sort_by {|p| p.name}
+    @people = Person.approved.order("RANDOM()").limit(6).sort_by {|p| p.name}
     @organizations = Organization.order("RANDOM()").limit(4).sort_by {|p| p.name}
   end
 
   def people
-    @people = Person.order(family_name: :asc)
+    @people = Person.approved.order(family_name: :asc)
   end
 
   def organizations

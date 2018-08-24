@@ -21,6 +21,10 @@ class Person < ApplicationRecord
   validates :namespace, presence: true
 
   delegate :repositories, to: :namespace
+
+  scope :approved, -> { joins(:user).where(users: {approved: true}) }
+
+  #after_commit :reindex_namespace
   
   def to_param
     namespace.slug if namespace
@@ -74,6 +78,10 @@ class Person < ApplicationRecord
       grants << application.grants(self)
     end
     grants.flatten
+  end
+
+  def reindex_namespace
+    namespace.reindex
   end
 
 end

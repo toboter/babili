@@ -301,7 +301,7 @@ Rails.application.routes.draw do
 
       get '/admin', to: redirect("/settings/admin/users"), as: 'admin_settings'
       scope path: 'admin' do
-        resources :users, only: [:index, :update] do
+        resources :users, only: [:index, :update, :destroy] do
           patch :approve, on: :member
           patch :make_admin, on: :member
         end

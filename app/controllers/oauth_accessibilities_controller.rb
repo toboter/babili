@@ -11,7 +11,7 @@ class OauthAccessibilitiesController < ApplicationController
 
   def new
     authorize! :create_accessibility, @oauth_application
-    @accessors = Organization.where.not(id: @oauth_application.organization_accessor_ids) + Person.where.not(id: @oauth_application.person_accessor_ids)
+    @accessors = Organization.where.not(id: @oauth_application.organization_accessor_ids) + Person.approved.where.not(id: @oauth_application.person_accessor_ids)
     @oauth_accessibility = @oauth_application.accessibilities.new
   end
 

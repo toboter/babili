@@ -24,10 +24,14 @@ class User < ApplicationRecord
   has_many :user_sessions, class_name: 'UserSession', dependent: :destroy
   belongs_to :person
 
-  before_validation(on: :create) { self.slug = self.slug.downcase.to_param }
+  before_validation(on: :create) do
+    self.slug = self.slug.downcase.to_param
+    self.person = self.build_person
+    self.person.build_namespace(name: slug)
+  end
 
   validates :slug, presence: true, on: :create
-  validates :slug, exclusion: { in: %w(vocabularies zensus locate users people organizations search about contact explore collections settings blog help news sidekiq api oauth),
+  validates :slug, exclusion: { in: %w(vocabularies zensus locate users people organizations search about contact explore collections settings blog help news sidekiq api oauth discussions),
     message: "%{value} is reserved." }, on: :create
   validates :slug, format: { without: /^\d/, multiline: true}, on: :create
   validates :slug, length: { minimum: 3 }, on: :create
@@ -35,9 +39,8 @@ class User < ApplicationRecord
   validate :unique_namespace, on: :create
 
   after_validation(on: :create) do
-    self.person = self.build_person
-    self.person.build_namespace(name: slug)
   end
+
   after_update :enroll_to_default_oread_apps, if: :is_approved?
   after_update :audit_password_change, if: :needs_password_change_audit?
   after_update :send_approval_mail, if: :is_approved?

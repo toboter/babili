@@ -34,6 +34,17 @@ class UsersController < ApplicationController
       end
     end
   end
+
+  def destroy
+    if current_user.is_admin? && current_user != @user && !@user.approved?
+      @user.person.destroy
+      @user.destroy
+    end
+    respond_to do |format|
+      format.html { redirect_to users_url, notice: 'User & Person with Namespace was successfully removed.' }
+      format.js
+    end
+  end
   
   private
   def user_params
