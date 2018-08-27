@@ -13,6 +13,10 @@ class ApplicationController < ActionController::Base
     current_user.person if current_user
   end
   helper_method :current_person
+
+  def user_for_paper_trail
+    user_signed_in? ? current_user.person.id : 'Unknown user'
+  end
   
   protected
 

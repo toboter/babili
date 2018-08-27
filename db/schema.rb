@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_21_163447) do
+ActiveRecord::Schema.define(version: 2018_08_27_104510) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -193,6 +193,23 @@ ActiveRecord::Schema.define(version: 2018_08_21_163447) do
     t.string "slug"
     t.integer "position"
     t.index ["slug"], name: "index_cms_help_categories_on_slug", unique: true
+  end
+
+  create_table "collaborations", force: :cascade do |t|
+    t.integer "collaboratable_id"
+    t.string "collaboratable_type"
+    t.integer "collaborator_id"
+    t.boolean "can_create", default: false
+    t.boolean "can_read", default: true
+    t.boolean "can_update", default: false
+    t.boolean "can_destroy", default: false
+    t.boolean "can_manage", default: false
+    t.integer "creator_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["collaboratable_type", "collaboratable_id"], name: "index_collaborations_on_collaboratable"
+    t.index ["collaborator_id"], name: "index_collaborations_on_collaborator_id"
+    t.index ["creator_id"], name: "index_collaborations_on_creator_id"
   end
 
   create_table "discussion_assignments", force: :cascade do |t|
@@ -619,6 +636,16 @@ ActiveRecord::Schema.define(version: 2018_08_21_163447) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "versions", force: :cascade do |t|
+    t.string "item_type", null: false
+    t.integer "item_id", null: false
+    t.string "event", null: false
+    t.string "whodunnit"
+    t.text "object"
+    t.datetime "created_at"
+    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
+  end
+
   create_table "vocab_associative_relations", id: :serial, force: :cascade do |t|
     t.integer "concept_id"
     t.string "property"
@@ -713,6 +740,67 @@ ActiveRecord::Schema.define(version: 2018_08_21_163447) do
     t.index ["creator_id"], name: "index_vocab_schemes_on_creator_id"
     t.index ["namespace_id"], name: "index_vocab_schemes_on_namespace_id"
     t.index ["slug"], name: "index_vocab_schemes_on_slug", unique: true
+  end
+
+  create_table "writer_categorizations", force: :cascade do |t|
+    t.integer "category_node_id"
+    t.integer "document_id"
+    t.integer "categorizer_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["categorizer_id"], name: "index_writer_categorizations_on_categorizer_id"
+    t.index ["category_node_id"], name: "index_writer_categorizations_on_category_node_id"
+    t.index ["document_id"], name: "index_writer_categorizations_on_document_id"
+  end
+
+  create_table "writer_category_node_hierarchies", id: false, force: :cascade do |t|
+    t.integer "ancestor_id", null: false
+    t.integer "descendant_id", null: false
+    t.integer "generations", null: false
+    t.index ["ancestor_id", "descendant_id", "generations"], name: "category_node_anc_desc_idx", unique: true
+    t.index ["descendant_id"], name: "category_node_desc_idx"
+  end
+
+  create_table "writer_category_nodes", force: :cascade do |t|
+    t.integer "parent_id"
+    t.string "type"
+    t.string "slug"
+    t.string "name"
+    t.integer "sort_order"
+    t.integer "creator_id"
+    t.integer "categorization_count", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "index_writer_category_nodes_on_creator_id"
+    t.index ["name"], name: "index_writer_category_nodes_on_name"
+    t.index ["parent_id"], name: "index_writer_category_nodes_on_parent_id"
+    t.index ["slug"], name: "index_writer_category_nodes_on_slug"
+    t.index ["sort_order"], name: "index_writer_category_nodes_on_sort_order"
+    t.index ["type"], name: "index_writer_category_nodes_on_type"
+  end
+
+  create_table "writer_documents", force: :cascade do |t|
+    t.integer "repository_id"
+    t.integer "sequential_id"
+    t.string "title"
+    t.text "content"
+    t.integer "char_count", default: 0
+    t.integer "word_count", default: 0
+    t.string "language"
+    t.datetime "published_at"
+    t.integer "publisher_id"
+    t.integer "creator_id"
+    t.jsonb "settings"
+    t.integer "drafts_count", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "index_writer_documents_on_creator_id"
+    t.index ["published_at"], name: "index_writer_documents_on_published_at"
+    t.index ["publisher_id"], name: "index_writer_documents_on_publisher_id"
+    t.index ["repository_id"], name: "index_writer_documents_on_repository_id"
+    t.index ["sequential_id", "repository_id"], name: "index_writer_documents_on_sequential_id_and_repository_id", unique: true
+    t.index ["sequential_id"], name: "index_writer_documents_on_sequential_id"
+    t.index ["title"], name: "index_writer_documents_on_title"
   end
 
   create_table "zensus_activities", id: :serial, force: :cascade do |t|

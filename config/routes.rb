@@ -141,6 +141,8 @@ Rails.application.routes.draw do
     end
   end
 
+
+
   constraints lambda { |r| r.subdomain != 'raw' && r.subdomain != 'api' } do
 
     # doorkeeper paths
@@ -367,6 +369,7 @@ Rails.application.routes.draw do
         end
       end
       resources :repositories, concerns: :discussable do
+        resources :documents, path: :docs, module: :writer
         get :settings, on: :member
         get :edit_topics, on: :member
         put :update_topics, on: :member
@@ -387,7 +390,6 @@ Rails.application.routes.draw do
             resources :commits, only: [:index, :show]
           end
         end
-        resources :docs
       end
     end
   end

@@ -1,0 +1,13 @@
+<div class="row">
+  <div class="col-md-10 col-centered">
+    <%= simple_form_for([@namespace, @repository, @document]) do |f| %>
+      <%= f.error_notification %>
+
+      <%= f.input :title, label: false, placeholder: 'Title' %>
+      <%= f.input :content, label: false, placeholder: 'Your text ...', input_html: {class: 'froala-edit'} %>
+
+      <%= f.submit %>
+
+    <% end %>
+  </div>
+</div>

@@ -45,9 +45,11 @@ trix-references {
   overflow: visible;
   .comment-left {
     @extend .media-left;
+    @extend .hidden-xs;
   }
   .event-left {
     @extend .media-left;
+    @extend .hidden-xs;
     min-width: 60px;
   }
   a {

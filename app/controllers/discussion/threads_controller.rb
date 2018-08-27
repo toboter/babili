@@ -3,7 +3,7 @@ module Discussion
     DEFAULT_PER_PAGE = 50
     load_resource :namespace
     load_resource :repository
-    load_and_authorize_resource :thread, through: [:repository, :entry], find_by: :sequential_id
+    load_and_authorize_resource :thread, through: :repository, find_by: :sequential_id
     
   
     def index

@@ -12,6 +12,15 @@ module ApplicationHelper
     ], pipeline_context
     pipeline.call(content)[:output].to_s.html_safe
   end
+
+  def documentify(content)
+    pipeline_context = { whitelist: Sanitize::Config::RELAXED }
+    pipeline = HTML::Pipeline.new [
+      # HTML::Pipeline::MarkdownFilter,
+      HTML::Pipeline::SanitizationFilter
+    ], pipeline_context
+    pipeline.call(content)[:output].to_s.html_safe
+  end
  
   def markdown(text)
     renderer = Redcarpet::Render::HTML.new(hard_wrap: true, filter_html: false, with_toc_data: true)

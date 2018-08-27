@@ -1,0 +1,28 @@
+<% title "#{@document.title} \\ Documents \\ ", false %>
+
+<div class="row document-wrapper" style="">
+  <div class="col-md-10 col-centered">
+    <%= content_tag :div, class: '--spacing-20 clearfix' do %>
+      <%= content_tag :span, @document.title, class: 'text-strong' %>
+      <%= content_tag :span, class: 'pull-right text-small text-strong' do %>
+        <%= link_to fa_icon('edit', text: 'Edit'), [:edit, @document.repository.owner, @document.repository, @document] %>
+        <%= link_to fa_icon('times', text: 'Remove'), [@document.repository.owner, @document.repository, @document], method: :delete, style: 'margin-left:10px;' %>
+      <% end %>
+      <div class="row --spacious-10">
+        <%= content_tag :div, class: 'col-md-8 text-gray text-small' do %>
+          <%= link_to background_image_div(@document.creator, :small_thumb, {class: 'author-avatar organization-member-avatar', style: 'height:20px;width:20px;background-position:center;'}), @document.creator.namespace %>
+          <%= link_to @document.creator.name, @document.creator.namespace, class: 'text-strong' %>
+          created this <%= content_tag :span, "#{distance_of_time_in_words(@document.created_at, Time.now)} ago", title: @document.created_at %>.<br>
+          Versions: <%= @document.drafts.count %>
+        <% end %>
+        <%= content_tag :div, class: 'col-md-4' do %>
+          <% @document.authors.each do |author| %>
+            <%= link_to background_image_div(author, :small_thumb, {class: 'author-avatar organization-member-avatar', style: 'height:20px;width:20px;background-position:center;'}), author.namespace, title: author.name %>
+          <% end if @document.authors.count > 1 || @document.authors.first != @document.creator %>
+        <% end %>
+      </div>
+      <hr>
+    <% end %>
+    <%= content_tag :div, raw(@document.content), class: 'fr-view' %>
+  </div>
+</div>

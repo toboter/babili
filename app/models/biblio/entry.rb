@@ -16,7 +16,20 @@ class Biblio::Entry < ApplicationRecord
   has_many :referencations, class_name: 'Biblio::Referencation', dependent: :destroy
   has_many :repositories, through: :referencations
   has_many :references, as: :referenceable
-
+  #
+  #
+  #
+  #
+  #
+  #
+  ## ADD FILES!!!
+  # Add aggs to referencations
+  #
+  # #
+  # 
+  #
+  # #
+  #
   accepts_nested_attributes_for :referencations, reject_if: :all_blank, allow_destroy: true
 
   def self.types

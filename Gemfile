@@ -66,6 +66,7 @@ gem 'sanitize', '~> 4.6', '>= 4.6.6'
 gem "selectize-rails"
 gem 'rails-bootstrap-markdown' #
 gem 'redcarpet' #
+gem "wysiwyg-rails"
 
 gem 'acts_as_list'
 gem 'closure_tree'
@@ -79,6 +80,7 @@ gem 'attr_json'
 
 gem 'searchkick'
 gem 'friendly_id'
+gem 'paper_trail'
 gem 'browser'
 gem 'geo_pattern'  # https://github.com/jasonlong/geo_pattern
 gem 'inline_svg'   # https://github.com/jamesmartin/inline_svg

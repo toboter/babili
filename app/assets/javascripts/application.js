@@ -15,6 +15,7 @@
 //= require jquery_ujs
 //= require toastr
 //= require bootstrap-markdown-bundle
+//= require froala_editor.min.js
 //= require trix
 //= require cocoon
 //= require dropzone
