@@ -1,5 +1,10 @@
-<div id="referenceables">
-  <%= f.simple_fields_for :referenceables do |r| %>
-    <%= render 'references/referenceable_fields', f: r %>
-  <% end %>
+<div id="referenceables" class="panel panel-default">
+  <div class="panel-heading text-strong text-gray">
+    <%= fa_icon('files') %> Attached files
+  </div>
+  <ul class="list-group" id="files-list">
+    <%= f.simple_fields_for :referenceables do |r| %>
+      <%= render 'references/referenceable_fields', f: r %>
+    <% end %>
+  </ul>
 </div>
