@@ -12,6 +12,10 @@
         <div class="list-group">
           <%= render @places.sort_by(&:default_name) %>
         </div>
+        <div class="--spacious">
+          <h5 class="text-strong">Toponyms only. No place exists.</h5>
+          <%= @toponyms.map(&:descriptor).join(', ') %>
+        </div>
       </div>
       <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
         <div class="list-group">

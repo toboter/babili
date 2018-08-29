@@ -4,6 +4,7 @@ class Locate::PlacesController < ApplicationController
   # GET /locate/places
   # GET /locate/places.json
   def index
+    @toponyms = Locate::Toponym.where(dating_id: nil).order(descriptor: :asc)
   end
 
   # GET /locate/places/1
