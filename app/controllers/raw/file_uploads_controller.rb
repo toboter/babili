@@ -39,7 +39,7 @@ class Raw::FileUploadsController < ApplicationController
   def destroy
     @file_upload.destroy
     respond_to do |format|
-      format.html { redirect_to raw_file_uploads_url, notice: 'File was successfully removed.' }
+      format.html { redirect_to raw_path, notice: 'File was successfully removed.' }
       format.json { head :no_content }
     end
   end

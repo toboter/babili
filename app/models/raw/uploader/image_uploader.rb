@@ -10,7 +10,7 @@ module Raw::Uploader
 
     Attacher.validate do
       # validate dimensions only if the attached file is an image
-      if validate_mime_type_inclusion Raw::FileUpload.types
+      if validate_mime_type_inclusion Raw::Image::TYPES
         get.download do |tempfile|
           errors << "is corrupted or invalid" unless ImageProcessing::MiniMagick.valid_image?(tempfile)
         end

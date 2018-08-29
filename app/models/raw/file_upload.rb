@@ -1,3 +1,6 @@
+#x t.string  :creator => Zensus::Activity
+#? has_paper_trail on: :file_copyright
+
 module Raw
   class FileUpload < ApplicationRecord
     extend FriendlyId

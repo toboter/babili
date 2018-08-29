@@ -3,9 +3,15 @@
     <%= link_to background_image_div(reference.referencor, :small_thumb, {class: 'media-object organization-member-avatar', style: 'height:20px;width:20px; background-position:center;'}), reference.referencor.namespace %>
   </div>
   <div class="media-body" id="discussion-event-<%= reference.created_at %>" style="overflow: visible;">
-    <%= link_to reference.referencor.name, reference.referencor.namespace, class: 'text-strong' %> referenced this in a
-    <%= link_to reference.referencing.class.name.demodulize.downcase, [reference.referencing.thread.discussable.owner, reference.referencing.thread.discussable, :discussion, reference.referencing.thread, anchor: "discussion-comment-#{reference.referencing.id}"] %> on
-    <%= link_to reference.referencing.thread.title, [reference.referencing.thread.discussable.owner, reference.referencing.thread.discussable, :discussion, reference.referencing.thread] %>
+    <%= link_to reference.referencor.name, reference.referencor.namespace, class: 'text-strong' %>
+    <% if reference.referencing.class.base_class.name == 'Discussion::Comment' %>
+      referenced this in a
+      <%= link_to reference.referencing.class.name.demodulize.downcase, reference.referencing_url %> on
+      <%= link_to reference.referencing.thread.title, [reference.referencing.thread.discussable.owner, reference.referencing.thread.discussable, :discussion, reference.referencing.thread] %>
+    <% elsif reference.referencing.class.base_class.name == 'Biblio::Entry' %>
+      attached this to
+      <%= link_to reference.referencing.citation, reference.referencing_url %>
+    <% end %>
     <%= content_tag :span, "#{distance_of_time_in_words(reference.created_at, Time.now)} ago", title: reference.created_at %>
   </div>
 </div>

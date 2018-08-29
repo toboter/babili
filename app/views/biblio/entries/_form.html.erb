@@ -1,5 +1,5 @@
 <%= simple_form_for @entry, 
-  html: { class: 'form-horizontal' },
+  html: { class: 'form-horizontal with_referenceables' },
   wrapper: :horizontal_form do |f| %>
   <%= f.error_notification %>
 
@@ -178,7 +178,12 @@
       id: 'vocab_tag_list' }, 
     label: "Tags <span class='text-muted' style='font-weight:normal;'>(separate with comma)</span>".html_safe,
     hint: 'Add tags to categorize the collection and make it more discoverable.' %>
-  
+
+  <%= render 'references/referenceable', f: f %>
+  <div id="dashboard-container" 
+    data-file-types="<%= Raw::FileUpload.types %>" 
+    data-updater-id="<%= current_user.person.id %>"></div>
+
     <div class="row">
       <div class="col-md-6">
         <hr>
@@ -198,3 +203,4 @@
   <%= render 'biblio/proceedings/new_modal' if @entry.fields.include?(:proceeding_id) %>
   <%= render 'locate/places/new_modal' if @entry.fields.include?(:place_ids) %>
 <% end %>
+

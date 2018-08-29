@@ -15,7 +15,7 @@ module  Raw
     ]
 
     def default_url
-      file.url
+      file[:original].url
     end
   end
 end

@@ -1,0 +1,5 @@
+<div id="referenceables">
+  <%= f.simple_fields_for :referenceables do |r| %>
+    <%= render 'references/referenceable_fields', f: r %>
+  <% end %>
+</div>

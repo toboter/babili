@@ -40,7 +40,7 @@ class Biblio::EntriesController < ApplicationController
   end
 
   def show
-    @discussions = @entry.references.where(referencing_type: 'Discussion::Comment')
+    @discussions = @entry.referencings.where(referencing_type: 'Discussion::Comment')
     respond_to do |format|
       format.html
       format.json { render json: @entry, serializer: EntrySerializer }
@@ -90,9 +90,13 @@ class Biblio::EntriesController < ApplicationController
 
   def create
     @entry = type_class.new(resource_params)
-    @entry.creator = current_person
+    @entry.creator = current_user.person
     @repository = @entry.referencations.last.repository
     authorize! :add_reference, @entry.referencations.last
+    if params[:referenceables]
+      gids = JSON.parse(params[:referenceables])['successful'].extend(Hashie::Extensions::DeepFind).deep_find_all('gid')
+      @entry.referenceables << gids.map{|gid| Reference.new(referenceable_gid: gid, referencor: current_user.person) unless gid.in?(@entry.referenceables.map(&:referenceable_gid)) }.compact
+    end
     respond_to do |format|
       if @entry.save
         format.html { redirect_to namespace_repository_biblio_references_path(@repository.owner, @repository), notice: "#{@type.demodulize} was successfully created. #{view_context.link_to('Show '+@entry.citation, @entry, class: 'text-strong')}".html_safe }
@@ -105,6 +109,10 @@ class Biblio::EntriesController < ApplicationController
   end
 
   def update
+    if params[:referenceables]
+      gids = JSON.parse(params[:referenceables])['successful'].extend(Hashie::Extensions::DeepFind).deep_find_all('gid')
+      @entry.referenceables << gids.map{|gid| Reference.new(referenceable_gid: gid, referencor: current_user.person) unless gid.in?(@entry.referenceables.map(&:referenceable_gid)) }.compact
+    end
     respond_to do |format|
       if @entry.update(resource_params)
         format.html { redirect_to @entry, notice: "#{@type.demodulize} was successfully updated." }
@@ -169,11 +177,12 @@ class Biblio::EntriesController < ApplicationController
       :url, 
       :doi, 
       :abstract, 
-      :tag_list, 
+      :tag_list,
       :author_ids => [],
       :editor_ids => [],
-      :place_ids => [], 
-      referencations_attributes: [:id, :repository_id, :creator_id, :_destroy]
+      :place_ids => [],
+      referencations_attributes: [:id, :repository_id, :creator_id, :_destroy],
+      referenceables_attributes: [:id, :referenceable_gid, :referencor_id, :_destroy]
     )
 
   end

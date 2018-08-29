@@ -1,0 +1,8 @@
+<div class="nested-fields">
+  <%= f.object.referenceable.default_url unless f.object.new_record? %>
+  
+  <%= f.input :referenceable_gid, as: :hidden %>
+  <%= f.object.referenceable_gid %>
+  <%= f.input :referencor_id, as: :hidden %>
+  <%= link_to_remove_association fa_icon('times'), f %>
+</div>

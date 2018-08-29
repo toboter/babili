@@ -1,1 +1,24 @@
-<%= image_tag @file_upload.file[:large].url %>
+<% if display == :plain %>
+  <%= image_tag image.file[version].url, class: 'img-responsive' %>
+  <%= link_to image.file[:original].original_filename, image.file[:original].url %>
+<% elsif display == :list %>
+  <%= content_tag :li, class: 'list-group-item' do %>
+    <div class="row">
+      <div class="col-sm-4">
+        <%= link_to raw_file_upload_path(image) do %>
+          <%= image_tag image.file[version].url, class: 'img-responsive' %>
+        <% end %>
+      </div>
+      <div class="col-sm-8">
+        <ul class="list-unstyled">
+          <%= content_tag :li, link_to(image.file[:original].original_filename, raw_file_upload_path(image), class: 'text-gray text-strong') %>
+          <%= content_tag :li, "#{fa_icon('copyright', style: 'margin-right:3px;')}#{image.file_copyright.gsub(/\A\s*[©]\s*/, '')   }".html_safe, class: 'text-small' if image.file_copyright.present? %>
+        </ul>
+        <%= content_tag :ul, class: 'list-unstyled text-small --spacious-10' do %>
+          <%= content_tag :li, "Uploaded by #{image.uploader.name}" %>
+          <%= content_tag :li, "Referenced by #{referencor.name}" if referencor %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

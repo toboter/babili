@@ -15,3 +15,4 @@ sudo apt-get install libgeos-dev libproj-dev
 elasticsearch
 redis
 postgres 9.5
+mutool (uses `mutool draw` but as `mudraw`)

@@ -152,6 +152,18 @@
           </table>
         <% end if @entry.children.any? %>
 
+        <%= content_tag :div, class: 'panel panel-default', id: 'files' do %>
+          <div class="panel-heading text-strong text-gray">
+            <%= fa_icon('files') %> Files
+            <%= content_tag :span, @entry.files.count, class: 'badge pull-right', style: 'background-color:#777;' %>
+          </div>
+          <ul class="list-group" id="files-list">
+            <% @entry.referenceables.where(referenceable_type: 'Raw::FileUpload').each do |reference| %>
+              <%= render "#{reference.referenceable.to_partial_path}", reference.referenceable.class.name.demodulize.underscore.to_sym => reference.referenceable, display: :list, version: :small, referencor: reference.referencor %>
+            <% end %>
+          </ul>
+        <% end if @entry.files.any? %>
+
         <%= content_tag :div, id: 'similar-objects' do %>
           <h4 class="subhead --spacious">Similar readings for <%= content_tag :span, @entry.citation, class: 'text-gray' %></h4>
           <table class="table table-simple">
@@ -192,7 +204,6 @@
           <% end %>
         </div>
       </div>
-      
     </div>
   </div>
 <% end %>

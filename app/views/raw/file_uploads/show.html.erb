@@ -1,14 +1,23 @@
 <p id="notice"><%= notice %></p>
 
 <div>
-  <%= render @file_upload %>
+  <%= render @file_upload, display: :plain, version: :large %>
 </div>
 
 Ref count: <%= @file_upload.references_count %>
 <% @file_upload.references.each do |reference| %>
-  <%= reference.inspect %>
+  <%= render 'references/reference', reference: reference %>
 <% end %>
 
-<p>by <%= @file_upload.uploader.name %></p>
+<p>Uploaded by <%= @file_upload.uploader.name %></p>
 
 <%= link_to 'Remove', raw_file_upload_path(@file_upload), method: :delete, data: { confirm: 'Are you sure?' } if can?(:destroy, @file_upload) %>
+
+<p># Files will be target of agent activities in a event. Like a CopyrightEvent or a DigitalizationEvent. Any Events happening to this file outside of babylon-online.org</p>
+<hr>
+
+<%= @file_upload.file_data %>
+
+<hr>
+
+<%= @file_upload.inspect %>

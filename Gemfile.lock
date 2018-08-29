@@ -19,7 +19,6 @@ GIT
 
 GEM
   remote: https://rubygems.org/
-  remote: https://rails-assets.org/
   specs:
     actioncable (5.2.1)
       actionpack (= 5.2.1)
@@ -316,7 +315,6 @@ GEM
       bundler (>= 1.3.0)
       railties (= 5.2.1)
       sprockets-rails (>= 2.0.0)
-    rails-assets-dropzone (5.1.1)
     rails-bootstrap-markdown (2.6.0)
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
@@ -485,10 +483,6 @@ GEM
     thor (0.20.0)
     thread_safe (0.3.6)
     tilt (2.0.8)
-    toastr-rails (1.0.3)
-      railties (>= 3.1.0)
-    trix-rails (0.11.4.1)
-      rails (> 4.1, < 6.0)
     turbolinks (5.1.1)
       turbolinks-source (~> 5.1)
     turbolinks-source (5.1.0)
@@ -577,7 +571,6 @@ DEPENDENCIES
   puma (~> 3.11)
   rack-cors
   rails (~> 5.2.0)
-  rails-assets-dropzone!
   rails-bootstrap-markdown
   recaptcha
   redcarpet
@@ -598,8 +591,6 @@ DEPENDENCIES
   sparql-client
   spring
   spring-watcher-listen (~> 2.0.0)
-  toastr-rails
-  trix-rails
   turbolinks (~> 5)
   uglifier (>= 1.3.0)
   unicode_utils

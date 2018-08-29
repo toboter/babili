@@ -1,1 +1,44 @@
-<%= link_to @file_upload.file.original_filename, @file_upload.file.url %>
+<% if display == :plain %>
+  <%= image_tag document.file[:preview].url, class: 'img-responsive' %>
+  <%= link_to document.file[:original].original_filename, document.file[:original].url %>
+<% elsif display == :list %>
+  <%= content_tag :li, class: 'list-group-item' do %>
+    <div class="row">
+      <div class="col-sm-4">
+        <%= link_to raw_file_upload_path(document) do %>
+          <%= image_tag document.file[:preview].url, class: 'img-responsive', style: 'border:1px solid #ddd;' %>
+        <% end %>
+      </div>
+      <div class="col-sm-8">
+        <ul class="list-unstyled">
+          <%= content_tag :li, link_to(document.file[:original].original_filename, raw_file_upload_path(document), class: 'text-gray text-strong') %>
+          <%= content_tag :li, "#{fa_icon('copyright', style: 'margin-right:3px;')}#{document.file_copyright.gsub(/\A\s*[©]\s*/, '')   }".html_safe, class: 'text-small' if document.file_copyright.present? %>
+        </ul>
+        <%= content_tag :ul, class: 'list-unstyled text-small --spacious-10' do %>
+          <%= content_tag :li, "Uploaded by #{document.uploader.name}" %>
+          <%= content_tag :li, "Referenced by #{referencor.name}" if referencor %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% else %>
+  <div class="uppy-DashboardItem-preview">
+    <div class="uppy-DashboardItem-previewInnerWrap" style="background-color: rgb(231, 76, 60);">
+      <div class="uppy-DashboardItem-previewIconWrap">
+        <span class="uppy-DashboardItem-previewIcon" style="color: rgb(231, 76, 60);">
+          <svg aria-hidden="true" class="UppyIcon" viewBox="0 0 342 335">
+            <path d="M329.337 227.84c-2.1 1.3-8.1 2.1-11.9 2.1-12.4 0-27.6-5.7-49.1-14.9 8.3-.6 15.8-.9 22.6-.9 12.4 0 16 0 28.2 3.1 12.1 3 12.2 9.3 10.2 10.6zm-215.1 1.9c4.8-8.4 9.7-17.3 14.7-26.8 12.2-23.1 20-41.3 25.7-56.2 11.5 20.9 25.8 38.6 42.5 52.8 2.1 1.8 4.3 3.5 6.7 5.3-34.1 6.8-63.6 15-89.6 24.9zm39.8-218.9c6.8 0 10.7 17.06 11 33.16.3 16-3.4 27.2-8.1 35.6-3.9-12.4-5.7-31.8-5.7-44.5 0 0-.3-24.26 2.8-24.26zm-133.4 307.2c3.9-10.5 19.1-31.3 41.6-49.8 1.4-1.1 4.9-4.4 8.1-7.4-23.5 37.6-39.3 52.5-49.7 57.2zm315.2-112.3c-6.8-6.7-22-10.2-45-10.5-15.6-.2-34.3 1.2-54.1 3.9-8.8-5.1-17.9-10.6-25.1-17.3-19.2-18-35.2-42.9-45.2-70.3.6-2.6 1.2-4.8 1.7-7.1 0 0 10.8-61.5 7.9-82.3-.4-2.9-.6-3.7-1.4-5.9l-.9-2.5c-2.9-6.76-8.7-13.96-17.8-13.57l-5.3-.17h-.1c-10.1 0-18.4 5.17-20.5 12.84-6.6 24.3.2 60.5 12.5 107.4l-3.2 7.7c-8.8 21.4-19.8 43-29.5 62l-1.3 2.5c-10.2 20-19.5 37-27.9 51.4l-8.7 4.6c-.6.4-15.5 8.2-19 10.3-29.6 17.7-49.28 37.8-52.54 53.8-1.04 5-.26 11.5 5.01 14.6l8.4 4.2c3.63 1.8 7.53 2.7 11.43 2.7 21.1 0 45.6-26.2 79.3-85.1 39-12.7 83.4-23.3 122.3-29.1 29.6 16.7 66 28.3 89 28.3 4.1 0 7.6-.4 10.5-1.2 4.4-1.1 8.1-3.6 10.4-7.1 4.4-6.7 5.4-15.9 4.1-25.4-.3-2.8-2.6-6.3-5-8.7z"></path>
+          </svg>
+        </span>
+        <svg class="uppy-DashboardItem-previewIconBg" width="72" height="93" viewBox="0 0 72 93">
+          <g>
+            <path d="M24.08 5h38.922A2.997 2.997 0 0 1 66 8.003v74.994A2.997 2.997 0 0 1 63.004 86H8.996A2.998 2.998 0 0 1 6 83.01V22.234L24.08 5z" fill="#FFF"></path>
+            <path d="M24 5L6 22.248h15.007A2.995 2.995 0 0 0 24 19.244V5z" fill="#E4E4E4"></path>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <%= link_to document.file[:original].original_filename, document.file[:original].url %>
+
+<% end %>
