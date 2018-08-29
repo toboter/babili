@@ -34,8 +34,8 @@ module Api::V1
       }
     end
 
-    has_many :organization_accessors, each_serializer: OrganizationSerializer
-    has_many :person_accessors, each_serializer: PersonSerializer
+    has_many :organization_accessors, serializer: OrganizationSerializer
+    has_many :person_accessors, serializer: PersonSerializer
 
     private
     def permissions
