@@ -141,41 +141,41 @@ Rails.application.routes.draw do
     end
   end
 
-  constraints lambda { |r| r.subdomain != 'raw' && r.subdomain != 'api' } do
-
-    # doorkeeper paths
-    # tokens => api.host/...
-    # authorizations => api.host/...
-    # authorized_applications => /settings/oauth/authorized_applications
-    # applications => /settings/developer/oauth/applications
-
-    scope 'oauth' do
-      resources :applications, as: :oauth_application, only: [:destroy, :show], controller: 'doorkeeper/applications'
+  # doorkeeper paths
+  # tokens => api.host/...
+  # authorizations => api.host/...
+  # authorized_applications => /settings/oauth/authorized_applications
+  # applications => /settings/developer/oauth/applications
+  scope 'oauth' do
+    resources :applications, as: :oauth_application, only: [:destroy, :show], controller: 'doorkeeper/applications'
+  end
+  scope path: '/settings' do
+    use_doorkeeper do
+      # use_doorkeeper :authorized_applications
+      skip_controllers :tokens, :applications, :authorizations
     end
-    scope path: '/settings' do
+    scope path: 'developer' do
       use_doorkeeper do
-        # use_doorkeeper :authorized_applications
-        skip_controllers :tokens, :applications, :authorizations
+        # use_doorkeeper :applications
+        skip_controllers :authorizations, :tokens, :authorized_applications
       end
-      scope path: 'developer' do
-        use_doorkeeper do
-          # use_doorkeeper :applications
-          skip_controllers :authorizations, :tokens, :authorized_applications
-        end
-        scope :oauth do
-          resources :applications, as: :oauth_application, except: [:destroy, :show] do
-            resources :oauth_accessibilities, 
-              except: :show, 
-              as: :accessibilities, 
-              path: 'accessibilities'
-            get 'send_accessibilities_to_clients', to: 'oauth_accessibilities#send_accessibilities_to_app'
-          end
+      scope :oauth do
+        resources :applications, as: :oauth_application, except: [:destroy, :show] do
+          resources :oauth_accessibilities, 
+            except: :show, 
+            as: :accessibilities, 
+            path: 'accessibilities'
+          get 'send_accessibilities_to_clients', to: 'oauth_accessibilities#send_accessibilities_to_app'
         end
       end
     end
-
-    # end doorkeeper paths
-
+  end
+  # end doorkeeper paths
+  # for api-login reasons devise has to be called on any babili subdomain
+  devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}, :controllers => { :registrations => :registrations }
+    
+  constraints lambda { |r| r.subdomain != 'raw' && r.subdomain != 'api' } do
+    
     require 'sidekiq/web'
 
     get '/discussions', to: 'home#discussions'
@@ -250,8 +250,6 @@ Rails.application.routes.draw do
       get '/search', to: 'search#index'
       resources :identifiers, only: [:index, :show], path: 'boi'
     end
-
-    devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}, :controllers => { :registrations => :registrations }
     
     get '/search', to: 'search#index'
     get '/about', to: 'home#about'
