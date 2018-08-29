@@ -1,23 +1,54 @@
-<p id="notice"><%= notice %></p>
+<% title "#{@file_upload.file[:original].original_filename} \\ Files \\ RawContent" %>
 
-<div>
-  <%= render @file_upload, display: :plain, version: :large %>
-</div>
+<%= content_for :container do %>
+  <div class="row --spacious">
+    <div class="col-md-6">
+      <%= render @file_upload, display: :plain, version: :large %>
+    </div>
+    <div class="col-md-5 col-md-offset-1">
+      <%= link_to 'Edit', edit_raw_file_upload_path(@file_upload) if can?(:update, @file_upload) %>
+      <%= link_to 'Remove', raw_file_upload_path(@file_upload), method: :delete, data: { confirm: 'Are you sure?' } if can?(:destroy, @file_upload) %>
+      <table class="table table-bordered table-striped">
+        <tbody>
+          <%= content_tag :tr do %>
+            <%= content_tag :th, 'Filename', style: 'width:30%' %>
+            <%= content_tag :td, @file_upload.file[:original].original_filename %>
+          <% end %>
+          <%= content_tag :tr do %>
+            <%= content_tag :th, 'Uploaded by', style: 'width:30%' %>
+            <%= content_tag :td, @file_upload.uploader.name %>
+          <% end %>
+          <%= content_tag :tr do %>
+            <%= content_tag :th, 'Copyright', style: 'width:30%' %>
+            <%= content_tag :td, @file_upload.file_copyright.present? ? "#{fa_icon('copyright', style: 'margin-right:3px;')}#{@file_upload.file_copyright.gsub(/\A\s*[©]\s*/, '')   }".html_safe : 'undefined' %>
+          <% end %>
+        </tbody>
+      </table>
+      <div class="panel panel-default" id="attachments">
+        <div class="panel-heading text-strong text-gray">
+          <%= fa_icon('share-alt') %> Attachments
+          <%= content_tag :span, @file_upload.references_count, class: 'badge pull-right', style: 'background-color:#777;' %>
+        </div>
+        <div class="panel-body">
+          <% @file_upload.references.each do |reference| %>
+            <%= render 'references/reference', reference: reference %>
+          <% end %>
+        </div>
+      </div>
+      <div class="panel panel-default" id="events">
+        <div class="panel-heading text-strong text-gray">
+          <%= fa_icon('calendar') %> Events
+        </div>
+        <div class="panel-body">
+          <p># Files will be target of agent activities in a event. Like a CopyrightEvent or a DigitalizationEvent. 
+          Any Events happening to this file outside of babylon-online.org</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
-Ref count: <%= @file_upload.references_count %>
-<% @file_upload.references.each do |reference| %>
-  <%= render 'references/reference', reference: reference %>
+  <hr>
+
+  <%= @file_upload.file_data %>
+
 <% end %>
-
-<p>Uploaded by <%= @file_upload.uploader.name %></p>
-
-<%= link_to 'Remove', raw_file_upload_path(@file_upload), method: :delete, data: { confirm: 'Are you sure?' } if can?(:destroy, @file_upload) %>
-
-<p># Files will be target of agent activities in a event. Like a CopyrightEvent or a DigitalizationEvent. Any Events happening to this file outside of babylon-online.org</p>
-<hr>
-
-<%= @file_upload.file_data %>
-
-<hr>
-
-<%= @file_upload.inspect %>
