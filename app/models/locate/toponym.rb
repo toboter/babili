@@ -13,7 +13,7 @@ class Locate::Toponym < ApplicationRecord
   DENOMINATIONS = %w(self foreign)
   TYPES = %w(Preferred Alternative Hidden)
 
-  belongs_to :dating
+  belongs_to :dating, optional: true
   has_one :place, through: :dating
 
   alias_attribute :given, :descriptor
