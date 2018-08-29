@@ -16,7 +16,7 @@ $(document).on('turbolinks:load', function(){
     target: '#dashboard-container' 
   })
   uppy.use(Uppy.XHRUpload, {
-    endpoint: 'http://dev.local:3000/raw/files.json',
+    endpoint: '/raw/files.json',
     formData: true,
     fieldName: 'upload[file]',
     headers: {
