@@ -1,12 +1,9 @@
 module Raw::Uploader
   class DocumentUploader < BaseUploader
-    plugin :validation_helpers
 
     Attacher.validate do
       validate_mime_type_inclusion Raw::Document::TYPES
     end
-    plugin :processing
-    plugin :versions
   
     # We are creating a preview for pdfs
     #https://stackoverflow.com/a/47652854

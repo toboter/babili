@@ -6,22 +6,68 @@
       <%= render @file_upload, display: :plain, version: :large %>
     </div>
     <div class="col-md-5 col-md-offset-1">
-      <%= link_to 'Edit', edit_raw_file_upload_path(@file_upload) if can?(:update, @file_upload) %>
-      <%= link_to 'Remove', raw_file_upload_path(@file_upload), method: :delete, data: { confirm: 'Are you sure?' } if can?(:destroy, @file_upload) %>
-      <table class="table table-bordered table-striped">
+      <div class="clearfix">
+        <%= link_to fa_icon('times', text: 'Remove'), raw_file_upload_path(@file_upload), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default text-strong pull-right', style: 'margin-left:10px;' if can?(:destroy, @file_upload) %>
+        <%= link_to fa_icon('download', text: 'Download'), '', class: 'btn btn-default text-strong disabled pull-right' if can?(:read, @file_upload) %>
+      </div>
+      <table class="table table-bordered table-striped --spacious-20">
         <tbody>
           <%= content_tag :tr do %>
-            <%= content_tag :th, 'Filename', style: 'width:30%' %>
+            <%= content_tag :th, 'Filename', style: 'width:30%;' %>
             <%= content_tag :td, @file_upload.file[:original].original_filename %>
           <% end %>
           <%= content_tag :tr do %>
-            <%= content_tag :th, 'Uploaded by', style: 'width:30%' %>
+            <%= content_tag :th, 'Uploader' %>
             <%= content_tag :td, @file_upload.uploader.name %>
           <% end %>
           <%= content_tag :tr do %>
-            <%= content_tag :th, 'Copyright', style: 'width:30%' %>
+            <%= content_tag :th, 'Uploaded on' %>
+            <%= content_tag :td, @file_upload.created_at.to_formatted_s(:long)  %>
+          <% end %>
+          <%= content_tag :tr do %>
+            <%= content_tag :th, 'Copyright' %>
             <%= content_tag :td, @file_upload.file_copyright.present? ? "#{fa_icon('copyright', style: 'margin-right:3px;')}#{@file_upload.file_copyright.gsub(/\A\s*[©]\s*/, '')   }".html_safe : 'undefined' %>
           <% end %>
+          <%= content_tag :tr do %>
+            <%= content_tag :th, 'Dimensions' %>
+            <%= content_tag :td, @file_upload.file[:original].dimensions.join(' x ') %>
+          <% end if @file_upload.file[:original].try(:dimensions) %>
+          <%= content_tag :tr do %>
+            <%= content_tag :th, 'Duration' %>
+            <%= content_tag :td, @file_upload.file[:original].metadata['duration'] %>
+          <% end if @file_upload.file[:original].metadata['duration'] %>
+          <%= content_tag :tr do %>
+            <%= content_tag :th, 'Language' %>
+            <%= content_tag :td, @file_upload.file[:original].metadata['language'] %>
+          <% end if @file_upload.file[:original].metadata['language'] %>
+          <%= content_tag :tr do %>
+            <%= content_tag :th, 'MimeType' %>
+            <%= content_tag :td, @file_upload.file[:original].metadata['mime_type'] %>
+          <% end if @file_upload.file[:original].metadata['mime_type'] %>
+          <%= content_tag :tr do %>
+            <%= content_tag :th, 'Original date' %>
+            <%= content_tag :td, "#{@file_upload.file[:original].metadata['date']} #{@file_upload.file[:original].metadata['year']}" %>
+          <% end if @file_upload.file[:original].metadata['date'] || @file_upload.file[:original].metadata['year'] %>
+          <%= content_tag :tr do %>
+            <%= content_tag :th, 'Original title' %>
+            <%= content_tag :td, @file_upload.file[:original].metadata['title'] %>
+          <% end if @file_upload.file[:original].metadata['title'] %>
+          <%= content_tag :tr do %>
+            <%= content_tag :th, 'Pages' %>
+            <%= content_tag :td, @file_upload.file[:original].metadata['page_count'] %>
+          <% end if @file_upload.file[:original].metadata['page_count'] %>
+          <%= content_tag :tr do %>
+            <%= content_tag :th, 'Profile' %>
+            <%= content_tag :td, @file_upload.file[:original].metadata['profile_description'] %>
+          <% end if @file_upload.file[:original].metadata['profile_description'] %>
+          <%= content_tag :tr do %>
+            <%= content_tag :th, 'Publisher' %>
+            <%= content_tag :td, link_to(@file_upload.file[:original].metadata['publisher'], @file_upload.file[:original].metadata['publisher_url']) %>
+          <% end if @file_upload.file[:original].metadata['publisher'] %>
+          <%= content_tag :tr do %>
+            <%= content_tag :th, 'Size' %>
+            <%= content_tag :td, number_to_human_size(@file_upload.file[:original].metadata['size']) %>
+          <% end if @file_upload.file[:original].metadata['size'] %>
         </tbody>
       </table>
       <div class="panel panel-default" id="attachments">
@@ -46,9 +92,5 @@
       </div>
     </div>
   </div>
-
-  <hr>
-
-  <%= @file_upload.file_data %>
 
 <% end %>

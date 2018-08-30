@@ -20,6 +20,7 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'mini_magick', '~> 4.8'
 gem 'image_processing', '~> 1.2'
+gem "streamio-ffmpeg"
 gem 'down'
 gem 'shrine'
 gem 'marcel'

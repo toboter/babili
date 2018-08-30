@@ -1,4 +1,4 @@
-module  Raw
+module Raw
   class Document < FileUpload
     include Uploader::DocumentUploader::Attachment.new(:file)
 
@@ -14,7 +14,7 @@ module  Raw
       text/rtf
     ]
 
-    def default_url
+    def embed_url
       file[:original].url
     end
   end

@@ -11,7 +11,7 @@ class Raw::FileUploadSerializer < ActiveModel::Serializer
   end
 
   attribute :file_url do
-    object.default_url
+    object.embed_url
   end
 
   attribute :html_url do

@@ -16,3 +16,4 @@ elasticsearch
 redis
 postgres 9.5
 mutool (uses `mutool draw` but as `mudraw`)
+ffmpeg
