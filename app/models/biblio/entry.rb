@@ -1,3 +1,6 @@
+#x t.text  :file_data
+# Agent Activities to be added. ReviewEvent, CitationEvent (-> target: Biblio::Entry). Everything out of the scope of the Entry Entity and out of babylon-online.
+
 class Biblio::Entry < ApplicationRecord
   #require 'csl/styles'
   extend FriendlyId
@@ -15,22 +18,13 @@ class Biblio::Entry < ApplicationRecord
   belongs_to :creator, class_name: 'Person'
   has_many :referencations, class_name: 'Biblio::Referencation', dependent: :destroy
   has_many :repositories, through: :referencations
-  has_many :references, as: :referenceable
-  #
-  #
-  #
-  #
-  #
-  #
-  ## ADD FILES!!!
-  # Add aggs to referencations
-  #
-  # #
-  # 
-  #
-  # #
-  #
+  has_many :referencings, as: :referenceable, class_name: 'Reference', dependent: :destroy # Entry is referenceable
+  has_many :discussion_comments, through: :referencings, source: :referencing, source_type: 'Discussion::Comment'
+  has_many :referenceables, as: :referencing, class_name: 'Reference', dependent: :destroy
+  has_many :files, through: :referenceables, source: :referenceable, source_type: 'Raw::FileUpload'
+
   accepts_nested_attributes_for :referencations, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :referenceables, reject_if: :all_blank, allow_destroy: true
 
   def self.types
     authored_types + edited_types

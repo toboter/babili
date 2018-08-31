@@ -1,0 +1,31 @@
+<% title "#{@journal.citation} \\ Journals \\ Bibliography " %>
+
+<% content_for :container do %>
+  <div class="wrapper biblio" id="biblio-entry-<%= @journal.id %>">
+
+    <div class="row">
+      <div class="col-sm-12">
+        <h3>
+          <%= @journal.name %>
+          <%= link_to fa_icon('edit', text: 'Edit'), [:edit, @journal], class: 'btn btn-default btn-sm text-strong pull-right' if can?(:update, @journal) %>
+        </h3>
+        <p class="text-gray">
+          <%= @journal.note %>
+        </p>
+        <ul class="list-unstyled">
+          <%= content_tag :li, link_to(@journal.url, @journal.url) if @journal.url.present? %>
+          <%= content_tag :li, 'Issn: ' + @journal.print_issn if @journal.print_issn.present? %>
+        </ul>
+        <%= @journal.tag_list.map{|tag| content_tag(:span, tag, class: 'label label-default')}.join(' ').html_safe %>
+      </div>
+    </div>
+
+    <div class='journal-contents'>
+      <table class="table table-simple">
+        <tbody>
+          <%= render @journal.articles.sort_by{|x| [x.year, x.volume, x.pages] }, show_actions: false %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>

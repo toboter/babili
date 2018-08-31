@@ -9,12 +9,6 @@
 <%= content_tag :div, class: 'row' do %>
   <%= content_tag :div, class: 'col-md-12' do %>
 
-    <%= content_tag :ul, class: 'nav nav-pills' do %>
-      <%= content_tag :li, link_to(@application.name, edit_oauth_application_path(@application)), class: "#{' active text-strong' if current_page?(edit_oauth_application_path(@application))}" %>
-      <%= content_tag :li, link_to('Scopes', oauth_application_accessibilities_path(@application)), class: "#{' active text-strong' if current_page?(oauth_applications_path)}", style: 'margin: 0 20px;' %>
-      <%= content_tag :li, link_to('Accessors', oauth_application_accessibilities_path(@application)), class: "#{' active text-strong' if current_page?(oauth_application_accessibilities_path(@application))}" %>
-    <% end %>
-
     <h4><%= t('.application_id') %>:</h4>
     <p><code id="application_id"><%= @application.uid %></code></p>
 
@@ -24,6 +18,7 @@
     <% end %>
 
     <%= render 'form', application: @application %>
+    <%= link_to('Accessibilities', oauth_application_accessibilities_path(@application)) %>
     
     <h4><%= t('.callback_urls') %>:</h4>
     <table>

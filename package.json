@@ -1,0 +1,15 @@
+{
+  "name": "babili",
+  "version": "1.0.0",
+  "description": "main module for babylon-online.org",
+  "main": "index.js",
+  "repository": "git@github.com:toboter/babili.git",
+  "author": "Tobias Schmidt <t.schmidt@rubidat.de>",
+  "license": "MIT",
+  "dependencies": {
+    "toastr": "^2.1.4",
+    "trix": "^0.12.0",
+    "uppy": "^0.27.2"
+  },
+  "devDependencies": {}
+}

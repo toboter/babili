@@ -13,12 +13,12 @@
 //= require jquery
 //= require jquery.turbolinks
 //= require jquery_ujs
-//= require toastr
+//= require toastr/build/toastr.min
 //= require bootstrap-markdown-bundle
 //= require froala_editor.min.js
-//= require trix
+//= require trix/dist/trix
+//= require uppy/dist/uppy.min
 //= require cocoon
-//= require dropzone
 //= require selectize
 //= require bootstrap
 //= require turbolinks
@@ -42,7 +42,6 @@ $(function () {
         placement: 'top'
     })
   });
-
 
   $('.popover').popover();
 })

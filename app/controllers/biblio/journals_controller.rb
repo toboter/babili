@@ -12,9 +12,9 @@ class Biblio::JournalsController < ApplicationController
 
   def show
     @entry = @journal
-    @discussions = @entry.references.where(referencing_type: 'Discussion::Comment')
+    @discussions = @entry.referencings.where(referencing_type: 'Discussion::Comment')
     respond_to do |format|
-      format.html { render 'biblio/entries/show' }
+      format.html
       format.json { render json: @journal, serializer: Biblio::JournalSerializer }
     end
   end

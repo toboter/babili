@@ -1,0 +1,7 @@
+<div class="nested-fields">
+  <%= content_tag :span, link_to_remove_association(fa_icon('trash'), f, style: 'color:#F05F40;padding:5px;'), style: 'position:absolute;z-index:10;right:15px;margin:5px;', class: 'with-tooltip', title: 'Remove this file' %>
+  <%= render "#{f.object.referenceable.to_partial_path}", f.object.referenceable.class.name.demodulize.underscore.to_sym => f.object.referenceable, 
+    display: :list, version: :small, referencor: f.object.referencor unless f.object.new_record? %>
+  <%= f.input :referenceable_gid, as: :hidden %>
+  <%= f.input :referencor_id, as: :hidden %>
+</div>

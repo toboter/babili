@@ -1,14 +1,17 @@
-<% title t('.title') %>
+<% title t('.title'), false %>
 
 <% content_for :breadcrumbs do %>
   <%= content_tag :li, yield(:title), class: 'active' %>
 <% end %>
-<% content_for :buttons do %>
-  <%= link_to t('.new'), new_oauth_application_path, class: 'btn btn-default text-strong' %>
-<% end if can?(:create, Doorkeeper::Application) %>
-
 
 <main role="main">
+  <div class="page-header" style="margin-top:0px;">
+    <h3 style="margin-top:0px;">
+      <%= yield(:title) %>
+      <%= link_to t('.new'), new_oauth_application_path, class: 'btn btn-default text-strong pull-right' if can?(:create, Doorkeeper::Application) %>
+    </h3>
+    <p class="text-gray">OAuth applications are used to access the babylon-online.org API.</p>
+  </div>
   <table class="table table-simple">
     <thead>
     <tr>
@@ -21,7 +24,7 @@
     <% @applications.each do |application| %>
       <tr>
         <td>
-          <strong><%= link_to application.name, oauth_application_path(application) %></strong>
+          <%= content_tag :span, application.name, class: 'text-strong' %>
           <%= content_tag :p, truncate(application.description, length: 200), class: 'text-muted text-small' if application.description? %>
           <%= content_tag :p, "Owner: #{application.owner.try(:name)}", class: 'text-muted text-small' %>        
         </td>

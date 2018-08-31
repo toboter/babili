@@ -20,6 +20,8 @@ module Discussion
 
     accepts_nested_attributes_for :versions, allow_destroy: false
 
+    delegate :title, to: :thread
+
     def current_body # gives the last current version of the comment
       versions.last.try(:body)
     end

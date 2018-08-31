@@ -1,6 +1,6 @@
 class Biblio::Creatorship < ApplicationRecord
   belongs_to :agent_appellation, class_name: 'Zensus::Appellation'
-  belongs_to :entry
+  belongs_to :entry, optional: true
 
   after_create :agent_activity
 

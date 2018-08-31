@@ -8,7 +8,7 @@ module Api::V1
     end
 
     def show
-      @organization.private? ? (render json: {status: 'Not Found', code: 404}.to_json) : (render json: @organization, each_serializer: OrganizationSerializer)
+      @organization.private? ? (render json: {status: 'Not Found', code: 404}.to_json) : (render json: @organization, serializer: OrganizationSerializer)
     end
 
   end

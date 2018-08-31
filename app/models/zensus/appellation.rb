@@ -7,7 +7,7 @@ class Zensus::Appellation < ApplicationRecord
   searchkick
 
   belongs_to :agent, touch: true, optional: true, inverse_of: :appellations
-  has_many :appellation_parts, -> { order(position: :asc) }
+  has_many :appellation_parts, -> { order(position: :asc) }, dependent: :destroy
   has_many :creatorships, dependent: :destroy, class_name: 'Biblio::Creatorship', foreign_key: :agent_appellation_id
   has_many :creations, -> { order 'biblio_creatorships.id asc' }, through: :creatorships, source: :entry, class_name: 'Biblio::Entry'
 

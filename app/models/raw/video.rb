@@ -1,4 +1,4 @@
-module  Raw
+module Raw
   class Video < FileUpload
     include Uploader::VideoUploader::Attachment.new(:file)
 
@@ -6,10 +6,12 @@ module  Raw
       video/mpeg
       video/x-msvideo
       video/webm
+      video/mp4
     ]
-  end
-  
-  def default_url
-    file.url
+ 
+    def embed_url
+      file[:original].url
+    end
+
   end
 end

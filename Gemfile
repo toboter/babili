@@ -20,6 +20,7 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'mini_magick', '~> 4.8'
 gem 'image_processing', '~> 1.2'
+gem "streamio-ffmpeg"
 gem 'down'
 gem 'shrine'
 gem 'marcel'
@@ -57,8 +58,8 @@ gem "font-awesome-rails"
 gem 'simple_form'
 gem 'will_paginate-bootstrap'
 gem 'cocoon'
-gem 'toastr-rails'
-gem 'trix-rails', require: 'trix'
+# gem 'toastr-rails'
+# gem 'trix-rails', require: 'trix'
 gem 'html-pipeline', '~> 2.8', '>= 2.8.4'
 gem 'commonmarker', '~> 0.17.11'
 gem 'github-markup', '~> 2.0', '>= 2.0.1'
@@ -104,7 +105,3 @@ gem 'linkeddata'
 gem 'language_list'
 gem 'hashie'
 gem "recaptcha", require: "recaptcha/rails"
-
-source 'https://rails-assets.org' do
-  gem 'rails-assets-dropzone'
-end

@@ -19,7 +19,7 @@
         
 
           <% @place.datings.each do |dating| %>
-            <%= dating.concept.default_name %>
+            <%= dating.concept.try(:default_name) %>
             <%= dating.toponyms.map(&:descriptor).join(', ') %>
           <% end %>
 

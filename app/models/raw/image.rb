@@ -1,4 +1,4 @@
-module  Raw
+module Raw
   class Image < FileUpload
     include Uploader::ImageUploader::Attachment.new(:file)
 
@@ -10,7 +10,7 @@ module  Raw
       image/webp
     ]
 
-    def default_url
+    def embed_url
       file[:large].url
     end
   end

@@ -1,7 +1,6 @@
 class Raw::FileUploadsController < ApplicationController
   before_action :set_klass, only: :create
   load_and_authorize_resource except: :create, find_by: :slug
-  layout 'raw'
   
   # GET /raw/file_uploads/1
   # GET /raw/file_uploads/1.json
@@ -39,7 +38,7 @@ class Raw::FileUploadsController < ApplicationController
   def destroy
     @file_upload.destroy
     respond_to do |format|
-      format.html { redirect_to raw_file_uploads_url, notice: 'File was successfully removed.' }
+      format.html { redirect_to raw_path, notice: 'File was successfully removed.' }
       format.json { head :no_content }
     end
   end

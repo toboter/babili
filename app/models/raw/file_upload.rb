@@ -1,9 +1,13 @@
+#x t.string  :creator => Zensus::Activity
+#? has_paper_trail on: :file_copyright
+#? HasFileCopyrights through CopyrightEvents -> Zensus
+
 module Raw
   class FileUpload < ApplicationRecord
     extend FriendlyId
     friendly_id :uuid, use: :slugged
     belongs_to :uploader, class_name: 'Person'
-    has_many :references, as: :referenceable
+    has_many :references, as: :referenceable, dependent: :destroy
 
     validates :type, :file, presence: true
     # validates :container, presence: true
