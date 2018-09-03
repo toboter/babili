@@ -106,6 +106,10 @@ Rails.application.routes.draw do
           get :concepts, to: 'vocab/concepts#search'
         end
 
+        namespace :raw do
+          resources :file_uploads, only: [:show, :create], path: 'files'
+        end
+
         resources :identifiers, only: [:index, :show], path: 'boi', module: 'aggregation'
 
         resources :namespaces, only: [], path: '' do
