@@ -31,6 +31,14 @@ class Namespace < ApplicationRecord
     subclass_type == 'Person' ? [subclass] : subclass.members
   end
 
+  def permissions
+    #Person, can_create, can_read, can_update, can_destroy, can_manage, is_owner 
+    permissions = []
+    permissions << Permission.new(person: subclass, can_create: true, can_read: true, can_update: true, can_destroy: true, can_manage: true, is_owner: true) if subclass.is_a?(Person)
+    permissions << subclass.memberships.map{ |m| Permission.new(person: m.person, can_create: m.role_member?, can_read: m.role_member?, can_update: m.role_member?, can_destroy: m.role_member?, can_manage: m.role_admin?, is_owner: m.role_member?) } if subclass.is_a?(Organization)
+    return permissions.compact.flatten.uniq
+  end
+
   def should_generate_new_friendly_id?
     name_changed? || super
   end

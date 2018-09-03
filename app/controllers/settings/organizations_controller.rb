@@ -14,14 +14,12 @@ class Settings::OrganizationsController < ApplicationController
   def new
     @organization = Organization.new
     @people = Person.all
-    @roles = ['Member', 'Admin']
     @organization.memberships.build(person: current_person, role: 'Admin', verified: true)
   end
 
   # GET /settings/organizations/1/edit
   def edit
     @people = Person.all
-    @roles = ['Member', 'Admin']
   end
 
   # POST /settings/organizations

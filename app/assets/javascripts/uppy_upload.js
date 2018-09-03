@@ -1,4 +1,5 @@
-$(document).on('turbolinks:load', function(){
+$(function () {
+  if ( $( "#dashboard-container" ).length ) {
   var uppy = Uppy.Core({ 
     autoProceed: false,
     debug: true,
@@ -42,4 +43,5 @@ $(document).on('turbolinks:load', function(){
   //   // $('#').push(JSON.stringify(referenceable));
   //   console.log(referenceable);
   // });
+  }
 });

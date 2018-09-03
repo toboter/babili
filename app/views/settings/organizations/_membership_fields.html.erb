@@ -11,7 +11,7 @@
   </td>
   <td>
     <%= f.input :role, 
-      collection: @roles, 
+      collection: Membership::ROLES, 
       include_blank: true,
       label: false,
       disabled: f.object.person == current_person %>

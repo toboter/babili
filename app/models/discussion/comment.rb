@@ -7,7 +7,7 @@
 
 module Discussion
   class Comment < ApplicationRecord
-    belongs_to :thread, counter_cache: true, autosave: true, touch: true
+    belongs_to :thread, counter_cache: true, touch: true
     belongs_to :author, class_name: 'Person'
     has_many :versions, dependent: :destroy
     has_many :mentions, as: :mentionable, dependent: :destroy
@@ -16,7 +16,7 @@ module Discussion
     has_many :files, through: :references, source_type: 'Raw::FileUpload', source: :referenceable
 
     before_validation :extract_attachments
-    after_commit :reindex_thread, on: [:update, :destroy]
+    after_commit :reindex_thread, on: [:create, :update, :destroy]
 
     accepts_nested_attributes_for :versions, allow_destroy: false
 
@@ -65,7 +65,11 @@ module Discussion
     end
 
     def set_references(values)
-      attached_referenceables = values.map{|v| GlobalID::Locator.locate(v['gid']) }.uniq
+      begin
+        attached_referenceables = values.map{|v| GlobalID::Locator.locate(v['gid']) }.uniq
+      rescue ActiveRecord::RecordNotFound
+        return false
+      end
       references.where.not(referenceable: attached_referenceables).destroy_all
       attached_references = attached_referenceables.map{|r| Reference.new(referenceable: r, referencor: author)}
       if attached_references.present?

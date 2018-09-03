@@ -7,9 +7,15 @@ class Membership < ApplicationRecord
   
   validates :role, presence: true
   validates :person_id, uniqueness: { scope: :organization_id, message: "is already on the list" }
+
+  ROLES=%w[Member Admin]
   
-  def is_admin?
+  def role_admin?
     role == 'Admin'
+  end
+
+  def role_member?
+    role == 'Member' || role == 'Admin'
   end
 
   def send_admin_mail

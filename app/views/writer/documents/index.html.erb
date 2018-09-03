@@ -12,7 +12,7 @@
       <% end if params[:q] %>
     </div>
     <div class="col-md-2 col-md-offset-5">
-      <%= link_to 'New Document', new_namespace_repository_document_path(@namespace, @repository), class: 'btn btn-default text-strong pull-right' %>
+      <%= link_to 'New Document', new_namespace_repository_document_path(@namespace, @repository), class: 'btn btn-default text-strong pull-right' if can?(:create, @repository.documents.build) %>
     </div>
   <% end %>
 

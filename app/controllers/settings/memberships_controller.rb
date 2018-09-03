@@ -3,6 +3,7 @@ class Settings::MembershipsController < ApplicationController
   before_action :set_organization
 
   def create #apply
+    authorize! :read, @organization
     @applyment = current_person.memberships.new(organization: @organization, verified: false, role: 'Member')
 
     respond_to do |format|

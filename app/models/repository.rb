@@ -17,8 +17,8 @@ class Repository < ApplicationRecord
   belongs_to :owner, class_name: 'Namespace', foreign_key: :namespace_id
   belongs_to :creator, class_name: 'Person'
 
-  has_many :collaborations, as: :collaboratable, dependent: :destroy
-  has_many :collaborators, through: :collaborations
+  has_many :invited_collaborations, as: :collaboratable, dependent: :destroy, class_name: 'Collaboration'
+  has_many :invited_collaborators, through: :invited_collaborations, source: :collaborator
 
   has_many :documents, dependent: :destroy, class_name: 'Writer::Document'
   
@@ -32,6 +32,8 @@ class Repository < ApplicationRecord
   has_many :references, through: :referencations, class_name: 'Biblio::Entry', source: :entry
 
   has_many :threads, as: :discussable, class_name: 'Discussion::Thread'
+
+  delegate :accessors, to: :owner
 
   validates :name, :description,
     presence: true
@@ -49,6 +51,21 @@ class Repository < ApplicationRecord
 
   def name_tree
     [owner.name, name]
+  end
+
+  def collaborators
+    collabs = []
+    collabs << accessors
+    collabs << invited_collaborators
+    return collabs.compact.flatten.uniq
+  end
+
+  def permissions
+    #Person, can_create, can_read, can_update, can_destroy, can_manage, is_owner 
+    permissions = owner.permissions
+    collabs = invited_collaborations.map{ |c| Permission.new(person: c.collaborator, can_create: c.can_create, can_read: c.can_read, can_update: c.can_update, can_destroy: c.can_destroy, can_manage: c.can_manage, is_owner: false) }
+    permissions << collabs
+    return permissions.compact.flatten.uniq
   end
 
 end

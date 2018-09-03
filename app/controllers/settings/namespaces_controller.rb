@@ -5,12 +5,12 @@ class Settings::NamespacesController < ApplicationController
 
 
   def edit
-    authorize! :edit, @namespace.subclass
+    authorize! :edit, @namespace
   end
 
 
   def update
-    authorize! :update, @namespace.subclass
+    authorize! :update, @namespace
     respond_to do |format|
       if @namespace.update(namespace_params)
         format.html { redirect_to [:edit, :settings, (@namespace.subclass.class.name == 'Person' ? :person : @namespace.subclass)], notice: "Namespace was successfully updated!" }

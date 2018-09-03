@@ -11,8 +11,8 @@
         <% end %>
         <%= content_tag :div, class: 'col-sm-3' do %>
           <%= content_tag :span, class: 'pull-right text-small text-strong' do %>
-            <%= link_to fa_icon('edit', text: 'Edit'), [:edit, document.repository.owner, document.repository, document] %>
-            <%= link_to fa_icon('times', text: 'Remove'), [document.repository.owner, document.repository, document], method: :delete, style: 'margin-left:10px;' %>
+            <%= link_to fa_icon('edit', text: 'Edit'), [:edit, document.repository.owner, document.repository, document] if can?(:update, document) %>
+            <%= link_to fa_icon('times', text: 'Remove'), [document.repository.owner, document.repository, document], method: :delete, style: 'margin-left:10px;' if can?(:destroy, document) %>
           <% end %>
         <% end %>
       <% end %>

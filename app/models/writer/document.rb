@@ -23,11 +23,12 @@ module Writer
     belongs_to :creator, class_name: 'Person'
     belongs_to :publisher, class_name: 'Person', optional: true
     belongs_to :repository
-    has_many :collaborators, through: :repository
     has_many :references, as: :referencing, dependent: :destroy
     has_many :files, through: :references, source_type: 'Raw::FileUpload', source: :referenceable
 
     validates :content, presence: true
+
+    delegate :collaborators, to: :repository
 
     before_validation do
       striped_content = ActionView::Base.full_sanitizer.sanitize(content.gsub("<br>", ' ').gsub("<\p>", ' '))
@@ -39,6 +40,10 @@ module Writer
 
     def to_param
       self.sequential_id.to_s
+    end
+
+    def published?
+      published_at.present? && publisher.present?
     end
 
     def authors

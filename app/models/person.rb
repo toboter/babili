@@ -10,6 +10,8 @@ class Person < ApplicationRecord
 
   has_one :namespace, as: :subclass, dependent: :destroy
   has_one :user
+  has_many :collaborations, dependent: :destroy, foreign_key: :collaborator_id
+  has_many :collaboration_repos, through: :collaborations, source: :collaboratable, source_type: 'Repository'
   has_many :blog_pages, class_name: 'CMS::BlogPage', foreign_key: :author_id
   has_many :memberships, dependent: :destroy
   has_many :organizations, through: :memberships
@@ -55,7 +57,8 @@ class Person < ApplicationRecord
   end
 
   def all_repos
-    repositories.to_a.concat(organizations.map(&:repositories).to_a).flatten
+    repos = []
+    repositories.to_a.concat(organizations.map(&:repositories).to_a).concat(collaboration_repos.to_a).flatten
   end
 
 
