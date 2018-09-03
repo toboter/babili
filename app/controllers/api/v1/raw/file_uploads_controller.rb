@@ -1,0 +1,51 @@
+module Api
+  module V1
+    module Raw
+      class FileUploadsController < Api::V1::BaseController
+        before_action :set_klass, only: :create
+        load_and_authorize_resource except: :create, find_by: :slug, class: 'Raw::FileUpload'
+        
+        def show
+          render json: @file_upload, serializer: FileUploadSerializer
+        end
+
+        def create
+          @file_upload = @klass.new(resource_params)
+          @file_upload.uploader = current_user.person
+          authorize! :create, @file_upload
+
+          # if a file already exists with the same md5 checksum, this will be returned.
+          @existing = ::Raw::FileUpload.find_by_file_signature(@file_upload.file_signature)
+
+          if @existing.present? ? (@file_upload = @existing) : @file_upload.save
+            render status: :created, json: @file_upload, serializer: FileUploadSerializer
+          else
+            render json: @file_upload.errors, status: :unprocessable_entity
+          end
+        end
+
+        private
+        # Never trust parameters from the scary internet, only allow the white list through.
+        def resource_params
+          params.require(:upload).permit(:file, :creator, :file_copyright)
+        end
+
+        def set_klass
+          file = resource_params[:file]
+          if file.present?
+            @klass = case file.try(:tempfile).present? ? Marcel::MimeType.for(Pathname.new(file.tempfile)) : JSON.parse(file)['metadata']['mime_type']
+              when /^image\//       then ::Raw::Image
+              when /^audio\//       then ::Raw::Audio
+              when /^video\//       then ::Raw::Video
+              when /^application\// then ::Raw::Document
+              when /^text\//        then ::Raw::Document
+              else ::Raw::FileUpload
+            end
+          else
+            @klass = ::Raw::FileUpload
+          end
+        end
+      end
+    end
+  end
+end
