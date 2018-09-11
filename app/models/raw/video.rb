@@ -8,10 +8,5 @@ module Raw
       video/webm
       video/mp4
     ]
- 
-    def embed_url
-      file[:original].url
-    end
-
   end
 end

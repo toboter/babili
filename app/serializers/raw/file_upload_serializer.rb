@@ -11,7 +11,15 @@ class Raw::FileUploadSerializer < ActiveModel::Serializer
   end
 
   attribute :file_url do
-    object.embed_url
+    embed = case object.type
+      when 'Raw::Image' then view_raw_file_upload_path(object, version: 'large')
+      when 'Raw::Document' then view_raw_file_upload_path(object, version: 'preview')
+      when 'Raw::Video' then view_raw_file_upload_path(object, version: 'preview')
+      when 'Raw::Audio' then view_raw_file_upload_path(object, version: 'original')
+      else view_raw_file_upload_path(object, version: 'original')
+      end
+
+    embed
   end
 
   attribute :html_url do

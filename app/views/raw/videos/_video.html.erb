@@ -1,12 +1,12 @@
 <% if display == :plain %>
-  <%= video_tag video.file[:original].url, poster: video.file[:preview].url, class: 'img-responsive', controls: true, autobuffer: false %>
-  <%= link_to video.file[:original].original_filename, video.file[:original].url %>
+  <%= video_tag view_raw_file_upload_path(video, version: 'original'), poster: view_raw_file_upload_path(video, version: 'preview'), class: 'img-responsive', controls: true, autobuffer: false %>
+  <%= link_to video.file[:original].original_filename, view_raw_file_upload_path(video, version: 'original') %>
 <% elsif display == :list %>
   <%= content_tag :li, class: 'list-group-item' do %>
     <div class="row">
       <div class="col-sm-4">
         <%= link_to raw_file_upload_path(video) do %>
-          <%= image_tag video.file[:preview].url, class: 'img-responsive', style: 'border:1px solid #ddd;' %>
+          <%= image_tag view_raw_file_upload_path(video, version: 'preview'), class: 'img-responsive', style: 'border:1px solid #ddd;' %>
         <% end %>
       </div>
       <div class="col-sm-8">

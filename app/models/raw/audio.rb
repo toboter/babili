@@ -9,10 +9,5 @@ module Raw
       audio/webm
       audio/mp3
     ]
-
-    def embed_url
-      file[:original].url
-    end
-
   end
 end

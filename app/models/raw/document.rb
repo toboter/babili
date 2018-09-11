@@ -13,9 +13,5 @@ module Raw
       text/richtext
       text/rtf
     ]
-
-    def embed_url
-      file[:original].url
-    end
   end
 end

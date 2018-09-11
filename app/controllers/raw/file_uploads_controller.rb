@@ -7,6 +7,19 @@ class Raw::FileUploadsController < ApplicationController
   def show
   end
 
+  def view_file
+    uploaded_file = @file_upload.file.is_a?(Hash) ? @file_upload.file.fetch(params[:version].present? ? params[:version].to_sym : :original) : @file_upload.file
+
+    headers["Content-Length"] = uploaded_file.size
+    headers["Content-Type"] = uploaded_file.mime_type
+    headers["Content-Disposition"] = "inline; filename=\"#{uploaded_file.original_filename}\""
+
+    self.response_body = Enumerator.new do |yielder|
+      yielder << uploaded_file.read(16*1024) until uploaded_file.eof?
+      uploaded_file.close
+    end
+  end
+
   # GET /raw/file_uploads/new
   def new
     @file_upload = Raw::FileUpload.new
