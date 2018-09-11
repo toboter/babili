@@ -32,7 +32,7 @@ module Api::V1
     end
 
     def avatar_url
-      "http://#{Rails.application.routes.default_url_options[:host]}
+      "#{Rails.application.routes.default_url_options[:host]}
       #{':'+Rails.application.routes.default_url_options[:port].to_s if Rails.application.routes.default_url_options[:port]}
       #{object.image_url(:small_thumb)}".squish.gsub(/\s+/, "")
     end
