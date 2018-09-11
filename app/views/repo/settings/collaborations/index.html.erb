@@ -1,0 +1,14 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <%= content_tag :span, 'Collaborators', class: 'text-strong' %>
+  </div>
+  <ul class="list-group">
+    <% @collaborations.each do |collab| %>
+      <li class="list-group-item"><%= render 'form', collab: collab %></li>
+    <% end %>
+  </ul>
+  <div class="panel-footer">
+    <%= content_tag :p, 'Search by username or full name', class: 'text-strong text-gray' %>
+    input
+  </div>
+</div>

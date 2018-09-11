@@ -1,0 +1,3 @@
+$('#edit_repository_topics_<%= @repository.id %>').addClass('hidden');
+$('#info-for-<%= @repository.id %>').removeClass('hidden');
+$('#topics_for_<%= @repository.id %>').html("<%= escape_javascript(render partial: 'repo/topics/topic', collection: @repository.topic_list, as: :topic) %>");

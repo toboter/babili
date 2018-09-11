@@ -1,3 +1,5 @@
+<% title "Bibliography \\ #{@repository.name} \\ #{@namespace.name}", false %>
+
 <%= content_tag :div, class: "row hidden-xs hidden-sm" do %>
   <div class="col-md-8">
     <%= render 'biblio/referencations/add_entry', namespace: @namespace, repository: @repository %>

@@ -7,7 +7,7 @@ class RepositoriesController < ApplicationController
 
   def show
     @items = @repository.items.joins(:identifier).order('aggregation_identifiers.origin_id asc')
-    render layout: 'repo'
+    render layout: 'repositories/base'
   end
 
   def new
@@ -15,20 +15,9 @@ class RepositoriesController < ApplicationController
 
   def edit
     respond_to do |format|
-      format.html { render :edit, layout: 'repo' }
+      format.html { render :edit, layout: 'repositories/base' }
       format.js
     end
-  end
-
-  def edit_topics
-    respond_to do |format|
-      format.html { render :edit }
-      format.js
-    end
-  end
-
-  def settings
-    render layout: 'repo'
   end
 
   def create
@@ -53,16 +42,7 @@ class RepositoriesController < ApplicationController
       else
         format.html { render :edit }
         format.json { render json: @repository.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  def update_topics
-    respond_to do |format|
-      if @repository.update(repository_params)
-        format.js
-      else
-        format.js { head :bad_request }
+        format.js { render js: "toastr['error'](#{@repository.errors.full_messages});", status: 422 }
       end
     end
   end
@@ -78,10 +58,7 @@ class RepositoriesController < ApplicationController
   private
   def repository_params
     params.require(:repository).permit(
-      :name, 
       :description,
-      :readme,
-      :topic_list
     )
   end
 

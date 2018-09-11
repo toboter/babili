@@ -5,12 +5,12 @@ module Writer
     load_resource :namespace
     load_resource :repository
     load_and_authorize_resource :document, through: :repository, find_by: :sequential_id
-    layout 'repo'
+    layout 'repositories/base'
 
     def index
       query = params[:q].presence || '*'
       sorted_by = params[:sorted_by] ||= 'created_desc'
-      sort_order = Writer::Document.sorted_by(sorted_by) if @documents.any?
+      sort_order = Writer::Document.all.sorted_by(sorted_by) unless @documents.nil?
   
       per_page = current_user.try(:person).try(:per_page).present? ? current_user.person.per_page : DEFAULT_PER_PAGE
   

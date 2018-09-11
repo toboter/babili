@@ -1,0 +1,10 @@
+<%= simple_form_for @repository, url: namespace_repository_settings_topics_path(@namespace, @repository), as: :repository_topic, method: :put, remote: true, html: {} do |f| %>
+  <%= f.input :topic_list, 
+    as: :string,
+    label: false,
+    input_html: {
+      value: f.object.topic_list.join(','),
+      id: 'vocab_tag_list' },
+    hint: 'Add topics to categorize your repository and make it more discoverable. Separate by comma.' %>
+  <%= f.submit 'Done', class: 'btn btn-default text-strong' %>
+<% end %>

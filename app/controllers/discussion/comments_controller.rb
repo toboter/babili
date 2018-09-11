@@ -7,12 +7,12 @@ module Discussion
 
     def new
       @comment.author = current_user.person
-      render layout: 'repo' if @repository.present?
+      render layout: 'repositories/base' if @repository.present?
     end
 
     def edit
       respond_to do |format|
-        format.html { render layout: 'repo' if @repository.present? }
+        format.html { render layout: 'repositories/base' if @repository.present? }
         format.js
       end
     end

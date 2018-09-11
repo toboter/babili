@@ -2,7 +2,7 @@ class Aggregation::ItemsController < ApplicationController
   load_and_authorize_resource :namespace
   load_and_authorize_resource :repository, through: :namespace
   load_and_authorize_resource through: :repository
-  layout 'repo'
+  layout 'repositories/base'
 
   def index
     @items = @items.order(slug: :asc)

@@ -1,20 +1,20 @@
+<% title "Insights \\ #{@repository.name} \\ #{@namespace.name}", false %>
+
 <div class="row --spacing">
   <div class="col-md-4">
     <div class="topics --spacing-20" id="info-for-<%= @repository.id %>">
       <% if @repository.topics.any? %>
         <div id="topics_for_<%= @repository.id %>" style="display:inline;">
-          <%= render 'topic_list_labels', repository: @repository %>
+          <%= render partial: 'repo/topics/topic', collection: @repository.topic_list, as: :topic %>
         </div>
-        <%= link_to 'Manage topics', edit_topics_namespace_repository_path(@namespace, @repository), remote: true, class: 'text-small' if can?(:edit, @repository) %>
+        <%= link_to 'Manage topics', edit_namespace_repository_settings_topics_path(@namespace, @repository), remote: true, class: 'text-small' if can?(:edit_topic, @repository) %>
       <% elsif can?(:edit, @repository) %>
-        <%= link_to 'Add topics', edit_topics_namespace_repository_path(@namespace, @repository), remote: true, class: 'text-small' %>
+        <%= link_to 'Add topics', edit_namespace_repository_settings_topics_path(@namespace, @repository), remote: true, class: 'text-small' %>
       <% end %>
     </div>
-
-    <%= simple_form_for [:update_topics, @namespace, @repository], method: :put, remote: true, html: {class: 'hidden', id: "edit_repository_topics_#{@repository.id}"} do |f| %>
-      <%= render 'topics_field', f: f %>
-      <%= f.submit 'Done', class: 'btn btn-default text-strong' %>
-    <% end if can?(:edit, @repository) %>
+    <%= content_tag :div, class: 'hidden', id: "edit_repository_topics_#{@repository.id}" do %>
+      <%= render 'repo/settings/topics/form' if can?(:edit_topic, @repository) %>
+    <% end %>
   </div>
 
   <div class="col-md-7 col-md-offset-1">
@@ -24,12 +24,7 @@
     </div>
     <%= simple_form_for [@namespace, @repository], method: :put, remote: true, html: {class: 'hidden', id: "edit_repository_#{@repository.id}"} do |f| %>
       <%= f.input :description %>
-      <strong>Readme</strong>
-      <div class="readme-field">
-        <%= f.input :readme, as: :hidden %>
-        <trix-editor input="repository_readme">
-      </div>
-      <%= f.submit 'Done', class: 'btn btn-default text-strong --spacious-10' %>
+      <%= f.submit 'Done', class: 'btn btn-default text-strong' %>
     <% end if can?(:edit, @repository) %>
 
   </div>

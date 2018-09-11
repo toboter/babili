@@ -8,7 +8,7 @@ module Discussion
     def index
       @assignees = Namespace.all-@thread.assignees
       respond_to do |format|
-        format.html { render layout: 'repo' if @repository.present? }
+        format.html { render layout: 'repositories/base' if @repository.present? }
         format.js
       end
     end
@@ -17,7 +17,7 @@ module Discussion
       @assignees = Namespace.all-@thread.assignees
       @assignment.assigner = current_user.person
       respond_to do |format|
-        format.html { render layout: 'repo' if @repository.present? }
+        format.html { render layout: 'repositories/base' if @repository.present? }
         format.js
       end
     end

@@ -1,0 +1,11 @@
+<% title "Options \\ Settings \\ #{@repository.name} \\ #{@namespace.name}", false %>
+
+<h3 class="subhead">Settings</h4>
+
+<%= simple_form_for @repository, url: name_namespace_repository_settings_options_path(@namespace, @repository), as: :repository_name, method: :put, html: {class: 'form-inline'} do |f| %>
+  <%= f.input :name, label: false %>
+  <%= f.submit 'Rename', class: 'btn btn-default text-strong', data: {confirm: 'Are you sure?'} %>
+<% end if can?(:name, @repository) %>
+
+<h4 class="subhead --spacious">Topics</h4>
+<%= render 'repo/settings/topics/form' %>

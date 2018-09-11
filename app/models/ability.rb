@@ -90,11 +90,17 @@ class Ability
         can [:new, :create], Repository do |repo|
           repo.owner.permissions.select { |p| p.person == user.person }.try(:first).try(:can_create)
         end
-        can [:edit, :update], Repository do |repo|
+        can [:edit, :update, :edit_topic, :update_topic], Repository do |repo|
           repo.permissions.select { |p| p.person == user.person }.try(:first).try(:can_update)
         end
         can :destroy, Repository do |repo|
           repo.owner.permissions.select { |p| p.person == user.person }.try(:can_destroy)
+        end
+        can [:name, :read_collaborations], Repository do |repo|
+          repo.permissions.select { |p| p.person == user.person }.try(:first).try(:can_manage)
+        end
+        can [:new, :create, :edit, :update, :destroy], Collaboration do |collab|
+          collab.collaboratable.permissions.select { |p| p.person == user.person }.try(:first).try(:can_manage)
         end
 
         # Namespace/Repository/Biblio::Referencation
@@ -145,8 +151,17 @@ class Ability
 
         # Namespace/Repository/Document
         ### todo
-        can :manage, Writer::Document do |doc|
-          doc.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_manage)
+        can [:read], Writer::Document do |doc|
+          doc.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_read)
+        end
+        can [:new, :create], Writer::Document do |doc|
+          doc.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_create)
+        end
+        can [:edit, :update], Writer::Document do |doc|
+          doc.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_update)
+        end
+        can :destroy, Writer::Document do |doc|
+          doc.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_destroy)
         end
 
 

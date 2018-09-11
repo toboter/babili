@@ -2,7 +2,7 @@ class Aggregation::EventsController < ApplicationController
   load_and_authorize_resource :namespace
   load_and_authorize_resource :repository, through: :namespace
   load_and_authorize_resource through: :repository
-  layout 'repo'
+  layout 'repositories/base'
   
   # vererbt an FileUpload, ListTransfer, ApiRequest
   def index

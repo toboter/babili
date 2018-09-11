@@ -1,3 +1,0 @@
-$('#edit_repository_topics_<%= @repository.id %>').addClass('hidden');
-$('#info-for-<%= @repository.id %>').removeClass('hidden');
-$('#topics_for_<%= @repository.id %>').html("<%= escape_javascript(render 'topic_list_labels', repository: @repository) %>");

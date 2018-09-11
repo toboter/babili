@@ -1,5 +1,5 @@
+toastr['success']('Successfully updated description!');
 $('#edit_repository_<%= @repository.id %>').addClass('hidden');
 $('#repo-edit-info-button').removeClass('hidden');
 $('#repo-info-section').removeClass('hidden');
 $('#repo-info-section').html("<%= escape_javascript(render 'repo_info_section', repository: @repository) %>");
-

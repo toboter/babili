@@ -370,9 +370,16 @@ Rails.application.routes.draw do
       end
       resources :repositories, concerns: :discussable do
         resources :documents, path: :docs, module: :writer
-        get :settings, on: :member
-        get :edit_topics, on: :member
-        put :update_topics, on: :member
+        scope module: :repo do
+          namespace :settings do
+            get '/', to: 'options#edit'
+            resource :options, only: [:edit] do
+              put 'name', on: :member
+            end
+            resource :topics, only: [:edit, :update]
+            resources :collaborations
+          end
+        end
         namespace :biblio, path: 'bibliography' do
           resources :references, controller: 'referencations', only: [:index, :destroy] do
             post :add_entry, to: 'referencations#add_entry', on: :collection

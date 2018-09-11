@@ -5,6 +5,8 @@
 # t.datetime "updated_at", null: false
 # t.integer "creator_id"
 
+#x t.text :readme
+
 class Repository < ApplicationRecord
   extend FriendlyId
   friendly_id :name, :use => :scoped, :scope => :owner
@@ -17,8 +19,8 @@ class Repository < ApplicationRecord
   belongs_to :owner, class_name: 'Namespace', foreign_key: :namespace_id
   belongs_to :creator, class_name: 'Person'
 
-  has_many :invited_collaborations, as: :collaboratable, dependent: :destroy, class_name: 'Collaboration'
-  has_many :invited_collaborators, through: :invited_collaborations, source: :collaborator
+  has_many :collaborations, as: :collaboratable, dependent: :destroy, class_name: 'Collaboration'
+  has_many :invited_collaborators, through: :collaborations, source: :collaborator
 
   has_many :documents, dependent: :destroy, class_name: 'Writer::Document'
   
@@ -34,6 +36,8 @@ class Repository < ApplicationRecord
   has_many :threads, as: :discussable, class_name: 'Discussion::Thread'
 
   delegate :accessors, to: :owner
+
+  accepts_nested_attributes_for :collaborations, allow_destroy: true
 
   validates :name, :description,
     presence: true
@@ -63,7 +67,7 @@ class Repository < ApplicationRecord
   def permissions
     #Person, can_create, can_read, can_update, can_destroy, can_manage, is_owner 
     permissions = owner.permissions
-    collabs = invited_collaborations.map{ |c| Permission.new(person: c.collaborator, can_create: c.can_create, can_read: c.can_read, can_update: c.can_update, can_destroy: c.can_destroy, can_manage: c.can_manage, is_owner: false) }
+    collabs = collaborations.map{ |c| Permission.new(person: c.collaborator, can_create: c.can_create, can_read: c.can_read, can_update: c.can_update, can_destroy: c.can_destroy, can_manage: c.can_manage, is_owner: false) }
     permissions << collabs
     return permissions.compact.flatten.uniq
   end

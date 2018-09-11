@@ -1,7 +1,7 @@
 class Biblio::ReferencationsController < ApplicationController
   load_and_authorize_resource :namespace, except: :add_repository
   load_and_authorize_resource :repository, through: :namespace, except: :add_repository
-  layout 'repo'
+  layout 'repositories/base'
   DEFAULT_PER_PAGE = 50
 
   def index

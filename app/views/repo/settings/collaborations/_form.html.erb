@@ -1,0 +1,21 @@
+<%= simple_form_for collab, url: namespace_repository_settings_collaboration_path(@namespace, @repository, collab), 
+  remote: true, 
+  method: :put, 
+  as: :repository_collaboration,
+  html: {
+    id: "edit_repository_collaboration_#{collab.id}"
+  } do |f| %>
+
+  <%= content_tag :span, f.object.collaborator.name, class: 'text-strong' %>
+
+  <%= f.input :can_manage %>
+  <%= f.input :can_create %>
+  <%= f.input :can_read %>
+  <%= f.input :can_update %>
+  <%= f.input :can_destroy %>
+
+  <%= f.submit 'Update', class: 'btn btn-default btn-sm text-strong' %>
+
+<% end %>
+
+

@@ -6,10 +6,6 @@
       <%= simple_form_for [@namespace, @repository] do |f| %>
         <%= f.error_notification %>
         <%= f.input :description %>
-        <div class="readme-field">
-          <%= f.input :readme, as: :hidden %>
-          <trix-editor input="repository_readme">
-        </div>
 
         <div class="actions --spacious">
           <%= f.submit class: 'btn btn-primary' %>

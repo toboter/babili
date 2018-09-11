@@ -23,21 +23,21 @@ module Discussion
         body[:query][:bool][:must] = { query_string: { query: query, default_operator: "and" } }
       end
 
-      render layout: 'repo' if @repository.present?
+      render layout: 'repositories/base' if @repository.present?
     end
 
     def show
       @items = @thread.items.sort_by{|e| e[:created_at]}
-      render layout: 'repo' if @repository.present?
+      render layout: 'repositories/base' if @repository.present?
     end
 
     def new
-      render layout: 'repo' if @repository.present?
+      render layout: 'repositories/base' if @repository.present?
     end
 
     def edit
       respond_to do |format|
-        format.html { render layout: 'repo' if @repository.present? }
+        format.html { render layout: 'repositories/base' if @repository.present? }
         format.js
       end
     end

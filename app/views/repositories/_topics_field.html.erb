@@ -1,7 +1,0 @@
-<%= f.input :topic_list, 
-  as: :string,
-  input_html: {
-    value: f.object.topic_list.join(','),
-    id: 'vocab_tag_list' }, 
-  label: "Topics <span class='text-muted' style='font-weight:normal;'>(separate with comma)</span>".html_safe,
-  hint: 'Add topics to categorize your repository and make it more discoverable.' %>
