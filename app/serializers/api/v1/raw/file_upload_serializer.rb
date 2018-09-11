@@ -13,7 +13,7 @@ module Api
 
         attribute :file_url do
           url = []
-          url << "http://#{Rails.application.routes.default_url_options[:host]}"
+          url << "#{Rails.application.routes.default_url_options[:host]}"
           url << "#{':'+Rails.application.routes.default_url_options[:port].to_s}" if Rails.application.routes.default_url_options[:port]
           url << object.embed_url
           url.join('')

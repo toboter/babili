@@ -6,7 +6,7 @@ module Api::V1
     attributes :name, :id, :namespace, :avatar_url, :url, :html_url, :organizations_url, :repositories_url, :vocabularies_url, :applications_url, :type, :site_admin
 
     def avatar_url
-      "http://#{Rails.application.routes.default_url_options[:host]}
+      "#{Rails.application.routes.default_url_options[:host]}
       #{':'+Rails.application.routes.default_url_options[:port].to_s if Rails.application.routes.default_url_options[:port]}
       #{object.image_url(:small_thumb)}".squish.gsub(/\s+/, "")
     end

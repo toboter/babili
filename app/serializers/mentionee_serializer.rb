@@ -18,7 +18,7 @@ class MentioneeSerializer < ActiveModel::Serializer
   end
 
   attribute :avatar_url do
-    "http://#{Rails.application.routes.default_url_options[:host]}
+    "#{Rails.application.routes.default_url_options[:host]}
     #{':'+Rails.application.routes.default_url_options[:port].to_s if Rails.application.routes.default_url_options[:port]}
     #{object.subclass.image_url(:small_thumb)}".squish.gsub(/\s+/, "") if object.subclass
   end
