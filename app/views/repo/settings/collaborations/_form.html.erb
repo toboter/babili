@@ -6,8 +6,11 @@
     id: "edit_repository_collaboration_#{collab.id}"
   } do |f| %>
 
-  <%= content_tag :span, f.object.collaborator.name, class: 'text-strong' %>
-
+  <%= content_tag :h5 do %>
+    <%= content_tag :span, collab.collaborator.name, class: 'text-strong' %>
+    <%= content_tag :span, "(added by #{collab.creator.name} on #{collab.created_at.to_formatted_s(:long)})", class: 'text-small text-gray' %>
+  <% end %>
+  
   <%= f.input :can_manage %>
   <%= f.input :can_create %>
   <%= f.input :can_read %>

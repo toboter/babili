@@ -1,14 +1,34 @@
 <div class="panel panel-default">
   <div class="panel-heading">
-    <%= content_tag :span, 'Collaborators', class: 'text-strong' %>
+    <%= content_tag :h5, 'Collaborators', class: 'text-strong' %>
+    <%= content_tag :p, 'Here you can find and add people you like to collaborate with and who are not already able to access your repository.', class: 'text-gray' %>
   </div>
   <ul class="list-group">
     <% @collaborations.each do |collab| %>
-      <li class="list-group-item"><%= render 'form', collab: collab %></li>
+      <li class="list-group-item">
+        <%= render 'form', collab: collab %>
+        <%= link_to 'remove', namespace_repository_settings_collaboration_path(@namespace, @repository, collab), method: :delete, data: { confirm: 'Are you sure?' } %>
+      </li>
     <% end %>
   </ul>
   <div class="panel-footer">
-    <%= content_tag :p, 'Search by username or full name', class: 'text-strong text-gray' %>
-    input
+    <%= content_tag :h5, 'Search by username or full name', class: 'text-strong text-gray' %>
+    <%= content_tag :p, 'You can only add approved users, who are not already in the accessors list for the repository.', class: 'text-gray' %>
+    <%= simple_form_for @repository.collaborations.new, 
+      url: namespace_repository_settings_collaborations_path(@namespace, @repository),
+      as: :repository_collaboration,
+      html: {
+        id: "new_repository_collaboration"
+      } do |f| %>
+
+      <div class="input-group">
+        <%= f.input :collaborator_id, collection: @potential_collabs, label: false %>
+        <span class="input-group-btn">
+          <%= f.submit 'Add collaborator', class: 'btn btn-default text-strong' %>
+        </span>
+      </div>
+      
+      
+    <% end %>
   </div>
 </div>
