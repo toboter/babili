@@ -12,10 +12,18 @@ module Api
         end
 
         attribute :file_url do
+          embed = case object.type
+            when 'Raw::Image' then view_raw_file_upload_path(object, version: 'large')
+            when 'Raw::Document' then view_raw_file_upload_path(object, version: 'preview')
+            when 'Raw::Video' then view_raw_file_upload_path(object, version: 'preview')
+            when 'Raw::Audio' then view_raw_file_upload_path(object, version: 'original')
+            else view_raw_file_upload_path(object, version: 'original')
+            end
+
           url = []
           url << "#{Rails.application.routes.default_url_options[:host]}"
           url << "#{':'+Rails.application.routes.default_url_options[:port].to_s}" if Rails.application.routes.default_url_options[:port]
-          url << object.embed_url
+          url << embed
           url.join('')
         end
 

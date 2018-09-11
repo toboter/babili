@@ -1,5 +1,5 @@
 <% if display == :plain %>
-  <%= link_to audio.file[:original].original_filename, audio.file[:original].url %>
+  <%= link_to audio.file[:original].original_filename, view_raw_file_upload_path(audio, version: 'preview') %>
 <% elsif display == :list %>
   <%= content_tag :li, class: 'list-group-item' do %>
     <div class="row">

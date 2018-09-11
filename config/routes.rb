@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   namespace :raw do
     get '/', to: redirect(subdomain: false, path: '/')
-    resources :file_uploads, path: 'files', except: :index
+    resources :file_uploads, path: 'files', except: :index do
+      get "view", to: "file_uploads#view_file", on: :member
+    end
   end
 
   constraints subdomain: 'api' do
@@ -107,7 +109,9 @@ Rails.application.routes.draw do
         end
 
         namespace :raw do
-          resources :file_uploads, only: [:show, :create], path: 'files'
+          resources :file_uploads, only: [:show, :create], path: 'files' do
+            get "view", to: "file_uploads#view_file", on: :member
+          end
         end
 
         resources :identifiers, only: [:index, :show], path: 'boi', module: 'aggregation'

@@ -1,12 +1,12 @@
 <% if display == :plain %>
-  <%= image_tag image.file[version].url, class: 'img-responsive' %>
-  <%= link_to image.file[:original].original_filename, image.file[:original].url %>
+  <%= image_tag view_raw_file_upload_path(image, version: version), class: 'img-responsive' %>
+  <%= link_to image.file[:original].original_filename, view_raw_file_upload_path(image, version: 'original') %>
 <% elsif display == :list %>
   <%= content_tag :li, class: 'list-group-item' do %>
     <div class="row">
       <div class="col-sm-4">
         <%= link_to raw_file_upload_path(image) do %>
-          <%= image_tag image.file[version].url, class: 'img-responsive' %>
+          <%= image_tag view_raw_file_upload_path(image, version: version), class: 'img-responsive' %>
         <% end %>
       </div>
       <div class="col-sm-8">

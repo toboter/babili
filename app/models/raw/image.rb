@@ -9,9 +9,5 @@ module Raw
       image/tiff
       image/webp
     ]
-
-    def embed_url
-      file[:large].url
-    end
   end
 end
