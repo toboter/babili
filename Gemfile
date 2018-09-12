@@ -12,7 +12,6 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.2'
 gem 'mini_racer', platforms: :ruby
-gem 'jquery-rails'
 gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 # gem 'redis', '~> 3.0'
@@ -53,18 +52,14 @@ gem 'doorkeeper', '~> 4.3.0'
 gem 'cancancan'
 
 gem 'bootstrap-sass', '~> 3.3.6'
-gem 'jquery-turbolinks'
 gem "font-awesome-rails"
 gem 'simple_form'
 gem 'will_paginate-bootstrap'
 gem 'cocoon'
-# gem 'toastr-rails'
-# gem 'trix-rails', require: 'trix'
 gem 'html-pipeline', '~> 2.8', '>= 2.8.4'
 gem 'commonmarker', '~> 0.17.11'
 gem 'github-markup', '~> 2.0', '>= 2.0.1'
 gem 'sanitize', '~> 4.6', '>= 4.6.6'
-gem "selectize-rails"
 gem 'rails-bootstrap-markdown' #
 gem 'redcarpet' #
 gem "wysiwyg-rails"

@@ -48,6 +48,7 @@ class Repo::Settings::CollaborationsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to namespace_repository_settings_collaborations_path(@namespace, @repository), notice: 'Collaborator was successfully removed.' }
       format.json { head :no_content }
+      format.js
     end
   end
 

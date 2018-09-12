@@ -1,19 +1,20 @@
 <div class="panel panel-default">
   <div class="panel-heading">
     <%= content_tag :h5, 'Collaborators', class: 'text-strong' %>
-    <%= content_tag :p, 'Here you can find and add people you like to collaborate with and who are not already able to access your repository.', class: 'text-gray' %>
+    <%= content_tag :p, 'Here you can find, fine-tune accessibilities and add people you collaborate with, as long they are not already able
+      to access the repository, because they belong to the owning organization.', class: 'text-gray' %>
   </div>
   <ul class="list-group">
     <% @collaborations.each do |collab| %>
-      <li class="list-group-item">
+      <li class="list-group-item" id="list-item-collab-<%= collab.id %>">
+        <%= link_to fa_icon('times'), namespace_repository_settings_collaboration_path(@namespace, @repository, collab), method: :delete, remote: true, data: { confirm: 'Are you sure?' }, title: 'remove', class: 'pull-right' %>
         <%= render 'form', collab: collab %>
-        <%= link_to 'remove', namespace_repository_settings_collaboration_path(@namespace, @repository, collab), method: :delete, data: { confirm: 'Are you sure?' } %>
       </li>
     <% end %>
   </ul>
   <div class="panel-footer">
     <%= content_tag :h5, 'Search by username or full name', class: 'text-strong text-gray' %>
-    <%= content_tag :p, 'You can only add approved users, who are not already in the accessors list for the repository.', class: 'text-gray' %>
+    <%= content_tag :p, 'You can only add approved users, who are not already in the accessors list for this repository.', class: 'text-gray' %>
     <%= simple_form_for @repository.collaborations.new, 
       url: namespace_repository_settings_collaborations_path(@namespace, @repository),
       as: :repository_collaboration,

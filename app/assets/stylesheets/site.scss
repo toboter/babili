@@ -215,6 +215,19 @@ form {
     }
 }
 
+form {
+    .form-inline {
+        .checkbox {
+            margin-right:15px;
+            label {
+                input[type="checkbox"] {
+                    margin-right:5px;
+                }
+            }
+        }
+    }
+}
+
 .bg-primary {
     background-color: #F05F40;
 }

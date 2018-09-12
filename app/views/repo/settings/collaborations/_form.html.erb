@@ -6,18 +6,18 @@
     id: "edit_repository_collaboration_#{collab.id}"
   } do |f| %>
 
-  <%= content_tag :h5 do %>
+  <%= content_tag :h5, style: 'margin-top:0px;' do %>
     <%= content_tag :span, collab.collaborator.name, class: 'text-strong' %>
     <%= content_tag :span, "(added by #{collab.creator.name} on #{collab.created_at.to_formatted_s(:long)})", class: 'text-small text-gray' %>
   <% end %>
-  
-  <%= f.input :can_manage %>
-  <%= f.input :can_create %>
-  <%= f.input :can_read %>
-  <%= f.input :can_update %>
-  <%= f.input :can_destroy %>
-
-  <%= f.submit 'Update', class: 'btn btn-default btn-sm text-strong' %>
+  <div class="form-inline">
+    <%= f.input :can_manage, label: 'Manage', input_html: {id: "repository_collaboration_#{collab.id}_can_manage", class: 'autosubmit'} %>
+    <%= f.input :can_create, label: 'Create', input_html: {id: "repository_collaboration_#{collab.id}_can_create", class: 'autosubmit'} %>
+    <%= f.input :can_read, label: 'Read', input_html: {id: "repository_collaboration_#{collab.id}_can_read", class: 'autosubmit'} %>
+    <%= f.input :can_update, label: 'Update', input_html: {id: "repository_collaboration_#{collab.id}_can_update", class: 'autosubmit'} %>
+    <%= f.input :can_destroy, label: 'Delete', input_html: {id: "repository_collaboration_#{collab.id}_can_destroy", class: 'autosubmit'} %>
+  </div>
+  <%= f.submit 'Update', class: 'btn btn-default btn-sm text-strong inputs-autosubmit' %>
 
 <% end %>
 

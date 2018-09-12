@@ -1,4 +1,4 @@
-$(function () {
+$(document).on('turbolinks:load', function(){
   if ( $( "#dashboard-container" ).length ) {
   var uppy = Uppy.Core({ 
     autoProceed: false,
@@ -21,7 +21,7 @@ $(function () {
     formData: true,
     fieldName: 'upload[file]',
     headers: {
-      'X-CSRF-Token': $.rails.csrfToken()
+      'X-CSRF-Token': Rails.csrfToken()
     }
   })
   uppy.use(Uppy.Form, {

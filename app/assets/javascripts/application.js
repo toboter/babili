@@ -10,19 +10,17 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery
-//= require jquery.turbolinks
-//= require jquery_ujs
+//= require rails-ujs
+//= require jquery/dist/jquery.min
+//= require bootstrap
 //= require toastr/build/toastr.min
 //= require bootstrap-markdown-bundle
 //= require froala_editor.min.js
 //= require trix/dist/trix
 //= require uppy/dist/uppy.min
 //= require cocoon
-//= require selectize
-//= require bootstrap
+//= require selectize/dist/js/standalone/selectize.min
 //= require turbolinks
-//= require turbolinks-compatibility
 //= require_tree .
 
 $(function () {
@@ -44,6 +42,14 @@ $(function () {
   });
 
   $('.popover').popover();
+
+  if ( $( ".autosubmit" ).length ) {
+    $('.inputs-autosubmit').hide();
+    $('.autosubmit').on('change', function(e) {
+        e.preventDefault();
+        Rails.fire(this.form, "submit")
+    });
+  };
 })
 
 
