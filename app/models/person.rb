@@ -25,7 +25,7 @@ class Person < ApplicationRecord
   delegate :repositories, to: :namespace
 
   scope :approved, -> { joins(:user).where(users: {approved: true}) }
-
+  
   #after_commit :reindex_namespace
   
   def to_param
@@ -57,8 +57,7 @@ class Person < ApplicationRecord
   end
 
   def all_repos
-    repos = []
-    repositories.to_a.concat(organizations.map(&:repositories).to_a).concat(collaboration_repos.to_a).flatten
+    repositories.to_a.concat(organizations.map(&:repositories).to_a).flatten
   end
 
 

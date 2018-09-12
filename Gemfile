@@ -62,7 +62,6 @@ gem 'github-markup', '~> 2.0', '>= 2.0.1'
 gem 'sanitize', '~> 4.6', '>= 4.6.6'
 gem 'rails-bootstrap-markdown' #
 gem 'redcarpet' #
-gem "wysiwyg-rails"
 
 gem 'acts_as_list'
 gem 'closure_tree'

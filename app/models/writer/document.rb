@@ -25,6 +25,8 @@ module Writer
     belongs_to :repository
     has_many :references, as: :referencing, dependent: :destroy
     has_many :files, through: :references, source_type: 'Raw::FileUpload', source: :referenceable
+    has_many :categorizations, dependent: :destroy
+    has_many :categories, through: :categorizations, class_name: 'CategoryNode'
 
     validates :content, presence: true
 

@@ -15,14 +15,14 @@ class Ability
     can :read, Oread::Application
     can :read, Doorkeeper::Application
     can :read, [Zensus::Agent, Zensus::Appellation, Zensus::Event, Zensus::Activity]
-    can :read, [CMS::BlogPage, CMS::Novelity, CMS::HelpPage]
+    can :read, [CMS::BlogPage, CMS::Novelity, CMS::HelpPage, CMS::HelpCategory, CMS::BlogCategory]
     can :read, [Locate::Place, Locate::Dating, Locate::Toponym, Locate::Location]
-    can :read, [Aggregation::Identifier, Aggregation::Item, Aggregation::Event, Aggregation::Commit]
     can :read, Writer::Document
     cannot :read, Writer::Document, published_at: nil
     cannot :read, CMS::BlogPage, published_at: nil
     cannot :read, Raw::FileUpload
     cannot :index, User
+    cannot :read, [Aggregation::Identifier, Aggregation::Item, Aggregation::Event, Aggregation::Commit]
 
     if user
       can [:show, :create, :update], User do |u|
@@ -33,20 +33,6 @@ class Ability
       end
   
       if user.approved?
-        #can :manage, :all
-        if user.is_admin?
-          can :manage, User
-          can :manage, Oread::Application
-          can :manage, Doorkeeper::Application
-          can :manage, OauthAccessibility
-          can :manage, Raw::FileUpload
-          can :destroy, Biblio::Entry
-          can :manage, [Zensus::Agent, Zensus::Appellation, Zensus::Event, Zensus::Activity]
-          can :manage, [CMS::BlogPage, CMS::Novelity, CMS::HelpPage, CMS::HelpCategory, CMS::BlogCategory]
-          can :manage, [Locate::Place, Locate::Dating, Locate::Toponym, Locate::Location]
-          can :manage, [Aggregation::Identifier, Aggregation::Item, Aggregation::Event, Aggregation::Commit]
-        end
-
         # Person
         ### todo
         ###  anpassen auf namespace permissions
@@ -91,7 +77,8 @@ class Ability
           repo.owner.permissions.select { |p| p.person == user.person }.try(:first).try(:can_create)
         end
         can [:edit, :update, :edit_topic, :update_topic], Repository do |repo|
-          repo.permissions.select { |p| p.person == user.person }.try(:first).try(:can_update)
+          repo.permissions.select { |p| p.person == user.person }.try(:first).try(:can_update) ||
+          repo.permissions.select { |p| p.person == user.person }.try(:first).try(:can_manage)
         end
         can :destroy, Repository do |repo|
           repo.owner.permissions.select { |p| p.person == user.person }.try(:can_destroy)
@@ -136,32 +123,88 @@ class Ability
         # Namespace/Repository/Data
         ### todo
         ### anpassen auf repo.permissions
-        can :manage, Aggregation::Identifier do |identifier|
-          false
+        can :index, Aggregation::Item, repository_id: user.person.all_repos.map(&:id)
+        can :index, Aggregation::Item, repository_id: user.person.collaborations.readable.map{ |c| c.collaboratable.id }
+        can :show, Aggregation::Item do |item|
+          item.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_manage) ||
+          item.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_read)
         end
-        can :manage, Aggregation::Item do |item|
-          false
+        can [:new, :create], Aggregation::Item do |item|
+          item.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_create)
         end
-        can :manage, Aggregation::Event do |event|
-          false
+        can [:edit, :update], Aggregation::Item do |item|
+          item.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_update)
         end
-        can :manage, Aggregation::Commit do |commit|
-          false
+        can :destroy, Aggregation::Item do |item|
+          item.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_destroy)
         end
+
+        can :index, Aggregation::Event, repository_id: user.person.all_repos.map(&:id)
+        can :index, Aggregation::Event, repository_id: user.person.collaborations.readable.map{ |c| c.collaboratable.id }
+        can :show, Aggregation::Event do |event|
+          event.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_manage) ||
+          event.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_read)
+        end
+        can [:new, :create], Aggregation::Event do |event|
+          event.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_create)
+        end
+        can [:edit, :update], Aggregation::Event do |event|
+          event.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_update)
+        end
+        can :destroy, Aggregation::Event do |event|
+          event.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_destroy)
+        end
+
+        can :index, Aggregation::Commit, event: { repository_id: user.person.all_repos.map(&:id) }
+        can :index, Aggregation::Commit, event: { repository_id: user.person.collaborations.readable.map{ |c| c.collaboratable.id } }
+        can :show, Aggregation::Commit do |commit|
+          commit.event.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_manage) ||
+          commit.event.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_read)
+        end
+        can [:new, :create], Aggregation::Commit do |commit|
+          commit.event.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_create)
+        end
+        can [:edit, :update], Aggregation::Commit do |commit|
+          commit.event.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_update)
+        end
+        can :destroy, Aggregation::Commit do |commit|
+          commit.event.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_destroy)
+        end
+
+        can :index, Aggregation::Identifier, items: { repository_id: user.person.all_repos.map(&:id) }
+        can :index, Aggregation::Identifier, items: { repository_id: user.person.collaborations.readable.map{ |c| c.collaboratable.id } }
+        can :show, Aggregation::Identifier do |identifier|
+          identifier.items.map{|i| i.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_manage)}.include?(true) ||
+          identifier.items.map{|i| i.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_read)}.include?(true)
+        end
+
 
         # Namespace/Repository/Document
         ### todo
-        can [:read], Writer::Document do |doc|
-          doc.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_read)
+        can :index, Writer::Document, repository_id: user.person.all_repos.map(&:id)
+        can :index, Writer::Document, repository_id: user.person.collaborations.readable.map{ |c| c.collaboratable.id }
+        can :show, Writer::Document do |doc|
+          doc.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_manage) ||
+          doc.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_read) ||
+          doc.published?
+        end
+        can :publish, Writer::Document do |doc|
+          doc.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_manage)
+        end
+        can :categorize, Writer::Document do |doc|
+          doc.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_manage) &&
+          doc.published?
         end
         can [:new, :create], Writer::Document do |doc|
           doc.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_create)
         end
         can [:edit, :update], Writer::Document do |doc|
-          doc.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_update)
+          doc.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_update) &&
+          !doc.published?
         end
         can :destroy, Writer::Document do |doc|
-          doc.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_destroy)
+          doc.repository.permissions.select { |p| p.person == user.person }.try(:first).try(:can_destroy) &&
+          !doc.published?
         end
 
 
@@ -209,6 +252,19 @@ class Ability
           token.resource_owner == user
         end
         can [:new, :create], PersonalAccessToken
+
+        if user.is_admin?
+          can :manage, User
+          can :manage, Oread::Application
+          can :manage, Doorkeeper::Application
+          can :manage, OauthAccessibility
+          can :manage, Raw::FileUpload
+          can :destroy, Biblio::Entry
+          can :manage, [Zensus::Agent, Zensus::Appellation, Zensus::Event, Zensus::Activity]
+          can :manage, [CMS::BlogPage, CMS::Novelity, CMS::HelpPage, CMS::HelpCategory, CMS::BlogCategory]
+          can :manage, [Locate::Place, Locate::Dating, Locate::Toponym, Locate::Location]
+          can :manage, [Aggregation::Identifier]
+        end
         
       end
     end

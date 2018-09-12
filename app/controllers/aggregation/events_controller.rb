@@ -1,12 +1,12 @@
 class Aggregation::EventsController < ApplicationController
-  load_and_authorize_resource :namespace
-  load_and_authorize_resource :repository, through: :namespace
-  load_and_authorize_resource through: :repository
+  load_resource :namespace
+  load_resource :repository, through: :namespace
+  load_and_authorize_resource :event, through: :repository, except: :index
   layout 'repositories/base'
   
   # vererbt an FileUpload, ListTransfer, ApiRequest
   def index
-    @events = @events.order(updated_at: :desc)
+    @events = @repository.events.accessible_by(current_ability).order(updated_at: :desc)
   end
 
   def show

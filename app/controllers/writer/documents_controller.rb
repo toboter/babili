@@ -4,10 +4,11 @@ module Writer
     before_action :set_paper_trail_whodunnit, except: [:index, :show]
     load_resource :namespace
     load_resource :repository
-    load_and_authorize_resource :document, through: :repository, find_by: :sequential_id
+    load_and_authorize_resource :document, through: :repository, find_by: :sequential_id, except: :index
     layout 'repositories/base'
 
     def index
+      @documents = @repository.documents.accessible_by(current_ability)
       query = params[:q].presence || '*'
       sorted_by = params[:sorted_by] ||= 'created_desc'
       sort_order = Writer::Document.all.sorted_by(sorted_by) unless @documents.nil?
@@ -16,7 +17,7 @@ module Writer
   
       @results = Writer::Document.search(query, 
         fields: [:_all],
-        where: { repository_id: @repository.id },
+        where: { id: @documents.ids },
         order: sort_order,
         page: params[:page], 
         per_page: per_page
@@ -53,6 +54,21 @@ module Writer
       respond_to do |format|
         if @document.update(document_params)
           format.html { redirect_to [@namespace, @repository, @document], notice: "Document was successfully updated." }
+          format.json { render :show, status: :ok, location: @document }
+          format.js
+        else
+          format.html { render :edit, notice: "Please review your input." }
+          format.json { render json: @document.errors, status: :unprocessable_entity }
+          format.js
+        end
+      end
+    end
+
+    def publish
+      publishing_params = params[:button] == 'depublish' ? {published_at: nil, publisher: nil} : {published_at: Time.now, publisher: current_person}
+      respond_to do |format|
+        if @document.update(publishing_params)
+          format.html { redirect_to [@namespace, @repository, @document], notice: "Document was successfully #{params[:button]}ed." }
           format.json { render :show, status: :ok, location: @document }
           format.js
         else

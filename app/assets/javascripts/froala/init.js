@@ -1,16 +1,16 @@
-  //= require plugins/colors.min.js
-  //= require third_party/embedly.min.js
-  //= require plugins/entities.min.js
-  //= require plugins/font_size.min.js
-  //= require plugins/link.min.js
-  //= require plugins/line_breaker.min.js
-  //= require plugins/draggable.min.js
-  //= require plugins/quote.min.js
-  //= require plugins/image.min.js
-  //= require plugins/table.min.js
-  //= require plugins/url.min.js
-  //= require plugins/special_characters.min.js
-  //= require plugins/word_paste.min.js
+  //= require froala-editor/js/plugins/colors.min.js
+  //= require froala-editor/js/third_party/embedly.min.js
+  //= require froala-editor/js/plugins/entities.min.js
+  //= require froala-editor/js/plugins/font_size.min.js
+  //= require froala-editor/js/plugins/link.min.js
+  //= require froala-editor/js/plugins/line_breaker.min.js
+  //= require froala-editor/js/plugins/draggable.min.js
+  //= require froala-editor/js/plugins/quote.min.js
+  //= require froala-editor/js/plugins/image.min.js
+  //= require froala-editor/js/plugins/table.min.js
+  //= require froala-editor/js/plugins/url.min.js
+  //= require froala-editor/js/plugins/special_characters.min.js
+  //= require froala-editor/js/plugins/word_paste.min.js
 
   $(document).on("turbolinks:load", function()  {
     if ( $( ".froala-edit" ).length ) {

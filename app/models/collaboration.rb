@@ -15,4 +15,6 @@ class Collaboration < ApplicationRecord
   belongs_to :collaboratable, polymorphic: true
   belongs_to :creator, class_name: 'Person'
 
+  scope :readable, -> { where(can_read: true).or(where(can_manage: true)) }
+
 end

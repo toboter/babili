@@ -10,16 +10,11 @@
  * files in this directory. Styles in this file should be added after the last require_* statement.
  * It is generally better to create a new file per style scope.
  *= require bootstrap-markdown
- *= require selectize/dist/css/selectize.css
- *= require selectize/dist/css/selectize.bootstrap3.css
  */
 
 @import "bootstrap-sprockets";
 @import "bootstrap";
-@import "froala_editor.min";
-@import "froala_style.min";
 @import "froala";
-@import "font-awesome-sprockets";
 @import "font-awesome";
 @import "cookieconsent.min";
 @import "site";
@@ -32,3 +27,5 @@
 @import "trix/dist/trix";
 @import "trix/rich-content";
 @import "trix/toolbar";
+@import "selectize/dist/css/selectize.css";
+@import "selectize/dist/css/selectize.bootstrap3.css";

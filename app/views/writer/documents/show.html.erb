@@ -2,12 +2,17 @@
 
 <div class="row document-wrapper" style="">
   <div class="col-md-10 col-centered">
-  <%= @document.repository.permissions.inspect %>
     <%= content_tag :div, class: '--spacing-20 clearfix' do %>
       <%= content_tag :span, @document.title, class: 'text-strong' %>
       <%= content_tag :span, class: 'pull-right text-small text-strong' do %>
-        <%= link_to fa_icon('edit', text: 'Edit'), [:edit, @document.repository.owner, @document.repository, @document] if can?(:update, @document) %>
-        <%= link_to fa_icon('times', text: 'Remove'), [@document.repository.owner, @document.repository, @document], method: :delete, style: 'margin-left:10px;' if can?(:destroy, @document) %>
+        <%= form_for @document, url: publish_namespace_repository_document_path(@document.repository.owner, @document.repository, @document), method: :put, html: {style: 'display:inline;'} do |f| %>
+          <%= button_tag(value: @document.published? ? 'depublish' : 'publish', class: "btn btn-default btn-sm text-strong", data: { disable_with: "Please wait..." }) do %>
+            <%= @document.published? ? fa_icon('undo', text: 'Depublish') : fa_icon('check', text: 'Publish now!') %>
+          <% end %>
+        <% end if can?(:publish, @document) %>
+        <%= link_to fa_icon('edit', text: 'Edit'), [:edit, @document.repository.owner, @document.repository, @document], class: 'btn btn-default btn-sm text-strong' if can?(:update, @document) %>
+        <%= link_to fa_icon('times', text: 'Remove'), [@document.repository.owner, @document.repository, @document], method: :delete, class: 'btn btn-default btn-sm text-strong' if can?(:destroy, @document) %>
+        <%= link_to fa_icon('bookmark', text: 'Categorize'), '', class: 'btn btn-default btn-sm text-strong' if can?(:categorize, @document) %>
       <% end %>
       <div class="row --spacious-10">
         <%= content_tag :div, class: 'col-md-8 text-gray text-small' do %>
@@ -15,6 +20,11 @@
           <%= link_to @document.creator.name, @document.creator.namespace, class: 'text-strong' %>
           created this <%= content_tag :span, "#{distance_of_time_in_words(@document.created_at, Time.now)} ago", title: @document.created_at %>.<br>
           Versions: <%= @document.drafts.count %>
+          <% if @document.published? %>
+            &mdash;
+            <%= link_to @document.publisher.name, @document.publisher.namespace %> published this 
+            <%= content_tag :span, "#{distance_of_time_in_words(@document.published_at, Time.now)} ago", title: @document.published_at %>
+          <% end %>
         <% end %>
         <%= content_tag :div, class: 'col-md-4' do %>
           <% @document.authors.each do |author| %>
@@ -27,3 +37,5 @@
     <%= content_tag :div, raw(@document.content), class: 'fr-view' %>
   </div>
 </div>
+
+<script src="https://cdn.embedly.com/widgets/platform.js" charset="UTF-8"></script>
