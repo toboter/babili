@@ -24,6 +24,8 @@ class Ability
     cannot :index, User
     cannot :read, [Aggregation::Identifier, Aggregation::Item, Aggregation::Event, Aggregation::Commit]
 
+    can :manage, Writer::Category::Blog
+
     if user
       can [:show, :create, :update], User do |u|
         u == user

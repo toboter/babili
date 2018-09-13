@@ -12,7 +12,7 @@
         <% end if can?(:publish, @document) %>
         <%= link_to fa_icon('edit', text: 'Edit'), [:edit, @document.repository.owner, @document.repository, @document], class: 'btn btn-default btn-sm text-strong' if can?(:update, @document) %>
         <%= link_to fa_icon('times', text: 'Remove'), [@document.repository.owner, @document.repository, @document], method: :delete, class: 'btn btn-default btn-sm text-strong' if can?(:destroy, @document) %>
-        <%= link_to fa_icon('bookmark', text: 'Categorize'), '', class: 'btn btn-default btn-sm text-strong' if can?(:categorize, @document) %>
+        <%= link_to fa_icon('bookmark', text: 'Categorize'), '', class: 'btn btn-default btn-sm text-strong', title: 'Secondary publication' if can?(:categorize, @document) %>
       <% end %>
       <div class="row --spacious-10">
         <%= content_tag :div, class: 'col-md-8 text-gray text-small' do %>

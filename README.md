@@ -24,6 +24,7 @@ Coming with *docs*:
 * rewritten repo permission control for user/group owned repositories and collaborators.
 * discussion mods 
 * new docs feature on repositories.
+* new blog / help / dev categories feature for repo docs
 
 * many many bugfixes
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_27_104510) do
+ActiveRecord::Schema.define(version: 2018_09_13_112930) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -748,9 +748,11 @@ ActiveRecord::Schema.define(version: 2018_08_27_104510) do
     t.integer "categorizer_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "slug"
     t.index ["categorizer_id"], name: "index_writer_categorizations_on_categorizer_id"
     t.index ["category_node_id"], name: "index_writer_categorizations_on_category_node_id"
     t.index ["document_id"], name: "index_writer_categorizations_on_document_id"
+    t.index ["slug"], name: "index_writer_categorizations_on_slug"
   end
 
   create_table "writer_category_node_hierarchies", id: false, force: :cascade do |t|
@@ -768,7 +770,7 @@ ActiveRecord::Schema.define(version: 2018_08_27_104510) do
     t.string "name"
     t.integer "sort_order"
     t.integer "creator_id"
-    t.integer "categorization_count", default: 0
+    t.integer "categorizations_count", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["creator_id"], name: "index_writer_category_nodes_on_creator_id"

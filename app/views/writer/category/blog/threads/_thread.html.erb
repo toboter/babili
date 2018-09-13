@@ -1,0 +1,12 @@
+<% if @postings.any? %>
+  <% @postings.each do |posting| %>
+    <%= render 'writer/category/blog/postings/posting', posting: posting %>
+  <% end %>
+  <div id="pagination-results">
+    <%= will_paginate @postings, renderer: BootstrapPagination::Rails %>
+  </div>
+<% else %>
+  <%= content_tag :div, class: '--spacious' do %>
+    <p class="text-center text-gray"> This thread is empty </p>
+  <% end %>
+<% end %>

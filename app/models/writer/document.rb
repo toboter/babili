@@ -1,21 +1,20 @@
-# Document
-# t.integer   :repository_id
-# t.string    :title
-# t.text      :content
-# t.integer   :char_count
-# t.integer   :word_count
-# t.string    :language
-# t.integer   :sequential_id
-# t.datetime  :published_at
-# t.integer   :publisher_id
-# t.integer   :creator_id
-# t.jsonb     :settings
-#x t.integer   :drafts_count
-# t.timestamps
-
+#x t.integer  :drafts_count
 
 module Writer
   class Document < ApplicationRecord
+    # t.integer   :repository_id
+    # t.string    :title
+    # t.text      :content
+    # t.integer   :char_count
+    # t.integer   :word_count
+    # t.string    :language
+    # t.integer   :sequential_id
+    # t.datetime  :published_at
+    # t.integer   :publisher_id
+    # t.integer   :creator_id
+    # t.jsonb     :settings
+    # t.timestamps
+
     acts_as_sequenced scope: :repository_id
     has_paper_trail only: [:title, :content], versions: :drafts
     searchkick
@@ -26,7 +25,7 @@ module Writer
     has_many :references, as: :referencing, dependent: :destroy
     has_many :files, through: :references, source_type: 'Raw::FileUpload', source: :referenceable
     has_many :categorizations, dependent: :destroy
-    has_many :categories, through: :categorizations, class_name: 'CategoryNode'
+    has_many :categories, through: :categorizations, class_name: 'CategoryNode', source: :category_node
 
     validates :content, presence: true
 
@@ -39,6 +38,14 @@ module Writer
       self.word_count = striped_content.scan(/[\w-]+/).size
     end
     before_validation :extract_attachments
+
+    before_save do
+      if published_at_changed? && !published?
+        categorizations.destroy_all
+      end
+    end
+
+    scope :published, -> { where.not(published_at: nil) }
 
     def to_param
       self.sequential_id.to_s

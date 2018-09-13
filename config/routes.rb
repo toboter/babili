@@ -321,7 +321,7 @@ Rails.application.routes.draw do
             end
             resources :blog_categories, except: :show
           end
-        end 
+        end
       end
 
       get '/developer', to: redirect("/settings/developer/oauth/applications"), as: 'developer_settings'
@@ -330,7 +330,19 @@ Rails.application.routes.draw do
       end
     end
 
-
+    namespace :writer do
+      scope module: :category, as: :category do
+        scope module: :blog, as: :blog, path: 'blog' do
+          get '/', to: 'threads#index'
+          resources :threads, path: '' do
+            get ':year/:month/:id', to: 'postings#show', as: :date_posting
+          end
+          get ':year/:month/:id', to: 'postings#show', as: :date_posting
+        end
+        resources :helps, path: 'help'            # help pages
+        resources :developers, path: 'developer'  # dev articles
+      end
+    end
 
     namespace :cms, path: nil do
       resources :blog_pages, path: :blog, only: :index

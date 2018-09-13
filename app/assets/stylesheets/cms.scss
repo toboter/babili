@@ -7,6 +7,10 @@
     .category-list {
       @extend .list-group;
       a {color: #0366d6;}
+      span.badge {
+        background-color: #777777;
+        color: #fff;
+      }
     }
   }
   .blog-post {
