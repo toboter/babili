@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_14_102438) do
+ActiveRecord::Schema.define(version: 2018_09_14_123812) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -533,6 +533,9 @@ ActiveRecord::Schema.define(version: 2018_09_14_102438) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "references_count"
+    t.boolean "published", default: false
+    t.datetime "published_at"
+    t.integer "publisher_id"
     t.index ["file_signature"], name: "index_raw_file_uploads_on_file_signature"
     t.index ["slug"], name: "index_raw_file_uploads_on_slug"
     t.index ["type"], name: "index_raw_file_uploads_on_type"

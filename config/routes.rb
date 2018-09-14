@@ -3,6 +3,7 @@ Rails.application.routes.draw do
     get '/', to: redirect(subdomain: false, path: '/')
     resources :file_uploads, path: 'files', except: :index do
       get "view", to: "file_uploads#view_file", on: :member
+      put "publish", to: "file_uploads#publish", on: :member
     end
   end
 

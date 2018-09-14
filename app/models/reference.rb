@@ -25,6 +25,7 @@ class Reference < ApplicationRecord
   def referencing_url
     case referencing_type
       when 'Discussion::Comment' then [referencing.thread.discussable.owner, referencing.thread.discussable, :discussion, referencing.thread, anchor: "discussion-comment-#{referencing.id}"]
+      when 'Writer::Document' then [referencing.try(:repository).try(:owner), referencing.try(:repository), referencing]
       else [referencing]
     end
   end

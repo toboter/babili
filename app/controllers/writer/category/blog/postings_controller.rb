@@ -6,6 +6,7 @@ module Writer
 
       def show
         @posting = Writer::Categorization.where('extract(year from created_at) = ? AND extract(month from created_at) = ?', params[:year], params[:month]).friendly.find(params[:id])
+        authorize! :read, @posting
       end
 
     end

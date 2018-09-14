@@ -7,10 +7,10 @@ module Raw
     extend FriendlyId
     friendly_id :uuid, use: :slugged
     belongs_to :uploader, class_name: 'Person'
+    belongs_to :publisher, class_name: 'Person', optional: true
     has_many :references, as: :referenceable, dependent: :destroy
 
     validates :type, :file, presence: true
-    # validates :container, presence: true
 
     def self.types
       Image::TYPES + Audio::TYPES + Video::TYPES + Document::TYPES

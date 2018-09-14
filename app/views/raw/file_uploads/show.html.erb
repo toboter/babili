@@ -9,6 +9,11 @@
       <div class="clearfix">
         <%= link_to fa_icon('times', text: 'Remove'), raw_file_upload_path(@file_upload), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default text-strong pull-right', style: 'margin-left:10px;' if can?(:destroy, @file_upload) %>
         <%= link_to fa_icon('download', text: 'Download'), '', class: 'btn btn-default text-strong disabled pull-right' if can?(:read, @file_upload) %>
+        <%= form_for @file_upload, url: publish_raw_file_upload_path(@file_upload), method: :put, html: {style: 'display:inline;'} do |f| %>
+          <%= button_tag(value: @file_upload.published? ? 'depublish' : 'publish', class: "btn btn-default btn-sm text-strong", data: { disable_with: "Please wait..." }) do %>
+            <%= @file_upload.published? ? fa_icon('undo', text: 'Depublish') : fa_icon('check', text: 'Publish now!') %>
+          <% end %>
+        <% end if can?(:publish, @file_upload) %>
       </div>
       <table class="table table-bordered table-striped --spacious-20">
         <tbody>

@@ -46,6 +46,19 @@ class Raw::FileUploadsController < ApplicationController
     end
   end
 
+  def publish
+    publishing_params = params[:button] == 'depublish' ? {published: false, published_at: nil, publisher: nil} : {published: true, published_at: Time.now, publisher: current_person}
+    respond_to do |format|
+      if @file_upload.update(publishing_params)
+        format.html { redirect_to raw_file_upload_path(@file_upload), notice: "File was successfully #{params[:button]}ed." }
+        format.json { render json: @file_upload, status: 200, serializer: Raw::FileUploadSerializer }
+      else
+        format.html { redirect_to raw_file_upload_path(@file_upload), alert: "#{@file_upload.errors.messages}." }
+        format.json { render json: @file_upload.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   # DELETE /raw/file_uploads/1
   # DELETE /raw/file_uploads/1.json
   def destroy

@@ -18,11 +18,14 @@ class Ability
     can :read, [CMS::BlogPage, CMS::Novelity, CMS::HelpPage, CMS::HelpCategory, CMS::BlogCategory]
     can :read, [Locate::Place, Locate::Dating, Locate::Toponym, Locate::Location]
     can :read, Writer::Document
+    can :read, Writer::Categorization
+    can :read, Writer::CategoryNode
+    can :read, Raw::FileUpload
+    can :view_file, Raw::FileUpload, published: true
     can :mentionees, :mention # This method returns results for possible mentionees
     can :referenceables, :reference # This method returns results for possible referenceables
     cannot :read, Writer::Document, published_at: nil
     cannot :read, CMS::BlogPage, published_at: nil
-    cannot :read, Raw::FileUpload
     cannot :index, User
     cannot :read, [Aggregation::Identifier, Aggregation::Item, Aggregation::Event, Aggregation::Commit]
 
@@ -213,7 +216,8 @@ class Ability
         # ----------------------------------------------------
 
         # Raw::Fileupload
-        can :show, Raw::FileUpload
+        # If signed in any file will be visible! Not signed in requests will only see published files.
+        can [:view_file, :publish], Raw::FileUpload
         can :create, Raw::FileUpload
 
         # Zensus
@@ -266,6 +270,7 @@ class Ability
           can :manage, [CMS::BlogPage, CMS::Novelity, CMS::HelpPage, CMS::HelpCategory, CMS::BlogCategory]
           can :manage, [Locate::Place, Locate::Dating, Locate::Toponym, Locate::Location]
           can :manage, [Aggregation::Identifier]
+          can :manage, Writer::Category::Blog
         end
         
       end

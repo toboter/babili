@@ -72,7 +72,7 @@ module Writer
           format.json { render :show, status: :ok, location: @document }
           format.js
         else
-          format.html { render :edit, notice: "Please review your input." }
+          format.html { redirect_to [@namespace, @repository, @document], alert: "Please review your input." }
           format.json { render json: @document.errors, status: :unprocessable_entity }
           format.js
         end

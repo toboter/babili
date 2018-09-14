@@ -4,25 +4,22 @@ module Writer
   module Category
     class Blog::ThreadsController < ApplicationController
       before_action :load_threads
-      #load_and_authorize_resource
+      load_and_authorize_resource class: 'Writer::Category::Blog', except: :index, find_by: :slug, instance_name: :thread
       DEFAULT_PER_PAGE = 30
       layout 'writer/blog'
 
       def index
-        @postings = @threads.collect(&:postings).flatten.group_by(&:document).map{|d,c| c.first}.sort_by(&:created_at).reverse.paginate(page: params[:page], per_page: DEFAULT_PER_PAGE)
+        @postings = @threads.accessible_by(current_ability).collect(&:postings).flatten.group_by(&:document).map{|d,c| c.first}.sort_by(&:created_at).reverse.paginate(page: params[:page], per_page: DEFAULT_PER_PAGE)
       end
 
       def show
-        @thread = Blog.friendly.find(params[:id])
         @postings = @thread.postings.order(created_at: :desc).paginate(page: params[:page], per_page: DEFAULT_PER_PAGE)
       end
 
       def new
-        @thread = Blog.new
       end
 
       def create
-        @thread = Blog.new(thread_params)
         @thread.creator = current_person
         respond_to do |format|
           if @thread.save
@@ -38,7 +35,6 @@ module Writer
       end
 
       def destroy
-        @thread = Blog.friendly.find(params[:id])
         @thread.destroy
         respond_to do |format|
           format.html { redirect_to writer_category_blog_threads_path, notice: 'Thread was successfully removed.' }
