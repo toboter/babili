@@ -1,5 +1,13 @@
 <% content_for :content do %>
-  <div class="wrapper posts" style="padding-top: 60px;">
+  <div class="wrapper posts" style="padding-top: 50px;">
+    <%= content_tag :div, class: "pagehead", style: "background-color:#FAFBFC;border-bottom:1px solid #e1e4e8;" do %>
+      <div class="container">
+        <h3>
+          Blog
+          <%= content_tag :span, ' / ' + @thread.name, class: 'text-gray', style: '    font-size: 20px;' if @thread && !@thread.new_record? %>
+        </h3>
+      </div>
+    <% end %>
     <div class="container">
       <div class="row" style="padding-top: 20px;">
         <!-- Headline ? -->
@@ -15,7 +23,7 @@
           <div class="category-list">
             <%= link_to "All postings", writer_category_blog_threads_path, class: "list-group-item#{' active' if current_page?(writer_category_blog_threads_path)}" %>
             <% Writer::Category::Blog.all.each do |thread| %>
-              <%= link_to writer_category_blog_thread_path(thread), class: "list-group-item#{' active' if current_page?(writer_category_blog_thread_path(thread))}" do %>
+              <%= link_to writer_category_blog_thread_path(thread), class: "list-group-item#{' active' if current_page?(writer_category_blog_thread_path(thread)) }" do %>
                 <%= thread.name %>
                 <%= content_tag :span, thread.categorizations_count, class: 'badge' %>
               <% end %>

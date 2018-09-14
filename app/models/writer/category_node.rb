@@ -13,7 +13,8 @@ module Writer
     has_closure_tree order: 'sort_order'
 
     belongs_to :creator, class_name: 'Person'
-    has_many :categorizations
+    has_many :categorizations, dependent: :destroy
+    has_many :documents, through: :categorizations
 
     friendly_id :name, use: :scoped, scope: :type
 

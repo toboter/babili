@@ -3,17 +3,16 @@ require 'will_paginate/array'
 module Writer
   module Category
     class Blog::ThreadsController < ApplicationController
+      before_action :load_threads
       #load_and_authorize_resource
       DEFAULT_PER_PAGE = 30
       layout 'writer/blog'
 
       def index
-        @threads = Blog.all
-        @postings = @threads.collect(&:postings).flatten.sort_by(&:created_at).reverse.paginate(page: params[:page], per_page: DEFAULT_PER_PAGE)
+        @postings = @threads.collect(&:postings).flatten.group_by(&:document).map{|d,c| c.first}.sort_by(&:created_at).reverse.paginate(page: params[:page], per_page: DEFAULT_PER_PAGE)
       end
 
       def show
-        @threads = Blog.all
         @thread = Blog.friendly.find(params[:id])
         @postings = @thread.postings.order(created_at: :desc).paginate(page: params[:page], per_page: DEFAULT_PER_PAGE)
       end
@@ -52,6 +51,10 @@ module Writer
         params.require(:thread).permit(
           :name
         )
+      end
+
+      def load_threads
+        @threads = Blog.all
       end
 
     end

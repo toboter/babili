@@ -79,6 +79,18 @@ module Writer
       end
     end
 
+    def categorize
+      respond_to do |format|
+        if @document.published? && @document.categorize(document_params[:category_ids], current_person)
+          format.html { redirect_to [@namespace, @repository, @document], notice: "Document was successfully categorized." }
+          format.js
+        else
+          format.html { render :edit, notice: "Something went wrong." }
+          format.js
+        end
+      end
+    end
+
     def destroy
       @document.destroy
       respond_to do |format|
@@ -91,7 +103,8 @@ module Writer
     def document_params
       params.require(:document).permit(
         :title, 
-        :content
+        :content,
+        category_ids: []
       )
     end
 

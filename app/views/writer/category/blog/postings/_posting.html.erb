@@ -2,15 +2,15 @@
   <%= content_tag :h2, link_to(posting.title, @thread ? writer_category_blog_thread_date_posting_path(@thread, posting.created_at.year, posting.created_at.month, posting) : writer_category_blog_date_posting_path(posting.created_at.year, posting.created_at.month, posting)), class: 'blog-post-title h-condensed' %>
   <%= content_tag :ul, class: 'blog-post-meta' do %>
     <%= content_tag :li, fa_icon('calendar', text: posting.document.published_at.to_date.to_formatted_s(:long_ordinal)), class: 'meta-item' %>
-    <%= content_tag :li, class: 'meta-item' do %>
-      <% posting.document.authors.each do |author| %>
-        <%= link_to background_image_div(author, :small_thumb, {class: 'author-avatar organization-member-avatar', style: 'height:20px;width:20px;background-position:center;'}), author.namespace, title: author.name %>
-        <%= link_to author.name, author.namespace %>
-      <% end %>
-    <% end %>
-    <%= content_tag :li, fa_icon('bookmark', text: posting.document.categories.map{ |c| link_to(c.try(:name), writer_category_blog_thread_path(c)) }.join(', ').html_safe ), class: 'meta-item' %>  
+    <%= content_tag :li, fa_icon('folder', text: posting.document.categories.map{ |c| link_to(c.try(:name), writer_category_blog_thread_path(c)) }.join(', ').html_safe ), class: 'meta-item' %>  
     <%= content_tag :li, class: 'meta-item' do %>
       <%= link_to fa_icon('archive', text: posting.document.repository.name_tree.join('/')), [posting.document.repository.try(:owner), posting.document.repository, posting.document], title: 'Origin repository' %>
+    <% end %>
+    <%= content_tag :div, class: 'meta-item', style: 'margin-top:7px;margin-left:5px;' do %>
+      <% posting.document.authors.each do |author| %>
+        <%= link_to background_image_div(author, :small_thumb, {class: 'author-avatar organization-member-avatar', style: 'height:20px;width:20px;background-position:center;'}), author.namespace, title: author.name %>
+        <%= link_to author.name, author.namespace, style: 'margin-right: 10px;' %>
+      <% end %>
     <% end %>
   <% end %>
   <%= content_tag :div, class: "blog-post-body markdown-body --spacious" do %>

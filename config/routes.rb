@@ -387,7 +387,7 @@ Rails.application.routes.draw do
       resources :repositories, concerns: :discussable do
         resources :documents, path: :docs, module: :writer do
           put 'publish', on: :member
-          ## put 'categorize', on: :member
+          put 'categorize', on: :member 
         end 
         scope module: :repo do
           namespace :settings do

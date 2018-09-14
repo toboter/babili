@@ -31,6 +31,8 @@ module Writer
 
     delegate :collaborators, to: :repository
 
+    accepts_nested_attributes_for :categorizations, allow_destroy: true
+
     before_validation do
       striped_content = ActionView::Base.full_sanitizer.sanitize(content.gsub("<br>", ' ').gsub("<\p>", ' '))
       self.title = striped_content.truncate_words(5) if title.blank? && content.present?
@@ -46,6 +48,16 @@ module Writer
     end
 
     scope :published, -> { where.not(published_at: nil) }
+
+    def categorize(cat_ids, person)
+      cat_ids = cat_ids.reject(&:empty?).map { |c| c.to_i }
+
+      # Remove the categories which are not longer on the list
+      categorizations.where(category_node_id: (categories.ids - cat_ids)).destroy_all
+      # Add new categories together with the categorizer to categorizations
+      categorizations << (cat_ids - categories.ids).map{ |i| Categorization.new(category_node_id: i, categorizer: person) }
+      return true
+    end
 
     def to_param
       self.sequential_id.to_s

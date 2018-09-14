@@ -50,6 +50,14 @@ $(function () {
         Rails.fire(this.form, "submit")
     });
   };
+
+  $('#categorization').on('hidden.bs.modal', function (e) {
+    var selectors = [Rails.linkDisableSelector, Rails.formEnableSelector].join(', ');
+    $(selectors).each(function() {
+      Rails.enableElement(this);
+    })
+  });
+
 })
 
 
