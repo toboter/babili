@@ -7,7 +7,7 @@
 # to determine what character was typed, and position the autocomplete options using 
 # editor.getClientRectAtPosition().
 
-$ ->
+$(document).on 'turbolinks:load', ->
   document.addEventListener "trix-initialize", (event) =>
     TrixRefs.prepare($(event.target))
 

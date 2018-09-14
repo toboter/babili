@@ -18,6 +18,8 @@ class Ability
     can :read, [CMS::BlogPage, CMS::Novelity, CMS::HelpPage, CMS::HelpCategory, CMS::BlogCategory]
     can :read, [Locate::Place, Locate::Dating, Locate::Toponym, Locate::Location]
     can :read, Writer::Document
+    can :mentionees, :mention # This method returns results for possible mentionees
+    can :referenceables, :reference # This method returns results for possible referenceables
     cannot :read, Writer::Document, published_at: nil
     cannot :read, CMS::BlogPage, published_at: nil
     cannot :read, Raw::FileUpload

@@ -12,7 +12,6 @@ class Person < ApplicationRecord
   has_one :user
   has_many :collaborations, dependent: :destroy, foreign_key: :collaborator_id
   has_many :collaboration_repos, through: :collaborations, source: :collaboratable, source_type: 'Repository'
-  has_many :blog_pages, class_name: 'CMS::BlogPage', foreign_key: :author_id
   has_many :memberships, dependent: :destroy
   has_many :organizations, through: :memberships
   has_many :person_oauth_accessibilities, as: :accessor, dependent: :destroy, class_name: 'OauthAccessibility'

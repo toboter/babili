@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_13_112930) do
+ActiveRecord::Schema.define(version: 2018_09_14_102438) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -253,6 +253,7 @@ ActiveRecord::Schema.define(version: 2018_09_13_112930) do
     t.integer "comments_count", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "references_count", default: 0
     t.index ["author_id"], name: "index_discussion_threads_on_author_id"
     t.index ["discussable_id", "discussable_type"], name: "index_discussion_threads_on_discussable_id_and_discussable_type"
     t.index ["sequential_id", "discussable_id", "discussable_type"], name: "index_discussion_threads_on_sequential_id_and_discussable", unique: true
@@ -796,6 +797,7 @@ ActiveRecord::Schema.define(version: 2018_09_13_112930) do
     t.integer "drafts_count", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "references_count", default: 0
     t.index ["creator_id"], name: "index_writer_documents_on_creator_id"
     t.index ["published_at"], name: "index_writer_documents_on_published_at"
     t.index ["publisher_id"], name: "index_writer_documents_on_publisher_id"

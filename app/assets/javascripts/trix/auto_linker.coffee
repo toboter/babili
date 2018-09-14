@@ -1,7 +1,7 @@
 # https://github.com/basecamp/trix/issues/167
 # https://gist.github.com/javan/7b0c99f43e67080c2380e8d30707f773
 
-$ ->
+$(document).on 'turbolinks:load', ->
   addEventListener "trix-initialize", (event) ->
     new TrixAutoLinker event.target
 

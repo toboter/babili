@@ -1,5 +1,5 @@
 class MentionsController < ApplicationController
-  load_and_authorize_resource
+  authorize_resource :mention, class: false
 
   def mentionees
     query = params[:q]

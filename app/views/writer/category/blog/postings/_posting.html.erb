@@ -14,6 +14,29 @@
     <% end %>
   <% end %>
   <%= content_tag :div, class: "blog-post-body markdown-body --spacious" do %>
-    <%= content_tag :div, raw(posting.document.content), class: 'fr-view' %>
+    <%= content_tag :div, raw(posting.document.content), class: 'fr-view clearfix' %>
   <% end %>
+
+  <%= content_tag :div, class: 'panel panel-default --spacious', id: 'referencings' do %>
+    <div class="panel-heading text-strong text-gray">
+      <%= fa_icon('share-alt') %> References
+      <%= content_tag :span, posting.document.references_count, class: 'badge pull-right', style: 'background-color:#777;' %>
+    </div>
+    <div class="panel-body">
+      <% posting.document.referencings.each do |reference| %>
+        <%= render 'references/reference', reference: reference %>
+      <% end %>
+    </div>
+  <% end if posting.document.referencings.any? && @posting %>
+  <%= content_tag :div, class: 'panel panel-default --spacious', id: 'referenceables' do %>
+    <div class="panel-heading text-strong text-gray">
+      <%= fa_icon('file') %> Attachments
+      <%= content_tag :span, posting.document.files.count, class: 'badge pull-right', style: 'background-color:#777;' %>
+    </div>
+    <ul class="list-group" id="files-list">
+      <% posting.document.referenceables.where(referenceable_type: 'Raw::FileUpload').each do |reference| %>
+        <%= render "#{reference.referenceable.to_partial_path}", reference.referenceable.class.name.demodulize.underscore.to_sym => reference.referenceable, display: :list, version: :small, referencor: reference.referencor %>
+      <% end %>
+    </ul>
+  <% end if posting.document.files.any? && @posting %>
 <% end %>

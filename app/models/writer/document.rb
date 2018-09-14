@@ -15,6 +15,8 @@ module Writer
     # t.jsonb     :settings
     # t.timestamps
 
+    alias_attribute :name, :title
+
     acts_as_sequenced scope: :repository_id
     has_paper_trail only: [:title, :content], versions: :drafts
     searchkick
@@ -22,8 +24,12 @@ module Writer
     belongs_to :creator, class_name: 'Person'
     belongs_to :publisher, class_name: 'Person', optional: true
     belongs_to :repository
-    has_many :references, as: :referencing, dependent: :destroy
-    has_many :files, through: :references, source_type: 'Raw::FileUpload', source: :referenceable
+    
+    has_many :referencings, as: :referenceable, class_name: 'Reference', dependent: :destroy # Entry is referenceable
+    has_many :discussion_comments, through: :referencings, source: :referencing, source_type: 'Discussion::Comment'
+    has_many :referenceables, as: :referencing, class_name: 'Reference', dependent: :destroy
+    has_many :files, through: :referenceables, source_type: 'Raw::FileUpload', source: :referenceable
+
     has_many :categorizations, dependent: :destroy
     has_many :categories, through: :categorizations, class_name: 'CategoryNode', source: :category_node
 

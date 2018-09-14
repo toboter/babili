@@ -19,6 +19,8 @@ module Discussion
     acts_as_sequenced scope: [:discussable_id, :discussable_type]
     searchkick
 
+    alias_attribute :name, :title
+
     belongs_to :discussable, polymorphic: true
     belongs_to :author, class_name: 'Person'
     has_many :assignments, dependent: :destroy
@@ -27,6 +29,7 @@ module Discussion
     has_many :mentionees, through: :comments
     has_many :states, dependent: :destroy
     has_many :titles, dependent: :destroy
+    has_many :references, as: :referenceable
 
     attr_accessor :title
     accepts_nested_attributes_for :comments, allow_destroy: false
@@ -65,6 +68,7 @@ module Discussion
     def items
       items = []
       items << comments
+      items << references.order(created_at: :asc)
       items << states.order(created_at: :asc).to_a.drop(1)
       items << titles.order(created_at: :asc).to_a.drop(1)
       items << comments.map{ |c| c.references.map{|r| r unless r.referenceable_type.in?(%w[Raw::FileUpload])}.compact }

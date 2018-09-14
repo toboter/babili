@@ -34,7 +34,30 @@
       </div>
       <hr>
     <% end %>
-    <%= content_tag :div, raw(@document.content), class: 'fr-view' %>
+    <%= content_tag :div, raw(@document.content), class: 'fr-view --spacing clearfix' %>
+
+    <%= content_tag :div, class: 'panel panel-default', id: 'referencings' do %>
+      <div class="panel-heading text-strong text-gray">
+        <%= fa_icon('share-alt') %> References
+        <%= content_tag :span, @document.references_count, class: 'badge pull-right', style: 'background-color:#777;' %>
+      </div>
+      <div class="panel-body">
+        <% @document.referencings.each do |reference| %>
+          <%= render 'references/reference', reference: reference %>
+        <% end %>
+      </div>
+    <% end if @document.referencings.any? %>
+    <%= content_tag :div, class: 'panel panel-default', id: 'referenceables' do %>
+      <div class="panel-heading text-strong text-gray">
+        <%= fa_icon('file') %> Attachments
+        <%= content_tag :span, @document.files.count, class: 'badge pull-right', style: 'background-color:#777;' %>
+      </div>
+      <ul class="list-group" id="files-list">
+        <% @document.referenceables.where(referenceable_type: 'Raw::FileUpload').each do |reference| %>
+          <%= render "#{reference.referenceable.to_partial_path}", reference.referenceable.class.name.demodulize.underscore.to_sym => reference.referenceable, display: :list, version: :small, referencor: reference.referencor %>
+        <% end %>
+      </ul>
+    <% end if @document.files.any? %>
   </div>
 </div>
 

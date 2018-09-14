@@ -14,12 +14,12 @@
 //= require jquery/dist/jquery.min
 //= require bootstrap
 //= require toastr/build/toastr.min
-//= require bootstrap-markdown-bundle
 //= require froala-editor/js/froala_editor.min
 //= require trix/dist/trix
 //= require uppy/dist/uppy.min
 //= require cocoon
 //= require selectize/dist/js/standalone/selectize.min
+//= require bootstrap-markdown-bundle
 //= require turbolinks
 //= require_tree .
 

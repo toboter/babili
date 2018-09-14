@@ -41,7 +41,7 @@
       <div class="col-md-8">
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
-          <%= content_tag :li, link_to(fa_icon('object-group', text: 'Overview'), '#overview', aria: {controls: 'overview'}, data: {toggle: 'tab'}, role: 'tab'), class: 'active', role: 'presentation' %>
+          <%= content_tag :li, link_to(fa_icon('file', text: 'Insight'), '#insight', aria: {controls: 'insight'}, data: {toggle: 'tab'}, role: 'tab'), class: 'active', role: 'presentation' %>
           <%= content_tag :li, link_to(fa_icon('archive', text: 'Personal repositories'), '#repos', aria: {controls: 'repos'}, data: {toggle: 'tab'}, role: 'tab'), class: '', role: 'presentation' %>
           <%= content_tag :li, link_to(fa_icon('sitemap', text: 'Vocabularies'), '#vocabs', aria: {controls: 'vocabs'}, data: {toggle: 'tab'}, role: 'tab'), class: '', role: 'presentation' %>
           <%= content_tag :li, link_to(fa_icon('code-fork', text: 'Applications'), '#apps', aria: {controls: 'apps'}, data: {toggle: 'tab'}, role: 'tab'), class: '', role: 'presentation' %>
@@ -50,19 +50,7 @@
 
         <!-- Tab panes -->
         <div class="tab-content">
-          <div role="tabpanel" class="tab-pane active" id="overview">
-            <h3>
-              Recently added posts
-              <%= content_tag :span, @person.blog_pages.published.count, class: 'badge' %>
-            </h3>
-            <ul class="list-unstyled">
-              <% @person.blog_pages.published.order(published_at: :desc).limit(5).each do |blog| %>
-                <%= content_tag :li, class: '--spacing-20' do %>
-                  <%= content_tag :h4, link_to(blog.title, blog), class: 'h-condensed' %>
-                  <%= content_tag :p, fa_icon('calendar', text: blog.published_at.to_date.to_formatted_s(:long_ordinal)), class: 'text-muted' %>
-                <% end %>
-              <% end %>
-            </ul>
+          <div role="tabpanel" class="tab-pane active" id="insight">
           </div>
           <div role="tabpanel" class="tab-pane" id="repos">
             <div class="row --spacious-20 repos">

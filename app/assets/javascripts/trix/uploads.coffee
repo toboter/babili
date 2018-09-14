@@ -1,7 +1,7 @@
 # https://gorails.com/episodes/trix-editor
 # https://www.driftingruby.com/episodes/wysiwyg-editor-with-trix
 
-$ ->
+$(document).on 'turbolinks:load', ->
   document.addEventListener 'trix-attachment-add', (event) ->
     attachment = event.attachment
     if attachment.file
@@ -15,7 +15,7 @@ $ ->
     form.append 'upload[file]', file
     xhr = new XMLHttpRequest
     xhr.open 'POST', '/raw/files.json', true
-    xhr.setRequestHeader 'X-CSRF-Token', $.rails.csrfToken()
+    xhr.setRequestHeader 'X-CSRF-Token', Rails.csrfToken()
 
     xhr.upload.onprogress = (event) ->
       progress = undefined

@@ -16,6 +16,8 @@ class Reference < ApplicationRecord
   def referenceable_url
     case referenceable_type
       when 'Vocab::Concept' then [referenceable.try(:scheme).try(:namespace), :vocab, referenceable.try(:scheme), referenceable]
+      when 'Writer::Document' then [referenceable.try(:repository).try(:owner), referenceable.try(:repository), referenceable]
+      when 'Discussion::Thread' then [referenceable.try(:discussable).try(:owner), referenceable.try(:discussable), :discussion, referenceable]
       else [referenceable]
     end
   end
