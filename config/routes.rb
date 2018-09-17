@@ -340,7 +340,11 @@ Rails.application.routes.draw do
           end
           get ':year/:month/:id', to: 'postings#show', as: :date_posting
         end
-        resources :helps, path: 'help'            # help pages
+        scope module: :help, as: :help, path: 'help' do
+          get '/', to: 'categories#index'
+          resources :categories
+          resources :articles, only: :show
+        end
         resources :developers, path: 'developer'  # dev articles
       end
     end

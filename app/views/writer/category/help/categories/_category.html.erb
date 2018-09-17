@@ -1,0 +1,11 @@
+<%= content_tag :li, id: "help-category-#{category.id}", style: "margin-left:#{10*category.depth}px" do %>
+  <%= content_tag :h5, style: ('border-bottom:1px solid #eeeeee;margin-bottom:12px;padding-bottom:7px;' if category.root?) do %>
+    <%= link_to(category.name, writer_category_help_category_path(category), class: 'text-muted text-strong') %>
+  <% end %>
+  <%= content_tag :ul, class: 'list-unstyled chevron' do %>
+    <% category.articles.each do |article| %>
+      <%= content_tag(:li, link_to(article.title, writer_category_help_article_path(article)), class: "help-link", id: "help-article-#{article.id}") %>
+    <% end %>
+  <% end %>
+  <%= render partial: 'category', collection: category.children %>
+<% end %>

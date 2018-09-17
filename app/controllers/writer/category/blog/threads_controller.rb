@@ -4,7 +4,7 @@ module Writer
   module Category
     class Blog::ThreadsController < ApplicationController
       before_action :load_threads
-      load_and_authorize_resource class: 'Writer::Category::Blog', except: :index, find_by: :slug, instance_name: :thread
+      load_and_authorize_resource class: 'Writer::Category::BlogThread', except: :index, find_by: :slug, instance_name: :thread
       DEFAULT_PER_PAGE = 30
       layout 'writer/blog'
 
@@ -35,10 +35,14 @@ module Writer
       end
 
       def destroy
-        @thread.destroy
         respond_to do |format|
-          format.html { redirect_to writer_category_blog_threads_path, notice: 'Thread was successfully removed.' }
-          format.json { head :no_content }
+          if @thread.categorizations_count == 0 && !@thread.children.any?
+            @thread.destroy
+            format.html { redirect_to writer_category_blog_threads_path, notice: 'Thread was successfully removed.' }
+            format.json { head :no_content }
+          else
+            format.html { redirect_to writer_category_blog_thread_path(@thread), notice: 'Cannot remove thread.' }
+          end
         end
       end
 
@@ -50,7 +54,7 @@ module Writer
       end
 
       def load_threads
-        @threads = Blog.all
+        @threads = BlogThread.all
       end
 
     end

@@ -270,7 +270,10 @@ class Ability
           can :manage, [CMS::BlogPage, CMS::Novelity, CMS::HelpPage, CMS::HelpCategory, CMS::BlogCategory]
           can :manage, [Locate::Place, Locate::Dating, Locate::Toponym, Locate::Location]
           can :manage, [Aggregation::Identifier]
-          can :manage, Writer::Category::Blog
+          can :manage, Writer::Category::BlogThread # can destroy if category empty
+          can :manage, Writer::Category::HelpCategory
+          can :manage, Writer::Categorization
+          #can :manage, Writer::Category::DeveloperDocsTree
         end
         
       end

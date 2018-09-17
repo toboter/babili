@@ -22,14 +22,14 @@
         <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar --spacious-20' do %>
           <div class="category-list">
             <%= link_to "All postings", writer_category_blog_threads_path, class: "list-group-item#{' active' if current_page?(writer_category_blog_threads_path)}" %>
-            <% Writer::Category::Blog.all.each do |thread| %>
+            <% Writer::Category::BlogThread.all.each do |thread| %>
               <%= link_to writer_category_blog_thread_path(thread), class: "list-group-item#{' active' if current_page?(writer_category_blog_thread_path(thread)) }" do %>
                 <%= thread.name %>
                 <%= content_tag :span, thread.categorizations_count, class: 'badge' %>
               <% end %>
             <% end %>
             <div class="actions --spacious-10">
-              <%= link_to fa_icon('plus', text: 'Thread'), new_writer_category_blog_thread_path, class: 'btn btn-default btn-sm text-strong' if !(@thread && @thread.new_record?) && can?(:new, Writer::Category::Blog) %>
+              <%= link_to fa_icon('plus', text: 'Thread'), new_writer_category_blog_thread_path, class: 'btn btn-default btn-sm text-strong' if !(@thread && @thread.new_record?) && can?(:new, Writer::Category::BlogThread) %>
               <%= link_to fa_icon('times', text: 'Remove thread'), writer_category_blog_thread_path(@thread), class: 'btn btn-default btn-sm text-strong', method: :delete, data: { confirm: 'Are you sure?' } if @thread && !@thread.new_record? && can?(:destroy, @thread) %>
             </div>
           </div>

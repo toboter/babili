@@ -1,0 +1,8 @@
+<% title "Help" %>
+<ul class="list-unstyled">
+  <% @categories.roots.each do |root| %>
+    <div class="--spacing">
+      <%= render partial: 'category', object: root %>
+    </div>
+  <% end %>
+</ul>

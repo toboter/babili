@@ -18,7 +18,7 @@ module Writer
 
     friendly_id :name, use: :scoped, scope: :type
 
-    TYPES=%w(Writer::Category::Help Writer::Category::Developer Writer::Category::Blog)
+    TYPES=%w(Writer::Category::Help Writer::Category::Developer Writer::Category::BlogThread)
 
     validates :name, presence: true
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_14_123812) do
+ActiveRecord::Schema.define(version: 2018_09_17_120651) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -564,6 +564,7 @@ ActiveRecord::Schema.define(version: 2018_09_14_123812) do
     t.string "slug"
     t.jsonb "settings"
     t.text "readme"
+    t.boolean "private", default: false
     t.index ["creator_id"], name: "index_repositories_on_creator_id"
     t.index ["namespace_id"], name: "index_repositories_on_namespace_id"
     t.index ["slug"], name: "index_repositories_on_slug"

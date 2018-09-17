@@ -1,0 +1,18 @@
+<div class="row">
+  <div class="col-md-10 col-centered">
+    <h3>New <%= @category.parent ? "Sub-category on #{@category.parent.name}" : 'Category' %></h3>
+    <%= simple_form_for @category, url: writer_category_help_categories_path, as: :category do |f| %>
+      <%= f.error_notification %>
+
+      <%= f.input :parent_id, as: :hidden %>
+      <%= f.input :name, label: false, placeholder: 'Name' %>
+
+      <%= button_tag(value: 'submit', class: "btn btn-default text-strong", data: { disable_with: "Please wait..." }) do %>
+        <span class="glyphicon glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
+        Save
+      <% end %>
+      <%= link_to 'Cancel', (f.object.new_record? ? writer_category_help_categories_path : writer_category_help_category_path(@category)), class: "btn btn-default text-strong no-link" %>
+
+    <% end %>
+  </div>
+</div>

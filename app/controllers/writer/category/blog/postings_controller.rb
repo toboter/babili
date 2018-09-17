@@ -1,7 +1,7 @@
 module Writer
   module Category
     class Blog::PostingsController < ApplicationController
-      load_resource :thread, class: 'Writer::Category::Blog'
+      load_resource :thread, class: 'Writer::Category::BlogThread'
       layout 'writer/blog'
 
       def show

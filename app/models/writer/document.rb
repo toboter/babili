@@ -92,10 +92,10 @@ module Writer
 
     def set_references(values)
       attached_referenceables = values.map{|v| GlobalID::Locator.locate(v['gid']) }.uniq
-      references.where.not(referenceable: attached_referenceables).destroy_all
+      referencings.where.not(referenceable: attached_referenceables).destroy_all
       attached_references = attached_referenceables.map{|r| Reference.new(referenceable: r, referencor_id: ::PaperTrail.request.whodunnit)}
       if attached_references.present?
-        references << attached_references.map{|r| r unless r.referenceable.in?(references.map(&:referenceable).compact.flatten)}.compact
+        referencings << attached_references.map{|r| r unless r.referenceable.in?(referencings.map(&:referenceable).compact.flatten)}.compact
       end
     end
 
