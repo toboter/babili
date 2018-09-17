@@ -1,21 +1,20 @@
 class CMS::BlogPagesController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  load_and_authorize_resource instance_name: :blog, class: 'CMS::BlogPage', find_by: :slug
+  load_and_authorize_resource instance_name: :blog, class: 'CMS::BlogPage', find_by: :slug, except: :index
   
   # GET /blogs
   # GET /blogs.json
   def index
     @blogs = CMS::BlogPage.featured.order(created_at: :desc)
     @categories = CMS::BlogCategory.order(name: :asc)
-    @unpublished_blogs = current_person.blog_pages.unpublished if user_signed_in?
-    authorize! :read, [@blogs, @categories, @unpublished_blogs]
+    @unpublished_blogs = CMS::BlogPage.where(author: current_person).unpublished if user_signed_in?
   end
 
   # GET /blogs/1
   # GET /blogs/1.json
   def show
     @categories = CMS::BlogCategory.order(name: :asc)
-    @unpublished_blogs = current_person.blog_pages.where(published_at: nil) if user_signed_in?
+    @unpublished_blogs = CMS::BlogPage.where(author: current_person).unpublished if user_signed_in?
   end
 
   # GET /blogs/new

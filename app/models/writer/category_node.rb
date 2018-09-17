@@ -22,5 +22,7 @@ module Writer
 
     validates :name, presence: true
 
+    scope :blog_threads, -> { where(type: 'Writer::Category::BlogThread') }
+
   end
 end

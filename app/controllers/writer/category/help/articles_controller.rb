@@ -5,7 +5,7 @@ module Writer
       layout 'writer/help'
 
       def show
-        @article = Writer::Categorization.friendly.find(params[:id])
+        @article = Writer::Categorization.order(created_at: :asc).joins(:document).where('writer_documents.slug = ?', params[:id]).first
         authorize! :read, @article
       end
 

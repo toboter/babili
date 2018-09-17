@@ -72,7 +72,8 @@
         <div class="modal-body">
           <p class="text-gray">Categorizing this document will make it available as a site-wide blog / help or dev page.</p>
           <%= simple_form_for @document, url: categorize_namespace_repository_document_path(@namespace, @repository, @document), method: :put do |f| %>
-            <%= f.association :categories, as: :check_boxes %>
+            <%= f.association :blog_threads, as: :check_boxes %>
+            <%= f.association :help_categories, as: :check_boxes %>
             <%= f.submit %>
           <% end %>
         </div>

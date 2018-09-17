@@ -5,7 +5,7 @@ module Writer
       layout 'writer/blog'
 
       def show
-        @posting = Writer::Categorization.where('extract(year from created_at) = ? AND extract(month from created_at) = ?', params[:year], params[:month]).friendly.find(params[:id])
+        @posting = Writer::Categorization.order(created_at: :asc).joins(:document).where('extract(year from writer_categorizations.created_at) = ? AND extract(month from writer_categorizations.created_at) = ? AND writer_documents.slug = ?', params[:year], params[:month], params[:id]).first
         authorize! :read, @posting
       end
 

@@ -4,19 +4,16 @@ class CMS::BlogCategoriesController < ApplicationController
 
   def all
     @blogs = CMS::BlogPage.order(created_at: :desc)
-    authorize! :read, @blogs
     render 'cms/blog_pages/index'
   end
 
   def show
     @category = CMS::BlogCategory.friendly.find(params[:id])
     @category_blogs = @category.blog_pages
-    authorize! :read, @category_blogs
   end
 
   def unpublished_blogs
     @blogs = @unpublished_blogs.order(created_at: :asc) if @unpublished_blogs.present?
-    authorize! :read, @blogs
     render 'cms/blog_pages/index'
   end
 
@@ -26,7 +23,7 @@ class CMS::BlogCategoriesController < ApplicationController
     end
 
     def get_unpublished
-      @unpublished_blogs = current_person.blog_pages.unpublished if user_signed_in?
+      @unpublished_blogs = CMS::BlogPage.where(author: current_person).unpublished if user_signed_in?
     end
   
 end

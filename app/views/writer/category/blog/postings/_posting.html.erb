@@ -2,7 +2,7 @@
   <%= content_tag :h2, link_to(posting.title, @thread ? writer_category_blog_thread_date_posting_path(@thread, posting.created_at.year, posting.created_at.month, posting) : writer_category_blog_date_posting_path(posting.created_at.year, posting.created_at.month, posting)), class: 'blog-post-title h-condensed' %>
   <%= content_tag :ul, class: 'blog-post-meta' do %>
     <%= content_tag :li, fa_icon('calendar', text: posting.document.published_at.to_date.to_formatted_s(:long_ordinal)), class: 'meta-item' %>
-    <%= content_tag :li, fa_icon('folder', text: posting.document.categories.map{ |c| link_to(c.try(:name), writer_category_blog_thread_path(c)) }.join(', ').html_safe ), class: 'meta-item' %>  
+    <%= content_tag :li, fa_icon('folder', text: posting.document.categories.blog_threads.map{ |c| link_to(c.try(:name), writer_category_blog_thread_path(c)) }.join(', ').html_safe ), class: 'meta-item' %>  
     <%= content_tag :li, class: 'meta-item' do %>
       <%= link_to fa_icon('archive', text: posting.document.repository.name_tree.join('/')), [posting.document.repository.try(:owner), posting.document.repository, posting.document], title: 'Origin repository' %>
     <% end %>

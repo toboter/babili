@@ -331,7 +331,7 @@ Rails.application.routes.draw do
       end
     end
 
-    namespace :writer do
+    namespace :writer, path: '' do
       scope module: :category, as: :category do
         scope module: :blog, as: :blog, path: 'blog' do
           get '/', to: 'threads#index'
@@ -345,13 +345,17 @@ Rails.application.routes.draw do
           resources :categories
           resources :articles, only: :show
         end
-        resources :developers, path: 'developer'  # dev articles
+        scope module: :developer, as: :developer, path: 'developer' do
+          get '/', to: 'tree_items#index'
+          resources :tree_items, path: ''
+          resources :articles, only: :show
+        end
       end
     end
 
-    namespace :cms, path: nil do
+    namespace :cms, path: 'old-cms' do
       resources :blog_pages, path: :blog, only: :index
-      scope path: :blog do
+      scope path: :blog, as: :blig do
         resources :blog_categories, only: :show, path: 'categories' do
           get 'all', on: :collection
           get 'unpublished', to: 'blog_categories#unpublished_blogs', on: :collection

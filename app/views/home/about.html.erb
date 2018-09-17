@@ -19,27 +19,21 @@
           </div>
 
           <div class="col-md-6">
-            <%= content_tag :h3, link_to('Blog', cms_blog_pages_path) %>
+            <%= content_tag :h3, link_to('Blog', writer_category_blog_threads_path) %>
             <p class="text-gray sublead">
               Neueste Infos rund um Babylon. Neuigkeiten zur Plattform, zu Datenbanken, Applikationen und 
               Schnittstellen. 
             </p>
           </div>
           <div class="col-md-6">
-            <%= content_tag :h3, link_to('News & Press', cms_novelities_path) %>
-            <p class="text-gray sublead">
-              Kurze Nachrichten von und zu babylon-online.org und Babylon im Allgemeinen. Kurz verlinkt 
-              nach anderswo.
-            </p>
+
           </div>
           <div class="col-md-12 --spacious">
-            <%= content_tag :h3, 'Further reading' %>
+            <%= content_tag :h3, 'Latest blog postings' %>
             <ul class="text-gray list-unstyled link-list chevron">
-              <%= content_tag :li, link_to('Die Babylon-Sammlung am Vorderasiatischen Museum', "http://babylon-online.org/blog/die-babylon-sammlung-am-vorderasiatischen-museum") %>
-              <%= content_tag :li, link_to('Die deutschen Koldewey-Grabungen', "http://babylon-online.org/blog/die-deutschen-koldewey-grabungen") %>
-              <%= content_tag :li, link_to('Babylon-online.org', "http://babylon-online.org/blog/babylon-online-org") %>
-              <%= content_tag :li, link_to('Das Babylon-Projekt', "http://babylon-online.org/blog/das-babylon-projekt") %>
-              <%= content_tag :li, link_to('Das antike Babylon', "http://babylon-online.org/blog/das-antike-babylon") %>
+              <% @latest_blog_postings.each do |posting| %>
+                <%= content_tag :li, link_to(posting.title, writer_category_blog_date_posting_path(posting.created_at.year, posting.created_at.month, posting)) %>
+              <% end %>
             </ul>
           </div>
         </div>

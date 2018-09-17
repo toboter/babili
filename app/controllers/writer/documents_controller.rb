@@ -65,7 +65,7 @@ module Writer
     end
 
     def publish
-      publishing_params = params[:button] == 'depublish' ? {published_at: nil, publisher: nil} : {published_at: Time.now, publisher: current_person}
+      publishing_params = params[:button] == 'depublish' ? {published_at: nil, publisher: nil} : {published_at: Time.now, publisher: current_person, slug: nil}
       respond_to do |format|
         if @document.update(publishing_params)
           format.html { redirect_to [@namespace, @repository, @document], notice: "Document was successfully #{params[:button]}ed." }
@@ -80,8 +80,9 @@ module Writer
     end
 
     def categorize
+      ids = document_params[:blog_thread_ids] + document_params[:help_category_ids]
       respond_to do |format|
-        if @document.published? && @document.categorize(document_params[:category_ids], current_person)
+        if @document.published? && @document.categorize(ids.reject(&:empty?), current_person)
           format.html { redirect_to [@namespace, @repository, @document], notice: "Document was successfully categorized." }
           format.js
         else
@@ -104,7 +105,8 @@ module Writer
       params.require(:document).permit(
         :title, 
         :content,
-        category_ids: []
+        blog_thread_ids: [],
+        help_category_ids: []
       )
     end
 

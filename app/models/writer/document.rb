@@ -1,5 +1,3 @@
-#x t.integer  :drafts_count
-
 module Writer
   class Document < ApplicationRecord
     # t.integer   :repository_id
@@ -13,7 +11,11 @@ module Writer
     # t.integer   :publisher_id
     # t.integer   :creator_id
     # t.jsonb     :settings
+    # t.string    :slug, :index
     # t.timestamps
+
+    extend FriendlyId
+    friendly_id :title, use: :slugged
 
     alias_attribute :name, :title
 
@@ -32,6 +34,9 @@ module Writer
 
     has_many :categorizations, dependent: :destroy
     has_many :categories, through: :categorizations, class_name: 'CategoryNode', source: :category_node
+    has_many :blog_threads, through: :categorizations, class_name: 'Category::BlogThread', source: :category_node
+    has_many :help_categories, through: :categorizations, class_name: 'Category::HelpCategory', source: :category_node
+    # has_many :dev_tree_items, through: :categorizations, class_name: 'Category::BlogThread', source: :category_node
 
     validates :content, presence: true
 
@@ -56,7 +61,7 @@ module Writer
     scope :published, -> { where.not(published_at: nil) }
 
     def categorize(cat_ids, person)
-      cat_ids = cat_ids.reject(&:empty?).map { |c| c.to_i }
+      cat_ids = cat_ids.map { |c| c.to_i }
 
       # Remove the categories which are not longer on the list
       categorizations.where(category_node_id: (categories.ids - cat_ids)).destroy_all
@@ -87,15 +92,15 @@ module Writer
           references << attachment
         end
       end
-      set_references(references)
+      set_references(references) if content_changed?
     end
 
     def set_references(values)
       attached_referenceables = values.map{|v| GlobalID::Locator.locate(v['gid']) }.uniq
-      referencings.where.not(referenceable: attached_referenceables).destroy_all
+      referenceables.where.not(referenceable: attached_referenceables).destroy_all
       attached_references = attached_referenceables.map{|r| Reference.new(referenceable: r, referencor_id: ::PaperTrail.request.whodunnit)}
       if attached_references.present?
-        referencings << attached_references.map{|r| r unless r.referenceable.in?(referencings.map(&:referenceable).compact.flatten)}.compact
+        referenceables << attached_references.map{|r| r unless r.referenceable.in?(referenceables.map(&:referenceable).compact.flatten)}.compact
       end
     end
 
