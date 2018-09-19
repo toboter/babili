@@ -1,0 +1,8 @@
+<% title "#{@article.title} \\ Developer", false %>
+<%= content_tag :div, class: "blog-post", id: "dev-article-#{@article.id}" do %>
+    <%= content_tag :h3, @article.title %>
+    <%= link_to fa_icon('archive', text: @article.document.repository.name_tree.join('/')), [@article.document.repository.try(:owner), @article.document.repository, @article.document], title: 'Origin repository', style: 'color: #586069;' %>
+    <%= content_tag :div, class: "blog-post-body markdown-body --spacious-20" do %>
+      <%= content_tag :div, raw(@article.document.content), class: 'fr-view clearfix' %>
+    <% end %>
+<% end %>

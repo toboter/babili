@@ -3,7 +3,7 @@ class HomeController < ApplicationController
   def index
     # @blog_pages = CMS::BlogPage.featured.order(created_at: :desc).limit(5)
     @exploreables = [] #(Repository.take(3) + Vocab::Scheme.take(3)).shuffle
-    @latest_blog_postings = Writer::Categorization.includes(:category_node, :document).merge(Writer::CategoryNode.blog_threads).references(:category_node).group_by(&:document).take(5).map{|d,c| c.first}
+    @latest_blog_postings = Writer::Categorization.order(created_at: :desc).includes(:category_node, :document).merge(Writer::CategoryNode.blog_threads).references(:category_node).group_by(&:document).take(5).map{|d,c| c.first}
     @latest_references = Biblio::Entry.where("data->>'year' IS NOT NULL").order("(data ->> 'year') DESC").take(5)
   end
   
@@ -11,7 +11,7 @@ class HomeController < ApplicationController
   end
   
   def about
-    @latest_blog_postings = Writer::Categorization.includes(:category_node, :document).merge(Writer::CategoryNode.blog_threads).references(:category_node).group_by(&:document).take(5).map{|d,c| c.first}
+    @latest_blog_postings = Writer::Categorization.order(created_at: :desc).includes(:category_node, :document).merge(Writer::CategoryNode.blog_threads).references(:category_node).group_by(&:document).take(5).map{|d,c| c.first}
   end
   
   def imprint

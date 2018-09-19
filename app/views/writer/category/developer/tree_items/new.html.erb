@@ -1,0 +1,18 @@
+<div class="row">
+  <div class="col-md-10 col-centered">
+    <h3>New <%= @tree_item.parent ? "Sub-item on #{@tree_item.parent.name}" : 'Item' %></h3>
+    <%= simple_form_for @tree_item, url: writer_category_developer_tree_items_path, as: :tree_item do |f| %>
+      <%= f.error_notification %>
+
+      <%= f.input :parent_id, as: :hidden %>
+      <%= f.input :name, label: false, placeholder: 'Name' %>
+
+      <%= button_tag(value: 'submit', class: "btn btn-default text-strong", data: { disable_with: "Please wait..." }) do %>
+        <span class="glyphicon glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
+        Save
+      <% end %>
+      <%= link_to 'Cancel', @tree_item.parent ? writer_category_developer_nested_item_path(@tree_item.parent.root? ? nil : @tree_item.parent.root, @tree_item.parent.ancestors.where.not(id: @tree_item.parent.root.id).reverse.map(&:slug).join('/').presence || nil, @tree_item.parent) : writer_category_developer_tree_items_path, class: "btn btn-default text-strong no-link" %>
+
+    <% end %>
+  </div>
+</div>

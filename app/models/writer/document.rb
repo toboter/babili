@@ -36,7 +36,7 @@ module Writer
     has_many :categories, through: :categorizations, class_name: 'CategoryNode', source: :category_node
     has_many :blog_threads, through: :categorizations, class_name: 'Category::BlogThread', source: :category_node
     has_many :help_categories, through: :categorizations, class_name: 'Category::HelpCategory', source: :category_node
-    # has_many :dev_tree_items, through: :categorizations, class_name: 'Category::BlogThread', source: :category_node
+    has_many :developer_tree_items, through: :categorizations, class_name: 'Category::DeveloperTreeItem', source: :category_node
 
     validates :content, presence: true
 

@@ -74,6 +74,7 @@
           <%= simple_form_for @document, url: categorize_namespace_repository_document_path(@namespace, @repository, @document), method: :put do |f| %>
             <%= f.association :blog_threads, as: :check_boxes %>
             <%= f.association :help_categories, as: :check_boxes %>
+            <%= f.association :developer_tree_items, as: :check_boxes %>
             <%= f.submit %>
           <% end %>
         </div>

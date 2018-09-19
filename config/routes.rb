@@ -347,8 +347,11 @@ Rails.application.routes.draw do
         end
         scope module: :developer, as: :developer, path: 'developer' do
           get '/', to: 'tree_items#index'
-          resources :tree_items, path: ''
-          resources :articles, only: :show
+          resources :tree_items, path: '', only: [:index, :new, :create]
+          get "(/:root_id)(/*ancestors_path)/:id/new", controller: "tree_items", action: "new", as: :new_nested_item
+          get "(/:root_id)(/*ancestors_path)/:tree_item_id/articles/:id", controller: "articles", action: "show", :as => :nested_item_article
+          get "(/:root_id)(/*ancestors_path)/:id", controller: "tree_items", action: "show", as: :nested_item
+          delete "(/:root_id)(/*ancestors_path)/:id", controller: "tree_items", action: "destroy"
         end
       end
     end

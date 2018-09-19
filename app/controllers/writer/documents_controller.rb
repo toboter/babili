@@ -80,7 +80,7 @@ module Writer
     end
 
     def categorize
-      ids = document_params[:blog_thread_ids] + document_params[:help_category_ids]
+      ids = document_params[:blog_thread_ids] + document_params[:help_category_ids] + document_params[:developer_tree_item_ids]
       respond_to do |format|
         if @document.published? && @document.categorize(ids.reject(&:empty?), current_person)
           format.html { redirect_to [@namespace, @repository, @document], notice: "Document was successfully categorized." }
@@ -106,7 +106,8 @@ module Writer
         :title, 
         :content,
         blog_thread_ids: [],
-        help_category_ids: []
+        help_category_ids: [],
+        developer_tree_item_ids: []
       )
     end
 

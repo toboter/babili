@@ -1,0 +1,33 @@
+<% content_for :content do %>
+  <div class="wrapper articles" style="padding-top: 50px;margin-bottom:60px;">
+    <%= content_tag :div, class: "pagehead", style: "background-color:#FAFBFC;border-bottom:1px solid #e1e4e8;" do %>
+      <div class="container">
+        <h3>
+          <%= content_tag :span, link_to('Developer', writer_category_developer_tree_items_path, class: 'text-gray') %>
+          <%= content_tag :span, link_to(" / #{@tree_root.name}".html_safe, writer_category_developer_nested_item_path(nil, nil, @tree_root), class: 'text-gray', style: 'font-size: 20px;') if @tree_root %>
+          <%= link_to fa_icon('plus', text: 'Root item'), new_writer_category_developer_tree_item_path, class: 'btn btn-default btn-sm text-strong pull-right' if !@tree_item && can?(:new, Writer::Category::DeveloperTreeItem) %>
+          <%= link_to fa_icon('times', text: 'Remove root'), writer_category_developer_nested_item_path(nil, nil, @tree_root), class: 'btn btn-default btn-sm text-strong pull-right', method: :delete, data: {confirm: 'Are you sure?'} if can?(:destroy, @tree_root) %>
+        </h3>
+      </div>
+    <% end %>
+    <div class="container">
+      <div class="row" style="padding-top: 20px;">
+        <div class="col-sm-12 <%= 'col-md-8' if @tree_items %>">
+          <%= yield %>
+        </div>
+        <%= content_tag :div, class: 'col-md-4 sidebar' do %>
+          <ul class="list-group">
+            <% @tree_items.each do |item| %>
+              <li class="list-group-item">
+                <%= render 'writer/category/developer/tree_items/tree_item', item: item %>
+              </li>
+            <% end %>
+          </ul>
+        <% end if @tree_items %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<script src="https://cdn.embedly.com/widgets/platform.js" charset="UTF-8"></script>
+<%= render template: "layouts/application" %>

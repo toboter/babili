@@ -1,0 +1,50 @@
+<% title 'Developer', false %>
+
+<div class="row">
+  <div class="col-md-8 col-centered">
+    <h2 class="text-gray text-center">
+      Use babylon-online.org for your application
+    </h2>
+    <p class="lead text-gray text-center">
+      Build your own application using data from babylon-online. Manage user access and authorize accessibility. 
+    </p>
+  </div>
+</div>
+
+<div class="row --spacious-20">
+  <div class="col-md-6 col-centered">
+    <div class="category-list">
+      <% @tree_roots.each do |root| %>
+        <%= link_to writer_category_developer_nested_item_path(nil, nil, root), class: "list-group-item" do %>
+          <%= root.name %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="row --spacious">
+  <div class="col-md-10 col-centered">
+
+    <div class="applications">
+      <div class="page-header">
+        <h3>
+          What others have built
+        </h3>
+        <p class="text-muted">
+        </p>
+      </div>
+      <div class="row">
+        <% for application in @oread_applications.limit(3) do %>
+          <div class="col-md-4">
+            <%= render partial: 'oread/applications/application', object: application, locals: {full: true, actions: true} %>
+          </div>
+        <% end if can? :read, Oread::Application %>
+      </div>
+      <div class="row">
+        <%= link_to 'View all', collections_path, class: 'col-md-12' %>
+      </div>
+    </div>
+
+  </div>
+</div>
