@@ -2,6 +2,7 @@
           <%= link_to fa_icon("trash", text: 'Remove'), [:zensus, @agent], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default btn-sm text-strong text-danger pull-right' if can?(:destroy, @agent) %>
           <%= link_to fa_icon("edit", text: 'Edit'), [:edit, :zensus, @agent], class: 'btn btn-default btn-sm text-strong pull-right', style: 'margin-right:10px;' if can?(:update, @agent) %>
           <%= content_tag :h2, link_to(content_tag(:span, @agent.default_name, itemprop: "name"), [:zensus, @agent]), class: 'agent-title h-condensed' %>
+          <%= link_to "#{@agent.default_name} on babylon-online", @agent.person.namespace if @agent.person %>
 
             <h4 class="subhead --spacious">Family</h4>
             <ul class="list-unstyled">
@@ -49,4 +50,15 @@
                     </li>
                   <% end %>
                 </ul>
+
+            <%= content_tag :div, id: 'literatureBy' do %>
+              <h4 class="subhead --spacious">Literature by <%= @agent.default_name %> on babylon-online</h4>
+              <table class="table table-simple">
+                <tbody>
+                  <% @agent.bibliographic_creations.each do |entry| %>
+                    <%= render partial: entry.to_partial_path, object: entry, actions: true %>
+                  <% end %>
+                </tbody>
+              </table>
+            <% end %>
         <% end %>

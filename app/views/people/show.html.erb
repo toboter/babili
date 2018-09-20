@@ -15,12 +15,8 @@
               <%= content_tag :span, @person.namespace.slug, class: 'text-muted' %>
               <%= content_tag :span, 'Inactive', class: 'text-italic text-strong text-gray' if !@person.user %>
             </h4>
-            <%= content_tag :ul, class: 'list-unstyled' do %>
-              <%= content_tag :li, fa_icon('map-marker', text: @person.location, style: 'width:18px;') if @person.location.present? %>
-              <%= content_tag :li, fa_icon('university', text: @person.institution, style: 'width:18px;') if @person.institution.present? %>
-              <%= content_tag :li, fa_icon('link', text: link_to(@person.url, @person.url), style: 'width:18px;') if @person.url.present? %>
-            <% end %>
-            <%= content_tag :p, @person.about_me, style: 'margin-top:20px;margin-bottom:20px;' if @person.about_me.present? %>
+            <%= content_tag :p, link_to("Zensus agent for #{@person.name}", zensus_agent_path(@person.agent), class: 'text-gray') if @person.agent %>
+            <%= content_tag :p, @person.about_me, style: 'margin-bottom:20px;' if @person.about_me.present? %>
             <%= link_to fa_icon('edit', text: 'Edit your profile'), edit_settings_person_path, class: 'btn btn-sm btn-default text-strong' if @person.is?(current_person) %>
           </div>
           </div>
@@ -51,6 +47,23 @@
         <!-- Tab panes -->
         <div class="tab-content">
           <div role="tabpanel" class="tab-pane active" id="insight">
+            <%= content_tag :div, id: 'postingsBy', class: '--spacing' do %>
+              <h4 class="subhead --spacious-20">Most recently updated documents <%= content_tag :span, "#{@person.documents.count > 4 ? '5' : @person.documents.count} / #{@person.documents.count}", class: 'badge' %></h4>
+              <table class="table table-simple">
+                <tbody>
+                  <%= render @person.documents.order(updated_at: :desc).limit(5), style: 'table', name_tree: true %>
+                </tbody>
+              </table>
+            <% end %>
+
+            <%= content_tag :div, id: 'literatureBy' do %>
+              <h4 class="subhead --spacious-20">Literature by <%= @person.name %> on babylon-online</h4>
+              <table class="table table-simple">
+                <tbody>
+                  <%= render @person.agent.bibliographic_creations, actions: true %>
+                </tbody>
+              </table>
+            <% end if @person.agent %>
           </div>
           <div role="tabpanel" class="tab-pane" id="repos">
             <div class="row --spacious-20 repos">

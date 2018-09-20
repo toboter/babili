@@ -1,65 +1,69 @@
-# t.integer   :id
-# t.string    :slug
-# t.string    :type
-# t.text      :address
-# t.integer   :default_appellation_id
+module Zensus
+  class Agent < ApplicationRecord
+    # An Agent
+    # t.integer   :id
+    # t.string    :slug
+    # t.string    :type
+    # t.text      :address
+    # t.integer   :default_appellation_id
 
-class Zensus::Agent < ApplicationRecord
-  searchkick inheritance: true
-  extend FriendlyId
-  friendly_id :default_name, use: :slugged
+    searchkick inheritance: true
+    extend FriendlyId
+    friendly_id :default_name, use: :slugged
 
-  has_many :appellations, dependent: :nullify
-  has_many :links, dependent: :destroy
-  has_many :activities, as: :actable, dependent: :destroy
-  has_many :events, through: :activities
-  has_many :places, through: :events
-  has_many :notes, as: :issueable
-  belongs_to :creator, class_name: "Person"
+    has_many :appellations, dependent: :nullify
+    has_many :links, dependent: :destroy
+    has_many :activities, as: :actable, dependent: :destroy
+    has_many :events, through: :activities
+    has_many :places, through: :events
+    has_many :notes, as: :issueable
+    belongs_to :creator, class_name: "::Person"
+    has_many :bibliographic_creations, -> { order("(data ->> 'year') DESC") }, through: :appellations
 
-  accepts_nested_attributes_for :activities, reject_if: :all_blank, allow_destroy: true
-  accepts_nested_attributes_for :links, reject_if: :all_blank, allow_destroy: true
+    accepts_nested_attributes_for :activities, reject_if: :all_blank, allow_destroy: true
+    accepts_nested_attributes_for :links, reject_if: :all_blank, allow_destroy: true
 
-  validates :appellations, presence: :true
+    validates :appellations, presence: :true
 
-  def default_name
-    appellations.first.try(:name)
-  end
-
-  def should_generate_new_friendly_id?
-    appellations.any? { |a| a.changed? } || super
-  end
-
-  def self.types
-    %w[Person Group]
-  end
-
-  def search_data
-    {
-      name: default_name,
-      appellations: appellations.map{ |a| a.name(prefix: true, suffix: true, preferred: false) }.join(' '),
-      activities: activities.map{ |a| a.title }.join(' '),
-      places: places.map(&:names)
-    }
-  end
-
-  def self.sorted_by(sort_option)
-    direction = ((sort_option =~ /desc$/) ? 'desc' : 'asc').to_sym
-    case sort_option.to_s
-    when /^updated_at_/
-      { updated_at: direction }
-    else
-      raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
+    def default_name
+      appellations.first.name(prefix: true, suffix: true)
     end
-  end
 
-  def self.options_for_sorted_by
-    [
-      ['Updated asc', 'updated_at_asc'],
-      ['Updated desc', 'updated_at_desc']
-    ]
-  end
+    def should_generate_new_friendly_id?
+      appellations.any? { |a| a.changed? } || super
+    end
 
+    def self.types
+      %w[Person Group]
+    end
+
+    def search_data
+      {
+        name: default_name,
+        appellations: appellations.map{ |a| a.name(prefix: true, suffix: true, preferred: false) }.join(' '),
+        activities: activities.map{ |a| a.title }.join(' '),
+        places: places.map(&:names)
+      }
+    end
+
+    def self.sorted_by(sort_option)
+      direction = ((sort_option =~ /desc$/) ? 'desc' : 'asc').to_sym
+      case sort_option.to_s
+      when /^updated_at_/
+        { updated_at: direction }
+      else
+        raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
+      end
+    end
+
+    def self.options_for_sorted_by
+      [
+        ['Updated asc', 'updated_at_asc'],
+        ['Updated desc', 'updated_at_desc']
+      ]
+    end
+
+  end
 end
 
 # Suche

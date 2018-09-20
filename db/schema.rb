@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_17_201746) do
+ActiveRecord::Schema.define(version: 2018_09_20_120130) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -492,22 +492,14 @@ ActiveRecord::Schema.define(version: 2018_09_17_201746) do
   end
 
   create_table "people", id: :serial, force: :cascade do |t|
-    t.integer "user_id"
     t.text "about_me"
     t.string "family_name"
     t.string "given_name"
-    t.string "honorific_prefix"
-    t.string "honorific_suffix"
     t.text "image_data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "slug"
-    t.string "url"
-    t.string "institution"
-    t.string "location"
     t.jsonb "settings"
-    t.index ["slug"], name: "index_people_on_slug", unique: true
-    t.index ["user_id"], name: "index_people_on_user_id"
+    t.integer "agent_id"
   end
 
   create_table "personal_access_tokens", id: :serial, force: :cascade do |t|
@@ -903,5 +895,4 @@ ActiveRecord::Schema.define(version: 2018_09_17_201746) do
   add_foreign_key "oread_access_enrollments", "oread_applications", column: "application_id"
   add_foreign_key "oread_access_enrollments", "users", column: "creator_id"
   add_foreign_key "oread_access_enrollments", "users", column: "enrollee_id"
-  add_foreign_key "people", "users"
 end

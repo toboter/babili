@@ -13,16 +13,27 @@
       <div class="row">
         <%= content_tag :div, class: "col-sm-8 col-md-8" do %>
           <div class="form-inputs">
-            <%= f.input :honorific_prefix %>
-            <%= f.input :given_name %>
-            <%= f.input :family_name %>
-            <%= f.input :honorific_suffix %>
+            <%= f.input :agent_id, collection: Zensus::Person.all, label_method: :default_name %>
+            <div class="row">
+              <div class="col-md-6">
+                <%= f.input :given_name, input_html: { disabled: @person.agent } %>
+              </div>
+              <div class="col-md-6">
+                <%= f.input :family_name, input_html: { disabled: @person.agent } %>
+              </div>
+            </div>
+            <%= content_tag :p, 'You have choosen an Agent. Option disabled.', class: 'text-muted text-small' if @person.agent %>
             <%= f.input :about_me, label: 'Bio', input_html: { rows: 3 }, hint: 'Should be between 70 and 150 characters.' %>
-            <%= f.input :url %>
-            <%= f.input :institution %>
-            <%= f.input :location %>
           </div>
+          
+          <div class=''>
+            <h4 class="subhead --spacious">General settings</h4>
+            <%= f.input :csl, hint: "Citation style language. Default is apa. Available styles: #{link_to 'Style registry by http://citationstyles.org', 'https://github.com/citation-style-language/styles'}".html_safe %>
+            <%= f.input :per_page, collection: [10, 20, 50, 100, 200], hint: 'Used for the number of results per page. Default is 50.' %>
+          </div>
+
         <% end %>
+
         <%= content_tag :div, class: "col-xs-4 col-sm-3 col-md-3 col-md-offset-1 col-sm-offset-1" do %>
           <strong>Picture</strong>
           <%= content_tag :div, class: '', style: 'margin-top:3px; margin-bottom:10px;' do %>
@@ -49,20 +60,13 @@
           </div>
         <% end %>
       </div>
-
-      <div class="row">
-        <div class='col-md-8'>
-          <h4 class="subhead --spacious">General settings</h4>
-          <%= f.input :csl, hint: "Citation style language. Default is apa. Available styles: #{link_to 'Style registry by http://citationstyles.org', 'https://github.com/citation-style-language/styles'}".html_safe %>
-          <%= f.input :per_page, collection: [10, 20, 50, 100, 200], hint: 'Used for the number of results per page. Default is 50.' %>
-        </div>
-      </div>
   
       <div class="row --spacious">
         <div class="col-md-12">
           <%= f.submit 'Update', class: 'btn btn-primary text-strong' %>
           <%= link_to 'Cancel', edit_settings_person_path, class: "btn btn-default" %>
           <%= link_to 'View profile', @person.namespace, class: "btn btn-default" %>
+          <%= link_to 'View agent', zensus_agent_path(@person.agent), class: "btn btn-default" if @person.agent %>
         </div>
       </div>
     </div>

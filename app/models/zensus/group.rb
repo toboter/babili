@@ -1,12 +1,14 @@
-class Zensus::Group < Zensus::Agent
-  has_many :joining_activities, -> { where(property_id: 144) }, as: :actable, class_name: 'Zensus::Activity'
-  has_many :joining_events, through: :joining_activities, source: :event
+module Zensus
+  class Group < Agent
+    has_many :joining_activities, -> { where(property_id: 144) }, as: :actable, class_name: 'Activity'
+    has_many :joining_events, through: :joining_activities, source: :event
 
-  def members
-    joining_events.any? ? joining_events.map{ |j| j.activities.where(property_id: 143).map(&:actable) }.flatten : nil
+    def members
+      joining_events.any? ? joining_events.map{ |j| j.activities.where(property_id: 143).map(&:actable) }.flatten : nil
+    end
+
+
   end
-
-
 end
 
 # Group < Actor

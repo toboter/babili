@@ -8,12 +8,19 @@ class Person < ApplicationRecord
   attr_json :csl, :string, default: 'apa'
   attr_json :per_page, :integer, default: 50
 
-  has_one :namespace, as: :subclass, dependent: :destroy
   has_one :user
+  has_one :namespace, as: :subclass, dependent: :destroy
+  has_many :repositories, through: :namespace
+  belongs_to :agent, class_name: 'Zensus::Agent', optional: true
+
+  has_many :document_authorships, class_name: 'PaperTrail::Version', foreign_key: :whodunnit
+  has_many :documents, -> { distinct }, through: :document_authorships, source: :item, source_type: 'Writer::Document'
+
   has_many :collaborations, dependent: :destroy, foreign_key: :collaborator_id
   has_many :collaboration_repos, through: :collaborations, source: :collaboratable, source_type: 'Repository'
   has_many :memberships, dependent: :destroy
   has_many :organizations, through: :memberships
+
   has_many :person_oauth_accessibilities, as: :accessor, dependent: :destroy, class_name: 'OauthAccessibility'
   has_many :person_accessible_oauth_apps, through: :person_oauth_accessibilities, source: :oauth_application
   has_many :organization_accessible_oauth_apps, -> { distinct }, through: :organizations, source: :accessible_oauth_apps
@@ -21,14 +28,15 @@ class Person < ApplicationRecord
 
   validates :namespace, presence: true
 
-  delegate :repositories, to: :namespace
-
   scope :approved, -> { joins(:user).where(users: {approved: true}) }
+
+  delegate :email, :is_admin?, to: :user
+  delegate :slug, to: :namespace
   
   #after_commit :reindex_namespace
   
   def to_param
-    namespace.slug if namespace
+    slug
   end
 
   def self.find(input)
@@ -39,26 +47,17 @@ class Person < ApplicationRecord
     user ? user.oread_enrolled_applications : []
   end
 
-  def email
-    user ? user.email : false
-  end
-
   def is?(person)
     self == person
   end
 
-  def is_admin?
-    user ? user.is_admin? : false
-  end
-
   def name
-    [honorific_prefix, given_name, family_name, honorific_suffix].join(' ').strip.presence || namespace.slug
+    agent.try(:name).presence || [given_name, family_name].join(' ').strip.presence || namespace.slug
   end
 
   def all_repos
     repositories.to_a.concat(organizations.map(&:repositories).to_a).flatten
   end
-
 
   def oauth_accessibilities
     accessibilities = person_oauth_accessibility_ids.concat(organization_oauth_accessibility_ids).uniq
