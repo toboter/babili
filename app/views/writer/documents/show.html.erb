@@ -72,10 +72,51 @@
         <div class="modal-body">
           <p class="text-gray">Categorizing this document will make it available as a site-wide blog / help or dev page.</p>
           <%= simple_form_for @document, url: categorize_namespace_repository_document_path(@namespace, @repository, @document), method: :put do |f| %>
-            <%= f.association :blog_threads, as: :check_boxes %>
-            <%= f.association :help_categories, as: :check_boxes %>
-            <%= f.association :developer_tree_items, as: :check_boxes %>
-            <%= f.submit %>
+            <div class="panel-group" id="accordionCategorization" role="tablist" aria-multiselectable="true">
+              <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingBlogThread">
+                  <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#accordionCategorization" href="#collapseBlogThread" aria-expanded="true" aria-controls="collapseBlogThread">
+                      Blog threads
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapseBlogThread" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingBlogThread">
+                  <div class="panel-body">
+                    <%= f.association :blog_threads, label: false, collection: Writer::Category::BlogThread.roots_and_descendants_preordered, as: :check_boxes, label_method: lambda { |b| content_tag(:span, b.name, style: "margin-left:#{10*b.depth}px") } %>
+                  </div>
+                </div>
+              </div>
+              <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingHelpCat">
+                  <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordionCategorization" href="#collapseHelpCat" aria-expanded="false" aria-controls="collapseHelpCat">
+                      Help categories
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapseHelpCat" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingHelpCat">
+                  <div class="panel-body">
+                    <%= f.association :help_categories, label: false, collection: Writer::Category::HelpCategory.roots_and_descendants_preordered, as: :check_boxes, label_method: lambda { |b| content_tag(:span, b.name, style: "margin-left:#{10*b.depth}px") } %>
+                  </div>
+                </div>
+              </div>
+              <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingDevTree">
+                  <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordionCategorization" href="#collapseDevTree" aria-expanded="false" aria-controls="collapseDevTree">
+                      Developer tree
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapseDevTree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingDevTree">
+                  <div class="panel-body">
+                    <%= f.association :developer_tree_items, label: false, collection: Writer::Category::DeveloperTreeItem.roots_and_descendants_preordered, as: :check_boxes, label_method: lambda { |b| content_tag(:span, b.name, style: "margin-left:#{10*b.depth}px") } %>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <%= f.submit 'Update categories', class: 'btn btn-default text-strong' %>
           <% end %>
         </div>
       </div>
