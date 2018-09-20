@@ -25,11 +25,14 @@ Coming with *docs*:
 * discussion mods 
 * new docs feature on repositories.
 * new blog / help / dev categories feature for repo docs
+* new insight view on person
+* person and agent connection and corresponding partials
 
 * many many bugfixes
 
 
 # todo
+* Ladegeschwindigkeit bei bibliographie
 * discussions need to use the repo permission control.
 * better error pages in production
 * favicon

@@ -34,6 +34,10 @@ class Person < ApplicationRecord
   delegate :slug, to: :namespace
   
   #after_commit :reindex_namespace
+
+  def all_repos
+    repositories.to_a.concat(organizations.map(&:repositories).to_a).flatten
+  end
   
   def to_param
     slug
@@ -53,10 +57,6 @@ class Person < ApplicationRecord
 
   def name
     agent.try(:name).presence || [given_name, family_name].join(' ').strip.presence || namespace.slug
-  end
-
-  def all_repos
-    repositories.to_a.concat(organizations.map(&:repositories).to_a).flatten
   end
 
   def oauth_accessibilities
