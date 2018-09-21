@@ -1,15 +1,11 @@
 <% content_for :content do %>
   <div class="container" style="margin: 60px auto 100px auto;">
-    <%= content_tag :ol, class: 'breadcrumb' do %>
-      <%= content_tag :li, link_to('Settings', settings_path) %>
-      <%= yield(:breadcrumbs) %>
-    <% end if content_for?(:breadcrumbs) %>
-    <div class="row">
+    <div class="row --spacious">
       <div class="col-md-3">
         <div class="panel panel-default">
           <div class="panel-heading text-strong"><span class="text-muted">Personal Settings</span></div>
           <div class="list-group">
-            <%= link_to 'Profile & General settings', edit_settings_person_path, class: "list-group-item #{'active text-strong' if current_page?(edit_settings_person_path)}" %>
+            <%= link_to 'General profile settings', edit_settings_person_path, class: "list-group-item #{'active text-strong' if current_page?(edit_settings_person_path)}" %>
             <%= link_to 'Account', account_path, class: "list-group-item #{'active text-strong' if current_page?(account_path)}" %>
             <%= link_to 'Notifications', account_path, class: "list-group-item disabled" %>
             <%= link_to 'Repositories', settings_oread_enrollments_path, class: "list-group-item #{'active text-strong' if current_page?(settings_oread_enrollments_path)}" %>
@@ -18,20 +14,28 @@
             <%= link_to 'Applications', oauth_authorized_applications_path, class: "list-group-item #{'active text-strong' if current_page?(oauth_authorized_applications_path)}" %>
           </div>
         </div>
-        <div class="panel panel-default">
+        <%= content_tag :div, class: "panel panel-default" do %>
+          <div class="panel-heading text-strong"><span class="text-muted">Admin Settings</span></div>
           <div class="list-group">
-            <%= link_to 'Admin', admin_settings_path, class: "list-group-item #{'active text-strong' if current_page?(admin_settings_path)}" if current_user.is_admin? %>
-            <%= link_to 'Developer', developer_settings_path, class: "list-group-item #{'active text-strong' if current_page?(developer_settings_path)}" %>
+            <%= link_to 'User registration', users_path, class: "list-group-item #{'active text-strong' if current_page?(users_path)}" %>
+            <%= link_to 'Repository integration', settings_admin_oread_applications_path, class: "list-group-item #{'active text-strong' if current_page?(settings_admin_oread_applications_path)}" %>
+            <%= link_to 'Background processes', sidekiq_web_path, class: "list-group-item #{'active text-strong' if current_page?(sidekiq_web_path)}" %>
           </div>
-        </div>
+        <% end if current_user.is_admin? %>
+        <%= content_tag :div, class: "panel panel-default" do %>
+          <div class="panel-heading text-strong"><span class="text-muted">Developer Settings</span></div>
+          <div class="list-group">
+            <%= link_to 'OAuth Apps', oauth_applications_path, class: "list-group-item#{' active text-strong' if current_page?(oauth_applications_path)}" %>
+            <%= link_to 'Personal access tokens', personal_access_tokens_path, class: "list-group-item#{' active text-strong' if current_page?(personal_access_tokens_path)}" %>
+          </div>
+        <% end %>
       </div>
       <div class="col-md-9">
         <%= content_tag :div, class: 'page-header', style: 'margin-top:0px;' do %>
           <%= content_tag :h3, style: 'margin-top:0px;' do %>
-            <%= yield(:title) %>
             <%= content_tag :span, yield(:buttons), class: 'pull-right', style: 'margin-top:-5px;' %>
           <% end %>
-        <% end if content_for?(:title) && @show_title %>
+        <% end if content_for?(:buttons) %>
         <% if content_for?(:sidebar) %>
           <div class="row">
             <div class="col-md-9">

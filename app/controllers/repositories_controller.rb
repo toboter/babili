@@ -1,11 +1,18 @@
 class RepositoriesController < ApplicationController
   load_and_authorize_resource :namespace
-  load_and_authorize_resource through: :namespace
+  load_and_authorize_resource :repository, through: :namespace
 
   def index
+    set_meta_tags title: 'Repositories | ' + @namespace.name,
+                  description: 'Repositories index page',
+                  noindex: true,
+                  follow: true
   end
 
   def show
+    set_meta_tags title: @repository.name_tree.reverse.join(' | ') + ' | Repositories',
+                  description: 'Repository root page'
+
     @items = @repository.items.joins(:identifier).order('aggregation_identifiers.origin_id asc')
     render layout: 'repositories/base'
   end

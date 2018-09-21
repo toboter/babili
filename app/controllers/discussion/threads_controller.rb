@@ -7,6 +7,10 @@ module Discussion
     
   
     def index
+      set_meta_tags title: 'Discussions | ' + @repository.name_tree.reverse.join(' | '),
+                    description: "List of discussions on #{@repository.name}",
+                    noindex: true,
+                    follow: true
       query = params[:q].presence || '*'
       sorted_by = params[:sorted_by] ||= 'created_desc'
       sort_order = Discussion::Thread.sorted_by(sorted_by) if @threads.any?
@@ -27,15 +31,23 @@ module Discussion
     end
 
     def show
+      set_meta_tags title: view_context.truncate(@thread.title, length: 25) + ' | ' + @repository.name_tree.reverse.join(' | '),
+                    description: "Disscussion on #{@thread.title}",
+                    index: true,
+                    follow: true
       @items = @thread.items.sort_by{|e| e[:created_at]}
       render layout: 'repositories/base' if @repository.present?
     end
 
     def new
+      set_meta_tags title: 'New | Discussions',
+                    description: 'Add a new discussion'
       render layout: 'repositories/base' if @repository.present?
     end
 
     def edit
+      set_meta_tags title: 'Edit | Discussions',
+                    description: 'Edit the discussion title'
       respond_to do |format|
         format.html { render layout: 'repositories/base' if @repository.present? }
         format.js

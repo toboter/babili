@@ -1,21 +1,27 @@
 class PersonalAccessTokensController < ApplicationController
   before_action :authenticate_user!
   load_and_authorize_resource
-  layout "developer"
+  layout "settings"
 
   # GET /personal_access_tokens
   # GET /personal_access_tokens.json
   def index
+    set_meta_tags title: 'Personal access tokens | Developer | Settings',
+                  description: 'Personal access tokens for babylon-online.org',
+                  noindex: true,
+                  nofollow: true
     @personal_access_tokens = current_user.personal_access_tokens.order(updated_at: :desc)
   end
 
   # GET /personal_access_tokens/new
   def new
+    set_meta_tags title: 'New | Personal access tokens | Developer | Settings'
     @personal_access_token = current_user.personal_access_tokens.new
   end
 
   # GET /personal_access_tokens/1/edit
   def edit
+    set_meta_tags title: 'Edit | Personal access tokens | Developer | Settings'
   end
 
   # POST /personal_access_tokens

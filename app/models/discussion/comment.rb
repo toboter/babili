@@ -15,7 +15,7 @@ module Discussion
     has_many :references, as: :referencing, dependent: :destroy
     has_many :files, through: :references, source_type: 'Raw::FileUpload', source: :referenceable
 
-    before_validation :extract_attachments
+    after_save :extract_attachments
     after_commit :reindex_thread, on: [:create, :update, :destroy]
 
     accepts_nested_attributes_for :versions, allow_destroy: false
@@ -52,7 +52,7 @@ module Discussion
       end
       set_mentions(mentions)
       set_references(references)
-      reindex_thread
+      files.each{|f| f.publish(author)}
     end
 
     def set_mentions(values)

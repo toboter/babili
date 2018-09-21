@@ -1,27 +1,35 @@
 class HomeController < ApplicationController
   
   def index
-    # @blog_pages = CMS::BlogPage.featured.order(created_at: :desc).limit(5)
-    @exploreables = [] #(Repository.take(3) + Vocab::Scheme.take(3)).shuffle
+    set_meta_tags title: 'Start',
+                  description: 'The babylon-online homepage',
+                  index: true,
+                  follow: true
     @latest_blog_postings = Writer::Categorization.order(created_at: :desc).includes(:category_node, :document).merge(Writer::CategoryNode.blog_threads).references(:category_node).group_by(&:document).take(5).map{|d,c| c.first}
     @latest_references = Biblio::Entry.where("data->>'year' IS NOT NULL").order("(data ->> 'year') DESC").take(5)
   end
   
-  def api
-  end
-  
   def about
+    set_meta_tags title: 'About',
+                  description: 'Info about babylon-online',
+                  index: true,
+                  follow: true
     @latest_blog_postings = Writer::Categorization.order(created_at: :desc).includes(:category_node, :document).merge(Writer::CategoryNode.blog_threads).references(:category_node).group_by(&:document).take(5).map{|d,c| c.first}
   end
   
-  def imprint
-  end
-
   def collections
+    set_meta_tags title: 'Collections',
+                  description: 'Data provider apps',
+                  noindex: true,
+                  nofollow: true
     @collection_apps = Oread::Application.order(name: :asc)
   end
   
   def explore
+    set_meta_tags title: 'Explore',
+                  description: 'Entrypoint to explore babylon-online',
+                  index: true,
+                  follow: true
     @oread_applications = Oread::Application.order("RANDOM()")
     @showcased = Oread::Application.order("RANDOM()").first
     @vocabularies = Vocab::Scheme.order(created_at: :desc)
@@ -31,18 +39,34 @@ class HomeController < ApplicationController
   end
 
   def people
+    set_meta_tags title: 'Researcher',
+                  description: 'List of researchers on babylon-online',
+                  noindex: true,
+                  follow: true
     @people = Person.approved.order(family_name: :asc)
   end
 
   def organizations
+    set_meta_tags title: 'Organizations',
+                  description: 'List of organizations on babylon-online',
+                  noindex: true,
+                  follow: true
     @organizations = Organization.order(created_at: :desc)
   end
 
   def repositories
+    set_meta_tags title: 'Repositories',
+                  description: 'List of repositories on babylon-online',
+                  noindex: true,
+                  follow: true
     @repositories = Repository.order(created_at: :desc)
   end
 
   def discussions
+    set_meta_tags title: 'Discussions',
+                  description: 'Interessting discussions on several topics',
+                  noindex: true,
+                  follow: true
     repository_ids = Repository.all.ids
     @threads = Discussion::Thread.where(discussable_type: 'Repository', discussable_id: repository_ids)
     query = params[:q].presence || '*'

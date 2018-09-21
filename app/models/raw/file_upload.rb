@@ -28,6 +28,16 @@ module Raw
       ObjectSpace.each_object(Class).select { |klass| klass < self }
     end
 
+    def publish(person)
+      self.attributes = { published: true, published_at: Time.now, publisher: person }
+      return self.save
+    end
+
+    def depublish
+      self.attributes = { published: nil, published_at: nil, publisher: nil }
+      return self.save
+    end
+
     # def file=(value)
     #   super
     #   self.type = set_type_from(file).try(:first)

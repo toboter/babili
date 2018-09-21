@@ -9,14 +9,23 @@ module Writer
       layout 'writer/help'
 
       def index
+        set_meta_tags title: "Overview | Help",
+                      description: "Listing all help categories with articles",
+                      noindex: true,
+                      follow: true
         @articles = @categories.accessible_by(current_ability).collect(&:articles).flatten.group_by(&:document).map{|d,c| c.first}.sort_by(&:created_at).reverse.paginate(page: params[:page], per_page: DEFAULT_PER_PAGE)
       end
 
       def show
+        set_meta_tags title: "#{@category.name} | Categories | Help",
+                      description: "Listing all help categories and articles below #{@category.name}",
+                      noindex: true,
+                      follow: true
         @articles = @category.articles.order(created_at: :desc).paginate(page: params[:page], per_page: DEFAULT_PER_PAGE)
       end
 
       def new
+        set_meta_tags title: "New category | Help"
         @category.parent = HelpCategory.friendly.find(params[:parent]) if params[:parent]
       end
 

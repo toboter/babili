@@ -5,6 +5,10 @@ class Biblio::EntriesController < ApplicationController
   DEFAULT_PER_PAGE = 50
 
   def index
+    set_meta_tags title: 'Bibliographic references',
+                  description: 'List of organizations on babylon-online',
+                  noindex: true,
+                  follow: true
     @all_entries = Biblio::Entry.all
     @entries = @all_entries
       .where.not(type: ['Biblio::Serie', 'Biblio::Journal'])
@@ -40,6 +44,10 @@ class Biblio::EntriesController < ApplicationController
   end
 
   def show
+    set_meta_tags title: @entry.citation + ' | References',
+                  description: @entry.bibliographic,
+                  index: true,
+                  follow: true
     @discussions = @entry.referencings.where(referencing_type: 'Discussion::Comment')
     respond_to do |format|
       format.html

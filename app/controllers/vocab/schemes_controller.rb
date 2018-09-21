@@ -5,18 +5,28 @@ class Vocab::SchemesController < ApplicationController
   before_action :set_language
 
   def index
+    set_meta_tags title: 'Vocabularies | ' + @namespace.name,
+                  description: "Listing vocabulary schemes for #{@namespace.name}",
+                  noindex: true,
+                  follow: true
     # Sind in Organisationen die Vokabulare der Mitglieder automatisch Teil des Organisationsvokabulars?
     # @schemes = (@schemes + @namespace.accessors.map(&:namespace).map(&:schemes).flatten).uniq
     # Vocab::Scheme.new(abbr: 'aat', title: 'Art and Architecture Thesaurus', slug: 'aat')
   end
 
   def show
+    set_meta_tags title: "#{@scheme.abbr} | Vocabularies | #{@namespace.name}",
+                  description: "#{@scheme.title} (#{@scheme.abbr}), #{@scheme.definition}",
+                  index: true,
+                  follow: true
   end
 
   def new
+    set_meta_tags title: "New | Vocabularies | #{@namespace.name}"
   end
 
   def edit
+    set_meta_tags title: "Edit | Vocabularies | #{@namespace.name}"
   end
 
   # POST /vocabularies

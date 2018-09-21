@@ -2,14 +2,19 @@ class OauthAccessibilitiesController < ApplicationController
   before_action :set_oauth_application
   before_action :authenticate_user!
   load_and_authorize_resource :oauth_accessibility, except: :new
-  layout 'developer'
+  layout 'settings'
 
   # after_action :send_client_hook
   def index
+    set_meta_tags title: 'OAuth application accessibilities | Developer | Settings',
+                  description: 'OAuth application accessibilities',
+                  noindex: true,
+                  nofollow: true
     @accessibilities = @oauth_application.accessibilities.order(created_at: :desc)
   end
 
   def new
+    set_meta_tags title: 'New | OAuth application accessibilities | Developer | Settings'
     authorize! :create_accessibility, @oauth_application
     @accessors = Organization.where.not(id: @oauth_application.organization_accessor_ids) + Person.approved.where.not(id: @oauth_application.person_accessor_ids)
     @oauth_accessibility = @oauth_application.accessibilities.new
@@ -19,6 +24,7 @@ class OauthAccessibilitiesController < ApplicationController
   end
   
   def create
+    set_meta_tags title: 'Edit | OAuth application accessibilities | Developer | Settings'
     @oauth_accessibility = @oauth_application.accessibilities.new(oauth_accessibility_params)
     @oauth_accessibility.creator = current_person
     person_ids = @oauth_accessibility.accessor.class.name == 'Organization' ? @oauth_accessibility.accessor.member_ids : [@oauth_accessibility.accessor_id]

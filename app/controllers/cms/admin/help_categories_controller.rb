@@ -2,7 +2,7 @@ class CMS::Admin::HelpCategoriesController < ApplicationController
   before_action :set_cms_help_category, only: [:edit, :update, :destroy, :move]
   before_action :authenticate_user!
   load_and_authorize_resource param_method: :cms_help_category_params, class: "CMS::HelpCategory", find_by: :slug
-  layout "admin"
+  layout "settings"
   
   # GET /cms/help_categories
   # GET /cms/help_categories.json

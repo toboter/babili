@@ -9,14 +9,23 @@ module Writer
       layout 'writer/developer'
 
       def index
+        set_meta_tags title: "Overview | Developer",
+                      description: "Listing all developer api versions",
+                      noindex: true,
+                      follow: true
         @tree_roots = DeveloperTreeItem.roots
         @oread_applications = Oread::Application.order("RANDOM()")
       end
 
       def show
+        set_meta_tags title: "#{@tree_item == @tree_root ? 'Overview' : @tree_item.name} | #{@tree_root.name} | Developer",
+                      description: "Listing all developer api versions",
+                      noindex: true,
+                      follow: true
       end
 
       def new
+        set_meta_tags title: "New element | Developer"
         @parent_item = @tree_item
         @tree_item = DeveloperTreeItem.new
         @tree_item.parent = @parent_item

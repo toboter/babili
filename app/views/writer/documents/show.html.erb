@@ -1,12 +1,10 @@
-<% title "#{@document.title} \\ Documents \\ #{@repository.name} \\ #{@namespace.name}", false %>
-
 <div class="row document-wrapper" style="">
   <div class="col-md-10 col-centered">
     <%= content_tag :div, class: '--spacing-20 clearfix' do %>
       <%= content_tag :span, @document.title, class: 'text-strong' %>
       <%= content_tag :span, class: 'pull-right text-small text-strong' do %>
         <%= form_for @document, url: publish_namespace_repository_document_path(@document.repository.owner, @document.repository, @document), method: :put, html: {style: 'display:inline;'} do |f| %>
-          <%= button_tag(value: @document.published? ? 'depublish' : 'publish', class: "btn btn-default btn-sm text-strong", data: { disable_with: "Please wait..." }) do %>
+          <%= button_tag(value: @document.published? ? 'depublish' : 'publish', class: "btn btn-default btn-sm text-strong", data: { disable_with: "Please wait..." }, title: @document.published? ? 'Attachments will remain published' : 'Attachments will be published also') do %>
             <%= @document.published? ? fa_icon('undo', text: 'Depublish') : fa_icon('check', text: 'Publish now!') %>
           <% end %>
         <% end if can?(:publish, @document) %>

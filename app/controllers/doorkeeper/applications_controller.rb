@@ -5,18 +5,28 @@ module Doorkeeper
     load_and_authorize_resource :application, class: 'Doorkeeper::Application'
 
     def index
+      # added meta tags
+      set_meta_tags title: t('.title') + ' | Developer | Settings', nofollow: true, noindex: true
       @applications = current_user.applications.order(name: :asc)
     end
 
     def show
-      # Changed layout
+      # Changed layout, added meta tags
+      set_meta_tags title: "#{@application.name} | OAuth Applications", nofollow: true, noindex: true
       render layout: 'application'
     end
 
     def new
+      # added meta tags
+      set_meta_tags title: "#{t('.title')} | Developer | Settings", nofollow: true, noindex: true
       @application = Doorkeeper::Application.new
     end
     
+    def edit
+      # added meta tags
+      set_meta_tags title: 'Edit | OAuth applications | Developer | Settings', nofollow: true, noindex: true
+    end
+
     def create
       @application = Doorkeeper::Application.new(application_params)
       @application.owner = current_user if Doorkeeper.configuration.confirm_application_owner?
@@ -29,8 +39,6 @@ module Doorkeeper
         render :new
       end
     end
-
-    def edit; end
 
     def update
       if @application.update_attributes(application_params)

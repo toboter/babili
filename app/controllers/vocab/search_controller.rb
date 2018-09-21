@@ -2,6 +2,11 @@ class Vocab::SearchController < ApplicationController
   include ActionView::Helpers::TextHelper
 
   def index
+    set_meta_tags title: 'Search | Concepts | Vocabularies',
+                  description: "Search for all concepts in all schemes",
+                  noindex: true,
+                  follow: true
+
     @results = Searchkick.search(params[:q], 
       fields: [:type, 'narrower^4', :scheme, 'labels^10', :broader, :notes, :matches], 
       index_name: [Vocab::Concept],

@@ -1,13 +1,10 @@
-<% title t('doorkeeper.authorized_applications.index.title'), false %>
-
-<% content_for :breadcrumbs do %>
-  <%= content_tag :li, yield(:title), class: 'active' %>
-<% end %>
+<% set_meta_tags title: t('doorkeeper.authorized_applications.index.title'),
+                 description: "Personal applications authorized ton access the account", nofollow: true, noindex: true %>
 
 <main role="main">
   <div class="page-header" style="margin-top:0px;">
     <h3 style="margin-top:0px;">
-      <%= yield(:title) %>
+      <%= t('doorkeeper.authorized_applications.index.title') %>
     </h3>
     <p class="text-gray">Applications listed here are authorized to access your account.</p>
   </div>

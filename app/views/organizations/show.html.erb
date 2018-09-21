@@ -13,7 +13,7 @@
           <%= fa_icon('sitemap', text: 'Vocabularies', style: 'width:18px;') %>
           <%= content_tag :span, @organization.namespace.schemes.count, class: 'badge' %>
         <% end %>
-        <%= link_to namespace_members_path(@organization.namespace), class: 'list-group-item text-gray' do %>
+        <%= link_to namespace_memberships_path(@organization.namespace), class: 'list-group-item text-gray' do %>
           <%= fa_icon('users', text: 'People', style: 'width:18px;') %>
           <%= content_tag :span, @organization.memberships.count, class: 'badge' %>
         <% end %>
@@ -35,7 +35,7 @@
       <div class="--spacious row">
         <div class="col-md-8 member-avatar-group">
           <h4>
-            <%= link_to namespace_members_path(@organization.namespace), style: 'color: #586069;' do %>
+            <%= link_to namespace_memberships_path(@organization.namespace), style: 'color: #586069;' do %>
               <%= fa_icon('users', text: 'People') %>
               <%= content_tag :span, @organization.memberships.count, class: 'pull-right no-link' %>
             <% end %>

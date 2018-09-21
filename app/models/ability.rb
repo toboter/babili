@@ -7,6 +7,7 @@ class Ability
     cannot :manage, :all
     can :read, Person
     can :read, Organization, private: false
+    can :read, Membership, organization: { private: false }
     can :read, Namespace
     can :read, [Vocab::Scheme, Vocab::Concept]
     can :read, Repository
@@ -109,6 +110,7 @@ class Ability
         can [:edit, :update], Biblio::Entry do |entry|
           entry.repositories.map{|r| r.permissions.select { |p| p.person == user.person }.try(:first).try(:can_update) }.compact.flatten.include?(true)
         end
+        can [:new, :create, :edit, :update], [Biblio::Serie, Biblio::Journal]
 
         # Namespace/Repository/Discussion
         can :manage, Discussion::Comment do |comment|

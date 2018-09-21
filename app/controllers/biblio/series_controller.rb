@@ -2,6 +2,10 @@ class Biblio::SeriesController < ApplicationController
   load_and_authorize_resource
 
   def index
+    set_meta_tags title: 'Series | Bibliographic references',
+                  description: 'List of series on babylon-online',
+                  noindex: true,
+                  follow: true
     @serials = Biblio::Serie.order(citation_raw: :asc).all
 
     respond_to do |format|
@@ -11,6 +15,10 @@ class Biblio::SeriesController < ApplicationController
   end
 
   def show
+    set_meta_tags title: (@serie.abbr.presence || @serie.name) + ' | Series',
+                  description: "#{@serie.name} #{@serie.note}",
+                  index: true,
+                  follow: true
     @entry = @serie
     @discussions = @entry.referencings.where(referencing_type: 'Discussion::Comment')
     respond_to do |format|
@@ -20,11 +28,15 @@ class Biblio::SeriesController < ApplicationController
   end
 
   def new
+    set_meta_tags title: 'New | Series',
+                  description: 'Add new serie'
     @creators = Zensus::Appellation.all.eager_load(:appellation_parts)
     @entry = @serie
   end
 
   def edit
+    set_meta_tags title: 'Edit | Series',
+                  description: 'Edit serie'
     @creators = @serie.creatorships.order(id: :asc).map{|c| c.agent_appellation }.concat(Zensus::Appellation.all.eager_load(:appellation_parts)).uniq
     @entry = @serie
   end

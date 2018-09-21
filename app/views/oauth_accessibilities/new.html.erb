@@ -1,5 +1,3 @@
-<% title "New Accessibility for #{@oauth_application.name}", false %>
-
 <%= simple_form_for([@oauth_application, @oauth_accessibility], url: oauth_application_accessibilities_path) do |f| %>
   <%= f.error_notification %>
   <%= f.hidden_field :oauth_application_id %>

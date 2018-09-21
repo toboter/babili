@@ -1,12 +1,9 @@
-<% title "Registered users" %>
-
-<% content_for :breadcrumbs do %>
-  <%= content_tag :li, yield(:title), class: 'active' %>
-<% end %>
-
-<p class="text-muted">
-  Users listed here are registered and have the ability to read everything. Admins may assign other users a new role. You cannot change your own role, that is why you are missing in the table.
-<p>
+<div class="page-header" style="margin-top:0px;">
+  <h3 style="margin-top:0px;">
+    Registered users
+  </h3>
+  <p class="text-gray">Users listed here are registered and have the ability to read everything. Admins may assign other users a new role. You cannot change your own role, that is why you are missing in the table.</p>
+</div>
 
 <table class="table table-simple">
   <thead>

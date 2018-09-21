@@ -2,7 +2,7 @@ class CMS::Admin::BlogCategoriesController < ApplicationController
   before_action :set_cms_blog_category, only: [:edit, :update, :destroy]
   before_action :authenticate_user!
   load_and_authorize_resource param_method: :cms_blog_category_params, class: "CMS::BlogCategory", find_by: :slug
-  layout "admin"
+  layout "settings"
 
   # GET /cms/blog_categories
   # GET /cms/blog_categories.json

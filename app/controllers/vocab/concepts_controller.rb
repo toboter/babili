@@ -5,6 +5,11 @@ class Vocab::ConceptsController < ApplicationController
   before_action :set_language
 
   def index
+    set_meta_tags title: "Concepts | #{@scheme.abbr} | Vocabularies | #{@namespace.name}",
+                  description: "Concepts in #{@scheme.title}",
+                  noindex: true,
+                  follow: true
+
     if params[:q].present?
       @concepts = Vocab::Concept.search(params[:q], 
         fields: [:type, :narrower, 'labels^20', 'notes^5', :matches], 
@@ -14,11 +19,16 @@ class Vocab::ConceptsController < ApplicationController
   end
 
   def show
+    set_meta_tags title: "#{@concept.name} | Concepts | #{@namespace.name}",
+                  description: "#{@concept.name}, #{@concept.definitions.try(:first).try(:body)}",
+                  index: true,
+                  follow: true
     @definition = @concept.definitions.where(language: @language).first || @concept.definitions.first
     @other_definitions = @concept.notes-[@definition]
   end
 
   def new
+    set_meta_tags title: "New | Concepts | #{@namespace.name}"
     @concept.broader_concept_ids = [Vocab::Concept.friendly.find(params[:broader_concept]).id] if params[:broader_concept]
     @concept.type = params[:type] ? params[:type] : 'Concept'
     @concept.labels.build
@@ -26,6 +36,7 @@ class Vocab::ConceptsController < ApplicationController
   end
 
   def edit
+    set_meta_tags title: "Edit | Concepts | #{@namespace.name}"
   end
 
   # POST /vocabularies/:id/concepts

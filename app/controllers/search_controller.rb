@@ -4,6 +4,9 @@ class SearchController < ApplicationController
   include ERB::Util
 
   def index
+    set_meta_tags title: 'Search',
+                  description: 'Search results page'
+
     if params[:q].present?
       @repos = user_signed_in? ? current_user.oread_enrolled_applications : Oread::Application.where(enroll_users_default: true)
       @results =[]

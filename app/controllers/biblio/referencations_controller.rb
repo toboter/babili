@@ -5,6 +5,10 @@ class Biblio::ReferencationsController < ApplicationController
   DEFAULT_PER_PAGE = 50
 
   def index
+    set_meta_tags title: 'Bibliographic references | ' + @repository.name_tree.reverse.join(' | '),
+                  description: 'List of organizations on babylon-online',
+                  noindex: true,
+                  follow: true
     @entries = @repository.referencations.joins(:entry).where.not('biblio_entries.type IN (?)', ['Biblio::Serie', 'Biblio::Journal']).order('biblio_entries.slug asc').pluck('biblio_entries.id')
 
     query = params[:q].presence || '*'

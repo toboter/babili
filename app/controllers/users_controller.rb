@@ -3,9 +3,14 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
   load_and_authorize_resource
-  layout "admin", only: [:index]
+  layout "settings", only: [:index]
   
   def index
+    set_meta_tags title: 'Users | Admin | Settings',
+                  description: 'Admin users page',
+                  noindex: true,
+                  nofollow: true
+
     @users = User.order(approved: :asc, created_at: :desc) # .where.not(id: current_user.id)
   end
 

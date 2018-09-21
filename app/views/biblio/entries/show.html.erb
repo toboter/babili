@@ -1,11 +1,9 @@
-<% title @entry.citation %>
-
 <% content_for :container do %>
   <div class="wrapper biblio" id="biblio-entry-<%= @entry.id %>">
     <div class="row">
       <div class="col-md-12">
         <%= content_tag :h4, class: 'h-condensed --spacious-20' do %>
-          <%= link_to 'References', biblio_entries_path %>
+          <%= link_to 'Bibliographic references', biblio_entries_path %>
           <%= content_tag :span, ' / ', class: 'text-gray' %>
           <%= content_tag :span, @entry.citation, class: 'text-gray text-strong' %>
           <%= content_tag :div, class: 'pull-right' do %>

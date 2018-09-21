@@ -1,11 +1,14 @@
 class Biblio::ImportsController < ApplicationController
 
   def new
+    set_meta_tags title: 'Import | Bibliographic references',
+                  description: 'Import bibliographic references into babylon-online',
+                  noindex: true,
+                  nofollow: true
     @repository = Repository.find(params[:repo_id])
     @referencation = Biblio::Referencation.new(repository_id: @repository.id, creator: current_person)
     authorize! :add_reference, @referencation
     @import = Biblio::Import.new(repository: @repository)
-    authorize! :new, @import
   end
 
   def create
@@ -14,7 +17,7 @@ class Biblio::ImportsController < ApplicationController
     @import.repository = Repository.find(import_params[:repository])
     @repository = @import.repository
 
-    authorize! :create, @import
+    authorize! :update, @repository
     respond_to do |format|
       if @import.save
         format.html { redirect_to namespace_repository_biblio_references_path(@repository.owner, @repository), notice: "BibTeX successfully imported." }

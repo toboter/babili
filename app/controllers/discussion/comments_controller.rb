@@ -6,11 +6,15 @@ module Discussion
     load_and_authorize_resource :comment, through: :thread
 
     def new
+      set_meta_tags title: 'New comment | Discussions',
+                    description: "Add a new comment on #{@thread.title}"
       @comment.author = current_user.person
       render layout: 'repositories/base' if @repository.present?
     end
 
     def edit
+      set_meta_tags title: 'Edit comment | Discussions',
+                    description: "Edit comment on #{@thread.title}"
       respond_to do |format|
         format.html { render layout: 'repositories/base' if @repository.present? }
         format.js

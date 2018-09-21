@@ -1,5 +1,9 @@
 class ContactMessagesController < ApplicationController
   def new
+    set_meta_tags title: 'Contact',
+                  description: 'Get in contact with our support',
+                  noindex: true,
+                  nofollow: true
     @message = ContactMessage.new
   end
 

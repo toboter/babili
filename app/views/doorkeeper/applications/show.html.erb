@@ -1,13 +1,3 @@
-<% title t('.title', name: @application.name), false %>
-
-<% content_for :breadcrumbs do %>
-  <%= content_tag :li, link_to('Home', root_url) %>
-  <%= content_tag :li, link_to('Explore', explore_url) %>
-  <%= content_tag :li, 'OAuth applications', class: 'active'  %>
-  <%= content_tag :li, yield(:title), class: 'active'  %>
-<% end %>
-
-
 <% content_for :container do %>
   <div class="row">
     <div class="col-md-12">

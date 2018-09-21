@@ -6,11 +6,12 @@ class Oread::ApplicationsController < ApplicationController
   before_action :set_application, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, except: :show
   load_and_authorize_resource class: "Oread::Application"
-  layout "admin", except: :show
+  layout "settings", except: :show
         
   # GET /applications
   # GET /applications.json
   def index
+    set_meta_tags title: 'Collections - Repositories | Admin | Settings'
     # oread_application_ownerships
     @applications = Oread::Application.order(name: :asc)
   end
@@ -18,6 +19,7 @@ class Oread::ApplicationsController < ApplicationController
   # GET /applications/1
   # GET /applications/1.json
   def show
+    set_meta_tags title: @application.name + ' | Collections - Repositories'
     @access_tokens = @application.access_tokens.where(resource_owner: current_user)
     @token = @access_tokens.last
     if params[:q].present?
@@ -34,12 +36,14 @@ class Oread::ApplicationsController < ApplicationController
 
   # GET /applications/new
   def new
+    set_meta_tags title: 'New | Collections - Repositories'
     @application = Oread::Application.new
     @application.collection_classes.build
   end
 
   # GET /applications/1/edit
   def edit
+    set_meta_tags title: 'Edit | Collections - Repositories'
   end
 
   # POST /applications

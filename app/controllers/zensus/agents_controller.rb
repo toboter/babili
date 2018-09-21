@@ -2,6 +2,10 @@ class Zensus::AgentsController < ApplicationController
   load_and_authorize_resource find_by: :slug
 
   def index
+    set_meta_tags title: 'Agents',
+                  description: "Listing agents (individuals and groups) from Zensus",
+                  noindex: true,
+                  follow: true
     @agents = @agents.where(type: params[:type]) if params[:type]
   end
 

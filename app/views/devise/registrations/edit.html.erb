@@ -1,8 +1,12 @@
-<% title "Account settings", false %>
+<% set_meta_tags title: "Account | Settings",
+                 description: "General settings on the account" %>
 
-<% content_for :breadcrumbs do %>
-  <%= content_tag :li, yield(:title), class: 'active' %>
-<% end %>
+<div class="page-header" style="margin-top:0px;">
+  <h3 style="margin-top:0px;">
+    Account
+  </h3>
+  <p class="text-gray">Change your password or email or cancel your account.</p>
+</div>
 
 <div class="row">
   <div class="col-md-10">

@@ -1,11 +1,11 @@
-<% title 'Public profile' %>
-
-<% content_for :breadcrumbs do %>
-  <%= content_tag :li, yield(:title), class: 'active' %>
-<% end %>
+<div class="page-header" style="margin-top:0px;">
+  <h3 style="margin-top:0px;">
+    General profile settings
+  </h3>
+  <p class="text-gray"></p>
+</div>
 
 <%= simple_form_for @person, url: settings_person_path, method: :put do |f| %>
-
   <div class="row">
       <div class="col-md-12">
       <%= f.error_notification %>

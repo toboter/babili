@@ -1,2 +1,0 @@
-module CMS::HelpCategoriesHelper
-end

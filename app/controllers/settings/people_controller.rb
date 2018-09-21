@@ -3,6 +3,8 @@ class Settings::PeopleController < ApplicationController
   layout "settings"
 
   def edit
+    set_meta_tags title: "Your profile | Settings",
+                  description: "General settings on the person"
     @person = current_person
   end
 

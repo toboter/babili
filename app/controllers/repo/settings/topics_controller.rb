@@ -5,7 +5,6 @@ class Repo::Settings::TopicsController < ApplicationController
   def edit
     authorize! :edit_topic, @repository
     respond_to do |format|
-      format.html { render :edit }
       format.js
     end
   end
@@ -14,7 +13,7 @@ class Repo::Settings::TopicsController < ApplicationController
     authorize! :update_topic, @repository
     respond_to do |format|
       if @repository.update(repository_topic_params)
-        format.js
+        format.js { render js: "toastr['success']('Successfully updated topics!');", status: 200 }
       else
         format.js { head :bad_request }
       end

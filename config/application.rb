@@ -20,7 +20,7 @@ module Babili
     
     config.to_prepare do
       # Only Applications list
-      Doorkeeper::ApplicationsController.layout "developer"
+      Doorkeeper::ApplicationsController.layout "settings"
     
       # Only Authorization endpoint
       Doorkeeper::AuthorizationsController.layout "application"

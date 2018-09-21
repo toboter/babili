@@ -6,6 +6,10 @@ module Discussion
     load_and_authorize_resource :assignment, through: :thread
 
     def index
+      set_meta_tags title: 'Assignments | ' + view_context.truncate(@thread.title, length: 10) + ' | ' + @repository.name_tree.reverse.join(' | '),
+                    description: "Assignments for #{@thread.title}",
+                    noindex: true,
+                    follow: true
       @assignees = Namespace.all-@thread.assignees
       respond_to do |format|
         format.html { render layout: 'repositories/base' if @repository.present? }
@@ -14,6 +18,8 @@ module Discussion
     end
 
     def new
+      set_meta_tags title: 'Assign person | ' + view_context.truncate(@thread.title, length: 8) + ' | ' + @repository.name_tree.reverse.join(' | '),
+                    description: "Assigns a new person to #{@thread.title}"
       @assignees = Namespace.all-@thread.assignees
       @assignment.assigner = current_user.person
       respond_to do |format|

@@ -6,12 +6,16 @@ class Settings::OrganizationsController < ApplicationController
   # GET /settings/organizations
   # GET /settings/organizations.json
   def index
+    set_meta_tags title: "Teams | Settings",
+                  description: "List of organization memberships"
     @applyments = current_person.memberships.joins(:organization).where(verified: false).order('organizations.name ASC')
     @memberships = current_person.memberships.joins(:organization).where(verified: true).order('organizations.name ASC')
   end
 
   # GET /settings/organizations/new
   def new
+    set_meta_tags title: "New | Teams | Settings",
+                  description: "Add a new organization"
     @organization = Organization.new
     @people = Person.all
     @organization.memberships.build(person: current_person, role: 'Admin', verified: true)
@@ -19,6 +23,8 @@ class Settings::OrganizationsController < ApplicationController
 
   # GET /settings/organizations/1/edit
   def edit
+    set_meta_tags title: "Edit | Teams | Settings",
+                  description: "Edit an organization"
     @people = Person.all
   end
 

@@ -4,8 +4,11 @@ class Repo::Settings::OptionsController < ApplicationController
   layout 'repositories/settings'
 
   def edit
+    set_meta_tags title: "Settings | #{@repository.name_tree.reverse.join(' | ')}",
+                  description: "Edit repository settings"
   end
 
+  # put
   def name
     authorize! :name, @repository
     respond_to do |format|

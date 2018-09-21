@@ -5,6 +5,8 @@ class Repo::Settings::CollaborationsController < ApplicationController
   layout 'repositories/settings'
 
   def index
+    set_meta_tags title: "Collaborations | #{@repository.name_tree.reverse.join(' | ')}",
+                  description: "#{@repository.name_tree.reverse.join(' | ')} collaborations overview"
     authorize! :read_collaborations, @repository
     @collaborations = @repository.collaborations
     @potential_collabs = Person.all - @repository.accessors - @repository.invited_collaborators

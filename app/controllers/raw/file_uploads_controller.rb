@@ -5,6 +5,10 @@ class Raw::FileUploadsController < ApplicationController
   # GET /raw/file_uploads/1
   # GET /raw/file_uploads/1.json
   def show
+    set_meta_tags title: "#{@file_upload.file[:original].original_filename} | Files | RawContent",
+                  description: "#{@file_upload.type.demodulize} #{@file_upload.file[:original].original_filename}",
+                  index: true,
+                  follow: true
   end
 
   def view_file
@@ -22,6 +26,8 @@ class Raw::FileUploadsController < ApplicationController
 
   # GET /raw/file_uploads/new
   def new
+    set_meta_tags title: "Upload | Files | RawContent",
+                  description: "Upload a new file"
     @file_upload = Raw::FileUpload.new
   end
 
@@ -47,9 +53,8 @@ class Raw::FileUploadsController < ApplicationController
   end
 
   def publish
-    publishing_params = params[:button] == 'depublish' ? {published: false, published_at: nil, publisher: nil} : {published: true, published_at: Time.now, publisher: current_person}
     respond_to do |format|
-      if @file_upload.update(publishing_params)
+      if params[:button] == 'depublish' ? @file_upload.depublish : @file_upload.publish(current_person)
         format.html { redirect_to raw_file_upload_path(@file_upload), notice: "File was successfully #{params[:button]}ed." }
         format.json { render json: @file_upload, status: 200, serializer: Raw::FileUploadSerializer }
       else

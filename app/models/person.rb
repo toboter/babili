@@ -11,7 +11,7 @@ class Person < ApplicationRecord
   has_one :user
   has_one :namespace, as: :subclass, dependent: :destroy
   has_many :repositories, through: :namespace
-  belongs_to :agent, class_name: 'Zensus::Agent', optional: true
+  belongs_to :agent, class_name: 'Zensus::Person', optional: true
 
   has_many :document_authorships, class_name: 'PaperTrail::Version', foreign_key: :whodunnit
   has_many :documents, -> { distinct }, through: :document_authorships, source: :item, source_type: 'Writer::Document'

@@ -1,13 +1,7 @@
-<% title t('.title'), false %>
-
-<% content_for :breadcrumbs do %>
-  <%= content_tag :li, yield(:title), class: 'active' %>
-<% end %>
-
 <main role="main">
   <div class="page-header" style="margin-top:0px;">
     <h3 style="margin-top:0px;">
-      <%= yield(:title) %>
+      <%= t('.title') %>
       <%= link_to t('.new'), new_oauth_application_path, class: 'btn btn-default text-strong pull-right' if can?(:create, Doorkeeper::Application) %>
     </h3>
     <p class="text-gray">OAuth applications are used to access the babylon-online.org API.</p>

@@ -8,6 +8,10 @@ module Writer
     layout 'repositories/base'
 
     def index
+      set_meta_tags title: "Docs | #{@repository.name_tree.reverse.join(' | ')}",
+                    description: "Listing documents within #{@repository.name}",
+                    noindex: true,
+                    follow: true
       @documents = @repository.documents.accessible_by(current_ability)
       query = params[:q].presence || '*'
       sorted_by = params[:sorted_by] ||= 'created_desc'
@@ -27,12 +31,18 @@ module Writer
     end
 
     def show
+      set_meta_tags title: "#{view_context.truncate(@document.title, length: 26)} | #{@repository.name_tree.reverse.join(' | ')}",
+                    description: "Showing document #{@document.title} from #{@repository.name}",
+                    index: true,
+                    follow: true
     end
 
     def new
+      set_meta_tags title: "New | Docs | #{@repository.name_tree.reverse.join(' | ')}"
     end
 
     def edit
+      set_meta_tags title: "Edit | Docs | #{@repository.name_tree.reverse.join(' | ')}"
     end
 
     def create

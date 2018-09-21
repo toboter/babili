@@ -25,14 +25,17 @@ Coming with *docs*:
 * discussion mods 
 * new docs feature on repositories.
 * new blog / help / dev categories feature for repo docs
-* new insight view on person
+* new insight view on person with latest docs, repos and literature
 * person and agent connection and corresponding partials
+* review of all meta tags
+* new file_upload publishing. When adding a file to a comment or when publishing a document, the file will be published too.
 
 * many many bugfixes
 
 
 # todo
 * Ladegeschwindigkeit bei bibliographie
+* ability file spliten
 * discussions need to use the repo permission control.
 * better error pages in production
 * favicon

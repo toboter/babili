@@ -1,11 +1,9 @@
-<% title "References", false %>
-
 <% content_for :container do %>
   <div class="wrapper biblio">
     <div class="row --spacing-20 --spacious-10">
       <div class="col-md-9 col-xs-7">
         <%= content_tag :h4, class: '' do %>
-          <%= link_to yield(:title), biblio_entries_path %>
+          <%= link_to 'Bibliographic references', biblio_entries_path %>
         <% end %>
       </div>
       <div class="col-md-3 col-xs-5">

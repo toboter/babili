@@ -3,11 +3,11 @@ class Settings::NamespacesController < ApplicationController
   before_action :set_namespace
   layout "settings"
 
-
   def edit
+    set_meta_tags title: "Edit | Namespace | Settings",
+                  description: "Edit personal namespace"
     authorize! :edit, @namespace
   end
-
 
   def update
     authorize! :update, @namespace

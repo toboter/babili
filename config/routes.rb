@@ -208,7 +208,7 @@ Rails.application.routes.draw do
     end
 
     namespace :biblio, path: 'bibliography' do
-      get '/', to: 'home#index'
+      get '/', to: 'entries#index'
       resources :entries, only: :index do
         post :add_repositories, to: 'referencations#add_repository', on: :member
       end
@@ -388,7 +388,7 @@ Rails.application.routes.draw do
     get '/internal/referenceables', to: 'references#referenceables'
 
     resources :namespaces, only: :show, path: '' do
-      resources :members, only: :index
+      resources :memberships, only: :index
       resources :applications
       namespace :vocab, path: 'vocabularies' do
         resources :schemes, path: '' do

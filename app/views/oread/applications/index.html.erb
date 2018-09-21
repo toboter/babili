@@ -1,15 +1,12 @@
-<% title "Repositories" %>
-
-<% content_for :breadcrumbs do %>
-  <%= content_tag :li, yield(:title), class: 'active' %>
-<% end %>
-<% content_for :buttons do %>
-  <%= link_to 'Create new integration', new_settings_admin_oread_application_path, class: 'btn btn-default text-strong' %>
-<% end if can? :create, Oread::Application %>
-
-<p class="text-muted">Paths and their repositories listet here will offer their data for keywords search.<p>
-
 <main role="main">
+  <div class="page-header" style="margin-top:0px;">
+    <h3 style="margin-top:0px;">
+      Collection repositories
+      <%= link_to 'Create new integration', new_settings_admin_oread_application_path, class: 'btn btn-default text-strong pull-right' if can? :create, Oread::Application %>
+    </h3>
+    <p class="text-gray">Paths and their repositories listet here will offer their data for keywords search.</p>
+  </div>
+
   <table class="table table-simple">
     <thead>
     <tr>

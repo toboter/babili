@@ -1,3 +1,5 @@
+require 'html_to_plain_text'
+
 module Writer
   class Document < ApplicationRecord
     # t.integer   :repository_id
@@ -45,10 +47,10 @@ module Writer
     accepts_nested_attributes_for :categorizations, allow_destroy: true
 
     before_validation do
-      striped_content = ActionView::Base.full_sanitizer.sanitize(content.gsub("<br>", ' ').gsub("<\p>", ' '))
-      self.title = striped_content.truncate_words(5) if title.blank? && content.present?
-      self.char_count = striped_content.length
-      self.word_count = striped_content.scan(/[\w-]+/).size
+      striped_content_arr = HtmlToPlainText.plain_text(content).split(/\n/).reject(&:empty?)
+      self.title = striped_content_arr[0].truncate_words(5) if title.blank? && content.present?
+      self.char_count = striped_content_arr.join(' ').length
+      self.word_count = striped_content_arr.join(' ').scan(/[\w\.-]+/).size
     end
     before_validation :extract_attachments
 
@@ -93,6 +95,7 @@ module Writer
         end
       end
       set_references(references) if content_changed?
+      files.each{|f| f.publish(publisher)} if published_at_changed? && published_at != nil
     end
 
     def set_references(values)

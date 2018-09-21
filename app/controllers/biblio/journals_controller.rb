@@ -2,6 +2,10 @@ class Biblio::JournalsController < ApplicationController
   load_and_authorize_resource
 
   def index
+    set_meta_tags title: 'Journals | Bibliographic references',
+                  description: 'List of journals on babylon-online',
+                  noindex: true,
+                  follow: true
     @journals = Biblio::Journal.order(citation_raw: :asc).all   
     
     respond_to do |format|
@@ -11,6 +15,10 @@ class Biblio::JournalsController < ApplicationController
   end
 
   def show
+    set_meta_tags title: (@journal.abbr.presence || @journal.name) + ' | Journals',
+                  description: @journal.name,
+                  index: true,
+                  follow: true
     @entry = @journal
     @discussions = @entry.referencings.where(referencing_type: 'Discussion::Comment')
     respond_to do |format|
@@ -19,11 +27,15 @@ class Biblio::JournalsController < ApplicationController
     end
   end
 
-  def new 
+  def new
+    set_meta_tags title: 'New | Journals',
+                  description: 'Add new journal'
     @entry = @journal
   end
 
   def edit
+    set_meta_tags title: 'Edit | Journals',
+                  description: 'Edit journal'
     @entry = @journal
   end
     

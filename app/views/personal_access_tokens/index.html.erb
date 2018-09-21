@@ -1,13 +1,11 @@
-<% title 'Personal access tokens' %>
+<div class="page-header" style="margin-top:0px;">
+  <h3 style="margin-top:0px;">
+    Personal access tokens
+    <%= link_to 'Generate new token', new_personal_access_token_path, class: 'btn btn-default text-strong pull-right' if can?(:create, Doorkeeper::Application) %>
+  </h3>
+  <p class="text-gray">Tokens you have generated that can be used to access the babili API.</p>
+</div>
 
-<% content_for :breadcrumbs do %>
-  <%= content_tag :li, yield(:title), class: 'active' %>
-<% end %>
-<% content_for :buttons do %>
-  <%= link_to 'Generate new token', new_personal_access_token_path, class: 'btn btn-default text-strong' %>
-<% end if can?(:create, Doorkeeper::Application) %>
-
-<p>Tokens you have generated that can be used to access the babili API.</p>
 
 <%= content_tag :div, id: "personal-token-notice", class: 'panel panel-info' do %>
   <div class="panel-body bg-info">
