@@ -28,6 +28,7 @@ sudo apt-get install postgis
 * new insight view on person with latest docs, repos and literature
 * person and agent connection and corresponding partials
 * review of all meta tags
+* robots handling and better titles / search console
 * new file_upload publishing. When adding a file to a comment or when publishing a document, the file will be published too.
 * many many bugfixes
 
@@ -41,5 +42,5 @@ for older changes see commit log.
 * discussions need to use the repo permission control. Warum?
 * better error pages in production
 * favicon
-* robots handling and better titles / search console
+* remove old-cms
 * ...

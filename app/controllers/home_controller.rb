@@ -8,6 +8,10 @@ class HomeController < ApplicationController
     @latest_blog_postings = Writer::Categorization.order(created_at: :desc).includes(:category_node, :document).merge(Writer::CategoryNode.blog_threads).references(:category_node).group_by(&:document).take(5).map{|d,c| c.first}
     @latest_references = Biblio::Entry.where("data->>'year' IS NOT NULL").order("(data ->> 'year') DESC").take(5)
   end
+
+  def google_confirmation
+    render plain: 'google-site-verification: google2a2517cd9855149e.html'
+  end
   
   def about
     set_meta_tags title: 'About',

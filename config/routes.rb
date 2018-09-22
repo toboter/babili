@@ -184,7 +184,7 @@ Rails.application.routes.draw do
   devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}, :controllers => { :registrations => :registrations }
     
   constraints lambda { |r| r.subdomain != 'raw' && r.subdomain != 'api' } do
-    
+    get 'google2a2517cd9855149e.html', to: 'home#google_confirmation'
     require 'sidekiq/web'
 
     get '/discussions', to: 'home#discussions'
