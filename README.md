@@ -18,7 +18,7 @@ sudo apt-get install postgis
 
 
 # Changelog
-Coming with *docs*:
+*docs*
 * rewritten ability class
 * repositories now can have collaborators
 * rewritten repo permission control for user/group owned repositories and collaborators.
@@ -29,7 +29,6 @@ Coming with *docs*:
 * person and agent connection and corresponding partials
 * review of all meta tags
 * new file_upload publishing. When adding a file to a comment or when publishing a document, the file will be published too.
-
 * many many bugfixes
 
 
