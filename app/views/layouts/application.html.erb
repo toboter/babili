@@ -86,14 +86,6 @@
         <% end if content_for?(:breadcrumbs) %>
         <div class="row">
           <div class="col-sm-7 col-md-8 main">
-            <%= content_tag :div, class: "page-header" do %>
-              <h1 class="">
-                <%= yield(:title) if content_for?(:title) %>
-                <div class="pull-right">
-                  <%= yield(:buttons) if content_for?(:buttons) %>
-                </div>
-              </h1>
-            <% end if content_for?(:buttons) || content_for?(:title) && @show_title %>
             <%= yield %>
           </div>
           <div class="col-sm-5 col-md-4 sidebar">

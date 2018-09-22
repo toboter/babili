@@ -1,9 +1,7 @@
-<% title 'Collection applications' %>
-
 <% content_for :breadcrumbs do %>
   <%= content_tag :li, link_to('Home', root_url) %>
   <%= content_tag :li, link_to('Explore', explore_url) %>
-  <%= content_tag :li, yield(:title), class: 'active' %>
+  <%= content_tag :li, 'Collection applications', class: 'active' %>
 <% end %>
 
 <div class="row">

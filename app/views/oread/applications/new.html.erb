@@ -1,7 +1,5 @@
-<% title "New integration" %>
-
 <% content_for :breadcrumbs do %>
-  <%= content_tag :li, yield(:title), class: 'active' %>
+  <%= content_tag :li, "New integration", class: 'active' %>
 <% end %>
 
 <%= render 'form', application: @application %>

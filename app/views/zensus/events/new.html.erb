@@ -1,8 +1,6 @@
-<% title 'New event' %>
-
 <% content_for :breadcrumbs do %>
   <%= content_tag :li, link_to('Events', zensus_events_path) %>
-  <%= content_tag :li, yield(:title), class: 'active' %>
+  <%= content_tag :li, 'New', class: 'active' %>
 <% end %>
 
 <%= render 'form', event: @event %>

@@ -1,9 +1,7 @@
-<% title "CMS Blog Categories" %>
-
 <% content_for :breadcrumbs do %>
-  <%= content_tag :li, yield(:title), class: 'active' %>
+  <%= content_tag :li, "CMS Blog Categories", class: 'active' %>
 <% end %>
-<% content_for :buttons do %>
+<% content_tag :div do %>
   <%= link_to 'Create a new CMS Blog Category', new_cms_admin_blog_category_path, class: 'btn btn-default text-strong' %>
 <% end if can?(:create, CMS::BlogCategory) %>
 

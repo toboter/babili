@@ -20,7 +20,6 @@ module Zensus
     has_many    :inverse_related_events, through: :inverse_event_relations, source: :event
     has_many    :activities, dependent: :destroy
     has_many    :agents, through: :activities, source_type: 'Zensus::Agent', source: :actable
-    has_many    :notes, as: :issueable
     belongs_to  :place, class_name: 'Locate::Place'
     belongs_to  :period, class_name: 'Vocab::Concept'
     belongs_to  :creator, class_name: "Person"

@@ -418,7 +418,7 @@ Rails.application.routes.draw do
         end
         namespace :aggregation, path: 'data' do
           namespace :event, path: 'events' do
-            resources :upload_events, path: 'upload', only: [:new, :create]
+            resources :uploads, path: 'upload', only: [:new, :create]
             # resources :list_transforms, only: [:new, :create] # gehört an lists/:id/transform
           end
           resources :events, only: [:index, :show, :destroy] do

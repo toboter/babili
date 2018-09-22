@@ -1,3 +1,4 @@
+
 class Aggregation::Event::UploadEvent < Aggregation::Event
   require 'roo'
   include AttrJson::Record

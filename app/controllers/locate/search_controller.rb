@@ -1,6 +1,10 @@
 class Locate::SearchController < ApplicationController
 
   def index
+    set_meta_tags title: 'Search | Locate',
+                  description: "Search results page for Locate",
+                  noindex: true,
+                  follow: true
     @results = Searchkick.search(params[:q], 
       fields: [:type, :description, :name, :datings], 
       index_name: [Locate::Place],

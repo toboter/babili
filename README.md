@@ -35,8 +35,9 @@ Coming with *docs*:
 
 # todo
 * Ladegeschwindigkeit bei bibliographie
-* ability file spliten
-* discussions need to use the repo permission control.
+* split ability file
+* Neues Event-Model für Zensus
+* discussions need to use the repo permission control. Warum?
 * better error pages in production
 * favicon
 * robots handling and better titles / search console

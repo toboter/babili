@@ -1,5 +1,7 @@
-class Aggregation::Event::UploadEventsController < Aggregation::EventsController
+class Aggregation::Event::UploadsController < Aggregation::EventsController
   def new
+    @event = Aggregation::Event::UploadEvent.new(repository: @repository)
+    authorize! :new, @event
   end
 
   def create

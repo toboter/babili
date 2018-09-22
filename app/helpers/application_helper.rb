@@ -1,10 +1,4 @@
 module ApplicationHelper
-
-  def title(page_title, show_title = true) #deprecated
-    content_for(:title) { h(page_title.to_s) }
-    @show_title = show_title
-  end
-
   def commentify(content)
     pipeline_context = { whitelist: Sanitize::Config::RELAXED }
     pipeline = HTML::Pipeline.new [

@@ -4,20 +4,30 @@ class Locate::PlacesController < ApplicationController
   # GET /locate/places
   # GET /locate/places.json
   def index
+    set_meta_tags title: 'Places | Locate',
+                  description: "Listing places from Locate",
+                  noindex: true,
+                  follow: true
     @toponyms = Locate::Toponym.where(dating_id: nil).order(descriptor: :asc)
   end
 
   # GET /locate/places/1
   # GET /locate/places/1.json
   def show
+    set_meta_tags title: "#{@place.default_name} | Places | Locate",
+                  description: "Listing places from Locate",
+                  index: true,
+                  follow: true
   end
 
   # GET /locate/places/new
   def new
+    set_meta_tags title: 'New | Places | Locate'
   end
 
   # GET /locate/places/1/edit
   def edit
+    set_meta_tags title: 'Edit | Places | Locate'
   end
 
   # POST /locate/places

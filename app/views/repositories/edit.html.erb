@@ -1,17 +1,12 @@
-<% title 'Edit repository' %>
-
-  <div class="row">
-
-    <div class="col-sm-12 col-md-9 main">
-      <%= simple_form_for [@namespace, @repository] do |f| %>
-        <%= f.error_notification %>
-        <%= f.input :description %>
-
-        <div class="actions --spacious">
-          <%= f.submit class: 'btn btn-primary' %>
-          <%= link_to 'Cancel', (f.object.new_record? ? namespace_repositories_path(@namespace) : namespace_repository_path(@namespace, @repository)), class: "btn btn-default" %>
-        </div>
-        
-      <% end %>
-    </div>
+<div class="row">
+  <div class="col-sm-12 col-md-9 main">
+    <%= simple_form_for [@namespace, @repository] do |f| %>
+      <%= f.error_notification %>
+      <%= f.input :description %>
+      <div class="actions --spacious">
+        <%= f.submit class: 'btn btn-primary' %>
+        <%= link_to 'Cancel', (f.object.new_record? ? namespace_repositories_path(@namespace) : namespace_repository_path(@namespace, @repository)), class: "btn btn-default" %>
+      </div>
+    <% end %>
   </div>
+</div>

@@ -3,15 +3,25 @@ class Zensus::ActivitiesController < ApplicationController
   load_and_authorize_resource through: :event
 
   def index
+    set_meta_tags title: "Activities | #{@event.type.demodulize} | Events | Zensus",
+                  description: "Listing events from Zensus",
+                  noindex: true,
+                  follow: true
   end
 
   def show
+    set_meta_tags title: "#{@activity.actable_to_event} | #{@event.type.demodulize} | Events",
+                  description: "Listing events from Zensus",
+                  noindex: true,
+                  follow: true
   end
 
   def new
+    set_meta_tags title: "New | Activities | #{@event.type.demodulize} | Events | Zensus"
   end
 
   def edit
+    set_meta_tags title: "Edit | Activities | #{@event.type.demodulize} | Events | Zensus"
   end
 
   def create

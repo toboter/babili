@@ -1,9 +1,7 @@
-<% title "#{@page.title}" %>
-
 <% content_for(:breadcrumbs) do %>
   <%= content_tag :li, link_to('Help', cms_help_pages_url) %>
   <%= content_tag :li, link_to(truncate(@page.category.name, length: 28, separator: ' '), @page.category) %>
-  <%= content_tag :li, yield(:title), class: 'active' %>
+  <%= content_tag :li, @page.title, class: 'active' %>
 <% end %>
 
 <% content_for :container do %>

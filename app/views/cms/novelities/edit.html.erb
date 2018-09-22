@@ -1,8 +1,6 @@
-<% title "Editing: #{@novelity.title}", false %>
-
 <% content_for :breadcrumbs do %>
   <%= content_tag :li, link_to('News', cms_novelities_path) %>
-  <%= content_tag :li, yield(:title), class: 'active' %>
+  <%= content_tag :li, "Editing: #{@novelity.title}", class: 'active' %>
 <% end %>
 
 <%= render 'form', novelity: @novelity %>

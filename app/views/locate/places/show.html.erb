@@ -1,9 +1,7 @@
-<% title @place.default_name %>
-
 <% content_for :breadcrumbs do %>
   <%= content_tag :li, link_to('Locate', locate_path) %>
   <%= content_tag :li, link_to('Places', locate_places_path) %>
-  <%= content_tag :li, yield(:title), class: 'active' %>
+  <%= content_tag :li, @place.default_name, class: 'active' %>
 <% end %>
 
 <% content_for :container do %>

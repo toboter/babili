@@ -1,16 +1,14 @@
-<% title 'Create a new repository' %>
-
 <% content_for :breadcrumbs do %>
   <%= content_tag :li, link_to(@namespace.name, @namespace) %>
   <%= content_tag :li, link_to('Repositories', namespace_repositories_path(@namespace)) %>
-  <%= content_tag :li, yield(:title), class: 'active' %>
+  <%= content_tag :li, 'Create a new repository', class: 'active' %>
 <% end %>
 
 <% content_for :container do %>
   <div class="row">
     <div class="col-sm-12">
       <div class="page-header">
-        <h4><%= yield(:title) %></h4>
+        <h4>Create a new repository</h4>
         <p class="text-gray">A repository contains all your datasets.</p>
       </div>
       <%= simple_form_for [@namespace, @repository] do |f| %>

@@ -2,7 +2,7 @@ class Zensus::AgentsController < ApplicationController
   load_and_authorize_resource find_by: :slug
 
   def index
-    set_meta_tags title: 'Agents',
+    set_meta_tags title: 'Agents | Zensus',
                   description: "Listing agents (individuals and groups) from Zensus",
                   noindex: true,
                   follow: true
@@ -10,9 +10,14 @@ class Zensus::AgentsController < ApplicationController
   end
 
   def show
+    set_meta_tags title: "#{@agent.default_name} | Agents",
+                  description: "Detail view for #{@agent.type.demodulize.downcase} #{@agent.default_name}",
+                  index: true,
+                  follow: true
   end
 
   def new
+    set_meta_tags title: "New | Agents"
     @agent = Zensus::Agent.new(type: params[:type])
     @agent.appellations.build do |a|
       a.appellation_parts.build
@@ -20,6 +25,7 @@ class Zensus::AgentsController < ApplicationController
   end
 
   def edit
+    set_meta_tags title: "Edit | Agents"
   end
 
   def create

@@ -2,6 +2,10 @@ class Zensus::EventsController < ApplicationController
   load_and_authorize_resource
 
   def index
+    set_meta_tags title: 'Events | Zensus',
+                  description: "Listing events from Zensus",
+                  noindex: true,
+                  follow: true
     respond_to do |format|
       format.html
       format.json  { render json: @events, include: :activities, methods: [:description, :default_date] }
@@ -9,9 +13,14 @@ class Zensus::EventsController < ApplicationController
   end
 
   def show
+    set_meta_tags title: "#{@event.title} | Events | Zensus",
+                  description: "Detail view for #{@event.type.demodulize.downcase}",
+                  index: true,
+                  follow: true
   end
 
   def new
+    set_meta_tags title: "New | Events | Zensus"
     respond_to do |format|
       format.html
       format.js
@@ -19,6 +28,7 @@ class Zensus::EventsController < ApplicationController
   end
 
   def edit
+    set_meta_tags title: "Edit | Events | Zensus"
   end
 
   def create

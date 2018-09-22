@@ -1,11 +1,9 @@
-<% title "New #{@concept.type}" %>
-
 <% content_for :breadcrumbs do %>
   <%= content_tag :li, link_to(@namespace.name, @namespace) %>
   <%= content_tag :li, link_to('Vocabularies', namespace_vocab_schemes_path(@namespace)) %>
   <%= content_tag :li, link_to(@scheme.title, namespace_vocab_scheme_path(@namespace, @scheme)) %>
   <%= content_tag :li, link_to('Concepts', namespace_vocab_scheme_concepts_path(@namespace, @scheme)) %>
-  <%= content_tag :li, yield(:title), class: 'active' %>
+  <%= content_tag :li, "New #{@concept.type}", class: 'active' %>
 <% end %>
 
 <%= render 'form', concept: @concept %>

@@ -1,5 +1,3 @@
-<% title "Discussions \\ #{@repository.name} \\ #{@namespace.name}", false %>
-
 <%= content_tag :div, class: "row" do %>
   <div class="col-md-5">
     <%= form_tag [@namespace, @repository, @entry, :discussion, :threads], method: :get, class: "" do %>

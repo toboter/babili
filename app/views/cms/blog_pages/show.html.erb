@@ -1,9 +1,7 @@
-<% title "#{@blog.title}" %>
-
 <% content_for(:breadcrumbs) do %>
   <%= content_tag :li, link_to('Blog', cms_blog_pages_url) %>
   <%= content_tag :li, link_to(@blog.category.try(:name), @blog.category) %>
-  <%= content_tag :li, yield(:title), class: 'active' %>
+  <%= content_tag :li, @blog.title, class: 'active' %>
 <% end %>
 
 <% content_for :container do %>

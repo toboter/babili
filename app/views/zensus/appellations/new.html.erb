@@ -1,9 +1,7 @@
-<% title 'New name' %>
-
 <% content_for :breadcrumbs do %>
   <%= content_tag :li, link_to('Zensus', zensus_path) %>
   <%= content_tag :li, link_to('Names', zensus_names_path) %>
-  <%= content_tag :li, yield(:title), class: 'active' %>
+  <%= content_tag :li, 'New', class: 'active' %>
 <% end %>
 
 <%= render 'form', appellation: @appellation %>

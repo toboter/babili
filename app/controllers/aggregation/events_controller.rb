@@ -1,15 +1,23 @@
 class Aggregation::EventsController < ApplicationController
   load_resource :namespace
   load_resource :repository, through: :namespace
-  load_and_authorize_resource :event, through: :repository, except: :index
+  load_and_authorize_resource :event, through: :repository, except: [:index, :new]
   layout 'repositories/base'
   
   # vererbt an FileUpload, ListTransfer, ApiRequest
   def index
+    set_meta_tags title: "Data events | #{@repository.name_tree.reverse.join(' | ')}",
+                  description: "Listing data events for #{@repository.name_tree.reverse.join(' | ')}",
+                  noindex: true,
+                  follow: true
     @events = @repository.events.accessible_by(current_ability).order(updated_at: :desc)
   end
 
   def show
+    set_meta_tags title: "#{@event.slug} | Data events | #{@repository.name_tree.reverse.join(' | ')}",
+                  description: "Listing data events for #{@repository.name_tree.reverse.join(' | ')}",
+                  index: true,
+                  follow: true
   end
 
   def commit

@@ -1,11 +1,9 @@
-<% title 'Edit activity' %>
-
 <% content_for :breadcrumbs do %>
   <%= content_tag :li, link_to('Events', zensus_events_path) %>
   <%= content_tag :li, link_to(@event.title, zensus_event_path(@event)) %>
   <%= content_tag :li, link_to('Activities', zensus_event_activities_path(@event)) %>
   <%= content_tag :li, link_to(@activity.title, zensus_event_activity_path(@event, @activity)) %>
-  <%= content_tag :li, yield(:title), class: 'active' %>
+  <%= content_tag :li, 'Edit activity', class: 'active' %>
 <% end %>
 
 <%= render 'form', activity: @activity %>

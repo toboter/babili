@@ -3,6 +3,10 @@ class Zensus::AppellationsController < ApplicationController
   DEFAULT_PER_PAGE = 50
 
   def index
+    set_meta_tags title: 'Appellations | Zensus',
+                  description: "Listing all appellations from Zensus",
+                  noindex: true,
+                  follow: true
     query = params[:q].presence || '*'
     per_page = current_user.try(:person).try(:per_page).present? ? current_user.person.per_page : DEFAULT_PER_PAGE
 
@@ -20,13 +24,19 @@ class Zensus::AppellationsController < ApplicationController
   end
 
   def show
+    set_meta_tags title: "#{@appellation.name} | Appellations",
+                  description: "Detail view for #{@appellation.name}",
+                  index: true,
+                  follow: true
   end
 
   def new
+    set_meta_tags title: "New | Appellations"
     @appellation.appellation_parts.build
   end
 
   def edit
+    set_meta_tags title: "Edit | Appellations"
   end
 
   def create

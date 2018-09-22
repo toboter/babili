@@ -3,15 +3,25 @@ class Locate::LocationsController < ApplicationController
   load_and_authorize_resource through: :place
 
   def index
+    set_meta_tags title: "Locations | #{@place.default_name} | Locate",
+                  description: "Listing locations for #{@place.default_name}",
+                  noindex: true,
+                  follow: true
   end
 
   def show
+    set_meta_tags title: "Location | #{@place.default_name} | Locate",
+                  description: "Detail view for location",
+                  index: true,
+                  follow: true
   end
 
   def new
+    set_meta_tags title: "New | Locations | #{@place.default_name} | Locate"
   end
 
   def edit
+    set_meta_tags title: "Edit | Locations | #{@place.default_name} | Locate"
   end
 
   def create
