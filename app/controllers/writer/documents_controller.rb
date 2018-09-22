@@ -12,13 +12,14 @@ module Writer
                     description: "Listing documents within #{@repository.name}",
                     noindex: true,
                     follow: true
+
       @documents = @repository.documents.accessible_by(current_ability)
       query = params[:q].presence || '*'
-      sorted_by = params[:sorted_by] ||= 'created_desc'
-      sort_order = Writer::Document.all.sorted_by(sorted_by) unless @documents.nil?
+      sorted_by = params[:sorted_by] ||= 'updated_desc'
+      sort_order = Writer::Document.sorted_by(sorted_by) unless @documents.nil?
   
       per_page = current_user.try(:person).try(:per_page).present? ? current_user.person.per_page : DEFAULT_PER_PAGE
-  
+ 
       @results = Writer::Document.search(query, 
         fields: [:_all],
         where: { id: @documents.ids },
