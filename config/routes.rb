@@ -358,7 +358,7 @@ Rails.application.routes.draw do
 
     namespace :cms, path: 'old-cms' do
       resources :blog_pages, path: :blog, only: :index
-      scope path: :blog, as: :blig do
+      scope path: :blog do
         resources :blog_categories, only: :show, path: 'categories' do
           get 'all', on: :collection
           get 'unpublished', to: 'blog_categories#unpublished_blogs', on: :collection
