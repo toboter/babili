@@ -15,7 +15,7 @@ module Writer
 
       @documents = @repository.documents.accessible_by(current_ability)
       query = params[:q].presence || '*'
-      sorted_by = params[:sorted_by] ||= 'updated_desc'
+      sorted_by = params[:sorted_by] ||= 'updated_at_desc'
       sort_order = Writer::Document.sorted_by(sorted_by) unless @documents.nil?
   
       per_page = current_user.try(:person).try(:per_page).present? ? current_user.person.per_page : DEFAULT_PER_PAGE
