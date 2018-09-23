@@ -1,5 +1,7 @@
 <h3 class="subhead"><%= @tree_item == @tree_root ? 'Overview' : @tree_item.name %></h3>
 <% @tree_item.articles.each do |article| %>
-  <h4 class="subhead"><%= link_to article.title, writer_category_developer_nested_item_article_path(@tree_item.root? ? nil : @tree_item.root, @tree_item.ancestors.where.not(id: @tree_item.root.id).reverse.map(&:slug).join('/').presence || nil, @tree_item, article) %></h3>
-  <%= content_tag :span, "#{Nokogiri::HTML.parse(article.document.content).css('p').first.text.split(/[\.!?]/).first}.", class: 'text-gray' %>
+  <div class="article-<%= article.id %> --spacing">
+    <h4 class="subhead"><%= link_to article.title, writer_category_developer_nested_item_article_path(@tree_item.root? ? nil : @tree_item.root, @tree_item.ancestors.where.not(id: @tree_item.root.id).reverse.map(&:slug).join('/').presence || nil, @tree_item, article) %></h3>
+    <%= content_tag :span, "#{Nokogiri::HTML.parse(article.document.content).css('p').first.text.split(/[\.!?]/).first}.", class: 'text-gray' %>
+  </div>
 <% end %>

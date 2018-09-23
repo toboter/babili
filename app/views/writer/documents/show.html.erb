@@ -23,6 +23,9 @@
             <%= link_to @document.publisher.name, @document.publisher.namespace %> published this 
             <%= content_tag :span, "#{distance_of_time_in_words(@document.published_at, Time.now)} ago", title: @document.published_at %>
           <% end %>
+          <%= content_tag :div, id="categories" do %>
+            Categorized to: <%= @document.categories.map{|c| content_tag :span, link_to(c.name_tree.join('/'), c.instance_of?(Writer::Category::DeveloperTreeItem) ? writer_category_developer_nested_item_path(c.root? ? nil : c.root, c.ancestors.where.not(id: c.root.id).reverse.map(&:slug).join('/').presence || nil, c) : [:writer, c]) }.join(', ').html_safe %>
+          <% end if @document.categories.any? %>
         <% end %>
         <%= content_tag :div, class: 'col-md-4' do %>
           <% @document.authors.each do |author| %>

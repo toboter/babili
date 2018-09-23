@@ -1,10 +1,10 @@
 <%= link_to writer_category_developer_nested_item_path(item.root? ? nil : item.root, item.ancestors.where.not(id: item.root.id).reverse.map(&:slug).join('/').presence || nil, item) do %>
-  <%= item == @tree_root ? 'Overview' : item.name %>
+  <%= content_tag :span, item == @tree_root ? 'Overview' : item.name, class: 'text-strong' %>
     <%= content_tag :div, class: 'actions pull-right text-small' do %>
-      <%= link_to 'Add', writer_category_developer_new_nested_item_path(item.root? ? nil : item.root, item.ancestors.where.not(id: item.root.id).reverse.map(&:slug).join('/').presence || nil, item) if can?(:new, Writer::Category::DeveloperTreeItem) %>
+      <%= link_to 'Add child', writer_category_developer_new_nested_item_path(item.root? ? nil : item.root, item.ancestors.where.not(id: item.root.id).reverse.map(&:slug).join('/').presence || nil, item) if can?(:new, Writer::Category::DeveloperTreeItem) %>
       <%= '|' if can?(:destroy, item) %>
       <%= link_to 'Remove', writer_category_developer_nested_item_path(item.root? ? nil : item.root, item.ancestors.where.not(id: item.root.id).reverse.map(&:slug).join('/').presence || nil, item), method: :delete, data: {confirm: 'Are you sure?'} if can?(:destroy, item) %>
-    <% end %>
+    <% end unless item == @tree_root %>
   <ul class="list-group" style="margin-bottom:0px;">
     <% item.articles.each do |article| %>
       <li class="list-group-item text-small" style="border:none;padding:0px;margin-top:3px;"><%= link_to article.title, writer_category_developer_nested_item_article_path(item.root? ? nil : item.root, item.ancestors.where.not(id: item.root.id).reverse.map(&:slug).join('/').presence || nil, item, article) %></li>

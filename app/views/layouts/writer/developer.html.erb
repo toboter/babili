@@ -6,7 +6,8 @@
           <%= content_tag :span, link_to('Developer', writer_category_developer_tree_items_path, class: 'text-gray') %>
           <%= content_tag :span, link_to(" / #{@tree_root.name}".html_safe, writer_category_developer_nested_item_path(nil, nil, @tree_root), class: 'text-gray', style: 'font-size: 20px;') if @tree_root %>
           <%= link_to fa_icon('plus', text: 'Root item'), new_writer_category_developer_tree_item_path, class: 'btn btn-default btn-sm text-strong pull-right' if !@tree_item && can?(:new, Writer::Category::DeveloperTreeItem) %>
-          <%= link_to fa_icon('times', text: 'Remove root'), writer_category_developer_nested_item_path(nil, nil, @tree_root), class: 'btn btn-default btn-sm text-strong pull-right', method: :delete, data: {confirm: 'Are you sure?'} if can?(:destroy, @tree_root) %>
+          <%= link_to fa_icon('plus', text: 'Child item'), writer_category_developer_new_nested_item_path(nil, nil, @tree_item), class: 'btn btn-default btn-sm text-strong pull-right', style: 'margin-left:5px;' if @tree_item && @tree_item == @tree_root && can?(:new, Writer::Category::DeveloperTreeItem) %>
+          <%= link_to fa_icon('times', text: 'Remove root'), writer_category_developer_nested_item_path(nil, nil, @tree_root), class: 'btn btn-default btn-sm text-strong pull-right', method: :delete, data: {confirm: 'Are you sure?'} if @tree_item && @tree_item == @tree_root && can?(:destroy, @tree_root) %>
         </h3>
       </div>
     <% end %>
