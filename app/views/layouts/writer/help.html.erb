@@ -3,7 +3,7 @@
     <%= content_tag :div, class: "pagehead", style: "background-color:#FAFBFC;border-bottom:1px solid #e1e4e8;" do %>
       <div class="container">
         <h3>
-          <%= link_to 'Help', writer_category_help_categories_path, style: 'color:#0366d6', class: 'no-link' %>
+          <%= link_to('Help', writer_category_help_categories_path, class: 'text-gray') %>
           <% @category.self_and_ancestors.reverse.each do |category| %>
             <%= content_tag :span, " / #{link_to(category.name, writer_category_help_category_path(category), style: 'color:#0366d6', class: 'no-link')}".html_safe, class: 'text-gray', style: 'font-size: 20px;' %>
             <%= content_tag :div, class: 'pull-right' do %>

@@ -3,8 +3,8 @@
     <%= content_tag :div, class: "pagehead", style: "background-color:#FAFBFC;border-bottom:1px solid #e1e4e8;" do %>
       <div class="container">
         <h3>
-          Blog
-          <%= content_tag :span, ' / ' + @thread.name, class: 'text-gray', style: '    font-size: 20px;' if @thread && !@thread.new_record? %>
+          <%= content_tag :span, link_to('Blog', writer_category_blog_threads_path, class: 'text-gray') %>
+          <%= content_tag :span, ' / ' + @thread.name, class: 'text-gray', style: 'font-size: 20px;' if @thread && !@thread.new_record? %>
         </h3>
       </div>
     <% end %>

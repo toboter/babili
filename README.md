@@ -32,7 +32,7 @@ sudo apt-get install postgis
 * new file_upload publishing. When adding a file to a comment or when publishing a document, the file will be published too.
 * many many bugfixes
 
-for older changes see commit log.
+for older changes and minor updates see commit log.
 
 
 # todo
