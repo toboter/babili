@@ -1,4 +1,10 @@
 module ApplicationHelper
+  def plain_first_paragraph(html_content, split_if_length_gth=120)
+    paragraph = Nokogiri::HTML.parse(html_content).css('p').first&.text
+    paragraph = paragraph.split(/[\.!?]/)&.first if paragraph && paragraph.length > split_if_length_gth
+    paragraph ? "#{paragraph}#{'.' unless paragraph.match?(/[\.!?:]$/)}" : nil
+  end
+
   def commentify(content)
     pipeline_context = { whitelist: Sanitize::Config::RELAXED }
     pipeline = HTML::Pipeline.new [
