@@ -1,8 +1,8 @@
 module ApplicationHelper
   def plain_first_paragraph(html_content)
-    paragraph = Nokogiri::HTML.parse(html_content).css('p').first&.text
-    paragraph = paragraph.split(/\D[\.\!\?\:\n]/).first if paragraph.present?
-    paragraph ? "#{paragraph}#{'.' unless paragraph.match?(/[\.\!\?\:]$/)}" : nil
+    paragraph = Nokogiri::HTML.parse(html_content).css('p')&.first&.children&.first&.text
+    paragraph = paragraph.split(/\D[\.\!\?\:]\s|\n/).first if paragraph.present? 
+    paragraph ? "#{paragraph}#{'.' unless paragraph.lstrip.match?(/[\.\!\?\:]/)}" : nil
   end
 
   def commentify(content)
