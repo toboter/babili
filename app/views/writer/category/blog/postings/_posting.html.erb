@@ -31,7 +31,7 @@
   <%= content_tag :div, class: 'panel panel-default --spacious', id: 'referenceables' do %>
     <div class="panel-heading text-strong text-gray">
       <%= fa_icon('file') %> Attachments
-      <%= content_tag :span, posting.document.files.count, class: 'badge pull-right', style: 'background-color:#777;' %>
+      <%= content_tag :span, posting.document.files.size, class: 'badge pull-right', style: 'background-color:#777;' %>
     </div>
     <ul class="list-group" id="files-list">
       <% posting.document.referenceables.where(referenceable_type: 'Raw::FileUpload').each do |reference| %>

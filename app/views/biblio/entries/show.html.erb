@@ -42,7 +42,7 @@
               <%= content_tag :td, @entry.abbr %>
             <% end if @entry.try(:abbr).present? %>
             <%= content_tag :tr do %>
-              <%= content_tag :th, (@entry.try(:authors) ? 'Author' : 'Editor').pluralize(@entry.creators.count) %>
+              <%= content_tag :th, (@entry.try(:authors) ? 'Author' : 'Editor').pluralize(@entry.creators.size) %>
               <%= content_tag :td, @entry.creators_name_list.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %>
             <% end if @entry.try(:creators).present? %>
             <%= content_tag :tr do %>
@@ -62,12 +62,12 @@
               <%= content_tag :td, @entry.number %>
             <% end if @entry.try(:number).present? %>
             <%= content_tag :tr do %>
-              <%= content_tag :th, (@entry.try(:parent).try(:authors) ? 'Author' : 'Editor').pluralize(@entry.parent.creators.count) %>
+              <%= content_tag :th, (@entry.try(:parent).try(:authors) ? 'Author' : 'Editor').pluralize(@entry.parent.creators.size) %>
               <%= content_tag :td, @entry.parent.creators_name_list.map{|a| link_to a.name, a.agent ? zensus_agent_path(a.agent) : zensus_name_path(a) }.join(', ').html_safe %>
             <% end if @entry.try(:parent).present? && !@entry.parent.class.name.in?(['Biblio::Serie', 'Biblio::Journal']) %>
             <%= content_tag :tr do %>
               <%= content_tag :th, "
-                #{'Place'.pluralize(@entry.places.count)+'/' if @entry.try(:places).try(:any?)}
+                #{'Place'.pluralize(@entry.places.size)+'/' if @entry.try(:places).try(:any?)}
                 #{'Publisher'+'/' if @entry.try(:publisher)}
                 #{'Year' if @entry.try(:year)}
               " %>
@@ -136,7 +136,7 @@
             <% end if @entry.try(:abstract).present? %>
             <%= content_tag :tr do %>
               <%= content_tag :th, 'Contents' %>
-              <%= content_tag :td, pluralize(@entry.children.count, 'Record') %>
+              <%= content_tag :td, pluralize(@entry.children.size, 'Record') %>
             <% end %>
           </tbody>
         </table>
@@ -153,7 +153,7 @@
         <%= content_tag :div, class: 'panel panel-default', id: 'files' do %>
           <div class="panel-heading text-strong text-gray">
             <%= fa_icon('files') %> Files
-            <%= content_tag :span, @entry.files.count, class: 'badge pull-right', style: 'background-color:#777;' %>
+            <%= content_tag :span, @entry.files.size, class: 'badge pull-right', style: 'background-color:#777;' %>
           </div>
           <ul class="list-group" id="files-list">
             <% @entry.referenceables.where(referenceable_type: 'Raw::FileUpload').each do |reference| %>

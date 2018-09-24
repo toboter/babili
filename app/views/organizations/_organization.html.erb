@@ -23,7 +23,7 @@
       </h4>
       <p class="small text-muted">
         Created on <%= organization.created_at.to_date.to_formatted_s(:long_ordinal) %>. <br>
-        <%= link_to pluralize( organization.memberships.where(verified: true).count, 'member' ), 'javascript:void(0)', 
+        <%= link_to pluralize( organization.memberships.where(verified: true).size, 'member' ), 'javascript:void(0)', 
           class: 'popover',
           data: { 
             toggle: "popover", 
@@ -46,7 +46,7 @@
 
     <div class="panel-body text-center">
       <h4><%= organization.name %></h4>
-      <p class="small text-muted">Created on <%= organization.created_at.to_date.to_formatted_s(:long_ordinal) %>. <%= pluralize( organization.memberships.count, 'member' ) %></p>
+      <p class="small text-muted">Created on <%= organization.created_at.to_date.to_formatted_s(:long_ordinal) %>. <%= pluralize( organization.memberships.size, 'member' ) %></p>
 
       <%= content_tag :div, class: 'membership-actions' do %>
         <% if !organization.members.include?(current_person) %>

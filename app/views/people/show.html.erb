@@ -46,7 +46,7 @@
         <div class="tab-content">
           <div role="tabpanel" class="tab-pane active" id="insight">
             <%= content_tag :div, id: 'postingsBy', class: '--spacing' do %>
-              <h4 class="subhead --spacious-20">Most recently updated documents <%= content_tag :span, "#{@person.documents.count > 2 ? '3' : @person.documents.count} / #{@person.documents.count}", class: 'badge' %></h4>
+              <h4 class="subhead --spacious-20">Most recently updated documents <%= content_tag :span, "#{@person.documents.size > 2 ? '3' : @person.documents.size} / #{@person.documents.size}", class: 'badge' %></h4>
               <table class="table table-simple">
                 <tbody>
                   <%= render @person.documents.order(updated_at: :desc).limit(3), style: 'table', name_tree: true %>
@@ -55,7 +55,7 @@
             <% end %>
 
             <%= content_tag :div, id: 'reposBy', class: '--spacing' do %>
-              <h4 class="subhead --spacious-20">Recently updated repositories <%= content_tag :span, "#{@person.all_repos.count > 2 ? '3' : @person.all_repos.count} / #{@person.all_repos.count}", class: 'badge' %></h4>
+              <h4 class="subhead --spacious-20">Recently updated repositories <%= content_tag :span, "#{@person.all_repos.size > 2 ? '3' : @person.all_repos.size} / #{@person.all_repos.size}", class: 'badge' %></h4>
               <table class="table table-simple">
                 <tbody>
                   <%= render @person.all_repos.sort_by(&:updated_at).reverse.take(3), namespace: true %>

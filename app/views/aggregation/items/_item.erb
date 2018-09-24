@@ -9,6 +9,6 @@
 </tr>
   <%= content_tag :td, class: 'text-small', colspan: 3 do %>
     <%= item.commits.last.inspect if item.commits.any? %>
-    <strong><%= pluralize(item.commits.count, 'version') %></strong>
+    <strong><%= pluralize(item.commits.size, 'version') %></strong>
   <% end %>
 </tr>

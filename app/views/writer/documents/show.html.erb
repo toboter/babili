@@ -17,7 +17,7 @@
           <%= link_to background_image_div(@document.creator, :small_thumb, {class: 'author-avatar organization-member-avatar', style: 'height:20px;width:20px;background-position:center;'}), @document.creator.namespace %>
           <%= link_to @document.creator.name, @document.creator.namespace, class: 'text-strong' %>
           created this <%= content_tag :span, "#{distance_of_time_in_words(@document.created_at, Time.now)} ago", title: @document.created_at %>.<br>
-          Versions: <%= @document.drafts.count %>
+          Versions: <%= @document.drafts.size %>
           <% if @document.published? %>
             &mdash;
             <%= link_to @document.publisher.name, @document.publisher.namespace %> published this 
@@ -30,7 +30,7 @@
         <%= content_tag :div, class: 'col-md-4' do %>
           <% @document.authors.each do |author| %>
             <%= link_to background_image_div(author, :small_thumb, {class: 'author-avatar organization-member-avatar', style: 'height:20px;width:20px;background-position:center;'}), author.namespace, title: author.name %>
-          <% end if @document.authors.count > 1 || @document.authors.first != @document.creator %>
+          <% end if @document.authors.size > 1 || @document.authors.first != @document.creator %>
         <% end %>
       </div>
       <hr>
@@ -51,7 +51,7 @@
     <%= content_tag :div, class: 'panel panel-default', id: 'referenceables' do %>
       <div class="panel-heading text-strong text-gray">
         <%= fa_icon('file') %> Attachments
-        <%= content_tag :span, @document.files.count, class: 'badge pull-right', style: 'background-color:#777;' %>
+        <%= content_tag :span, @document.files.size, class: 'badge pull-right', style: 'background-color:#777;' %>
       </div>
       <ul class="list-group" id="files-list">
         <% @document.referenceables.where(referenceable_type: 'Raw::FileUpload').each do |reference| %>

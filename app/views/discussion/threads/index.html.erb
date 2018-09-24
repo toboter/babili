@@ -22,11 +22,11 @@
           <th style="font-weight: normal;">
             <%= link_to [@namespace, @repository, @entry, :discussion, :threads, q: 'is:open'], style: 'color:#565656;', class: "no-link#{' text-strong' if params[:q] && params[:q].include?('is:open')}" do %>
               <%= fa_stacked_icon('exclamation', base: "circle-o", class: 'text-small', style: 'font-size:.7em;') %>
-              <%= @threads.opend.count %> Open
+              <%= @threads.opend.size %> Open
             <% end %>
             <%= link_to [@namespace, @repository, @entry, :discussion, :threads, q: 'is:closed'], style: 'color:#565656;margin-left:10px;', class: "no-link#{' text-strong' if params[:q] && params[:q].include?('is:closed')}" do %>
               <%= fa_stacked_icon('check', base: "circle-o", class: 'text-small', style: 'font-size:.7em;') %>
-              <%= @threads.closed.count %> Closed
+              <%= @threads.closed.size %> Closed
             <% end %>
             <%= content_tag :div, class: "dropdown pull-right", style: "display:inline;" do %>
               <%= link_to '', class: "dropdown-toggle no-link text-strong", style: "cursor: pointer;color:#565656;", id: "sort-options", data: {toggle: "dropdown"}, aria: {haspopup: "true", expanded: "false"} do %>

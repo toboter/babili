@@ -50,7 +50,7 @@
               <%= pluralize(@concepts.total_count, 'result') %>. 
               <%= link_to("View all concepts in #{@scheme.abbr}.", [@namespace, :vocab, @scheme, :concepts]) %>
             <% else %>
-              <%= pluralize(@concepts.count, 'concept') %>.
+              <%= pluralize(@concepts.size, 'concept') %>.
             <% end %>
           <% end %>
         </div>

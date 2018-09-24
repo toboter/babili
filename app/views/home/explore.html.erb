@@ -6,7 +6,7 @@
         <div class="page-header">
           <h2>
             Repositories
-            <span class="badge"><%= @oread_applications.count %></span>
+            <span class="badge"><%= @oread_applications.size %></span>
           </h2>
         </div>
         <div class="page-header borderless">
@@ -23,7 +23,7 @@
         <div class="page-header">
           <h2>
             Vocabularies
-            <span class="badge"><%= @vocabularies.count %></span>
+            <span class="badge"><%= @vocabularies.size %></span>
           </h2>
         </div>
         <div class="page-header borderless">
@@ -42,7 +42,7 @@
           <div class="page-header">
             <h2>
               Teams
-              <span class="badge"><%= Organization.count %></span>
+              <span class="badge"><%= Organization.all.size %></span>
             </h2>
             <p class="text-muted">
               On babylon-online, you can join teams, which are groups of people with a shared research interest. 
@@ -87,7 +87,7 @@
           <div class="page-header borderless">
             <h2>
               Researchers
-              <span class="badge"><%= Person.approved.count %></span>
+              <span class="badge"><%= Person.approved.size %></span>
             </h2>
             <p class="text-muted">
               People on babylon-online.org.

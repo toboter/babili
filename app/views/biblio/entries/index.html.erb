@@ -19,7 +19,7 @@
             <%= select_tag 'sorted_by', options_for_select(Biblio::Entry.options_for_sorted_by, params[:sorted_by]), style: 'width:50%;', class: 'pull-right form-control --spacing-10', onchange: "this.form.submit()" %>
           <% end %>
           <%= content_tag :div, class: 'links --spacious-10' do %>
-            <%= content_tag :span, 'Total: '+ @entries.count.to_s, class: 'text-small' %> - 
+            <%= content_tag :span, 'Total: '+ @entries.size.to_s, class: 'text-small' %> - 
             <%= link_to('View all', biblio_entries_path, class: 'text-small') %>
             <%= content_tag :p, 'Results: '+@results.total_entries.to_s, class: 'text-small text-muted' if params[:q].present? %>
           <% end %>

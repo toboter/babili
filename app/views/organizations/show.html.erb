@@ -5,19 +5,19 @@
       <div class="list-group-menu --spacious">
         <%= link_to namespace_repositories_path(@organization.namespace), class: 'list-group-item text-gray' do %>
           <%= fa_icon('archive', text: 'Repositories', style: 'width:18px;') %>
-          <%= content_tag :span, @organization.namespace.repositories.count, class: 'badge' %>
+          <%= content_tag :span, @organization.namespace.repositories.size, class: 'badge' %>
         <% end %>
         <%= link_to namespace_vocab_schemes_path(@organization.namespace), class: 'list-group-item text-gray' do %>
           <%= fa_icon('sitemap', text: 'Vocabularies', style: 'width:18px;') %>
-          <%= content_tag :span, @organization.namespace.schemes.count, class: 'badge' %>
+          <%= content_tag :span, @organization.namespace.schemes.size, class: 'badge' %>
         <% end %>
         <%= link_to namespace_memberships_path(@organization.namespace), class: 'list-group-item text-gray' do %>
           <%= fa_icon('users', text: 'People', style: 'width:18px;') %>
-          <%= content_tag :span, @organization.memberships.count, class: 'badge' %>
+          <%= content_tag :span, @organization.memberships.size, class: 'badge' %>
         <% end %>
         <%= link_to namespace_applications_path(@organization.namespace), class: 'list-group-item text-gray' do %>
           <%= fa_icon('code-fork', text: 'Applications', style: 'width:18px;') %>
-          <%= content_tag :span, @organization.oauth_accessibilities.count, class: 'badge' %>
+          <%= content_tag :span, @organization.oauth_accessibilities.size, class: 'badge' %>
         <% end %>
       </div>
       <%= content_tag :div, class: "--spacious row" do %>
@@ -35,7 +35,7 @@
           <h4>
             <%= link_to namespace_memberships_path(@organization.namespace), style: 'color: #586069;' do %>
               <%= fa_icon('users', text: 'People') %>
-              <%= content_tag :span, @organization.memberships.count, class: 'pull-right no-link' %>
+              <%= content_tag :span, @organization.memberships.size, class: 'pull-right no-link' %>
             <% end %>
           </h4>
           <% @organization.members.limit(10).each do |member| %>

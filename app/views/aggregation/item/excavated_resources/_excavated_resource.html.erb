@@ -9,6 +9,6 @@
 </tr>
   <%= content_tag :td, class: 'text-small', colspan: 3 do %>
     <%= excavated_resource.commits.last.inspect if excavated_resource.commits.any? %>
-    <strong><%= pluralize(excavated_resource.commits.count, 'version') %></strong>
+    <strong><%= pluralize(excavated_resource.commits.size, 'version') %></strong>
   <% end %>
 </tr>
