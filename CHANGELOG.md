@@ -5,17 +5,19 @@
 ### todo
 * removing rails-bootstrap-markdown
 * removing old cms for blog and help
+* update doorkeeper and remove oauth-accessibility class, therefor adding integrations to repositories
 * new Event/Activity-Model for Zensus
 * adding referencations for file uploads on zensus
+* add zensus to main search
+* add zensus events and activity from bibliography create
 * adding possibility to reference agents in documents and discussions
 * adding possibility to reference literature and concepts in documents
 * repo private attribute
 * Ladegeschwindigkeit bei bibliographie
-* split ability file
+* split ability file (https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities%3A-Best-Practices#split-your-abilityrb-file)
 * discussions need to use the repo permission control?
 * better error pages in production
 * favicon
-* ...
 
 
 ## *docs* 2018-09-22

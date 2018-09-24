@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   end
 
   constraints subdomain: 'api' do
-    get '/', to: redirect(subdomain: false, path: "/help/categories/api")
+    get '/', to: redirect(subdomain: false, path: "/developer")
     scope module: 'api' do
       namespace :v1 do
         get '/', to: redirect(subdomain: false, path: "/help/categories/api")
