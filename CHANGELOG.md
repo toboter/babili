@@ -12,7 +12,12 @@
 * add zensus events and activity from bibliography create
 * adding possibility to reference agents in documents and discussions
 * adding possibility to reference literature and concepts in documents
+* adding module for a periodization model
 * repo private attribute
+* adding license selector on repository
+* adding png-preview for transliterations from tablet data model
+* adding tablet data model
+* adding transliterations and morphems on toponyms, concepts, appellation_parts and epoch_points
 * Ladegeschwindigkeit bei bibliographie
 * split ability file (https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities%3A-Best-Practices#split-your-abilityrb-file)
 * discussions need to use the repo permission control?
