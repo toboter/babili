@@ -15,7 +15,7 @@ class Ability
     can :read, [Discussion::Comment, Discussion::Thread, Discussion::Assignment]
     can :read, Oread::Application
     can :read, Doorkeeper::Application
-    can :read, [Zensus::Agent, Zensus::Appellation, Zensus::Event, Zensus::Activity]
+    can :read, [Zensus::Agent, Zensus::Appellation, Zensus::Event, Zensus::Assignment]
     can :read, [CMS::BlogPage, CMS::Novelity, CMS::HelpPage, CMS::HelpCategory, CMS::BlogCategory]
     can :read, [Locate::Place, Locate::Dating, Locate::Toponym, Locate::Location]
     can :read, Writer::Document
@@ -224,7 +224,7 @@ class Ability
 
         # Zensus
         ### todo
-        can [:new, :create, :edit, :update], [Zensus::Agent, Zensus::Appellation, Zensus::Event, Zensus::Activity]
+        can [:new, :create, :edit, :update], [Zensus::Agent, Zensus::Appellation, Zensus::Event, Zensus::Assignment]
 
         # Locate
         ### todo
@@ -268,7 +268,7 @@ class Ability
           can :manage, OauthAccessibility
           can :manage, Raw::FileUpload
           can :destroy, Biblio::Entry
-          can :manage, [Zensus::Agent, Zensus::Appellation, Zensus::Event, Zensus::Activity]
+          can :manage, [Zensus::Agent, Zensus::Appellation, Zensus::Event, Zensus::Assignment]
           can :manage, [CMS::BlogPage, CMS::Novelity, CMS::HelpPage, CMS::HelpCategory, CMS::BlogCategory]
           can :manage, [Locate::Place, Locate::Dating, Locate::Toponym, Locate::Location]
           can :manage, [Aggregation::Identifier]

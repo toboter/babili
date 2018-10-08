@@ -47,6 +47,7 @@ class Zensus::AgentsController < ApplicationController
         format.html { redirect_to zensus_agent_url(@agent), notice: "Agent was successfully updated." }
         format.json { render :show, status: :ok, location: @agent }
       else
+        raise @agent.errors.inspect
         format.html { render :edit }
         format.json { render json: @agent.errors, status: :unprocessable_entity }
       end
@@ -68,14 +69,6 @@ class Zensus::AgentsController < ApplicationController
       :type,
       :default_appellation_id,
       appellation_ids: [],
-      activities_attributes: [
-        :id,
-        :property_id,
-        :event_id,
-        :note,
-        :note_type,
-        :_destroy
-      ],
       links_attributes: [
         :id,
         :uri,

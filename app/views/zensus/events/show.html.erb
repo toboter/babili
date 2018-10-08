@@ -10,9 +10,9 @@
       <div class="col-sm-12 col-md-8 main">
         <strong><%= @event.description %></strong>
         <ul>
-          <% @event.activities.each do |activity| %>
+          <% @event.assignments.each do |activity| %>
             <li>
-              <%= link_to activity.event_to_actable, zensus_event_activity_path(@event, activity) %>
+              <%= link_to activity.name, zensus_event_path(@event) %>
               <% if activity.actable.class.name.deconstantize == 'Zensus' %>
                 <%= link_to activity.actable.default_name, [:zensus, activity.actable] %>
               <% elsif activity.actable.class.name.deconstantize == 'Vocab' %>
@@ -43,7 +43,6 @@
         <div class="list-group">
           <%= link_to fa_icon('edit', text: 'Edit'), edit_zensus_event_path(@event), class: 'list-group-item' if can?(:update, @event) %>
           <%= link_to fa_icon('trash', text: 'Delete'), zensus_event_path(@event), method: :delete, data: { confirm: 'Are you sure?' }, class: 'list-group-item' if can?(:destroy, @event) %>
-          <%= link_to fa_icon('angle-double-right', text: 'Activities'), zensus_event_activities_path(@event), class: 'list-group-item' %>
         </div>
       <% end %>
     </div>

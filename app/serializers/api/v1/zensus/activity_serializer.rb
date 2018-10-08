@@ -15,7 +15,7 @@ module Api::V1::Zensus
     end
 
     attribute :property do
-      object.actable_to_event
+      object.name(inverse: true)
     end
 
     attribute :event do

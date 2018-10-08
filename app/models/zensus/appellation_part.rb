@@ -46,7 +46,7 @@ module Zensus
     end
 
     def self.types
-      %w[Appellation Title Given Nick Family Suffix]
+      %w[Title Given Nick Family Suffix]
     end
 
     def reindex_agent

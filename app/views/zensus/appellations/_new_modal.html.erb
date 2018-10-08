@@ -12,10 +12,10 @@
                 <%= f.error_notification %>
                 <%= f.input :name, label: 'Simple full-name', hint: 'Leave blank if adding a complex name.' %>
                 <%= f.simple_fields_for :appellation_parts do |p| %>
-                  <%= render partial: 'zensus/agents/appellation_part_fields', locals: {f: p} %>
+                  <%= render partial: 'zensus/appellations/appellation_part_fields', locals: {f: p} %>
                 <% end %>
                 <div class="links">
-                  <%= link_to_add_association fa_icon('plus', text: 'Complex name element'), f, :appellation_parts, class: 'btn btn-default btn-sm', partial: 'zensus/agents/appellation_part_fields' %>
+                  <%= link_to_add_association fa_icon('plus', text: 'Complex name element'), f, :appellation_parts, class: 'btn btn-default btn-sm', partial: 'zensus/appellations/appellation_part_fields' %>
                 </div>
                 <p class="text-muted text-small --spacious-20">Creating a new name needs editorial work to ensure the name is assigned to a unique agent.</p>
               </div>

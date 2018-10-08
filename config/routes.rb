@@ -241,9 +241,7 @@ Rails.application.routes.draw do
           resources :groups, controller: 'agents', type: 'Zensus::Group'
         end
       end
-      resources :events do
-        resources :activities
-      end
+      resources :events
     end
 
     namespace :locate do

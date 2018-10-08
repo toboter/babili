@@ -4,13 +4,6 @@
   <div class="col-md-11">
     <div class="row border-left">
       <div class="col-md-6">
-        <%= f.input :property_id, 
-          collection: (Zensus::Activity.properties.collect {|p| [ p[:name], p[:id] ] }), 
-          label: false,
-          input_html: {
-            class: 'zensus_activity_property',
-            style: 'width:300px;'
-          } %>
       </div>
       <div class="col-md-6">
         <%= f.input :actable_gid, 

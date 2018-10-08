@@ -3,45 +3,42 @@
           <%= link_to fa_icon("edit", text: 'Edit'), [:edit, :zensus, @agent], class: 'btn btn-default btn-sm text-strong pull-right', style: 'margin-right:10px;' if can?(:update, @agent) %>
           <%= content_tag :h2, link_to(content_tag(:span, @agent.default_name, itemprop: "name"), [:zensus, @agent]), class: 'agent-title h-condensed' %>
 
-            <h4 class="subhead --spacious">Members</h4>
+            <h4 class="subhead --spacious">Current or former members</h4>
             <ul class="list-unstyled" itemscope itemprop="members">
-              <% @agent.members.each do |member| %>
+              <% @agent.current_or_former_members.uniq.each do |member| %>
                 <%= content_tag :li, link_to(content_tag(:span, member.default_name, itemprop: "name", itemtype: (member.class.name == 'Zensus::Person' ? "http://schema.org/Person" : "http://schema.org/Organization") ), [:zensus, member]) %>
-              <% end if @agent.members %>
+              <% end if @agent.current_members %>
             </ul>
 
-          <h4 class="subhead --spacious">Appellations</h4>
-                <ul class="list-unstyled">
-                  <% @agent.appellations.each do |appellation| %>
-                    <li>
-                      <%= link_to appellation.name(prefix: true, suffix: true, preferred: false), zensus_name_path(appellation) %>
-                    </li>
-                  <% end %>
-                </ul>
-          <h4 class="subhead --spacious">Timeline</h4>
-                <ul class="list-group">
-                  <% @agent.activities.joins(:event).order('zensus_events.begins_at_date DESC').each do |activity| %>
-                    <li class="list-group-item">
-                      <%= content_tag :span, activity.actable.default_name, class: 'text-muted' %><br>
-                      <%= link_to activity.actable_to_event, zensus_event_activity_path(activity.event, activity), class: 'text-strong' %>
-                      <% unless Zensus::Activity.properties.select {|p| p[:id] == activity.property_id  }.first[:ditransitive] %>
-                        <% actable = activity.event.activities.where.not(id: activity.id).first.actable %>
-                        <%= link_to actable.default_name, zensus_agent_path(actable) %>
-                      <% end %>
-                      <%= content_tag :span, class: 'text-italic' do %>
-                        <%= link_to(' on ' + activity.event.default_date, zensus_event_path(activity.event)).html_safe %>
-                        <%= link_to(' in ' + activity.event.place.default_name, activity.event.place).html_safe if activity.event.place.present? %>
-                      <% end %>
-                    </li>
-                  <% end %>
-                </ul>
+            <h4 class="subhead --spacious">Appellations</h4>
+            <ul class="list-unstyled">
+              <% @agent.appellations.each do |appellation| %>
+                <li>
+                  <%= link_to appellation.name(prefix: true, suffix: true, preferred: false), zensus_name_path(appellation) %>
+                </li>
+              <% end %>
+            </ul>
 
-          <h4 class="subhead --spacious">Other representations</h4>
-                <ul>
-                  <% @agent.links.each do |link| %>
-                    <li>
-                      <%= link_to(link.uri, link.uri, target: :blank) %>
-                    </li>
+            <h4 class="subhead --spacious">Timeline</h4>
+            <ul class="list-group">
+              <% @agent.assignments.joins(:event).order('zensus_events.begins_at_date DESC').each do |activity| %>
+                <li class="list-group-item">
+                  <%= content_tag :span, activity.inspect, class: 'text-muted' %><br>
+                  <%= link_to activity.name(inverse: true), zensus_event_activity_path(activity.event, activity), class: 'text-strong' %>
+                  <%= content_tag :span, class: 'text-italic' do %>
+                    <%= link_to(' on ' + activity.event.default_date, zensus_event_path(activity.event)).html_safe %>
+                    <%= link_to(' in ' + activity.event.place.default_name, activity.event.place).html_safe if activity.event.place.present? %>
                   <% end %>
-                </ul>
+                </li>
+              <% end %>
+            </ul>
+
+            <h4 class="subhead --spacious">Other representations</h4>
+            <ul>
+              <% @agent.links.each do |link| %>
+                <li>
+                  <%= link_to(link.uri, link.uri, target: :blank) %>
+                </li>
+              <% end %>
+            </ul>
         <% end %>

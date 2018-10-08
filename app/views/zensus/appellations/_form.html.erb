@@ -6,10 +6,10 @@
           <div class="appellation-parts col-md-8">
             <%= f.error_notification %>
             <%= f.simple_fields_for :appellation_parts do |p| %>
-              <%= render partial: 'zensus/agents/appellation_part_fields', locals: {f: p} %>
+              <%= render partial: 'appellation_part_fields', locals: {f: p} %>
             <% end %>
             <div class="links">
-              <%= link_to_add_association fa_icon('plus', text: 'Name element'), f, :appellation_parts, class: 'btn btn-default btn-sm', partial: 'zensus/agents/appellation_part_fields' %>
+              <%= link_to_add_association fa_icon('plus', text: 'Name element'), f, :appellation_parts, class: 'btn btn-default btn-sm', partial: 'appellation_part_fields' %>
             </div>
           </div>
           <div class="col-md-4">

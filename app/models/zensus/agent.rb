@@ -12,15 +12,13 @@ module Zensus
     friendly_id :default_name, use: :slugged
 
     has_many :appellations, dependent: :nullify
+    has_many :appellation_parts, through: :appellations
     has_many :links, dependent: :destroy
-    has_many :activities, as: :actable, dependent: :destroy
-    has_many :events, through: :activities
-    has_many :places, through: :events
-    has_many :notes, as: :issueable
+    has_many :properties, as: :rangeable, dependent: :destroy
+    has_many :events, through: :properties
     belongs_to :creator, class_name: "::Person"
     has_many :bibliographic_creations, -> { order("(data ->> 'year') DESC") }, through: :appellations
 
-    accepts_nested_attributes_for :activities, reject_if: :all_blank, allow_destroy: true
     accepts_nested_attributes_for :links, reject_if: :all_blank, allow_destroy: true
 
     validates :appellations, presence: :true
@@ -37,11 +35,16 @@ module Zensus
       %w[Person Group]
     end
 
+    def timeline
+      timeline = []
+      timeline << properties
+    end
+
     def search_data
       {
         name: default_name,
         appellations: appellations.map{ |a| a.name(prefix: true, suffix: true, preferred: false) }.join(' '),
-        activities: activities.map{ |a| a.title }.join(' '),
+        assignments: properties.map{ |a| a.title }.join(' '),
         places: places.map(&:names)
       }
     end

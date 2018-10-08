@@ -9,7 +9,7 @@
           <%= simple_form_for [:zensus, Zensus::Event.new], as: :zensus_event do |f| %>
             <%= f.error_notification %>
             <div class="form-inline" style="margin-bottom: 10px;">
-              <%= f.input :type, collection: Zensus::Event.types, label: false %>
+              <%= f.input :type, label: false %>
               <%= f.input :place_id, collection: Locate::Place.all, label: false, prompt: 'Select place', label_method: :default_name, value_method: :id, include_blank: true %>
               <%= f.input :period_id, collection: Vocab::Concept.all, label: false, prompt: 'Select period' %>
             </div>
@@ -24,11 +24,11 @@
 
             <h4 class="subhead --spacious">Activities</h4>
             <div id="activities">
-              <%= f.simple_fields_for :activities do |a| %>
-                <%= render 'zensus/events/activity_fields', f: a %>
+              <%= f.simple_fields_for :assignments do |a| %>
+                <%= render 'zensus/events/assignment_fields', f: a %>
               <% end %>
               <div class="links">
-                <%= link_to_add_association fa_icon('plus', text: 'Activity'), f, :activities, class: 'btn btn-default btn-sm', partial: 'zensus/events/activity_fields' %>
+                <%= link_to_add_association fa_icon('plus', text: 'Activity'), f, :assignments, class: 'btn btn-default btn-sm', partial: 'zensus/events/assignment_fields' %>
               </div>
             </div>
 

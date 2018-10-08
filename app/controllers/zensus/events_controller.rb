@@ -73,12 +73,11 @@ class Zensus::EventsController < ApplicationController
       :circa,
       :place_id,
       :period_id,
-      activities_attributes: [
+      assignments_attributes: [
         :id,
+        :type,
         :actable_gid,
-        :property_id,
         :note,
-        :note_type,
         :_destroy
       ],
       event_relations_attributes: [

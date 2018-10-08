@@ -8,7 +8,7 @@
         <h3 class="subhead">Appellations</h3>
         <div id="appellations">
           <%= f.input :appellation_ids, 
-          collection: f.object.appellations+Zensus::Appellation.where(agent_id: nil), 
+          collection: f.object.appellations+Zensus::Appellation.where(agent_id: nil).includes(:appellation_parts), 
           value_method: :id, 
           label_method: :name,
           label: false,
@@ -17,16 +17,6 @@
             class: 'zensus_appellation',
             id: 'zensus_appellation_id'
           } %>
-        </div>
-
-        <h3 class="subhead --spacious">Activity statements</h3>
-        <div id="activities">
-          <%= f.simple_fields_for :activities do |a| %>
-            <%= render 'activity_fields', f: a %>
-          <% end %>
-          <div class="links">
-            <%= link_to_add_association fa_icon('plus', text: 'Activity'), f, :activities, class: 'btn btn-default btn-sm' %>
-          </div>
         </div>
 
         <h3 class="subhead --spacious">Other</h3>
@@ -40,7 +30,7 @@
         <hr>
 
         <div id="links --spacious">
-          <h4>Uri's on the web</h4>
+          <h4>Other web-identifiers</h4>
           <%= f.simple_fields_for :links do |a| %>
             <%= render 'link_fields', f: a %>
           <% end %>
@@ -71,8 +61,6 @@
   </div>
 <% end %>
 
-
 <% content_for :modals do %>
-  <%= render 'zensus/events/new_modal' %>
   <%= render 'zensus/appellations/new_modal' %>
 <% end %>

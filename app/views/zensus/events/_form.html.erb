@@ -19,11 +19,11 @@
         
         <h3 class="subhead --spacious">Activities</h3>
         <div id="activities">
-          <%= f.simple_fields_for :activities do |a| %>
-            <%= render 'activity_fields', f: a %>
+          <%= f.simple_fields_for :assignments do |a| %>
+            <%= render 'assignment_fields', f: a %>
           <% end %>
           <div class="links">
-            <%= link_to_add_association fa_icon('plus', text: 'Activity'), f, :activities, class: 'btn btn-default btn-sm' %>
+            <%= link_to_add_association fa_icon('plus', text: 'Activity'), f, :assignments, class: 'btn btn-default btn-sm' %>
           </div>
         </div>
 

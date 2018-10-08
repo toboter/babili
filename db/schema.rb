@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_20_120130) do
+ActiveRecord::Schema.define(version: 2018_10_08_084408) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -146,6 +146,35 @@ ActiveRecord::Schema.define(version: 2018_09_20_120130) do
     t.index ["creator_id"], name: "index_biblio_referencations_on_creator_id"
     t.index ["entry_id"], name: "index_biblio_referencations_on_entry_id"
     t.index ["repository_id"], name: "index_biblio_referencations_on_repository_id"
+  end
+
+  create_table "chronoi_entities", id: :serial, force: :cascade do |t|
+    t.string "type"
+    t.string "begins_at_string"
+    t.string "ends_at_string"
+    t.boolean "circa", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "begins_at_date"
+    t.datetime "ends_at_date"
+    t.integer "creator_id"
+    t.string "title"
+    t.text "note"
+    t.index ["creator_id"], name: "index_chronoi_entities_on_creator_id"
+    t.index ["type"], name: "index_chronoi_entities_on_type"
+  end
+
+  create_table "chronoi_properties", id: :serial, force: :cascade do |t|
+    t.integer "entity_id"
+    t.integer "rangeable_id"
+    t.string "rangeable_type"
+    t.text "note"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "type"
+    t.index ["entity_id"], name: "index_chronoi_properties_on_entity_id"
+    t.index ["rangeable_id", "rangeable_type"], name: "index_chronoi_properties_on_rangeable_id_and_rangeable_type"
+    t.index ["type"], name: "index_chronoi_properties_on_type"
   end
 
   create_table "cms_blog_categories", id: :serial, force: :cascade do |t|
@@ -801,20 +830,6 @@ ActiveRecord::Schema.define(version: 2018_09_20_120130) do
     t.index ["title"], name: "index_writer_documents_on_title"
   end
 
-  create_table "zensus_activities", id: :serial, force: :cascade do |t|
-    t.integer "event_id"
-    t.integer "property_id"
-    t.integer "actable_id"
-    t.string "actable_type"
-    t.text "note"
-    t.string "note_type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["actable_id", "actable_type"], name: "index_zensus_activities_on_actable_id_and_actable_type"
-    t.index ["event_id"], name: "index_zensus_activities_on_event_id"
-    t.index ["property_id"], name: "index_zensus_activities_on_property_id"
-  end
-
   create_table "zensus_agents", id: :serial, force: :cascade do |t|
     t.string "slug"
     t.string "type"
@@ -849,33 +864,6 @@ ActiveRecord::Schema.define(version: 2018_09_20_120130) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["agent_id"], name: "index_zensus_appellations_on_agent_id"
-  end
-
-  create_table "zensus_event_relations", id: :serial, force: :cascade do |t|
-    t.integer "event_id"
-    t.integer "property_id"
-    t.integer "related_event_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["event_id"], name: "index_zensus_event_relations_on_event_id"
-    t.index ["property_id"], name: "index_zensus_event_relations_on_property_id"
-    t.index ["related_event_id"], name: "index_zensus_event_relations_on_related_event_id"
-  end
-
-  create_table "zensus_events", id: :serial, force: :cascade do |t|
-    t.string "type"
-    t.string "begins_at_string"
-    t.string "ends_at_string"
-    t.boolean "circa", default: false, null: false
-    t.integer "place_id"
-    t.integer "period_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "begins_at_date"
-    t.datetime "ends_at_date"
-    t.integer "creator_id"
-    t.index ["creator_id"], name: "index_zensus_events_on_creator_id"
-    t.index ["type"], name: "index_zensus_events_on_type"
   end
 
   create_table "zensus_links", id: :serial, force: :cascade do |t|
