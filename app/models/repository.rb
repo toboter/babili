@@ -39,7 +39,7 @@ class Repository < ApplicationRecord
 
   accepts_nested_attributes_for :collaborations, allow_destroy: true
 
-  validates :name, :description,
+  validates :name,
     presence: true
     
   validates :name, 

@@ -12,8 +12,8 @@ class Aggregation::Event::UploadEvent < Aggregation::Event
   attr_json :content_type, :string
   attr_json :schema, :string
 
-  attr_json :primary_id_label, :string, container_attribute: "processor"
-  attr_json :other_identificator_labels, :string, container_attribute: "processor"
+  attr_json :primary_id_label, :string, container_attribute: "processors"
+  attr_json :other_identificator_labels, :string, container_attribute: "processors"
 
   has_many :uploads, class_name: 'Aggregation::Upload', foreign_key: :event_id, dependent: :destroy
   accepts_nested_attributes_for :uploads, reject_if: :all_blank, allow_destroy: true
@@ -49,7 +49,7 @@ class Aggregation::Event::UploadEvent < Aggregation::Event
     header = sheet.row(1).map{|h| h.underscore }
     json = []
     (2..sheet.last_row).each do |i|
-      json << extract_row(Hash[[header, sheet.row(i)].transpose], 'bab_rel')
+      json << extract_row(Hash[[header, sheet.row(i)].transpose], processors['primary_id_label'])
     end
     commit_items(json)
   end

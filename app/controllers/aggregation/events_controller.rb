@@ -1,7 +1,7 @@
 class Aggregation::EventsController < ApplicationController
   load_resource :namespace
   load_resource :repository, through: :namespace
-  load_and_authorize_resource :event, through: :repository, except: [:index, :new]
+  load_and_authorize_resource :event, through: :repository, except: [:index, :new], class: 'Aggregation::Event'
   layout 'repositories/base'
   
   # vererbt an FileUpload, ListTransfer, ApiRequest

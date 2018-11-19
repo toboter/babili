@@ -8,7 +8,7 @@
 </tr>
 </tr>
   <%= content_tag :td, class: 'text-small', colspan: 3 do %>
-    <%= item.commits.last.inspect if item.commits.any? %>
-    <strong><%= pluralize(item.commits.size, 'version') %></strong>
+    <%= render partial: 'aggregation/items/item_hash', locals: {values: item.commits.last.payload, depth: 0} if item.commits.any? %>
+    <p class="text-strong"><%= pluralize(item.commits.size, 'version') %></p>
   <% end %>
 </tr>

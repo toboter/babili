@@ -17,7 +17,7 @@
   <div class="col-md-6">
   <table class="table table-striped">
     <tbody>
-      <%= @item.commits.last.data.inspect %>
+      <%= render partial: 'aggregation/items/item_hash', locals: {values: @item.commits.last.data['payload'], depth: 0} %>
     </tbody>
   </table>
   </div>

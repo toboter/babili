@@ -45,7 +45,7 @@ class Aggregation::Event < ApplicationRecord
         identifier = Aggregation::Identifier.where(origin_id: element[:identifier][:value], origin_type: element[:identifier][:type], origin_agent_id: element[:identifier][:source]).first_or_create
         item = Aggregation::Item.where(pref_identifier_id: identifier.id, repository_id: self.repository_id).first_or_create
         item.identifiers << identifier unless item.identifiers.include?(identifier)
-        element[:changeset] = item.commits.any? ? HashDiff.diff(element[:payload], item.commits.last.try(:data).try(:[], 'payload')) : []
+        element[:changeset] = item.commits.any? ? HashDiff.diff(element[:payload], item.commits.last.try(:data).try(:[], 'payload')) : []      
         commit = Aggregation::Commit.new(type: 'Aggregation::Commit::Legacy', item_id: item.id, event_id: self.id, creator_id: self.creator_id, data: element)
         commits << commit if element[:changeset].present? || item.commits.empty?
       end

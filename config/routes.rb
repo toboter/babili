@@ -406,6 +406,7 @@ Rails.application.routes.draw do
             get '/', to: 'options#edit'
             resource :options, only: [:edit] do
               put 'name', on: :member
+              put 'privacy', on: :member
             end
             resource :topics, only: [:edit, :update]
             resources :collaborations

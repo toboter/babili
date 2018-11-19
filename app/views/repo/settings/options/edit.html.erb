@@ -5,5 +5,10 @@
   <%= f.submit 'Rename', class: 'btn btn-default text-strong', data: {confirm: 'Are you sure?'} %>
 <% end if can?(:name, @repository) %>
 
+<%= simple_form_for @repository, url: privacy_namespace_repository_settings_options_path(@namespace, @repository), as: :repository_privacy, method: :put, html: {class: 'form-inline --spacious'} do |f| %>
+  <%= f.input :private %>
+  <%= f.submit 'Change privacy', class: 'btn btn-default text-strong' %>
+<% end if can?(:update, @repository) %>
+
 <h4 class="subhead --spacious">Topics</h4>
 <%= render 'repo/settings/topics/form' %>

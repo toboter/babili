@@ -22,10 +22,29 @@ class Repo::Settings::OptionsController < ApplicationController
     end
   end
 
+  def privacy
+    authorize! :update, @repository
+    respond_to do |format|
+      if @repository.update(repository_privacy_params)
+        format.html { redirect_to edit_namespace_repository_settings_options_path(@namespace, @repository), notice: "Repository privacy was successfully updated." }
+        format.json { render :show, status: :ok, location: @repository }
+      else
+        format.html { render :edit }
+        format.json { render json: @repository.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   private
   def repository_name_params
     params.require(:repository_name).permit(
-      :name, 
+      :name
+    )
+  end
+
+  def repository_privacy_params
+    params.require(:repository_privacy).permit(
+      :private
     )
   end
 

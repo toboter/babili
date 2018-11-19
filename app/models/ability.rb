@@ -10,7 +10,7 @@ class Ability
     can :read, Membership, organization: { private: false }
     can :read, Namespace
     can :read, [Vocab::Scheme, Vocab::Concept]
-    can :read, Repository
+    can :read, Repository, private: false
     can :read, Biblio::Entry
     can :read, [Discussion::Comment, Discussion::Thread, Discussion::Assignment]
     can :read, Oread::Application
@@ -79,6 +79,7 @@ class Ability
         end
 
         # Namespace/Repository
+        can :read, Repository # collabs && accessors only
         can [:new, :create], Repository do |repo|
           repo.owner.permissions.select { |p| p.person == user.person }.try(:first).try(:can_create)
         end

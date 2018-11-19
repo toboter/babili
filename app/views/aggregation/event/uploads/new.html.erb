@@ -15,6 +15,7 @@
           <div class="panel panel-default">
             <div class="panel-body">
               <%= content_tag :h4, 'Upload changes and pre-process'%>
+              <%= f.input :primary_id_label, placeholder: 'Primary key', as: :string, label: false %>
               <%= f.input :note, placeholder: 'Add files via uploader', as: :string, label: false %>
               <%= f.input :description, placeholder: 'Add an optional description', label: false %>
             </div>
