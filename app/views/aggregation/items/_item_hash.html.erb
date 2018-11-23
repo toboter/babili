@@ -2,7 +2,7 @@
     <% values.each do |k,v| %>
       <%= content_tag :span, "#{k.humanize}: ".html_safe, class: 'text-strong' if v.present? %>
       <% if v.is_a?(String) || v.is_a?(Integer) %>
-        <%= content_tag :p, v if v.present? %>
+        <%= simple_format(v.to_s) if v.present? %>
       <% elsif v.is_a?(Array) %>
         <%= render partial: 'aggregation/items/item_hash', collection: v, as: :values, locals: {depth: depth+1} %>
       <% else %>
