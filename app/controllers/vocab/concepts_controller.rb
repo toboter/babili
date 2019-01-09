@@ -16,6 +16,11 @@ class Vocab::ConceptsController < ApplicationController
         where: { id: @concepts.ids })
       @flat = true
     end
+    respond_to do |format|
+      format.html
+      format.json { render json: @concepts, each_serializer: ConceptSerializer }
+    end
+
   end
 
   def show
@@ -25,6 +30,12 @@ class Vocab::ConceptsController < ApplicationController
                   follow: true
     @definition = @concept.definitions.where(language: @language).first || @concept.definitions.first
     @other_definitions = @concept.notes-[@definition]
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @concept, serializer: ConceptSerializer }
+    end
+
   end
 
   def new

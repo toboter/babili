@@ -1,7 +1,5 @@
 # Changelog
 
-## next **
-
 ### todo
 * removing rails-bootstrap-markdown
 * removing old cms for blog and help
@@ -24,6 +22,13 @@
 * better error pages in production
 * favicon
 
+## *2019-01-09*
+Features:
+* added json export for vocabulary
+
+Bugfixes:
+* fixed data upload and visualization on aggregation
+* fixing user approval
 
 ## *docs* 2018-09-22
 

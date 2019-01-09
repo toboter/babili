@@ -23,3 +23,41 @@ class EntrySerializer < ActiveModel::Serializer
     end
 
 end
+
+# [
+  # {
+  # "author": [
+  # {
+  # "family": "Schmidt",
+  # "given": "T."
+  # }
+  # ],
+  # "title": "Files are everywhere.",
+  # "editor": [
+  # {
+  # "family": "Katja Sternitzke",
+  # "non-dropping-particle": "and beyondby"
+  # },
+  # {
+  # "family": "May-Sarah Zessin",
+  # "given": "Babylon"
+  # },
+  # {
+  # "family": "Wissenschaftliche"
+  # }
+  # ],
+  # "publisher": "sdv Saarländische Druckerei und Verlag",
+  # "source": "Veröffentlichungen der Deutschen Orient-Gesellschaft 201",
+  # "language": "nl",
+  # "publisher-place": "Berlin",
+  # "issued": {
+  # "date-parts": [
+  # [
+  # 2019
+  # ]
+  # ]
+  # },
+  # "id": "schmidt2019a",
+  # "type": "chapter"
+  # }
+# ]

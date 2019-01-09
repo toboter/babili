@@ -38,7 +38,6 @@
           <%= content_tag :li, link_to(fa_icon('file', text: 'Insight'), '#insight', aria: {controls: 'insight'}, data: {toggle: 'tab'}, role: 'tab'), class: 'active', role: 'presentation' %>
           <%= content_tag :li, link_to(fa_icon('archive', text: 'Personal repositories'), '#repos', aria: {controls: 'repos'}, data: {toggle: 'tab'}, role: 'tab'), class: '', role: 'presentation' %>
           <%= content_tag :li, link_to(fa_icon('sitemap', text: 'Vocabularies'), '#vocabs', aria: {controls: 'vocabs'}, data: {toggle: 'tab'}, role: 'tab'), class: '', role: 'presentation' %>
-          <%= content_tag :li, link_to(fa_icon('code-fork', text: 'Applications'), '#apps', aria: {controls: 'apps'}, data: {toggle: 'tab'}, role: 'tab'), class: '', role: 'presentation' %>
           <%= content_tag :li, link_to(fa_icon('list', text: 'Lists'), '#lists', aria: {controls: 'lists'}, data: {toggle: 'tab'}, role: 'tab'), class: '', role: 'presentation' %>
         </ul>
 
@@ -98,20 +97,7 @@
               </div>
             </div>
           </div>
-          <div role="tabpanel" class="tab-pane" id="apps">
-            <div class="--spacious-20">
-              <% if @person.oauth_applications.any? %>
-                <% @person.oauth_grants.each do |grant| %>
-                  <%= render grant.application %>
-                  <%= render partial: 'oauth_accessibilities/grant_panel', locals: {grant: grant} %>
-                <% end %>
-              <% else %>
-                <p class="text-muted">
-                  none assigned
-                </p>
-              <% end %>
-            </div>
-          </div>
+
 
           <div role="tabpanel" class="tab-pane" id="lists">
             Lists

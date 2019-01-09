@@ -15,10 +15,6 @@
           <%= fa_icon('users', text: 'People', style: 'width:18px;') %>
           <%= content_tag :span, @organization.memberships.size, class: 'badge' %>
         <% end %>
-        <%= link_to namespace_applications_path(@organization.namespace), class: 'list-group-item text-gray' do %>
-          <%= fa_icon('code-fork', text: 'Applications', style: 'width:18px;') %>
-          <%= content_tag :span, @organization.oauth_accessibilities.size, class: 'badge' %>
-        <% end %>
       </div>
       <%= content_tag :div, class: "--spacious row" do %>
         <div class="col-md-12 org-top-repos repos">

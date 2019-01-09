@@ -18,7 +18,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.update(user_params)
         Audit.create!(user: @user, actor: current_user, action: "user.#{@user.approved? ? 'approved' : 'disapproved'}", actor_ip: current_user.last_sign_in_ip)
-        format.html { redirect_to users_url, notice: 'Updated user roles.' }
+        format.html { redirect_to users_url, notice: 'Updated user approval.' }
         format.js
       else
         format.html { redirect_to users_url, notice: 'Error.' }

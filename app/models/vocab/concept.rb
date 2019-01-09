@@ -20,6 +20,8 @@ class Vocab::Concept < ApplicationRecord
     source: :child   # children
   # Can also be a literal to anywhere
   has_many :matches, class_name: 'AssociativeRelation', foreign_key: :concept_id, dependent: :destroy
+  has_many :ext_matches, through: :matches, source: :associatable, source_type: "Vocab::ExternalConcept"
+  has_many :loc_matches, through: :matches, source: :associatable, source_type: "Vocab::Concept"
   has_many :object_matches, as: :associatable, class_name: 'AssociativeRelation'
 
   before_validation :add_uuid, on: :create

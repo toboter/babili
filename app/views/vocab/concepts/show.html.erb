@@ -112,7 +112,7 @@
             <div class="list-group" id="representations">
               <h4 class="--spacious">Representations</h4>
               <%= link_to fa_icon('link', text: 'HTML'), [@namespace, :vocab, @concept.scheme, @concept, format: :html], class: 'list-group-item' %>
-              <%= link_to fa_icon('link', text: 'JSON'), [@namespace, :vocab, @concept.scheme, @concept, format: :json], class: 'list-group-item disabled' %>
+              <%= link_to fa_icon('link', text: 'JSON'), [@namespace, :vocab, @concept.scheme, @concept, format: :json], class: 'list-group-item' %>
               <%= link_to fa_icon('link', text: 'RDF/XML'), [@namespace, :vocab, @concept.scheme, @concept, format: :rdf], class: 'list-group-item disabled' %>
               <%= link_to fa_icon('link', text: 'RDF/TURTLE'), [@namespace, :vocab, @concept.scheme, @concept, format: :ttl], class: 'list-group-item disabled' %>
               <%= link_to fa_icon('link', text: 'RDF/NTRIPLES'), [@namespace, :vocab, @concept.scheme, @concept, format: :nt], class: 'list-group-item disabled' %>
