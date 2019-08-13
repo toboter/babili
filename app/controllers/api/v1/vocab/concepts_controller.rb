@@ -1,6 +1,4 @@
-module Api
-  module V1
-    module Vocab
+module Api::V1::Vocab
       class ConceptsController < Api::V1::BaseController
         load_and_authorize_resource :scheme, class: 'Vocab::Scheme', only: [:index, :show]
         load_and_authorize_resource :concept, through: :scheme, class: 'Vocab::Concept', find_by: :slug, only: [:index, :show]
@@ -46,7 +44,7 @@ module Api
           end
         end
 
-        # /api/search/concepts
+        # /api::/v1/search/concepts
         def search
           concepts = ::Vocab::Concept.accessible_by(current_ability, :read)
           concepts = concepts.where(scheme_id: ::Vocab::Scheme.friendly.find(params[:in_scheme])) if params[:in_scheme]
@@ -67,6 +65,4 @@ module Api
         end
 
       end
-    end
-  end
 end
