@@ -17,7 +17,7 @@ gem 'jbuilder', '~> 2.5'
 # gem 'redis', '~> 3.0'
 # gem 'capistrano-rails', group: :development
 
-gem 'mini_magick', '~> 4.8'
+gem 'mini_magick', '~> 4.9'
 gem 'image_processing', '~> 1.2'
 gem "streamio-ffmpeg"
 gem 'down'
