@@ -47,11 +47,11 @@ group :test do
 end
 
 # gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-gem 'devise'
+gem 'devise', '-> 4.4.3'
 gem 'doorkeeper', '~> 4.3.0'
 gem 'cancancan'
 
-gem 'bootstrap-sass', '~> 3.3.6'
+gem 'bootstrap-sass', '~> 3.4.1'
 gem "font-awesome-rails"
 gem 'simple_form'
 gem 'will_paginate-bootstrap'
