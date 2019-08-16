@@ -12,9 +12,9 @@ GIT
 
 GIT
   remote: https://github.com/toboter/acts_as_dag.git
-  revision: e73b2a5a7f628cd41d6f89e25485202070516ea0
+  revision: f87520b991b2b36554cb906e433a0797420ba994
   specs:
-    acts_as_dag (2.0.7)
+    acts_as_dag (2.0.8)
       activerecord (> 4.0)
 
 GEM
@@ -133,7 +133,7 @@ GEM
     color (1.8)
     commonmarker (0.17.11)
       ruby-enum (~> 0.5)
-    concurrent-ruby (1.0.5)
+    concurrent-ruby (1.1.5)
     connection_pool (2.2.2)
     crass (1.0.4)
     csl (1.5.0)
@@ -196,7 +196,7 @@ GEM
     htmlentities (4.3.4)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
-    i18n (1.1.0)
+    i18n (1.6.0)
       concurrent-ruby (~> 1.0)
     image_processing (1.6.0)
       mini_magick (~> 4.0)
