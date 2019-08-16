@@ -2,8 +2,9 @@ module Api::V1::Vocab
   class SchemeSerializer < ActiveModel::Serializer
     include Rails.application.routes.url_helpers
     type :concept_scheme
+    attribute(:@context) { "https://github.com/toboter/schema/raw/master/contexts/concept_scheme.jsonld" }
 
-    attribute(:schema) { 'http://github.com/toboter/schema/raw/master/concept_scheme.json' }
+    attribute(:schema) { 'https://github.com/toboter/schema/raw/master/concept_scheme.json' }
     attribute :id do
       [object.namespace.name, 'vocabulary', 'schemes', object.slug].join('/')
     end
