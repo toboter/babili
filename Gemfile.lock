@@ -549,7 +549,7 @@ DEPENDENCIES
   coffee-rails (~> 4.2)
   commonmarker (~> 0.17.11)
   csl-styles
-  devise
+  devise (~> 4.4.3)
   doorkeeper (~> 4.3.0)
   down
   exiftool_vendored
