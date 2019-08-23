@@ -100,3 +100,4 @@ gem 'language_list'
 gem 'hashie'
 gem "recaptcha", require: "recaptcha/rails"
 gem 'meta-tags'
+gem 'whatlanguage'

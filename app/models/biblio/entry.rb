@@ -15,7 +15,7 @@ class Biblio::Entry < ApplicationRecord
 
   has_many :creatorships, dependent: :destroy, class_name: 'Biblio::Creatorship', foreign_key: :entry_id
   has_many :creators, -> { order 'biblio_creatorships.id asc' }, through: :creatorships, source: :agent_appellation
-  belongs_to :creator, class_name: 'Person'
+  belongs_to :creator, class_name: 'Person', optional: true
   has_many :referencations, class_name: 'Biblio::Referencation', dependent: :destroy
   has_many :repositories, through: :referencations
   has_many :referencings, as: :referenceable, class_name: 'Reference', dependent: :destroy # Entry is referenceable

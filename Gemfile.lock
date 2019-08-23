@@ -510,6 +510,7 @@ GEM
     websocket-driver (0.7.0)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.3)
+    whatlanguage (1.0.6)
     will_paginate (3.1.6)
     will_paginate-bootstrap (1.0.1)
       will_paginate (>= 3.0.3)
@@ -601,6 +602,7 @@ DEPENDENCIES
   uglifier (>= 1.3.0)
   unicode_utils
   web-console (>= 3.3.0)
+  whatlanguage
   will_paginate-bootstrap
   xml-to-json
 

@@ -7,7 +7,7 @@ module Api::V1::Biblio
     DEFAULT_PER_PAGE = 50
 
     def index
-      @all_entries = Biblio::Entry.all
+      @all_entries = ::Biblio::Entry.all
       @entries = @all_entries
         .where.not(type: ['Biblio::Serie', 'Biblio::Journal'])
       @serials = @all_entries
@@ -29,7 +29,7 @@ module Api::V1::Biblio
         page: params[:page], 
         per_page: per_page)
       
-        render json: @results, each_serializer: EntrySerializer, adapter: :json
+        render json: @results, meta: pagination_dict(@results), each_serializer: EntrySerializer, adapter: :json
     
     end
 
