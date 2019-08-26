@@ -18,7 +18,7 @@ class Vocab::ConceptsController < ApplicationController
     end
     respond_to do |format|
       format.html
-      format.json { render json: @concepts, each_serializer: ConceptSerializer }
+      format.json { render json: @concepts, each_serializer: Api::V1::Vocab::ConceptSerializer }
     end
 
   end
@@ -33,7 +33,7 @@ class Vocab::ConceptsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render json: @concept, serializer: ConceptSerializer }
+      format.json { render json: @concept, serializer: Api::V1::Vocab::ConceptSerializer }
     end
 
   end
