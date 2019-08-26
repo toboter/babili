@@ -3,6 +3,15 @@
     <%= render 'biblio/referencations/add_entry', namespace: @namespace, repository: @repository %>
   </div>
   <div class="col-md-4">
+    <div class="btn-group">
+      <%= link_to '', class: 'btn btn-default btn-sm text-strong dropdown-toggle', data: { toggle: 'dropdown' }, aria: { haspopup: true, expanded: false } do %>
+        <%= fa_icon('download', text: 'Export') %> <span class="caret"></span>
+      <% end %>
+      <ul class="dropdown-menu">
+        <li><%= link_to 'BibTEX', [@namespace, @repository, :biblio, :references, format: 'bibtex'] %></li>
+        <li><%= link_to 'JSON', [@namespace, @repository, :biblio, :references, format: 'json'] %></li>
+      </ul>
+    </div>
     <%= content_tag :div, class: "btn-group pull-right" do %>
       <button type="button" class="btn btn-default dropdown-toggle text-strong" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <%= fa_icon('plus', text: "Create") %> <span class="caret"></span>

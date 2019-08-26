@@ -51,7 +51,7 @@ class Biblio::EntriesController < ApplicationController
     @discussions = @entry.referencings.where(referencing_type: 'Discussion::Comment')
     respond_to do |format|
       format.html
-      format.json { render json: @entry, serializer: EntrySerializer }
+      format.json { render json: @entry, serializer: Api::V1::Biblio::EntrySerializer }
       format.bibtex { render plain: (BibTeX::Bibliography.new << @entry.to_bib) }
     end
   end

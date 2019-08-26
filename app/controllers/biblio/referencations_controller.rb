@@ -16,7 +16,7 @@ class Biblio::ReferencationsController < ApplicationController
     sort_order = Biblio::Entry.sorted_by(sorted_by) if @entries.any?
 
     per_page = current_user.try(:person).try(:per_page).present? ? current_user.person.per_page : DEFAULT_PER_PAGE
-    per_page = nil if params[:format] == 'bibtex'
+    per_page = nil if params[:format] == 'bibtex' || params[:format] == 'json'
 
     @results = Biblio::Entry.search(query, 
       fields: [{citation: :exact}, :entry_type, :author, :editor, :title, :booktitle, :journal, :series, {year: :exact}, :publisher, :address, "tags^10", 
@@ -33,7 +33,7 @@ class Biblio::ReferencationsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render json: @results, each_serializer: Biblio::EntrySerializer }
+      format.json { render json: @results, each_serializer: Api::V1::Biblio::EntrySerializer }
       format.bibtex { render plain: (BibTeX::Bibliography.new << @results.map(&:to_bib))  }
     end
 
