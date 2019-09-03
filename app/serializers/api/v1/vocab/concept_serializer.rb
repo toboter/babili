@@ -6,7 +6,7 @@ module Api::V1::Vocab
 
     attribute(:schema) { 'https://github.com/toboter/schema/raw/master/concept.json' }
     attribute(:id) { [object.scheme.namespace.name, 'vocabulary', 'schemes', object.scheme.slug, 'concepts', object.slug].join('/') }
-    
+
     attribute(:created) { object.created_at }
     attribute(:issued) { object.created_at }
     attribute(:modified) { object.updated_at }
@@ -61,7 +61,7 @@ module Api::V1::Vocab
     attribute(:hiddenLabel) { object.labels.where(type: 'Hidden', is_abbrevation: false).map{ |label| {LanguageList::LanguageInfo.find(label.language.split(' ').last).iso_639_1.to_sym => label.body} }.reduce(&:merge!) }
 
     attribute :broader do
-      object.broader_concepts.map do |concept| 
+      object.broader_concepts.map do |concept|
         {
           id: [concept.scheme.namespace.name, 'vocabulary', 'schemes', concept.scheme.slug, 'concepts', concept.slug].join('/'),
           prefLabel: concept.labels.where(type: 'Preferred', is_abbrevation: false).map{ |label| {LanguageList::LanguageInfo.find(label.language.split(' ').last).iso_639_1.to_sym => label.body} }.reduce(&:merge!),
@@ -71,7 +71,7 @@ module Api::V1::Vocab
       end
     end
     attribute :narrower do
-      object.narrower_concepts.map do |concept| 
+      object.narrower_concepts.map do |concept|
         {
           id: [concept.scheme.namespace.name, 'vocabulary', 'schemes', concept.scheme.slug, 'concepts', concept.slug].join('/'),
           prefLabel: concept.labels.where(type: 'Preferred', is_abbrevation: false).map{ |label| {LanguageList::LanguageInfo.find(label.language.split(' ').last).iso_639_1.to_sym => label.body} }.reduce(&:merge!),
@@ -98,11 +98,11 @@ module Api::V1::Vocab
     attribute(:changeNote) { object.notes.where(type: 'Change').map{ |note| {LanguageList::LanguageInfo.find(note.language.split(' ').last).iso_639_1.to_sym => note.body} }.reduce(&:merge!) }
 
 
-    attribute(:closeMatch) { object.matches.where(property: 'close').map{|m| {name: m.associatable.name, uri: m.associatable.api_uri } } }
-    attribute(:exactMatch) { object.matches.where(property: 'exact').map{|m| {name: m.associatable.name, uri: m.associatable.api_uri } } }
-    attribute(:relatedMatch) { object.matches.where(property: 'related').map{|m| {name: m.associatable.name, uri: m.associatable.api_uri } } }
-    attribute(:broadMatch) { object.matches.where(property: 'broader').map{|m| {name: m.associatable.name, uri: m.associatable.api_uri } } }
-    attribute(:narrowMatch) { object.matches.where(property: 'narrower').map{|m| {name: m.associatable.name, uri: m.associatable.api_uri }} }
+    attribute(:closeMatch) { object.matches.where(property: 'close').map{|m| {name: m.associatable.try(:name), uri: m.associatable.api_uri } if m.associatable } }
+    attribute(:exactMatch) { object.matches.where(property: 'exact').map{|m| {name: m.associatable.try(:name), uri: m.associatable.api_uri } if m.associatable } }
+    attribute(:relatedMatch) { object.matches.where(property: 'related').map{|m| {name: m.associatable.try(:name), uri: m.associatable.api_uri } if m.associatable } }
+    attribute(:broadMatch) { object.matches.where(property: 'broader').map{|m| {name: m.associatable.try(:name), uri: m.associatable.api_uri } if m.associatable } }
+    attribute(:narrowMatch) { object.matches.where(property: 'narrower').map{|m| {name: m.associatable.try(:name), uri: m.associatable.api_uri } if m.associatable } }
 
     attribute :links do
       {
