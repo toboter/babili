@@ -8,8 +8,8 @@
         <%= fa_icon('download', text: 'Export') %> <span class="caret"></span>
       <% end %>
       <ul class="dropdown-menu">
-        <li><%= link_to 'BibTEX', [@namespace, @repository, :biblio, :references, format: 'bibtex'] %></li>
-        <li><%= link_to 'JSON', [@namespace, @repository, :biblio, :references, format: 'json'] %></li>
+        <li><%= link_to 'BibTEX', [@namespace, @repository, :biblio, :references, format: 'bibtex', q: params[:q], sorted_by: params[:sorted_by] ] %></li>
+        <li><%= link_to 'JSON', [@namespace, @repository, :biblio, :references, format: 'json', q: params[:q], sorted_by: params[:sorted_by] ] %></li>
       </ul>
     </div>
     <%= content_tag :div, class: "btn-group pull-right" do %>
@@ -57,7 +57,7 @@
         </div>
         <div class="--spacious-20">
           <p class="text-small text-grey">
-            Diese Bibliographie ist work in progress. Sie umfasst Referenzen zum Forschungsthema dieses Repositoriums. Umfang und Genauigkeit der Daten entwickeln sich mit dem Voranschreiten des Projekts. 
+            Diese Bibliographie ist work in progress. Sie umfasst Referenzen zum Forschungsthema dieses Repositoriums. Umfang und Genauigkeit der Daten entwickeln sich mit dem Voranschreiten des Projekts.
             Hinweise, Ergänzungen, sowie Berichtigungen werden dankbar entgegengenommen.
           </p>
         </div>
@@ -80,7 +80,7 @@
       <% end %>
 
       <div class="col-md-8 col-md-pull-4 main">
-        
+
         <div id='entries'>
           <table class="table table-simple">
             <tbody>
@@ -94,7 +94,7 @@
           <%= will_paginate @results, renderer: BootstrapPagination::Rails %>
         </div>
         <%= content_tag :div, class: 'links --spacious-10' do %>
-          <%= link_to('Get an overview', biblio_path, class: 'text-small') %> | 
+          <%= link_to('Get an overview', biblio_path, class: 'text-small') %> |
           <%= link_to('View all bibliographic references', biblio_entries_path, class: 'text-small') %>
         <% end %>
       </div>
