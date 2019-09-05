@@ -9,7 +9,7 @@ class User < ApplicationRecord
 
   devise :database_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :trackable, :validatable
-  
+
   attr_accessor :slug
 
   has_many :access_grants, class_name: "Doorkeeper::AccessGrant",
@@ -22,13 +22,7 @@ class User < ApplicationRecord
   has_many :personal_access_tokens, foreign_key: :resource_owner_id
   has_many :audits, dependent: :destroy, foreign_key: :user_id
   has_many :user_sessions, class_name: 'UserSession', dependent: :destroy
-  belongs_to :person
-
-  before_validation(on: :create) do
-    self.slug = self.slug.downcase.to_param
-    self.person = self.build_person
-    self.person.build_namespace(name: slug)
-  end
+  belongs_to :person, optional: true
 
   validates :slug, presence: true, on: :create
   validates :slug, exclusion: { in: %w(vocabularies zensus locate users people organizations search about contact explore collections settings blog help news sidekiq api oauth discussions),
@@ -38,7 +32,12 @@ class User < ApplicationRecord
   validates :slug, format: { with: /\A[a-zA-Z0-9-]+\z/, message: "only allows letters, numbers and '-'." }, on: :create
   validate :unique_namespace, on: :create
 
-  after_validation(on: :create) do
+  before_create do
+    self.slug = self.slug.downcase.to_param
+    person = Person.new(given_name: slug)
+    person.build_namespace(name: slug)
+    person.save
+    self.person = person
   end
 
   after_update :enroll_to_default_oread_apps, if: :is_approved?
@@ -47,30 +46,30 @@ class User < ApplicationRecord
   after_create :send_admin_mail
 
   def unique_namespace
-    if Namespace.find_by_slug(self.slug) && !self.person
+    if Namespace.find_by_slug(slug) && !self.person
       errors.add(:slug, "is already taken")
     end
   end
 
   delegate :name, to: :person
 
-  def active_for_authentication? 
-    super && approved? 
-  end 
+  def active_for_authentication?
+    super && approved?
+  end
 
   def enroll_to_default_oread_apps
     Oread::Application.where(enroll_users_default: true).each do |app|
       self.oread_access_enrollments << Oread::AccessEnrollment.new(application: app, creator: self)
     end
     return true
-  end  
-  
-  def inactive_message 
-    if !approved? 
-      :not_approved 
-    else 
-      super # Use whatever other message 
-    end 
+  end
+
+  def inactive_message
+    if !approved?
+      :not_approved
+    else
+      super # Use whatever other message
+    end
   end
 
   def send_admin_mail
@@ -109,11 +108,11 @@ class User < ApplicationRecord
     def is_approved?
       approved_changed? && approved?
     end
-  
+
     def needs_password_change_audit?
       encrypted_password_changed? && persisted?
     end
-     
+
     def audit_password_change
       Audit.create!(user: self, actor: self, action: "user.password_changed", actor_ip: self.last_sign_in_ip)
     end
