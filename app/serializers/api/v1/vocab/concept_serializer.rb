@@ -2,9 +2,9 @@ module Api::V1::Vocab
   class ConceptSerializer < ActiveModel::Serializer
     include Rails.application.routes.url_helpers
     type :concept
-    attribute(:@context) { "https://github.com/toboter/schema/raw/master/contexts/concept.jsonld" }
+    attribute(:@context) { "https://github.com/babylon-online/schema/raw/master/contexts/concept.jsonld" }
 
-    attribute(:schema) { 'https://github.com/toboter/schema/raw/master/concept.json' }
+    attribute(:schema) { 'https://github.com/babylon-online/schema/raw/master/concept.json' }
     attribute(:id) { [object.scheme.namespace.name, 'vocabulary', 'schemes', object.scheme.slug, 'concepts', object.slug].join('/') }
 
     attribute(:created) { object.created_at }
