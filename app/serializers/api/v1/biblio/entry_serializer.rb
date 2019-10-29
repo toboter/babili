@@ -5,7 +5,7 @@ module Api::V1::Biblio
     include Rails.application.routes.url_helpers
     type :citation_data_item
 
-    attribute(:schema) { 'https://github.com/toboter/schema/raw/master/citation_data_item.json' }
+    attribute(:schema) { 'https://github.com/babylon-online/schema/raw/master/citation_data_item.json' }
     attribute :type do
       type = object.type.demodulize
       case type
@@ -15,14 +15,14 @@ module Api::V1::Biblio
         when 'Proceeding' then 'book'
         when 'Article' then 'article-journal'
         when 'InBook' then 'chapter'
-        when 'InCollection' then 'article'
+        when 'InCollection' then 'chapter'
         when 'InProceeding' then 'paper-conference'
         when 'Manual' then 'book'
-        when 'Phd-Thesis' then 'thesis'
+        when 'Phdthesis' then 'thesis'
         when 'Masterthesis' then 'thesis'
         when 'Unpublished' then 'manuscript'
         when 'Techreport' then 'report'
-        when 'Misc' then 'misc'
+        when 'Misc' then 'article'
         else type.downcase
       end
     end
@@ -40,14 +40,11 @@ module Api::V1::Biblio
     attribute :author, if: -> { object.class.method_defined?(:authors) } do
       object.authors.map{|a| person_variable(a)}
     end
-    attribute :"collection-editor", if: -> { object.type != 'Biblio::Collection' && object.class.method_defined?(:editors) } do
+    attribute :"editor", if: -> { object.class.method_defined?(:editors) } do
       object.editors.map{|a| person_variable(a)}
     end
     attribute :"container-author", if: ->  { object.type == 'Biblio::InBook' } do
       object.book.authors.map{|a| person_variable(a)}
-    end
-    attribute :editor, if: -> { object.type == 'Biblio::Collection' && object.class.method_defined?(:editors) } do
-      object.editors.map{|a| person_variable(a)}
     end
 
     attribute :container, if: -> { object.try(:parent).try(:year) } do
@@ -81,7 +78,7 @@ module Api::V1::Biblio
     attribute :pages, key: :page, if: -> {object.class.method_defined?(:pages) && object.pages.present?}
 
     attribute(:publisher, if: -> { object.class.method_defined?(:publisher) }) { object.try(:publisher).try(:name) }
-    attribute :"publisher-place", if: -> { object.class.method_defined?(:places) } do 
+    attribute :"publisher-place", if: -> { object.class.method_defined?(:places) } do
       object.places.map { |p| p.try(:given) }.join(', ') if object.places.present?
     end
 
