@@ -1,21 +1,19 @@
 source 'https://rubygems.org'
-# source 'https://gems.ruby-china.org/'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.4.1'
+ruby '2.7.3'
 
 gem 'rails', '~> 5.2.0'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'activerecord-postgis-adapter'
-gem 'puma', '~> 3.11'
-gem 'sass-rails', '~> 5.0'
+gem 'puma', '~> 3.11' ##'~> 5.2'
+gem 'sassc-rails'
+# gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.2'
 gem 'mini_racer', platforms: :ruby
 gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
-# gem 'redis', '~> 3.0'
-# gem 'capistrano-rails', group: :development
 
 gem 'mini_magick', '~> 4.9'
 gem 'image_processing', '~> 1.2'
@@ -25,7 +23,7 @@ gem 'shrine'
 gem 'marcel'
 gem 'fastimage'
 gem 'exiftool_vendored'
-gem 'bootsnap', '>= 1.1.0', require: false
+gem 'bootsnap', '>= 1.7.0', require: false
 gem 'rack-cors', require: 'rack/cors'
 gem 'active_model_serializers', '~> 0.10.0'
 
@@ -47,11 +45,11 @@ group :test do
 end
 
 # gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-gem 'devise', '~> 4.4.3'
-gem 'doorkeeper', '~> 4.3.0'
+gem 'devise', '= 4.4.3'
+gem 'doorkeeper', '= 4.3.2'
 gem 'cancancan'
 
-gem 'bootstrap-sass', '~> 3.4.1'
+gem 'bootstrap-sass', '= 3.4.1'
 gem "font-awesome-rails"
 gem 'simple_form'
 gem 'will_paginate-bootstrap'
@@ -67,13 +65,13 @@ gem 'acts_as_list'
 gem 'closure_tree'
 gem 'acts_as_dag', git: 'https://github.com/toboter/acts_as_dag.git'
 # gem 'acts_as_dag', path: '/home/tschmidt/dev/gem_dev/acts_as_dag'
-gem 'acts-as-taggable-on'
+gem 'acts-as-taggable-on' ## , '~> 6.0'
 gem 'sequenced'
 # gem "jsonb_accessor", "~> 1.0.0"
 # gem 'json_attribute', git: 'https://github.com/jrochkind/json_attribute.git'
 gem 'attr_json'
 
-gem 'searchkick'
+gem 'searchkick', '~> 4'
 gem 'friendly_id'
 gem 'paper_trail'
 gem 'browser'

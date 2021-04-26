@@ -157,7 +157,7 @@ class Biblio::Entry < ApplicationRecord
     s, q = "", value
     loop do
       q, r = (q - 1).divmod(26)
-      s.prepend(Alpha26[r]) 
+      s.prepend(Alpha26[r])
       break if q.zero?
     end
     s
@@ -169,7 +169,7 @@ class Biblio::Entry < ApplicationRecord
     when /^creator_/
       { citation: direction }
     when /^year_/
-      { year: direction } 
+      { year: direction }
     #when /^updated_at_/
     #  { updated_at: direction }
     when /^score_/

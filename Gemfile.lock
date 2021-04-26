@@ -90,7 +90,7 @@ GEM
     bibtex-ruby (4.4.7)
       latex-decode (~> 0.0)
     bindex (0.5.0)
-    bootsnap (1.3.1)
+    bootsnap (1.7.4)
       msgpack (~> 1.0)
     bootstrap-sass (3.4.1)
       autoprefixer-rails (>= 5.2.1)
@@ -269,14 +269,16 @@ GEM
     mime-types (3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
-    mimemagic (0.3.2)
+    mimemagic (0.3.10)
+      nokogiri (~> 1)
+      rake
     mini_magick (4.9.5)
     mini_mime (1.0.1)
     mini_portile2 (2.3.0)
     mini_racer (0.2.0)
       libv8 (>= 6.3)
     minitest (5.11.3)
-    msgpack (1.2.4)
+    msgpack (1.4.2)
     multi_json (1.13.1)
     multipart-post (2.1.1)
     mustermann (1.0.2)
@@ -416,20 +418,15 @@ GEM
       crass (~> 1.0.2)
       nokogiri (>= 1.4.4)
       nokogumbo (~> 1.4)
-    sass (3.7.4)
-      sass-listen (~> 4.0.0)
-    sass-listen (4.0.0)
-      rb-fsevent (~> 0.9, >= 0.9.4)
-      rb-inotify (~> 0.9, >= 0.9.7)
-    sass-rails (5.0.7)
-      railties (>= 4.0.0, < 6)
-      sass (~> 3.1)
-      sprockets (>= 2.8, < 4.0)
-      sprockets-rails (>= 2.0, < 4.0)
-      tilt (>= 1.1, < 3)
     sassc (2.0.1)
       ffi (~> 1.9)
       rake
+    sassc-rails (2.1.2)
+      railties (>= 4.0.0)
+      sassc (>= 2.0)
+      sprockets (> 3.0)
+      sprockets-rails
+      tilt
     searchkick (4.1.0)
       activemodel (>= 5)
       elasticsearch (>= 6)
@@ -536,8 +533,8 @@ DEPENDENCIES
   acts_as_list
   attr_json
   bibtex-ruby
-  bootsnap (>= 1.1.0)
-  bootstrap-sass (~> 3.4.1)
+  bootsnap (>= 1.7.0)
+  bootstrap-sass (= 3.4.1)
   browser
   byebug
   cancancan
@@ -550,8 +547,8 @@ DEPENDENCIES
   coffee-rails (~> 4.2)
   commonmarker (~> 0.17.11)
   csl-styles
-  devise (~> 4.4.3)
-  doorkeeper (~> 4.3.0)
+  devise (= 4.4.3)
+  doorkeeper (= 4.3.2)
   down
   exiftool_vendored
   fastimage
@@ -586,8 +583,8 @@ DEPENDENCIES
   rgeo-proj4
   roo
   sanitize (~> 4.6, >= 4.6.6)
-  sass-rails (~> 5.0)
-  searchkick
+  sassc-rails
+  searchkick (~> 4)
   selenium-webdriver
   sequenced
   shrine
@@ -607,7 +604,7 @@ DEPENDENCIES
   xml-to-json
 
 RUBY VERSION
-   ruby 2.4.1p111
+   ruby 2.7.3p183
 
 BUNDLED WITH
-   1.17.3
+   2.2.16

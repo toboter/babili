@@ -74,5 +74,5 @@ Rails.application.configure do
     password: Rails.application.secrets.GMAIL_PASSWORD
   }
 
-  # config.i18n.fallbacks = true
+  config.i18n.fallbacks = true
 end
