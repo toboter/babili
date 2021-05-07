@@ -17,6 +17,14 @@ GIT
     acts_as_dag (2.0.8)
       activerecord (> 4.0)
 
+GIT
+  remote: https://github.com/toboter/ruby-xml-to-json.git
+  revision: 4705f1f64fdbe98543185b483b643400af1a4a03
+  specs:
+    xml-to-json (1.0.2)
+      json (~> 2)
+      xml-to-hash (>= 1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -222,7 +230,7 @@ GEM
     io-like (0.3.1)
     jbuilder (2.11.2)
       activesupport (>= 5.0.0)
-    json (1.8.6)
+    json (2.5.1)
     json-canonicalization (0.2.1)
     json-ld (3.1.9)
       htmlentities (~> 4.3)
@@ -552,9 +560,6 @@ GEM
       activerecord (>= 4.2)
     xml-to-hash (1.0.3)
       nokogiri (~> 1, >= 1.6)
-    xml-to-json (1.0.2)
-      json (~> 1)
-      xml-to-hash (>= 1)
     xpath (3.2.0)
       nokogiri (~> 1.8)
 
@@ -638,7 +643,7 @@ DEPENDENCIES
   web-console (>= 3.3.0)
   whatlanguage
   will_paginate-bootstrap
-  xml-to-json
+  xml-to-json!
 
 RUBY VERSION
    ruby 2.7.3p183

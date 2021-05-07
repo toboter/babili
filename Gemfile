@@ -81,7 +81,7 @@ gem "rgeo"
 gem "rgeo-proj4"
 gem 'roo'
 gem 'activerecord-import'
-gem 'xml-to-json'
+gem 'xml-to-json', git: 'https://github.com/toboter/ruby-xml-to-json.git'
 gem 'hashdiff'
 gem 'citeproc-ruby'
 gem 'csl-styles'
