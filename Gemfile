@@ -56,7 +56,7 @@ gem 'cocoon'
 gem 'html-pipeline', '~> 2.8', '>= 2.8.4'
 gem 'commonmarker', '~> 0.17.11'
 gem 'github-markup', '~> 2.0', '>= 2.0.1'
-gem 'sanitize', '~> 4.6', '>= 4.6.6'
+gem 'sanitize', '~> 5.2'
 gem 'rails-bootstrap-markdown' #
 gem 'redcarpet' #
 

@@ -300,8 +300,8 @@ GEM
     nokogiri (1.11.3)
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
-    nokogumbo (1.5.0)
-      nokogiri
+    nokogumbo (2.0.5)
+      nokogiri (~> 1.8, >= 1.8.4)
     orm_adapter (0.5.0)
     paper_trail (12.0.0)
       activerecord (>= 5.2)
@@ -435,10 +435,10 @@ GEM
     ruby2_keywords (0.0.4)
     ruby_dep (1.5.0)
     rubyzip (2.3.0)
-    sanitize (4.6.6)
+    sanitize (5.2.1)
       crass (~> 1.0.2)
-      nokogiri (>= 1.4.4)
-      nokogumbo (~> 1.4)
+      nokogiri (>= 1.8.0)
+      nokogumbo (~> 2.0)
     sassc (2.4.0)
       ffi (~> 1.9)
     sassc-rails (2.1.2)
@@ -601,7 +601,7 @@ DEPENDENCIES
   rgeo
   rgeo-proj4
   roo
-  sanitize (~> 4.6, >= 4.6.6)
+  sanitize (~> 5.2)
   sassc-rails
   searchkick (~> 4)
   selenium-webdriver
