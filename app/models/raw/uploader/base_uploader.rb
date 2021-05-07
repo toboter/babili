@@ -2,7 +2,7 @@ require 'exiftool'
 
 module Raw::Uploader
   class BaseUploader < Shrine
-    plugin :logging
+    plugin :instrumentation
     plugin :determine_mime_type, analyzer: :marcel
     plugin :signature
     plugin :add_metadata
@@ -12,7 +12,7 @@ module Raw::Uploader
     plugin :processing
     plugin :versions
     plugin :delete_raw
-   
+
     add_metadata do |io, context|
       e = Exiftool.new(io.path)
       file = e.to_hash
