@@ -61,16 +61,16 @@
     border-bottom: none;
   }
   .repo-meta {
-    @extend .list-inline;
-    @extend .text-gray;
-    @extend .text-small;
+    @extend .list-inline !optional;
+    @extend .text-gray !optional;
+    @extend .text-small !optional;
     margin-bottom: 20px;
     .meta-item {
     .author-avatar {
         vertical-align: top;
         border-radius: 3px;
         height:18px;
-        width:18px; 
+        width:18px;
         background-position:center;
         display: inline-block;
     }

@@ -12,7 +12,7 @@ span.trix-mention + figcaption {
   display: none;
 }
 
-trix-mentions, 
+trix-mentions,
 trix-references {
   .selectize-control {
     position: fixed
@@ -25,7 +25,7 @@ trix-references {
 }
 
 trix-mentions {
-  .selectize-control, 
+  .selectize-control,
   .selectize-dropdown {
     width: 200px !important;
     z-index: 9999;
@@ -33,7 +33,7 @@ trix-mentions {
 }
 
 trix-references {
-  .selectize-control, 
+  .selectize-control,
   .selectize-dropdown {
     width: 300px !important;
     z-index: 9999;
@@ -41,25 +41,25 @@ trix-references {
 }
 
 .thread-element {
-  @extend .media;
+  @extend .media !optional;
   overflow: visible;
   .comment-left {
-    @extend .media-left;
-    @extend .hidden-xs;
+    @extend .media-left !optional;
+    @extend .hidden-xs !optional;
   }
   .event-left {
-    @extend .media-left;
-    @extend .hidden-xs;
+    @extend .media-left !optional;
+    @extend .hidden-xs !optional;
     min-width: 60px;
   }
   a {
     color: #555;
-    @extend .text-strong;
+    @extend .text-strong !optional;
     div.author-avatar {
-      @extend .media-object;
-      @extend .organization-member-avatar;
+      @extend .media-object !optional;
+      @extend .organization-member-avatar !optional;
       height:20px;
-      width:20px; 
+      width:20px;
       background-position:center;
     }
   }
@@ -69,30 +69,30 @@ trix-references {
   }
   .author {
     color: #444;
-    @extend .text-strong;
+    @extend .text-strong !optional;
   }
   .title {
     color: #444;
-    @extend .text-strong;
+    @extend .text-strong !optional;
   }
   .date {
     font-weight: normal;
   }
 
   .comment-body {
-    @extend .media-body;
-    @extend .panel;
-    @extend .panel-default;
+    @extend .media-body !optional;
+    @extend .panel !optional;
+    @extend .panel-default !optional;
     overflow: visible;
   }
   .event-body {
-    @extend .media-body;
+    @extend .media-body !optional;
     overflow: visible;
     .icon-pre {
       font-size:.7em;
       margin-left:10px;
-      @extend .text-small;
-      @extend .pull-left;
+      @extend .text-small !optional;
+      @extend .pull-left !optional;
     }
     .event {
       margin-left:40px;
@@ -105,18 +105,18 @@ trix-references {
     font-weight: normal;
     color: #0366d6;
   }
-  figure.attachment--jpg, 
+  figure.attachment--jpg,
   figure.attachment--png {
       background-color: #FAFBFC;
       border: 1px dashed #0366d6;
       border-radius: 3px;
       img {
-          @extend .img-responsive;
+          @extend .img-responsive !optional;
           margin-left: auto;
           margin-right: auto;
       }
       figcaption {
-          @extend .text-center;
+          @extend .text-center !optional;
           padding-bottom: 2px;
       }
   }
@@ -128,7 +128,7 @@ trix-references {
       figcaption {
           padding: 2px 7px;
           span.attachment__size {
-              @extend .text-small;
+              @extend .text-small !optional;
           }
       }
       :hover {
@@ -136,13 +136,13 @@ trix-references {
       }
   }
   figure {
-    span.mention, 
+    span.mention,
     span.reference {
       color: #444;
-      @extend .text-strong;
+      @extend .text-strong !optional;
     }
   }
-  
+
   figure.attachment--content {
     display: inline;
     figcaption {

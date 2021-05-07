@@ -22,13 +22,13 @@ module Writer
     alias_attribute :name, :title
 
     acts_as_sequenced scope: :repository_id
-    has_paper_trail only: [:title, :content], versions: :drafts
+    has_paper_trail only: [:title, :content], versions: {name: :drafts}
     searchkick
 
     belongs_to :creator, class_name: 'Person'
     belongs_to :publisher, class_name: 'Person', optional: true
     belongs_to :repository
-    
+
     has_many :referencings, as: :referenceable, class_name: 'Reference', dependent: :destroy # Entry is referenceable
     has_many :discussion_comments, through: :referencings, source: :referencing, source_type: 'Discussion::Comment'
     has_many :referenceables, as: :referencing, class_name: 'Reference', dependent: :destroy
@@ -133,7 +133,7 @@ module Writer
         raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
       end
     end
-  
+
     def self.options_for_sorted_by
       [
         ['Newest', 'created_desc'],
