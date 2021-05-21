@@ -3,11 +3,11 @@
     <%= render "shared/search" %>
   </div>
   <div class="col-md-12">
-    
+
   </div>
 </div>
-    <table class="table table-simple table-responsive">
-      <tbody>
+    <table class="table table-simple table-responsive --spacious-10">
+      <tbody style="font-size:120%;">
         <%= render @local_results if @local_results %>
       </tbody>
     </table>
@@ -18,26 +18,29 @@
             <% if r.is_a?(Array) %>
               <% r.last.each do |o| %>
                 <% if r.first == 'ExcavatedObjects' %>
-                  <tr>
+                  <tr style="margin-top:12px;margin-bottom:10px;">
                     <td>
-                      <%= o["bab_rel"] %><br>
-                      <%= link_to o["links"]["html_url"], o["links"]["html_url"], class: 'text-small' %>
+                      <span class="text-strong text-gray" style="font-size:120%;"><%= o.try(:[], "identification").try(:[], "excavationNumber").try(:[], "literal") %></span>
+                      <span class="text-gray" style="font-size:120%;"> (<%= o.try(:[], "description").try(:first).try(:[], "de") %>)</span><br>
+                      <span class="text-gray"><%= o.try(:[], "identification").try(:[], "collectionNumber").try(:[], "collectionData").try(:[], "holder") %></span><br>
+                      <%= link_to o.try(:[], "links").try(:[], "html"), o.try(:[], "links").try(:[], "html"), class: 'text-small' %>
                     </td>
                   </tr>
-                <% elsif r.first == 'DocumentationObjects' %>
-                  <tr>
+                <% elsif r.first == 'ArchivalResources' %>
+                  <tr style="margin-top:12px;margin-bottom:10px;">
                     <td>
-                      <%= o["identifier_stable"] %><br>
-                      <%= link_to o["links"]["html_url"], o["links"]["html_url"], class: 'text-small' %>
+                      <span class="text-strong text-gray" style="font-size:120%;"><%= o.try(:[], "callNumber").try(:[], "value") %></span><br>
+                      <span class="text-gray"><%= o.try(:[], "containedIn").try(:[], "name") %></span><br>
+                      <%= link_to o.try(:[], "links").try(:[], "html"), o.try(:[], "links").try(:[], "html"), class: 'text-small' %>
                     </td>
                   </tr>
                 <% end %>
               <% end %>
             <% else %>
-              <tr>
+              <tr style="margin-top:12px;margin-bottom:10px;">
                 <td>
-                  <%= r["full_entry"] %><br>
-                  <%= link_to r["links"]["human"], r["links"]["human"], class: 'text-small' %>
+                  <span class="text-strong text-gray" style="font-size:120%;"><%= r.try(:[], "full_entry") %></span><br>
+                  <%= link_to r.try(:[], "links").try(:[], "html"), r.try(:[], "links").try(:[], "html"), class: 'text-small' %>
                 </td>
               </tr>
             <% end %>
@@ -55,9 +58,9 @@
   </p>
 
   <br>
-  <%= content_tag :p, 'Searching all registered, searchable collections.', class: "text-muted" if !user_signed_in? %>
+  <%= content_tag :p, 'Searching all registered, searchable apps.', class: "text-muted" if !user_signed_in? %>
 
-  <%= content_tag :h4, "Looking for personalized content in:", class: 'text-muted' if user_signed_in? %>
+  <%= content_tag :h4, "Looking for authorized content in:", class: 'text-muted' if user_signed_in? %>
   <%= render current_user.oread_enrolled_applications.order(name: :asc) if user_signed_in? %>
 
   <%= content_tag :h4, "Looking for unpublished content in:", class: 'text-muted' if user_signed_in? %>

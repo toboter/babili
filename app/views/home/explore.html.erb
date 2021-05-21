@@ -2,6 +2,23 @@
   <div class="" style="padding-bottom:50px;">
     <div class="row">
       <div class="col-md-7">
+        <div class="applications">
+          <div class="page-header">
+            <h2>Apps</h2>
+            <p class="text-muted">
+            </p>
+          </div>
+          <div class="row">
+            <% for application in @oread_applications.limit(3) do %>
+              <div class="col-md-6">
+                <%= render application, full: true, actions: true %>
+              </div>
+            <% end if can? :read, Oread::Application %>
+          </div>
+          <div class="row">
+            <%= link_to 'View all', collections_path, class: 'col-md-12' %>
+          </div>
+        </div>
 
         <div class="page-header">
           <h2>
@@ -11,7 +28,7 @@
         </div>
         <div class="page-header borderless">
           <p class="text-muted">
-            Repositories are workspaces for studies. They integrate baskets for various versioned data items as well as a bibliography and the users or groups 
+            Repositories are workspaces for studies. They integrate baskets for various versioned data items as well as a bibliography and the users or groups
             vocabularies. A board for discussions and a reports section offer a track over the repositories objectives.
           </p>
           <div class="--spacious">
@@ -28,8 +45,8 @@
         </div>
         <div class="page-header borderless">
           <p class="text-muted ">
-            Having 100 years of research history means having multiple naming conventions. <%= link_to 'Vocabularies', vocab_path, class: 'text-strong' %> shall 
-            assist each researcher or team with an idea of a common wording and term translations of topics and concepts as well as giving 
+            Having 100 years of research history means having multiple naming conventions. <%= link_to 'Vocabularies', vocab_path, class: 'text-strong' %> shall
+            assist each researcher or team with an idea of a common wording and term translations of topics and concepts as well as giving
             anyone the possibility to name things in a heterogenus way, while still acting with a common idea.
           </p>
         </div>
@@ -45,8 +62,8 @@
               <span class="badge"><%= Organization.all.size %></span>
             </h2>
             <p class="text-muted">
-              On babylon-online, you can join teams, which are groups of people with a shared research interest. 
-              These teams can be authorized together as one. Learn more on your personal 
+              On babylon-online, you can join teams, which are groups of people with a shared research interest.
+              These teams can be authorized together as one. Learn more on your personal
               <%= link_to 'teams settings page', settings_organizations_path %>.
             </p>
           </div>
@@ -60,29 +77,51 @@
           </div>
         </div>
 
-        <div class="applications">
-          <div class="page-header">
-            <h2>
-              S&umacr;q - Apps
-            </h2>
-            <p class="text-muted">
-            </p>
-          </div>
-          <div class="row">
-            <% for application in @oread_applications.limit(3) do %>
-              <div class="col-md-6">
-                <%= render application, full: true, actions: true %>
-              </div>
-            <% end if can? :read, Oread::Application %>
-          </div>
-          <div class="row">
-            <%= link_to 'View all', collections_path, class: 'col-md-12' %>
-          </div>
-        </div>
-
       </div>
 
       <div class="col-md-4 col-md-offset-1">
+        <div class="page-header">
+          <h2>Services</h2>
+        </div>
+
+        <div class="page-header borderless">
+          <h3>
+            Bibliographies
+          </h3>
+          <p class="text-muted ">
+            <%= link_to 'Bibliography', biblio_path, class: 'text-strong' %> integrates the scientific workflow idea into repositories. The entries
+            are like vocabulary terms scoped to, not only a person or group but even to their repositories and can be queried along the data.
+            As a repository forms the discourse universe of a scientific idea, references are an elementary service and make up a bibliography
+            of that matter in question.
+          </p>
+        </div>
+
+        <div class="page-header borderless">
+          <h3>Locate ::places</h3>
+          <p class="text-muted ">
+            <%= link_to 'Locate', locate_path, class: 'text-strong' %> is a geographic lookup service which guides you through places
+            and locations.
+          </p>
+        </div>
+
+        <div class="page-header borderless">
+          <h3>Phonebook ::zensus</h3>
+          <p class="text-muted ">
+            The babylon-online research framework helps you with some specific central authority services. With <%= link_to 'zensus', zensus_path, class: 'text-strong' %>,
+            you can lookup any type of people or institutions as agents. From recent team members, participating
+            institutions, to historic families or individuals, together with their affiliations or professions.
+          </p>
+        </div>
+
+        <div class="page-header borderless">
+          <h3>Object identifier ::boi</h3>
+          <p class="text-muted ">
+            BOI is the babylon object identifier. It is a general index of <%= link_to 'identifiers', aggregation_path, class: 'text-strong' %>
+            which aggregate data from various aspects of scientific interest (commits in repositories).
+            It drives the general visualization of heterogenus facets on objects.
+          </p>
+        </div>
+
         <div class="people">
           <div class="page-header borderless">
             <h2>
@@ -106,54 +145,6 @@
           </div>
         </div>
 
-        <div class="page-header">
-          <h2>Services</h2>
-        </div>
-
-        <div class="page-header borderless">
-          <h3>
-            Bibliographies
-          </h3>
-          <p class="text-muted ">
-            <%= link_to 'Bibliography', biblio_path, class: 'text-strong' %> integrates the scientific workflow idea into repositories. The entries 
-            are like vocabulary terms scoped to, not only a person or group but even to their repositories and can be queried along the data. 
-            As a repository forms the discourse universe of a scientific idea, references are an elementary service and make up a bibliography 
-            of that matter in question.
-          </p>
-        </div>
-
-        <div class="page-header borderless">
-          <h3>Locate ::places</h3>
-          <p class="text-muted ">
-            <%= link_to 'Locate', locate_path, class: 'text-strong' %> is a geographic lookup service which guides you through places 
-            and locations.
-          </p>
-        </div>
-
-        <div class="page-header borderless">
-          <h3>Phonebook ::zensus</h3>
-          <p class="text-muted ">
-            The babylon-online research framework helps you with some specific central authority services. With <%= link_to 'zensus', zensus_path, class: 'text-strong' %>, 
-            you can lookup any type of people or institutions as agents. From recent team members, participating 
-            institutions, to historic families or individuals, together with their affiliations or professions.
-          </p>
-        </div>
-
-        <div class="page-header borderless">
-          <h3>Object identifier ::boi</h3>
-          <p class="text-muted ">
-            BOI is the babylon object identifier. It is a general index of <%= link_to 'identifiers', aggregation_path, class: 'text-strong' %> 
-            which aggregate data from various aspects of scientific interest (commits in repositories). 
-            It drives the general visualization of heterogenus facets on objects.
-          </p>
-        </div>
-
-        <div class="page-header borderless hidden">
-          <h3>Epoc ::periods</h3>
-          <p class="text-muted ">
-            
-          </p>
-        </div>
       </div>
     </div>
   </div>
