@@ -6,7 +6,7 @@ ruby '2.7.3'
 gem 'rails', '~> 5.2.5'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'activerecord-postgis-adapter'
-gem 'puma', '~> 5.2'
+gem "puma", ">= 5.3.1"
 gem 'sassc-rails'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.2'
