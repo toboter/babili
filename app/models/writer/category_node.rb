@@ -10,7 +10,7 @@ module Writer
     # t.timestamps
 
     extend FriendlyId
-    has_closure_tree order: 'sort_order'
+    has_closure_tree order: 'sort_order', numeric_order: true
 
     belongs_to :creator, class_name: 'Person'
     has_many :categorizations, dependent: :destroy
