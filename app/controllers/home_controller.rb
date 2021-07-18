@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
-  
+
   def index
     set_meta_tags title: 'Start',
                   description: 'The babylon-online homepage',
@@ -7,12 +7,13 @@ class HomeController < ApplicationController
                   follow: true
     @latest_blog_postings = Writer::Categorization.order(created_at: :desc).includes(:category_node, :document).merge(Writer::CategoryNode.blog_threads).references(:category_node).group_by(&:document).take(5).map{|d,c| c.first}
     @latest_references = Biblio::Entry.where("data->>'year' IS NOT NULL").order("(data ->> 'year') DESC").take(5)
+    @featured_application = Oread::Application.first
   end
 
   def google_confirmation
     render plain: 'google-site-verification: google2a2517cd9855149e.html'
   end
-  
+
   def about
     set_meta_tags title: 'About',
                   description: 'Info about babylon-online',
@@ -20,7 +21,7 @@ class HomeController < ApplicationController
                   follow: true
     @latest_blog_postings = Writer::Categorization.order(created_at: :desc).includes(:category_node, :document).merge(Writer::CategoryNode.blog_threads).references(:category_node).group_by(&:document).take(5).map{|d,c| c.first}
   end
-  
+
   def collections
     set_meta_tags title: 'Collections',
                   description: 'Data provider apps',
@@ -28,7 +29,7 @@ class HomeController < ApplicationController
                   nofollow: true
     @collection_apps = Oread::Application.order(name: :asc)
   end
-  
+
   def explore
     set_meta_tags title: 'Explore',
                   description: 'Entrypoint to explore babylon-online',
@@ -79,15 +80,15 @@ class HomeController < ApplicationController
 
     per_page = current_user.try(:person).try(:per_page).present? ? current_user.person.per_page : 50
 
-    @results = Discussion::Thread.search(query, 
+    @results = Discussion::Thread.search(query,
       fields: [:is, :title, :author, :mentions, :assignee, :body],
       where: { discussable_type: 'Repository', discussable_id: repository_ids },
       order: sort_order,
-      page: params[:page], 
+      page: params[:page],
       per_page: per_page
       ) do |body|
       body[:query][:bool][:must] = { query_string: { query: query, default_operator: "and" } }
     end
   end
-  
+
 end

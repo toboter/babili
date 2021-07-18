@@ -1,6 +1,6 @@
 <% content_for :content do %>
   <div class="about-page">
-    <%= image_tag('team.jpg')%>
+    <%= image_tag("/assets/banner-about.jpg", style: 'width:100%;max-width:100%') %>
     <div class="container">
       <div class="row">
         <div class="col-md-10 col-centered">
@@ -9,9 +9,9 @@
               <strong>babylon-online.org</strong> ein digitales Findbuch
             </h1>
             <p class="main-lead">
-              Das Portal babylon-online.org ist im Rahmen des Babylon-Projektes entwickelt geworden. 
-              Es vernetzt verschiedene Datenpools und funktioniert als zentrales, digitales Findbuch 
-              zu allen verfügbaren Daten aus den deutschen Koldewey-Grabungen, seien es Artefakte, 
+              Das Portal babylon-online.org ist im Rahmen des Babylon-Projektes entwickelt geworden.
+              Es vernetzt verschiedene Datenpools und funktioniert als zentrales, digitales Findbuch
+              zu allen verfügbaren Daten aus den deutschen Koldewey-Grabungen, seien es Artefakte,
               Dokumentation, Literatur, beteiligte Personen oder Medien-Dateien.
             </p>
           </div>
@@ -19,8 +19,8 @@
           <div class="col-md-6">
             <%= content_tag :h3, link_to('Blog', writer_category_blog_threads_path) %>
             <p class="text-gray sublead">
-              Neueste Infos rund um Babylon. Neuigkeiten zur Plattform, zu Datenbanken, Applikationen und 
-              Schnittstellen. 
+              Neueste Infos rund um Babylon. Neuigkeiten zur Plattform, zu Datenbanken, Applikationen und
+              Schnittstellen.
             </p>
           </div>
           <div class="col-md-6">
