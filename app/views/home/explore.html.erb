@@ -1,15 +1,44 @@
-<% content_for :container do %>
-  <div class="" style="padding-bottom:50px;">
+<% content_for :content do %>
+  <div class="container-fluid" style="padding-bottom:50px;margin-top:50px;">
     <div class="row">
-      <div class="col-md-7">
+      <%= image_tag("/assets/banner-ohne-text.jpg", style: 'max-width:100%') %>
+    </div>
+    <div class="row" style="margin:0 4rem;">
+      <div class="col-md-3">
+        <div class='panel panel-default page-header' style="margin-right:50px;">
+          <%= image_tag("/assets/explore.png", style: 'max-width:100%') %>
+          <div class="panel-body text-left">
+            <p>BabylonOnline integrates additional research tools and services for researchers, such as working with repositories, organizing teams, setting up your own bibliographies and vocabularies as well as a discussions tool with colleagues.</p>
+            <p>With the underlying project coming to an end in 2021 the development of tools and services is paused for the time being. The platform is open for further development and allows the incorporation of tailored features for future research projects.</p>
+
+            <ul class="text-small text-muted list-unstyled">
+              <li>Check out the <%= link_to 'terms of use','http://babylon-online.org/help/articles/licensing' %></li>
+              <li>Developer? Use the <%= link_to 'API', 'http://babylon-online.org/developer' %></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5">
         <div class="applications">
           <div class="page-header">
-            <h2>Apps</h2>
-            <p class="text-muted">
-            </p>
+            <h2>
+              Apps
+              <span class="badge"><%= @oread_applications.size %></span>
+            </h2>
+          </div>
+          <div class="row --spacious">
+            <div class="col-md-12">
+              <p class="text-muted">
+                Applications are external services which make use of the
+                babylon-online ecosystem. They may consume the babylon-online API
+                and make use of authorization- and authentication-services, login-data,
+                bibliographies, vocabularies, zensus, repositories, team-data, discussions.
+                Applications data may be discovered through babylon-online /search.
+              <p>
+            </div>
           </div>
           <div class="row">
-            <% for application in @oread_applications.limit(3) do %>
+            <% for application in @oread_applications.limit(4) do %>
               <div class="col-md-6">
                 <%= render application, full: true, actions: true %>
               </div>
@@ -23,7 +52,7 @@
         <div class="page-header">
           <h2>
             Repositories
-            <span class="badge"><%= @oread_applications.size %></span>
+            <span class="badge"><%= @repositories.size %></span>
           </h2>
         </div>
         <div class="page-header borderless">
@@ -32,7 +61,7 @@
             vocabularies. A board for discussions and a reports section offer a track over the repositories objectives.
           </p>
           <div class="--spacious">
-            <%= render @repositories.limit(3), namespace: true %>
+            <%= render @repositories.take(6), namespace: true %>
             <%= link_to 'View more', repositories_path, class: 'text-small' %>
           </div>
         </div>
@@ -51,35 +80,13 @@
           </p>
         </div>
         <div class="--spacious --spacing">
-          <%= render @vocabularies.take(3), namespace: true %>
+          <%= render @vocabularies.take(6), namespace: true %>
           <%= link_to 'View more', vocab_path, class: 'text-small' %>
-        </div>
-
-        <div class="teams">
-          <div class="page-header">
-            <h2>
-              Teams
-              <span class="badge"><%= Organization.all.size %></span>
-            </h2>
-            <p class="text-muted">
-              On babylon-online, you can join teams, which are groups of people with a shared research interest.
-              These teams can be authorized together as one. Learn more on your personal
-              <%= link_to 'teams settings page', settings_organizations_path %>.
-            </p>
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-              <%= render @organizations, full: false, actions: true %>
-            </div>
-          </div>
-          <div class="row">
-            <%= link_to 'View all.', organizations_path, class: 'col-md-12' %>
-          </div>
         </div>
 
       </div>
 
-      <div class="col-md-4 col-md-offset-1">
+      <div class="col-md-4">
         <div class="page-header">
           <h2>Services</h2>
         </div>
@@ -142,6 +149,28 @@
               <%= link_to 'Meet more.', people_path %>
               <%= content_tag :span, ('or ' + link_to('Sign up', new_user_registration_path)).html_safe unless user_signed_in? %>
             </div>
+          </div>
+        </div>
+
+        <div class="teams">
+          <div class="page-header">
+            <h2>
+              Teams
+              <span class="badge"><%= Organization.all.size %></span>
+            </h2>
+            <p class="text-muted">
+              On babylon-online, you can join teams, which are groups of people with a shared research interest.
+              These teams can be authorized together as one. Learn more on your personal
+              <%= link_to 'teams settings page', settings_organizations_path %>.
+            </p>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <%= render @organizations, full: false, actions: true %>
+            </div>
+          </div>
+          <div class="row">
+            <%= link_to 'View all.', organizations_path, class: 'col-md-12' %>
           </div>
         </div>
 
