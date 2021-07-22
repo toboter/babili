@@ -1,17 +1,17 @@
 <% content_for :content do %>
-  <div class="container-fluid" style="padding-bottom:50px;">
+  <div class="container-fluid" style="padding-top:50px;padding-bottom:50px;">
     <div class="row">
       <%= image_tag("banner-explore.jpg", style: 'width:100%;max-width:100%') %>
     </div>
     <div class="row" style="margin:0 4rem;">
       <div class="col-md-3">
-        <div class='panel panel-default page-header' style="margin-right:50px;">
+        <div class='panel panel-default' style="margin-right:50px;margin-top:40px;">
           <%= image_tag("explore.png", style: 'width:100%;max-width:100%;') %>
-          <div class="panel-body text-left">
+          <div class="panel-body text-left" style="color:white;background-color:#666685;">
             <p>BabylonOnline integrates additional research tools and services for researchers, such as working with repositories, organizing teams, setting up your own bibliographies and vocabularies as well as a discussions tool with colleagues.</p>
             <p>With the underlying project coming to an end in 2021 the development of tools and services is paused for the time being. The platform is open for further development and allows the incorporation of tailored features for future research projects.</p>
 
-            <ul class="text-small text-muted list-unstyled">
+            <ul class="text-small list-unstyled" style="color:#ddd;">
               <li>Check out the <%= link_to 'terms of use','http://babylon-online.org/help/articles/licensing' %></li>
               <li>Developer? Use the <%= link_to 'API', 'http://babylon-online.org/developer' %></li>
             </ul>
@@ -30,10 +30,10 @@
             <div class="col-md-12">
               <p class="text-muted">
                 Applications are external services which make use of the
-                babylon-online ecosystem. They may consume the babylon-online API
+                BabylonOnline ecosystem. They may consume the BabylonOnline <%= link_to 'API', 'http://babylon-online.org/developer' %>
                 and make use of authorization- and authentication-services, login-data,
                 bibliographies, vocabularies, zensus, repositories, team-data, discussions.
-                Applications data may be discovered through babylon-online /search.
+                Applications data may be discovered through BabylonOnline <%= link_to 'Search', search_path %>.
               <p>
             </div>
           </div>
@@ -93,10 +93,10 @@
 
         <div class="page-header borderless">
           <h3>
-            Bibliographies
+            Bibliography
           </h3>
           <p class="text-muted ">
-            <%= link_to 'Bibliography', biblio_path, class: 'text-strong' %> integrates the scientific workflow idea into repositories. The entries
+            <%= link_to 'Bibliography', biblio_path, class: 'text-strong' %> aggregates literature references to a general plattform bibliography. The entries
             are like vocabulary terms scoped to, not only a person or group but even to their repositories and can be queried along the data.
             As a repository forms the discourse universe of a scientific idea, references are an elementary service and make up a bibliography
             of that matter in question.
@@ -114,7 +114,7 @@
         <div class="page-header borderless">
           <h3>Phonebook ::zensus</h3>
           <p class="text-muted ">
-            The babylon-online research framework helps you with some specific central authority services. With <%= link_to 'zensus', zensus_path, class: 'text-strong' %>,
+            The BabylonOnline research framework helps you with some specific central authority services. With <%= link_to 'zensus', zensus_path, class: 'text-strong' %>,
             you can lookup any type of people or institutions as agents. From recent team members, participating
             institutions, to historic families or individuals, together with their affiliations or professions.
           </p>
@@ -136,7 +136,7 @@
               <span class="badge"><%= Person.approved.size %></span>
             </h2>
             <p class="text-muted">
-              People on babylon-online.org.
+              Scholars participating in BabylonOnline.
             </p>
           </div>
           <div class="row">
@@ -159,7 +159,7 @@
               <span class="badge"><%= Organization.all.size %></span>
             </h2>
             <p class="text-muted">
-              On babylon-online, you can join teams, which are groups of people with a shared research interest.
+              On BabylonOnline, you can join teams of scholars with a shared research interest.
               These teams can be authorized together as one. Learn more on your personal
               <%= link_to 'teams settings page', settings_organizations_path %>.
             </p>

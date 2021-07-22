@@ -1,8 +1,8 @@
 <%= form_tag search_path, :method => 'get', class: "" do %>
   <div class="input-group">
     <span class="input-group-addon">
-      <%= link_to fa_icon('search'), writer_category_help_categories_path %>
+      <%= link_to fa_icon('info'), writer_category_help_categories_path %>
     </span>
-    <%= search_field_tag :q, params[:q], placeholder: "Search by Keyword", class: "form-control", autofocus: true %>
+    <%= search_field_tag :q, params[:q], placeholder: "Search by keyword, e.g. Figurine, Koldewey, etc.", class: "form-control text-strong", autofocus: true %>
   </div>
 <% end %>

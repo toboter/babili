@@ -3,11 +3,6 @@
     <div class="row">
       <%= image_tag("banner-babili.jpg", style: 'width:100%;max-width:100%;') %>
     </div>
-    <div class="row searchbox">
-      <div class="col-lg-6 col-md-8 col-sm-10 col-xs-12 col-centered --spacing --spacious">
-        <%= render 'shared/search' %>
-      </div>
-    </div>
 
     <div class="row featurepanels">
       <div class="col-md-8 col-centered --spacing-20" style="border-bottom:1px solid #eeeeee;"></div>
@@ -15,21 +10,31 @@
         <%= content_tag :h2, 'Featured', class: 'text-center text-primary --spacing-20' %>
       </div>
       <div class="col-md-3">
-        <div class='panel panel-default' style="min-height:450px;overflow:hidden;">
+        <div class='panel panel-default' style="min-height:450px;overflow:hidden;color:white;background-color:#666685;">
           <%= image_tag("search.jpg", style: 'width:100%;max-width:100%;') %>
+          <%= link_to search_path do %>
+            <div class="panel-body" style="color:#ddd;">
+              <%= fa_icon('search 3x',style: 'float:left;margin-top:8px;') %>
+              <p style="font-size: 22px;margin-left:60px;" class="text-strong">
+                Search all content on BabylonOnline.
+              </p>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class='panel panel-default' style="min-height:450px;overflow:hidden;">
+          <%= image_tag("babylon-inv.jpg", style: 'width:100%;max-width:100%;') %>
           <div class="panel-body text-left">
-            <%= content_tag :h4, 'Search', class: 'text-center text-primary' %>
-            <p>Search content on babylon-online.</p>
+            <%= content_tag :h4, 'Babylon Inventories', class: 'text-center text-primary' %>
+            <p>Access the Database on artifacts and field photos from the German Archaeological excavations at Babylon (ADGB).</p>
             <ul class="text-small text-muted list-unstyled">
-              <li><%= link_to fa_icon('search', text: 'Search'), search_path %></li>
+              <li><%= link_to fa_icon('external-link', text: 'Open ADGB (External Application Link)'), 'http://adgb.babylon-online.org/', target: '_blank', class: 'text-strong' %></li>
             </ul>
           </div>
         </div>
       </div>
-
-      <%= content_tag :div, class: "col-md-3" do %>
-        <%= render @featured_application, full: true, actions: true %>
-      <% end if can? :read, Oread::Application %>
 
       <div class="col-md-3">
         <div class='panel panel-default' style="min-height:450px;overflow:hidden;">
@@ -38,7 +43,7 @@
             <%= content_tag :h4, 'Explore Tools and Services', class: 'text-center text-primary' %>
             <p>BabylonOnline is a prototypical research infrastructure and provides additional tools and services.</p>
             <ul class="text-small text-muted list-unstyled">
-              <li><%= link_to 'Learn more', explore_path %></li>
+              <li><%= link_to 'Learn more', explore_path, class: 'text-strong' %></li>
             </ul>
           </div>
         </div>
@@ -48,10 +53,14 @@
         <div class='panel panel-default' style="min-height:450px;overflow:hidden;">
           <%= image_tag("books.jpg", style: 'width:100%;max-width:100%;') %>
           <div class="panel-body text-left">
-            <%= content_tag :h4, 'Babylon Bibliography', class: 'text-center text-primary' %>
-            <p>More than 120 years of research history led to a large quantity of publications on and related to the ancient city of Babylon.</p>
+            <%= content_tag :h4, 'Bibliography', class: 'text-center text-primary' %>
+            <p>
+              This service aggregates literature references to a general plattform bibliography.
+              Discover e.g. the publications of more than 120 years of research history on and related to
+              the ancient city of Babylon.
+            </p>
             <ul class="text-small text-muted list-unstyled">
-              <li><%= link_to 'Browse the repositories bibliographic database','http://babylon-online.org/babylon-projekt/repositories/bibliography/bibliography/references' %></li>
+              <li><%= link_to 'Browse the platforms bibliographic database', biblio_path, class: 'text-strong' %></li>
             </ul>
           </div>
         </div>
@@ -61,44 +70,50 @@
 
   <aside class="--spacious --spacing" style="background-color: #FAFBFC;border-top:1px solid #eeeeee;border-bottom:1px solid #eeeeee;">
     <div class="container" style="">
+      <div class="row" style="margin-bottom:30px;">
+        <div class="col-md-12">
+          <%= content_tag :h3, 'Learn more about BabylonOnline and the project behind', class: 'text-center text-primary' %>
+        </div>
+      </div>
       <div class="row">
         <div class="col-md-4">
-            <%= link_to image_tag('fu-logo.svg', style: 'height: 100px; margin: 0 30px 30px auto;max-width:100%;'), 'http://www.fu-berlin.de', target: :_blank %>
-            <%= link_to image_tag('dog-logo.png', style: 'height: 70px; margin: 30px 30px 30px auto;max-width:100%;'), 'http://www.orient-gesellschaft.de', target: :_blank %>
-            <%= link_to image_tag('SMB_VAM_PMS_SC.png', style: 'height: 75px; margin: 30px 30px 30px auto;max-width:100%;'), 'http://smb.museum', target: :_blank %>
-            <%= link_to image_tag('dfg_logo_schriftzug_blau_foerderung_4c.svg', style: 'height: 70px; margin: 30px 30px 40px auto;max-width:100%;'), 'http://www.dfg.de/', target: :_blank %>
+            <%= link_to image_tag('fu-logo.svg', style: 'height: 100px; margin: 0 30px 20px auto;max-width:100%;'), 'http://www.fu-berlin.de', target: :_blank %>
+            <%= link_to image_tag('SMB_VAM_PMS_SC.png', style: 'height: 80px; margin: 30px 30px 30px auto;max-width:100%;'), 'http://smb.museum', target: :_blank %>
+            <%= link_to image_tag('dog-logo-2.png', style: 'height: 45px; margin: 30px 30px 30px auto;max-width:100%;'), 'http://www.orient-gesellschaft.de', target: :_blank %>
+            <%= link_to image_tag('dfg_logo_schriftzug_blau_foerderung_4c.svg', style: 'height: 80px; margin: 30px 30px 40px auto;max-width:100%;'), 'http://www.dfg.de/', target: :_blank %>
         </div>
         <div class="col-md-7 col-md-offset-1">
-          <%= content_tag :h3, 'Learn more about BabylonOnline and the project behind', class: 'text-left text-primary' %>
           <p>
-            BabylonOnline is a platform with the purpose to facilitate future research projects and data access on Babylon and other archaeological or philological projects. It combines digitized inventories with additional research tools and services for researchers, such as working with repositories, organizing teams, setting up vocabularies and discussions with colleagues. The infrastructure is set up in English, the content for Babylon is provided in German and English.
+            BabylonOnline is a platform with the purpose to facilitate future research projects and data access on Babylon and other archaeological or philological projects. It combines digitized inventories with additional research tools and services for researchers, such as working with repositories, organizing teams, setting up vocabularies and discussions with colleagues. The infrastructure is set up in English, the content is currently provided in German and English.
           </p>
-          <p class="italic">
-            With the underlying project coming to an end in 2021 the content development is paused for the time being. The platform is open for further development and allows the incorporation of further data sets in the future.<br/>
-            At the moment access to full data is only granted for approved research projects. For further questions contact the VAM.
+          <p class="text-italic">
+            With the underlying project coming to an end in 2021 the development is paused for the time being.
           </p>
-          <ul class="list-unstyled">
-            <li>Check out the <%= link_to 'terms of use', 'http://babylon-online.org/help/articles/licensing' %></li>
-            <li>Developer? Use the <%= link_to 'API', 'http://babylon-online.org/developer' %></li>
+          <ul class="list-unstyled --spacing text-muted">
+            <li>Terms of use <%= link_to 'terms of use', 'http://babylon-online.org/help/articles/licensing' %></li>
+            <li>Developer? Check out the <%= link_to 'API', 'http://babylon-online.org/developer' %></li>
           </ul>
 
           <p>
-            BabylonOnline focuses on the output of the 20th century German Archaeological Excavations at the ruins of the once famous City of Babylon, namely the Koldewey-excavations (1899-1917) and the excavations conducted by the German Archaeological Institute (1957-1973).
+            The platform was developed within the ”Pilotstudie Babylon“ (2016-2021), an innovative research project initiated by the Vorderasiatisches Museum of the Staatliche Museen zu Berlin and the Institute of Ancient Near Eastern Studies at the Freie Universität Berlin. The project was subjecting the Babylon holdings of the Vorderasiatisches Museum to systematic analysis. The Deutsche Orient-Gesellschaft Berlin joined as a cooperation partner. The ”Pilotstudie Babylon“ was generously funded bei the German Research Foundation (DFG) and got additional financial support by the <%= link_to 'Freunde der Antike auf der Museumsinsel Berlin e.V', 'http://www.freunde-der-antike-berlin.de/' %>.
           </p>
-          <p class="italic">
-            The equally important later Iraqi and Italian archaeological excavations are currently not covered on BabylonOnline.
+          <ul class="list-unstyled --spacing text-muted">
+            <li>Learn more <%= link_to 'about the project', about_path %></li>
+          </ul>
+
+          <p>
+            In the light of this the content of BabylonOnline focuses in its current state on the output of the 20th century German Archaeological Excavations at the ruins of the once famous City of Babylon, namely the Koldewey-excavations (1899-1917) and the excavations conducted by the German Archaeological Institute (1957-1973).
           </p>
-          <ul class="list-unstyled">
+          <p class="text-italic">
+            The platform itself is open for further development and allows the incorporation of other data sets in the future, related to Babylon or beyond.<br/>
+            At the moment access to full data is only granted for approved research projects. For further questions contact the VAM.
+          </p>
+          <ul class="list-unstyled text-muted">
             <li>Learn more about the <%= link_to 'ancient city of Babylon', 'http://babylon-online.org/blog/2018/10/das-antike-babylon' %></li>
             <li>Get to know the <%= link_to 'German archaeological excavations', 'http://babylon-online.org/blog/2018/10/die-deutschen-koldewey-grabungen' %></li>
             <li>Find out about <%= link_to 'Babylon and the Vorderasiatisches Museum', 'http://babylon-online.org/blog/2018/10/die-babylon-sammlung-am-vorderasiatischen-museum' %></li>
           </ul>
-          <p>
-            The platform was developed within the ”Pilotstudie Babylon“ (2016-2021), an innovative research project initiated by the Vorderasiatisches Museum of the Staatliche Museen zu Berlin and the Institute of Ancient Near Eastern Studies at the Freie Universität Berlin. The project was subjecting the Babylon holdings of the Vorderasiatisches Museum to systematic analysis. The Deutsche Orient-Gesellschaft Berlin joined as a cooperation partner. The ”Pilotstudie Babylon“ was generously funded bei the German Research Foundation (DFG) and got additional financial support by the Freunde der Antike auf der Museumsinsel Berlin e.V.
-          </p>
-          <ul class="list-unstyled">
-            <li>Learn more <%= link_to 'about the project', about_path %></li>
-          </ul>
+
         </div>
       </div>
     </div>

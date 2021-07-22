@@ -32,13 +32,13 @@ class Person < ApplicationRecord
 
   delegate :email, :is_admin?, to: :user
   delegate :slug, to: :namespace
-  
+
   #after_commit :reindex_namespace
 
   def all_repos
     repositories.to_a.concat(organizations.map(&:repositories).to_a).flatten
   end
-  
+
   def to_param
     slug
   end

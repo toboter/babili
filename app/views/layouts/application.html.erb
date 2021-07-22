@@ -44,7 +44,19 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <%= content_tag :ul, class: "nav navbar-nav navbar-right" do %>
-            <li><%= link_to fa_icon('search', text: 'Search'), search_path %></li>
+            <%= content_tag :li do %>
+              <%= form_tag search_path, :method => 'get', class: "form-inline" do %>
+                <div class="input-group" style="margin-top:8px;margin-left:15px;">
+                  <span class="input-group-addon" style="width:38px;">
+                    <%= link_to fa_icon('search'), search_path %>
+                  </span>
+                  <span class="input-group-addon" style="width:38px;">
+                    <%= link_to fa_icon('info'), writer_category_help_categories_path %>
+                  </span>
+                  <%= search_field_tag :q, params[:q], placeholder: "Search by keyword, e.g. Figurine, Koldewey, etc.", class: "form-control", autofocus: false, style: 'width:400px;' %>
+                </div>
+              <% end %>
+            <% end unless current_page?(search_path) %>
             <li><%= link_to 'Explore', explore_path %></li>
             <li><%= link_to 'About', about_path %></li>
             <%= content_tag :li, link_to('Blog', writer_category_blog_threads_path) %>
