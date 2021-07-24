@@ -1,26 +1,79 @@
 <% content_for :content do %>
   <div class="about-page">
-    <%= image_tag("banner-about.jpg", style: 'width:100%;max-width:100%') %>
+    <%= image_tag("banner-about.jpg", style: 'width:100%;max-width:100%', title: 'Schreitender Drache vom Ischtar-Tor © Foto: Vorderasiatisches Museum der Staatlichen Museen zu Berlin - Preußischer Kulturbesitz, Fotograf: Olaf M. Teßmer') %>
     <div class="container">
       <div class="row">
         <div class="col-md-10 col-centered">
-          <div class="page-header text-center col-md-12">
-            <h1>
-              <strong>babylon-online.org</strong> ein digitales Findbuch
+          <div class="page-header text-left col-md-12">
+            <h1 class="text-center --spacing">
+              BabylonOnline
             </h1>
-            <p class="main-lead">
-              Das Portal babylon-online.org ist im Rahmen des Babylon-Projektes entwickelt geworden.
-              Es vernetzt verschiedene Datenpools und funktioniert als zentrales, digitales Findbuch
-              zu allen verfügbaren Daten aus den deutschen Koldewey-Grabungen, seien es Artefakte,
-              Dokumentation, Literatur, beteiligte Personen oder Medien-Dateien.
+            <p class="sublead">
+              BabylonOnline is a research framework and digital data hub which was developed within the Babylon pilot project. The platform supports research work and collaboration, like working with repositories, organizing teams, setting up vocabularies and to put up data and ideas for discussion with colleagues.
+            </p>
+            <p>
+              The infrastructure is set up in English, the content is currently provided in German and English.
+            </p>
+            <p>
+              Corresponding to the scope of the underlying Babylon Pilot Project the content on BabylonOnline focuses on the output of the 20th century German Archaeological Excavations at the ruins of the once famous City of Babylon, namely the Koldewey-excavations (1899-1917) and the excavations conducted by the German Archaeological Institute (1957-1973).
+            </p>
+            <p>
+              With the Babylon pilot project coming to an end in 2021 the development of infrastructure and content are paused.
+            </p>
+            <p>
+              Nonetheless the design of the platform allows further development and the incorporation of additional data sets. These might derive from other archaeological or philological projects, former or future, on Babylon or other sites, thus potentially providing overarching insights into the material culture of the Ancient Near East.
+            </p>
+
+            <h1 class="text-center --spacing --spacious">
+              The Babylon Pilot Project
+            </h1>
+            <p class="sublead">
+              The <span class="text-italic">Babylon Project</span> – full name <span class="text-italic">The Babylon Collection of the Vorderasiatisches Museum Berlin: A methodological and epistemological study of collection-based research in Museums</span> – was set up as a pilot project. Its objective was to systematically catalogue the thousands of objects and archival documents from and about Babylon, processing them for future scholarly research and organising them within the collection.
+            </p>
+            <p>
+              In the innovative research project scholars from the Vorderasiatisches Museum of the Staatliche Museen zu Berlin and the Institute of Ancient Near Eastern Studies at the Freie Universität Berlin were subjecting the Babylon holdings of the Vorderasiatisches Museum to systematic analysis. The Deutsche Orient-Gesellschaft Berlin was supporting the project as a cooperation partner.
+            </p>
+            <p>
+              The objects in the Berlin Babylon holdings were unearthed between 1899 and 1917 in the course of archaeological excavations overseen by Dr. Robert Koldewey. As a result of the agreements on the division of the finds, the objects have been located in Berlin since 1927. According to recent findings by the Babylon Project, the excavation in Babylon uncovered a total of some 77,800 objects spanning three millennia, including clay tablets inscribed with cuneiform script, everyday ceramics and jewellery. Of these, some 30,000 are today housed in the Vorderasiatisches Museum.
+            </p>
+            <p>
+              Furthermore, a significant portion of the excavation and inventory documentation has been preserved, including diaries, photographs, packing lists, cards, partial estates of people involved in the excavations, and architectural plans. These are mainly stored in the archive of the Deutsche Orient-Gesellschaft, in the Archive and Foto-Archive of the Vorderasiatisches Museum, with a smaller portion in the Staatliche Museen zu Berlin’s Zentralarchiv. The documentation comprises some 12,000 individual archive items.
+            </p>
+            <p>
+              Some 15,000 of the almost 30,000 archaeological objects located in Berlin along with the excavation and collection documentation associated with them have been examined by the research team, correlated with their find context and systematised. In the process, the object histories of the artefacts was also investigated, from their production through to their current site of preservation in the Vorderasiatisches Museum. Smaller case studies on typical find structures and trialling of the possibilities for presenting research in the museum context rounded off the project. The project aimed to generate the scholarly basis for long-term and internationally networked research projects on the cultural history of ancient Babylon on the one hand, and on the other, make use of the material to analyse and enhance fundamental, collection-specific research in museums.
+            </p>
+
+
+            <p class=" --spacious">
+              <span class="text-strong">Project Partners:</span> Staatliche Museen zu Berlin - Preußischer Kulturbesitz, <%= link_to 'Vorderasiatisches Museum', 'https://www.smb.museum/museen-einrichtungen/vorderasiatisches-museum/home/', target: :_blank %> and Freie Universität Berlin, <%= link_to 'Institut für Altorientalistik', 'https://www.geschkult.fu-berlin.de/e/altorient/', target: :_blank %>
+            </p>
+            <p>
+              <span class="text-strong">Project leads:</span> Prof. Dr Barbara Helwing (Director of the Vorderasiatisches Museum Berlin since 4/2020), Lutz Martin (Acting Director of the Vorderasiatisches Museum Berlin, up until 3/2020), Markus Hilgert (Director of the Vorderasiatisches Museum Berlin up until 4/2018), Eva Cancik-Kirschbaum (Professor for Ancient Near Eastern Studies, Freie Universität Berlin) and Joachim Marzahn (Honorary Professor for Ancient Near Eastern Studies, Freie Universität Berlin; Deputy Chair of the Deutsche Orient-Gesellschaft)
+            </p>
+            <p>
+              <span class="text-strong">Project staff:</span> Dr. des. Katja Sternitzke, Maria-Katharina-Krolikowski (Dipl.-Rest.), Tobias Schmidt (M.A.), May-Sarah Zessin (M.A.), Dr. Cornelia Wunsch, Stefanie Schrakamp, Dr. Elisabeth Katzy
+            </p>
+            <p>
+              <span class="text-strong">In cooperation with:</span> <%= link_to 'Deutsche Orient-Gesellschaft e.V.', 'https://www.orient-gesellschaft.de/', target: :_blank %> and Prof. emer. Olof Pedersén (University of Uppsala, Sweden)
+            </p>
+            <p>
+              <span class="text-strong">Additional collaboration:</span>  German Archaeological Institute - <%= link_to 'Orient Department', 'https://www.dainst.org/en/standort/-/organization-display/ZI9STUj61zKB/14586', target: :_blank %>
+            </p>
+            <p>
+              <span class="text-strong">Funding:</span> German Research Foundation (<%= link_to 'DFG Project number 286697695', 'https://gepris.dfg.de/gepris/projekt/286697695?language=en', target: :_blank %>, Business signs HI 1265/2-1 und CA 192/9-1, Obj.No. 625066 und 625065)
+            </p>
+            <p>
+              <span class="text-strong">With additional financial support by:</span> <%= link_to 'Freunde der Antike auf der Museumsinsel e.V.', 'http://www.freunde-der-antike-berlin.de/', target: :_blank %>
+            </p>
+            <p>
+              <span class="text-strong">Duration:</span>  March 2016 to August 2021
             </p>
           </div>
 
           <div class="col-md-6">
             <%= content_tag :h3, link_to('Blog', writer_category_blog_threads_path) %>
             <p class="text-gray sublead">
-              Neueste Infos rund um Babylon. Neuigkeiten zur Plattform, zu Datenbanken, Applikationen und
-              Schnittstellen.
+              Latest information about Babylon. News about the platform, databases, applications and interfaces.
             </p>
           </div>
           <div class="col-md-6">

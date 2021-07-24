@@ -14,6 +14,11 @@ body {
     font-family: 'Merriweather', 'Helvetica Neue', Arial, sans-serif;
 }
 
+.active {
+  background-color:#eee;
+  border-bottom: 2px solid #FF9900;
+}
+
 #about hr {
     border-color: #F05F40;
     border-width: 3px;

@@ -5,18 +5,17 @@
         <div class="page-header text-center borderless">
           <h2>Identify ::data</h2>
           <p class="text-muted lead">
-            Is a general index of primary identifiers which aggregate data from various aspects of scientific 
+            Is a general index of primary identifiers which aggregate data from various aspects of scientific
             interest (commits in repositories). It drives the general visualization of heterogenus facets on objects.
           </p>
         </div>
-         render 'biblio/search/box' %>
         <%= link_to 'View all entries', aggregation_identifiers_path, class: 'text-small' %>
 
         <div class="row">
           <div class="col-md-12 --spacious-20">
             <div class="repo-bibs">
-        
-        
+
+
             </div>
             <%= content_tag :p, 'Supported formats: Lido, ...', class: 'text-muted text-small'%>
           </div>

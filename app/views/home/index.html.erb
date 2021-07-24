@@ -1,7 +1,7 @@
 <%= content_for(:content) do %>
   <div class="container-fluid" style="padding-top:50px;">
     <div class="row">
-      <%= image_tag("banner-babili.jpg", style: 'width:100%;max-width:100%;') %>
+      <%= image_tag("banner-babili.jpg", style: 'width:100%;max-width:100%;', title: 'Schreitender Drache vom Ischtar-Tor © Foto: Vorderasiatisches Museum der Staatlichen Museen zu Berlin - Preußischer Kulturbesitz, Fotograf: Olaf M. Teßmer') %>
     </div>
 
     <div class="row featurepanels">
@@ -14,8 +14,8 @@
           <%= image_tag("search.jpg", style: 'width:100%;max-width:100%;') %>
           <%= link_to search_path do %>
             <div class="panel-body" style="color:#ddd;">
-              <%= fa_icon('search 3x',style: 'float:left;margin-top:8px;') %>
-              <p style="font-size: 22px;margin-left:60px;" class="text-strong">
+              <%= fa_icon('search 3x',style: 'float:left;margin-top:18px;') %>
+              <p style="font-size: 21px;margin-left:60px;margin-top:10px;" class="text-strong">
                 Search all content on BabylonOnline.
               </p>
             </div>
@@ -77,10 +77,10 @@
       </div>
       <div class="row">
         <div class="col-md-4">
-            <%= link_to image_tag('fu-logo.svg', style: 'height: 100px; margin: 0 30px 20px auto;max-width:100%;'), 'http://www.fu-berlin.de', target: :_blank %>
-            <%= link_to image_tag('SMB_VAM_PMS_SC.png', style: 'height: 80px; margin: 30px 30px 30px auto;max-width:100%;'), 'http://smb.museum', target: :_blank %>
+            <%= link_to image_tag('fu-logo.svg', style: 'height: 100px; margin: 0 30px 20px auto;max-width:100%;'), 'https://www.geschkult.fu-berlin.de/e/altorient/', target: :_blank %>
+            <%= link_to image_tag('SMB_VAM_PMS_SC.png', style: 'height: 80px; margin: 30px 30px 30px auto;max-width:100%;'), 'https://www.smb.museum/museen-einrichtungen/vorderasiatisches-museum/home/', target: :_blank %>
             <%= link_to image_tag('dog-logo-2.png', style: 'height: 45px; margin: 30px 30px 30px auto;max-width:100%;'), 'http://www.orient-gesellschaft.de', target: :_blank %>
-            <%= link_to image_tag('dfg_logo_schriftzug_blau_foerderung_4c.svg', style: 'height: 80px; margin: 30px 30px 40px auto;max-width:100%;'), 'http://www.dfg.de/', target: :_blank %>
+            <%= link_to image_tag('dfg_logo_schriftzug_blau_foerderung_4c.svg', style: 'height: 80px; margin: 30px 30px 40px auto;max-width:100%;'), 'https://gepris.dfg.de/gepris/projekt/286697695?language=en', target: :_blank %>
         </div>
         <div class="col-md-7 col-md-offset-1">
           <p>
@@ -90,12 +90,12 @@
             With the underlying project coming to an end in 2021 the development is paused for the time being.
           </p>
           <ul class="list-unstyled --spacing text-muted">
-            <li>Terms of use <%= link_to 'terms of use', 'http://babylon-online.org/help/articles/licensing' %></li>
+            <li>Find out about the <%= link_to 'terms of use', 'http://babylon-online.org/help/articles/licensing' %></li>
             <li>Developer? Check out the <%= link_to 'API', 'http://babylon-online.org/developer' %></li>
           </ul>
 
           <p>
-            The platform was developed within the ”Pilotstudie Babylon“ (2016-2021), an innovative research project initiated by the Vorderasiatisches Museum of the Staatliche Museen zu Berlin and the Institute of Ancient Near Eastern Studies at the Freie Universität Berlin. The project was subjecting the Babylon holdings of the Vorderasiatisches Museum to systematic analysis. The Deutsche Orient-Gesellschaft Berlin joined as a cooperation partner. The ”Pilotstudie Babylon“ was generously funded bei the German Research Foundation (DFG) and got additional financial support by the <%= link_to 'Freunde der Antike auf der Museumsinsel Berlin e.V', 'http://www.freunde-der-antike-berlin.de/' %>.
+            The platform was developed within the ”Pilotstudie Babylon“ (2016-2021), an innovative research project initiated by the Vorderasiatisches Museum of the Staatliche Museen zu Berlin and the Institute of Ancient Near Eastern Studies at the Freie Universität Berlin. The project was subjecting the Babylon holdings of the Vorderasiatisches Museum to systematic analysis. The Deutsche Orient-Gesellschaft Berlin joined as a cooperation partner. The ”Pilotstudie Babylon“ was generously funded bei the German Research Foundation (DFG) and got additional financial support by the <%= link_to 'Freunde der Antike auf der Museumsinsel Berlin e.V', 'http://www.freunde-der-antike-berlin.de/', target: :_blank %>.
           </p>
           <ul class="list-unstyled --spacing text-muted">
             <li>Learn more <%= link_to 'about the project', about_path %></li>
@@ -110,7 +110,7 @@
           </p>
           <ul class="list-unstyled text-muted">
             <li>Learn more about the <%= link_to 'ancient city of Babylon', 'http://babylon-online.org/blog/2018/10/das-antike-babylon' %></li>
-            <li>Get to know the <%= link_to 'German archaeological excavations', 'http://babylon-online.org/blog/2018/10/die-deutschen-koldewey-grabungen' %></li>
+            <li>Get to know the <%= link_to 'Koldewey excavations', 'http://babylon-online.org/blog/2018/10/die-deutschen-koldewey-grabungen' %></li>
             <li>Find out about <%= link_to 'Babylon and the Vorderasiatisches Museum', 'http://babylon-online.org/blog/2018/10/die-babylon-sammlung-am-vorderasiatischen-museum' %></li>
           </ul>
 

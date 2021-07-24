@@ -1,7 +1,7 @@
 <% content_for :content do %>
   <div class="container-fluid" style="padding-top:50px;padding-bottom:50px;">
     <div class="row">
-      <%= image_tag("banner-explore.jpg", style: 'width:100%;max-width:100%') %>
+      <%= image_tag("banner-explore.jpg", style: 'width:100%;max-width:100%', title: 'Schreitender Drache vom Ischtar-Tor © Foto: Vorderasiatisches Museum der Staatlichen Museen zu Berlin - Preußischer Kulturbesitz, Fotograf: Olaf M. Teßmer') %>
     </div>
     <div class="row" style="margin:0 4rem;">
       <div class="col-md-3">
@@ -123,7 +123,7 @@
         <div class="page-header borderless">
           <h3>Object identifier ::boi</h3>
           <p class="text-muted ">
-            BOI is the babylon object identifier. It is a general index of <%= link_to 'identifiers', aggregation_path, class: 'text-strong' %>
+            BOI is the BabylonOnline object identifier. It is a general index of <%= link_to 'identifiers', aggregation_path, class: 'text-strong' %>
             which aggregate data from various aspects of scientific interest (commits in repositories).
             It drives the general visualization of heterogenus facets on objects.
           </p>
