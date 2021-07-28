@@ -7,15 +7,16 @@ While being community driven at first, babili is a closed platform unless materi
 
 ## Dependencies
 
-* ruby 2.4.1
-* gem bundler 1.16.3
-* node >= 9.11.2
-* yarn 1.9.4
+* ruby 2.7.3
+* rails 5.2.6
+* gem bundler 2.2.17
+* node >= 10.24.1
+* yarn 1.22.5
 * postgres >= 9.5
 * postgis (https://github.com/rgeo/activerecord-postgis-adapter#upgrading-an-existing-database)
 * libgeos-dev
 * libproj-dev
-* elasticsearch =6.8.15
+* elasticsearch = 6.8.15
 * redis >= 3.0.6
 * mutool >= 1.7a (uses `mutool draw` as `mudraw`) -> `mupdf-tools`
 * ffmpeg >= 2.8.17
