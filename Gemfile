@@ -15,7 +15,7 @@ gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 
 gem 'mini_magick', '~> 4.9'
-gem 'image_processing', '~> 1.2'
+gem 'image_processing', '~> 1.12'
 gem "streamio-ffmpeg"
 gem 'down'
 gem 'shrine'
