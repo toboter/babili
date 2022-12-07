@@ -3,7 +3,9 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.7.3'
 
-gem 'rails', '~> 5.2.5'
+gem 'rails', '~> 5.2.8'
+gem "psych", "< 4"
+
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'activerecord-postgis-adapter'
 gem "puma", ">= 5.3.1"
@@ -70,7 +72,9 @@ gem 'sequenced'
 # gem 'json_attribute', git: 'https://github.com/jrochkind/json_attribute.git'
 gem 'attr_json'
 
-gem 'searchkick', '~> 4'
+gem 'searchkick'
+gem "opensearch-ruby"
+
 gem 'friendly_id'
 gem 'paper_trail'
 gem 'browser'
@@ -89,7 +93,7 @@ gem 'unicode_utils'
 gem 'bibtex-ruby'
 gem 'namae'
 gem 'rest-client'
-gem 'sidekiq'
+gem 'sidekiq', '<7'
 gem 'sinatra', git: 'https://github.com/sinatra/sinatra.git'
 gem 'sparql-client'
 gem 'linkeddata'
