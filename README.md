@@ -12,7 +12,7 @@ While being community driven at first, babili is a closed platform unless materi
 * bundler 2.3.26
 * node >= 16.15.1
 * yarn 1.22.19
-* postgres >= 15
+* postgres >= 15 or libpq-dev
 * postgis (https://github.com/rgeo/activerecord-postgis-adapter#upgrading-an-existing-database)
 * libgeos-dev
 * libproj-dev
@@ -26,6 +26,18 @@ While being community driven at first, babili is a closed platform unless materi
 ## Installation
 
 Make sure you have installed all dependencies first. Then download the application files from https://github.com/toboter/babili.
+
+### rbenv
+https://github.com/rbenv/rbenv#basic-git-checkout
+https://github.com/rbenv/ruby-build#clone-as-rbenv-plugin-using-git
+rbenv install 2.7.3
+
+
+### nvm
+https://github.com/nvm-sh/nvm#git-install
+nvm install --lts
+npm install --global yarn
+
 
 To install the apps' gem dependencies
 

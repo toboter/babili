@@ -5,6 +5,7 @@ ruby '2.7.3'
 
 gem 'rails', '~> 5.2.8'
 gem "psych", "< 4"
+gem "net-http"
 
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'activerecord-postgis-adapter'
