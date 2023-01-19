@@ -189,7 +189,7 @@ GEM
     geo_pattern (1.4.0)
       color (~> 1.5)
     github-markup (2.0.1)
-    globalid (1.0.0)
+    globalid (1.0.1)
       activesupport (>= 5.0)
     haml (5.2.2)
       temple (>= 0.8.0)
@@ -294,12 +294,14 @@ GEM
     mini_portile2 (2.8.0)
     mini_racer (0.6.3)
       libv8-node (~> 16.10.0.0)
-    minitest (5.16.3)
+    minitest (5.17.0)
     msgpack (1.6.0)
     multi_json (1.15.0)
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
     namae (1.1.1)
+    net-http (0.3.2)
+      uri
     net-http-persistent (4.0.1)
       connection_pool (~> 2.2)
     net-imap (0.3.1)
@@ -553,6 +555,7 @@ GEM
     unf_ext (0.0.8.2)
     unicode-types (1.8.0)
     unicode_utils (1.4.0)
+    uri (0.12.0)
     warden (1.2.9)
       rack (>= 2.0.9)
     web-console (3.7.0)
@@ -629,6 +632,7 @@ DEPENDENCIES
   mini_magick (~> 4.9)
   mini_racer
   namae
+  net-http
   opensearch-ruby
   paper_trail
   pg (>= 0.18, < 2.0)
