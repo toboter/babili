@@ -300,6 +300,8 @@ GEM
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
     namae (1.1.1)
+    net-http (0.3.2)
+      uri
     net-http-persistent (4.0.1)
       connection_pool (~> 2.2)
     net-imap (0.3.1)
@@ -333,7 +335,7 @@ GEM
     puma (6.0.0)
       nio4r (~> 2.0)
     racc (1.6.1)
-    rack (2.2.4)
+    rack (2.2.6.2)
     rack-cors (1.1.1)
       rack (>= 2.0.0)
     rack-test (2.0.2)
@@ -553,6 +555,7 @@ GEM
     unf_ext (0.0.8.2)
     unicode-types (1.8.0)
     unicode_utils (1.4.0)
+    uri (0.12.0)
     warden (1.2.9)
       rack (>= 2.0.9)
     web-console (3.7.0)
@@ -629,6 +632,7 @@ DEPENDENCIES
   mini_magick (~> 4.9)
   mini_racer
   namae
+  net-http
   opensearch-ruby
   paper_trail
   pg (>= 0.18, < 2.0)
