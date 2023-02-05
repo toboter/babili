@@ -1,6 +1,6 @@
 class AdminMailer < ApplicationMailer
-  default from: 'admin@babylon-online.org'
-  
+  default from: Rails.application.secrets.FROM
+
   def new_user_waiting_for_approval(user)
     @user = user
     @url  = users_url

@@ -1,6 +1,6 @@
 class UserMailer < ApplicationMailer
-  default from: 'admin@babylon-online.org'
-  
+  default from: Rails.application.secrets.FROM
+
   def account_approved(user)
     @user = user
     @url  = new_user_session_url

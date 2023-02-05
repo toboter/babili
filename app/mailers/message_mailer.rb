@@ -1,12 +1,12 @@
 class MessageMailer < ApplicationMailer
-  default from: 'contact@babylon-online.org'
-  
+  default from: Rails.application.secrets.FROM
+
   def contact(message)
     @name = message.name
     @from = message.email
     @body = message.body
     @sent_at = message.sent_at
-    to = 'contact@babylon-online.org'
+    to = Rails.application.secrets.TO
     mail(to: to, subject: "[babylon-online.org] Message from #{@name}.")
   end
 
