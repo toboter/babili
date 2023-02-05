@@ -48,7 +48,7 @@ end
 
 # gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'devise', '= 4.4.3'
-gem 'doorkeeper', '= 4.3.2'
+gem 'doorkeeper', '4.4.0'
 gem 'cancancan'
 
 gem 'bootstrap-sass', '= 3.4.1'

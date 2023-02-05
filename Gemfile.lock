@@ -160,7 +160,7 @@ GEM
       warden (~> 1.2.3)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    doorkeeper (4.3.2)
+    doorkeeper (4.4.0)
       railties (>= 4.2)
     down (5.4.0)
       addressable (~> 2.8)
@@ -612,7 +612,7 @@ DEPENDENCIES
   commonmarker (~> 0.17.11)
   csl-styles
   devise (= 4.4.3)
-  doorkeeper (= 4.3.2)
+  doorkeeper (= 4.4.0)
   down
   exiftool_vendored
   fastimage
