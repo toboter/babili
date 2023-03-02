@@ -1,7 +1,7 @@
 module ApplicationHelper
   def plain_first_paragraph(html_content)
     paragraph = Nokogiri::HTML.parse(html_content).css('p')&.first&.children&.first&.text
-    paragraph = paragraph.split(/\D[\.\!\?\:]\s|\n/).first if paragraph.present? 
+    paragraph = paragraph.split(/\D[\.\!\?\:]\s|\n/).first if paragraph.present?
     paragraph ? "#{paragraph}#{'.' unless paragraph.lstrip.match?(/[\.\!\?\:]/)}" : nil
   end
 
@@ -22,7 +22,7 @@ module ApplicationHelper
     ], pipeline_context
     pipeline.call(content)[:output].to_s.html_safe
   end
- 
+
   def markdown(text)
     renderer = Redcarpet::Render::HTML.new(hard_wrap: true, filter_html: false, with_toc_data: true)
     options = {
@@ -36,7 +36,7 @@ module ApplicationHelper
     }
     Redcarpet::Markdown.new(renderer, options).render(text).html_safe
   end
-  
+
   def teaser(text)
     renderer = Redcarpet::Render::HTML.new(hard_wrap: true, filter_html: true, no_images: true, no_links: true)
     options = {
@@ -48,7 +48,7 @@ module ApplicationHelper
     }
     Redcarpet::Markdown.new(renderer, options).render(text).html_safe
   end
-  
+
   def toc(text)
     Redcarpet::Render::HTML_TOC
     renderer = Redcarpet::Render::HTML_TOC.new
