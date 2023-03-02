@@ -393,18 +393,10 @@ flatten@^1.0.2:
   resolved "https://registry.yarnpkg.com/flatten/-/flatten-1.0.3.tgz#c1283ac9f27b368abc1e36d1ff7b04501a30356b"
   integrity sha512-dVsPA/UwQ8+2uoFe5GHtiBMu48dWLTdsuEd7CKGlZlD78r1TTWBvDuFaFGKCo/ZfEr95Uk56vZoX86OsHkUeIg==
 
-font-awesome@>=4.4.0:
-  version "4.7.0"
-  resolved "https://registry.yarnpkg.com/font-awesome/-/font-awesome-4.7.0.tgz#8fa8cf0411a1a31afd07b06d2902bb9fc815a133"
-  integrity sha512-U6kGnykA/6bFmg1M/oT9EkFeIYv7JlX3bozwQJWiiLz6L0w3F5vBVPxHlwyX/vtNq1ckcpRKOB9f2Qal/VtFpg==
-
-froala-editor@^2.8.5:
-  version "2.9.8"
-  resolved "https://registry.yarnpkg.com/froala-editor/-/froala-editor-2.9.8.tgz#dd5d539921423538958332f3887ab54f5b3ba064"
-  integrity sha512-ebZb3duCqtt6/1LRDtVmhVxd+FLQfSWU1k1wo7IN+JNzdmxwiMZCNR/BYttFaYc7u1M1TcrqPG8G/KOU3RL+Zg==
-  dependencies:
-    font-awesome ">=4.4.0"
-    jquery ">=1.11.0"
+froala-editor@^4.0.7:
+  version "4.0.7"
+  resolved "https://registry.yarnpkg.com/froala-editor/-/froala-editor-4.0.7.tgz#adbb773526d1b218cd7fee2f4db40bb0f40fd042"
+  integrity sha512-V4n9/IkRf0MyCgkvj4CZtaXH0heWwRD2hca/59wdbrSFv6HVIzDe0cBzE2pj6NNUSk8b3EuiCm2P/yDrf8/rTw==
 
 get-form-data@^2.0.0:
   version "2.0.0"
@@ -443,7 +435,7 @@ isarray@2.0.1:
   resolved "https://registry.yarnpkg.com/isarray/-/isarray-2.0.1.tgz#a37d94ed9cda2d59865c9f76fe596ee1f338741e"
   integrity sha512-c2cu3UxbI+b6kR3fy0nRnAhodsvR9dx7U5+znCOzdj6IfP3upFURTr0Xl5BlQZNKZjEtxrmVyfSdeE3O57smoQ==
 
-jquery@>=1.11.0, jquery@>=1.12.0, jquery@^3.3.1:
+jquery@>=1.12.0, jquery@^3.3.1:
   version "3.6.3"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.6.3.tgz#23ed2ffed8a19e048814f13391a19afcdba160e6"
   integrity sha512-bZ5Sy3YzKo9Fyc8wH2iIQK4JImJ6R0GWI9kL1/k7Z91ZBNgkRXE6U0JfHIizZbort8ZunhSI3jw9I6253ahKfg==
