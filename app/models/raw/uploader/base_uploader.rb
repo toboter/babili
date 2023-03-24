@@ -8,12 +8,6 @@ module Raw::Uploader
     plugin :add_metadata
     plugin :metadata_attributes
     plugin :pretty_location
-    plugin :validation_helpers
-    plugin :derivates
-
-    plugin :processing
-    plugin :versions
-    plugin :delete_raw
 
     add_metadata do |io, context|
       e = Exiftool.new(io.path)

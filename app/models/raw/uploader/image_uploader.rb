@@ -16,26 +16,23 @@ module Raw::Uploader
     Attacher.default_url do |options|
       "/assets/defaults/#{options[:version]}.svg"
     end
-      
-    process(:store) do |io, context|
-      versions = { original: io } # retain original
-    
-      io.download do |original|
-        pipeline = ImageProcessing::MiniMagick.source(original).convert("jpg")
-    
-        versions[:xlarge]       = pipeline.resize_to_limit!(1536, 1536)
-        versions[:large]        = pipeline.resize_to_limit!(1280, 1280)
-        versions[:medium]       = pipeline.resize_to_limit!(768, 768)
-        versions[:small]        = pipeline.resize_to_limit!(384, 384)
-        versions[:thumb_large]  = pipeline.resize_to_fill!(400, 400)
-        versions[:thumb_medium] = pipeline.resize_to_fill!(200, 200)
-        versions[:thumb_small]  = pipeline.resize_to_fill!(50, 50)
-      end
-    
-      versions
+
+
+    Attacher.derivatives do |original|
+      magick = ImageProcessing::MiniMagick.source(original).convert("jpg")
+
+      {
+        original: original,
+        small:  magick.resize_to_limit!(384, 384),
+        medium: magick.resize_to_limit!(768, 768),
+        large: magick.resize_to_limit!(1280, 1280),
+        xlarge: magick.resize_to_limit!(1536, 1536),
+        thumb_large: magick.resize_to_fill!(400, 400),
+        thumb_medium: magick.resize_to_fill!(200, 200),
+        thumb_small: magick.resize_to_fill!(50, 50)
+      }
     end
+
 
   end
 end
-
-    

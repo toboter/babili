@@ -4,10 +4,11 @@ module Raw::Uploader
     Attacher.validate do
       validate_mime_type_inclusion Raw::Document::TYPES
     end
-  
+
     # We are creating a preview for pdfs
     #https://stackoverflow.com/a/47652854
-    process(:store) do |io, context|
+
+    Attacher.derivatives do |original|
       if DocumentUploader.determine_mime_type(io) == "application/pdf"
         preview = Tempfile.new(["shrine-pdf-preview", ".pdf"], binmode: true)
         begin
@@ -17,13 +18,14 @@ module Raw::Uploader
         rescue Errno::ENOENT
           fail "mutool is not installed"
         end
-  
+
         preview.open # flush & rewind
       end
-  
-      versions = { original: io }
-      versions[:preview] = preview if preview && preview.size > 0
-      versions
+
+      {
+        original: original,
+        preview:  preview
+      }
     end
 
 
