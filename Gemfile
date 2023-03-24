@@ -47,7 +47,7 @@ group :test do
 end
 
 # gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-gem 'devise', '= 4.4.3'
+gem 'devise' #, '= 4.5.0'
 gem 'doorkeeper', '= 4.3.2'
 gem 'cancancan'
 

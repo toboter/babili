@@ -6,7 +6,7 @@ class HomeController < ApplicationController
                   index: true,
                   follow: true
     @latest_blog_postings = Writer::Categorization.order(created_at: :desc).includes(:category_node, :document).merge(Writer::CategoryNode.blog_threads).references(:category_node).group_by(&:document).take(5).map{|d,c| c.first}
-    @latest_references = Biblio::Entry.where("data->>'year' IS NOT NULL").order("(data ->> 'year') DESC").take(5)
+    @latest_references = Biblio::Entry.where(Arel.sql("data->>'year' IS NOT NULL")).order(Arel.sql("(data ->> 'year') DESC")).take(5)
     @featured_application = Oread::Application.first
   end
 

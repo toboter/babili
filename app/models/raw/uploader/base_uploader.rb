@@ -9,6 +9,8 @@ module Raw::Uploader
     plugin :metadata_attributes
     plugin :pretty_location
     plugin :validation_helpers
+    plugin :derivates
+
     plugin :processing
     plugin :versions
     plugin :delete_raw
