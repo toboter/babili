@@ -142,7 +142,7 @@ GEM
     commonmarker (0.17.13)
       ruby-enum (~> 0.5)
     concurrent-ruby (1.2.2)
-    connection_pool (2.3.0)
+    connection_pool (2.4.0)
     content_disposition (1.0.0)
     crass (1.0.6)
     csl (2.0.0)
@@ -479,7 +479,7 @@ GEM
     searchkick (5.2.1)
       activemodel (>= 5.2)
       hashie
-    selenium-webdriver (4.8.1)
+    selenium-webdriver (4.8.2)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
