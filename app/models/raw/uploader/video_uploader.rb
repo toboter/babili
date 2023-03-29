@@ -9,8 +9,8 @@ module Raw::Uploader
 
 
     Attacher.derivatives do |original|
-      video = Tempfile.new ["shrine-video", ".mp4"], binmode: true
-      screenshot = Tempfile.new ["shrine-video-preview", ".mp4"], binmode: true)
+      video = Tempfile.new(["shrine-video", ".mp4"], binmode: true)
+      screenshot = Tempfile.new(["shrine-video-preview", ".mp4"], binmode: true)
 
       movie = FFMPEG::Movie.new(original.path)
       movie.transcode(video.path, %w(-strict -2))
