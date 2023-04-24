@@ -10,11 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_20_120130) do
+ActiveRecord::Schema.define(version: 2023_04_24_210948) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "postgis"
 
   create_table "aggregation_commits", force: :cascade do |t|
     t.integer "item_id"
@@ -307,18 +306,6 @@ ActiveRecord::Schema.define(version: 2018_09_20_120130) do
     t.index ["location_id"], name: "index_locate_datings_locations_on_location_id"
   end
 
-  create_table "locate_locations", force: :cascade do |t|
-    t.integer "place_id"
-    t.geometry "loc", limit: {:srid=>3785, :type=>"geometry"}
-    t.float "fuzzyness"
-    t.integer "creator_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["creator_id"], name: "index_locate_locations_on_creator_id"
-    t.index ["loc"], name: "index_locate_locations_on_loc", using: :gist
-    t.index ["place_id"], name: "index_locate_locations_on_place_id"
-  end
-
   create_table "locate_places", force: :cascade do |t|
     t.string "type"
     t.text "description"
@@ -434,6 +421,7 @@ ActiveRecord::Schema.define(version: 2018_09_20_120130) do
     t.string "owner_type"
     t.string "homepage_url"
     t.string "description"
+    t.boolean "confidential", default: true, null: false
     t.index ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type"
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
