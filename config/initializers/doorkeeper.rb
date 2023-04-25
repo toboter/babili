@@ -11,7 +11,7 @@ Doorkeeper.configure do
     current_user || warden.authenticate!(:scope => :user)
     # User.find_by_id(session[:user_id]) || redirect_to(new_user_session_url)
   end
-  
+
   #  resource_owner_from_credentials do |_routes|
   #    user = User.find_for_database_authentication(email: params[:username])
   #    user if user && user.valid_password?(params[:password])
