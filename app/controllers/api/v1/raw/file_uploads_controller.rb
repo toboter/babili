@@ -10,9 +10,13 @@ module Api
         end
 
         def view_file
+          if params[:version] && params[:version] != 'original'
+            uploaded_file = @file_upload.file(params[:version].to_sym)
+          else
+            uploaded_file = @file_upload.file
+          end
           #uploaded_file = @file_upload.file.is_a?(Hash) ? @file_upload.file.fetch(params[:version].present? ? params[:version].to_sym : :original) : @file_upload.file
-          uploaded_file = @file_upload.is_a?(Hash) ? (params[:version].present? ? @file_upload.file(params[:version].to_sym) : @file_upload.file) : @file_upload.file
-
+          
           headers["Content-Length"] = uploaded_file.metadata['size']
           headers["Content-Type"] = uploaded_file.metadata['mime_type']
           headers["Content-Disposition"] = "inline; filename=\"#{uploaded_file.metadata['filename']}\""
