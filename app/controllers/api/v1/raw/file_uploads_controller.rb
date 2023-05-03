@@ -7,7 +7,7 @@ module Api
         
         def show
           render json: @file_upload, serializer: FileUploadSerializer
-        ends
+        end
 
         def view_file
           #uploaded_file = @file_upload.file.is_a?(Hash) ? @file_upload.file.fetch(params[:version].present? ? params[:version].to_sym : :original) : @file_upload.file
