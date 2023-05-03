@@ -5,18 +5,18 @@ class Raw::FileUploadsController < ApplicationController
   # GET /raw/file_uploads/1
   # GET /raw/file_uploads/1.json
   def show
-    set_meta_tags title: "#{@file_upload.file[:original].original_filename} | Files | RawContent",
-                  description: "#{@file_upload.type.demodulize} #{@file_upload.file[:original].original_filename}",
+    set_meta_tags title: "#{@file_upload.file.metadata['filename']} | Files | RawContent",
+                  description: "#{@file_upload.type.demodulize} #{@file_upload.file.metadata['filename']}",
                   index: true,
                   follow: true
   end
 
   def view_file
-    uploaded_file = @file_upload.file.is_a?(Hash) ? @file_upload.file.fetch(params[:version].present? ? params[:version].to_sym : :original) : @file_upload.file
+    uploaded_file = @file_upload.is_a?(Hash) ? (params[:version].present? ? @file_upload.file(params[:version].to_sym) : @file_upload.file) : @file_upload.file
 
     headers["Content-Length"] = uploaded_file.size
     headers["Content-Type"] = uploaded_file.mime_type
-    headers["Content-Disposition"] = "inline; filename=\"#{uploaded_file.original_filename}\""
+    headers["Content-Disposition"] = "inline; filename=\"#{uploaded_file.metadata['filename']}\""
 
     self.response_body = Enumerator.new do |yielder|
       yielder << uploaded_file.read(16*1024) until uploaded_file.eof?

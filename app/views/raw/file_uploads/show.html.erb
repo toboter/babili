@@ -17,7 +17,7 @@
         <tbody>
           <%= content_tag :tr do %>
             <%= content_tag :th, 'Filename', style: 'width:30%;' %>
-            <%= content_tag :td, @file_upload.file[:original].original_filename %>
+            <%= content_tag :td, @file_upload.file.metadata['filename'] %>
           <% end %>
           <%= content_tag :tr do %>
             <%= content_tag :th, 'Uploader' %>
@@ -33,44 +33,44 @@
           <% end %>
           <%= content_tag :tr do %>
             <%= content_tag :th, 'Dimensions' %>
-            <%= content_tag :td, @file_upload.file[:original].dimensions.join(' x ') %>
-          <% end if @file_upload.file[:original].try(:dimensions) %>
+            <%= content_tag :td, @file_upload.file.dimensions.join(' x ') %>
+          <% end if @file_upload.file.try(:dimensions) %>
           <%= content_tag :tr do %>
             <%= content_tag :th, 'Duration' %>
-            <%= content_tag :td, @file_upload.file[:original].metadata['duration'] %>
-          <% end if @file_upload.file[:original].metadata['duration'] %>
+            <%= content_tag :td, @file_upload.file.metadata['duration'] %>
+          <% end if @file_upload.file.metadata['duration'] %>
           <%= content_tag :tr do %>
             <%= content_tag :th, 'Language' %>
-            <%= content_tag :td, @file_upload.file[:original].metadata['language'] %>
-          <% end if @file_upload.file[:original].metadata['language'] %>
+            <%= content_tag :td, @file_upload.file.metadata['language'] %>
+          <% end if @file_upload.file.metadata['language'] %>
           <%= content_tag :tr do %>
             <%= content_tag :th, 'MimeType' %>
-            <%= content_tag :td, @file_upload.file[:original].metadata['mime_type'] %>
-          <% end if @file_upload.file[:original].metadata['mime_type'] %>
+            <%= content_tag :td, @file_upload.file.metadata['mime_type'] %>
+          <% end if @file_upload.file.metadata['mime_type'] %>
           <%= content_tag :tr do %>
             <%= content_tag :th, 'Original date' %>
-            <%= content_tag :td, "#{@file_upload.file[:original].metadata['date']} #{@file_upload.file[:original].metadata['year']}" %>
-          <% end if @file_upload.file[:original].metadata['date'] || @file_upload.file[:original].metadata['year'] %>
+            <%= content_tag :td, "#{@file_upload.file.metadata['date']} #{@file_upload.file.metadata['year']}" %>
+          <% end if @file_upload.file.metadata['date'] || @file_upload.file.metadata['year'] %>
           <%= content_tag :tr do %>
             <%= content_tag :th, 'Original title' %>
-            <%= content_tag :td, @file_upload.file[:original].metadata['title'] %>
-          <% end if @file_upload.file[:original].metadata['title'] %>
+            <%= content_tag :td, @file_upload.file.metadata['title'] %>
+          <% end if @file_upload.file.metadata['title'] %>
           <%= content_tag :tr do %>
             <%= content_tag :th, 'Pages' %>
-            <%= content_tag :td, @file_upload.file[:original].metadata['page_count'] %>
-          <% end if @file_upload.file[:original].metadata['page_count'] %>
+            <%= content_tag :td, @file_upload.file.metadata['page_count'] %>
+          <% end if @file_upload.file.metadata['page_count'] %>
           <%= content_tag :tr do %>
             <%= content_tag :th, 'Profile' %>
-            <%= content_tag :td, @file_upload.file[:original].metadata['profile_description'] %>
-          <% end if @file_upload.file[:original].metadata['profile_description'] %>
+            <%= content_tag :td, @file_upload.file.metadata['profile_description'] %>
+          <% end if @file_upload.file.metadata['profile_description'] %>
           <%= content_tag :tr do %>
             <%= content_tag :th, 'Publisher' %>
-            <%= content_tag :td, link_to(@file_upload.file[:original].metadata['publisher'], @file_upload.file[:original].metadata['publisher_url']) %>
-          <% end if @file_upload.file[:original].metadata['publisher'] %>
+            <%= content_tag :td, link_to(@file_upload.file.metadata['publisher'], @file_upload.file.metadata['publisher_url']) %>
+          <% end if @file_upload.file.metadata['publisher'] %>
           <%= content_tag :tr do %>
             <%= content_tag :th, 'Size' %>
-            <%= content_tag :td, number_to_human_size(@file_upload.file[:original].metadata['size']) %>
-          <% end if @file_upload.file[:original].metadata['size'] %>
+            <%= content_tag :td, number_to_human_size(@file_upload.file.metadata['size']) %>
+          <% end if @file_upload.file.metadata['size'] %>
         </tbody>
       </table>
       <div class="panel panel-default" id="attachments">
