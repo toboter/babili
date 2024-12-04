@@ -13,7 +13,7 @@
     "selectize": "^0.12.6",
     "toastr": "^2.1.4",
     "trix": "^0.12.0",
-    "uppy": "^0.27.2"
+    "uppy": "^2.3.3"
   },
   "devDependencies": {}
 }
