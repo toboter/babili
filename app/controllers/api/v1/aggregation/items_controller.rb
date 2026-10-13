@@ -6,11 +6,11 @@ module Api::V1::Aggregation
     
     def index
       @items = @items.paginate(page: params[:page], per_page: params[:per_page] || 30)
-      render json: @items, meta: pagination_dict(@items), each_serializer: ItemSerializer, adapter: :json
+      render_with_serializer(@items, meta: pagination_dict(@items), each_serializer: ItemSerializer)
     end
 
     def show
-      render json: @item, serializer: ItemSerializer, adapter: :json
+      render_with_serializer(@item, serializer: ItemSerializer)
     end
 
   end

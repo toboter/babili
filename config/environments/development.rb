@@ -1,4 +1,9 @@
 Rails.application.configure do
+  config.active_storage.service = :local
+  config.hosts << 'dev.local'
+  config.hosts << 'localhost'
+  config.hosts << 'api.dev.local'
+  config.hosts << '.dev.local'
   # Settings specified here will take precedence over those in config/application.rb.
   Rails.application.routes.default_url_options = { host: 'dev.local', port: 3000 }
 
@@ -29,7 +34,6 @@ Rails.application.configure do
   end
 
   # Store uploaded files on the local file system (see config/storage.yml for options)
-  config.active_storage.service = :local
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
@@ -70,8 +74,8 @@ Rails.application.configure do
     domain: "babylon-online.org",
     authentication: "plain",
     enable_starttls_auto: true,
-    user_name: Rails.application.secrets.GMAIL_USERNAME,
-    password: Rails.application.secrets.GMAIL_PASSWORD
+    user_name: Rails.application.credentials.GMAIL_USERNAME,
+    password: Rails.application.credentials.GMAIL_PASSWORD
   }
 
   config.i18n.fallbacks = true

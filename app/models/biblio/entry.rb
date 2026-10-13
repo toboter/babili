@@ -69,7 +69,7 @@ class Biblio::Entry < ApplicationRecord
         Biblio::Creatorship \
           .where(creator_assignments[:entry_id].eq(entries[:id]) \
           .and(creator_assignments[:agent_appellation_id].eq(c_id))) \
-          .exists
+          .arel.exists
       )
     }
   }

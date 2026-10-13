@@ -22,7 +22,6 @@ module Writer
     alias_attribute :name, :title
 
     acts_as_sequenced scope: :repository_id
-    has_paper_trail only: [:title, :content], versions: {name: :drafts}
     searchkick
 
     belongs_to :creator, class_name: 'Person'
@@ -81,8 +80,7 @@ module Writer
     end
 
     def authors
-      author_ids = drafts.map(&:whodunnit).compact.map(&:to_i).uniq
-      Person.where(id: author_ids)
+      Person.where(id: [creator_id, publisher_id].compact.uniq)
     end
 
     def extract_attachments
@@ -101,7 +99,8 @@ module Writer
     def set_references(values)
       attached_referenceables = values.map{|v| GlobalID::Locator.locate(v['gid']) }.uniq
       referenceables.where.not(referenceable: attached_referenceables).destroy_all
-      attached_references = attached_referenceables.map{|r| Reference.new(referenceable: r, referencor_id: ::PaperTrail.request.whodunnit)}
+      referencor_id = RequestStore.store[:current_person_id] || creator_id
+      attached_references = attached_referenceables.map{|r| Reference.new(referenceable: r, referencor_id: referencor_id)}
       if attached_references.present?
         referenceables << attached_references.map{|r| r unless r.referenceable.in?(referenceables.map(&:referenceable).compact.flatten)}.compact
       end

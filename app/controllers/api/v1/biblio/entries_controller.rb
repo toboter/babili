@@ -29,12 +29,12 @@ module Api::V1::Biblio
         page: params[:page], 
         per_page: per_page)
       
-        render json: @results, meta: pagination_dict(@results), each_serializer: EntrySerializer, adapter: :json
+        render_with_serializer(@results, meta: pagination_dict(@results), each_serializer: EntrySerializer)
     
     end
 
     def show
-      render json: @entry, serializer: EntrySerializer, adapter: :json
+      render_with_serializer(@entry, serializer: EntrySerializer)
     end
 
 

@@ -13,8 +13,7 @@ class Person < ApplicationRecord
   has_many :repositories, through: :namespace
   belongs_to :agent, class_name: 'Zensus::Person', optional: true
 
-  has_many :document_authorships, class_name: 'PaperTrail::Version', foreign_key: :whodunnit
-  has_many :documents, -> { distinct }, through: :document_authorships, source: :item, source_type: 'Writer::Document'
+  has_many :documents, class_name: 'Writer::Document', foreign_key: :creator_id
 
   has_many :collaborations, dependent: :destroy, foreign_key: :collaborator_id
   has_many :collaboration_repos, through: :collaborations, source: :collaboratable, source_type: 'Repository'

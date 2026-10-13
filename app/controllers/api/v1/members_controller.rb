@@ -5,7 +5,7 @@ module Api::V1
 
     def index
       members = @members.order(id: :asc).joins(:memberships).where(memberships: {verified: true}).uniq
-      render json: members, each_serializer: PersonSerializer
+      render_with_serializer(members, each_serializer: PersonSerializer)
     end
 
     def show

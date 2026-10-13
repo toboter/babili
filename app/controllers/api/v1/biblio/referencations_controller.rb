@@ -22,7 +22,7 @@ module Api::V1::Biblio
         page: params[:page], 
         per_page: per_page)
 
-      render json: @results, each_serializer: EntrySerializer, adapter: :json
+      render_with_serializer(@results, each_serializer: EntrySerializer)
     end
 
   end

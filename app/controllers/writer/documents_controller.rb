@@ -1,7 +1,6 @@
 module Writer
   class DocumentsController < ApplicationController
     DEFAULT_PER_PAGE = 50
-    before_action :set_paper_trail_whodunnit, except: [:index, :show]
     load_resource :namespace
     load_resource :repository
     load_and_authorize_resource :document, through: :repository, find_by: :sequential_id, except: :index

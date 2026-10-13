@@ -1,5 +1,5 @@
 class UserMailer < ApplicationMailer
-  default from: Rails.application.secrets.FROM
+  default from: Rails.application.credentials.FROM
 
   def account_approved(user)
     @user = user

@@ -6,11 +6,11 @@ module Api::V1::Aggregation
 
     def index
       @events = @events.paginate(page: params[:page], per_page: params[:per_page] || 30)
-      render json: @events, meta: pagination_dict(@events), each_serializer: EventSerializer, adapter: :json
+      render_with_serializer(@events, meta: pagination_dict(@events), each_serializer: EventSerializer)
     end
 
     def show
-      render json: @event, serializer: EventSerializer, adapter: :json
+      render_with_serializer(@event, serializer: EventSerializer)
     end
 
     def create

@@ -1,6 +1,9 @@
 require_relative 'boot'
 
-require 'rails/all'
+# Soft-skip ruby-vips so Rails 8 ActiveStorage can boot on older libvips.
+require_relative "skip_old_libvips"
+
+require "rails/all"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -9,7 +12,8 @@ Bundler.require(*Rails.groups)
 module Babili
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.2
+    config.load_defaults 8.1
+    config.autoloader = :zeitwerk
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
@@ -17,14 +21,15 @@ module Babili
     # the framework and any gems in your application.
 
     config.active_job.queue_adapter = :sidekiq
-    
+    config.active_storage.variant_processor = :mini_magick
+
     config.to_prepare do
       # Only Applications list
       Doorkeeper::ApplicationsController.layout "settings"
-    
+
       # Only Authorization endpoint
       Doorkeeper::AuthorizationsController.layout "application"
-    
+
       # Only Authorized Applications
       Doorkeeper::AuthorizedApplicationsController.layout "settings"
     end

@@ -1,5 +1,5 @@
 class AdminMailer < ApplicationMailer
-  default from: Rails.application.secrets.FROM
+  default from: Rails.application.credentials.FROM
 
   def new_user_waiting_for_approval(user)
     @user = user

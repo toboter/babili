@@ -10,7 +10,7 @@ class Biblio::JournalsController < ApplicationController
     
     respond_to do |format|
       format.html
-      format.json { render json: @journals, each_serializer: Biblio::JournalSerializer }
+      format.json { render_with_serializer(@journals, each_serializer: Api::V1::Biblio::JournalSerializer) }
     end
   end
 
@@ -23,7 +23,7 @@ class Biblio::JournalsController < ApplicationController
     @discussions = @entry.referencings.where(referencing_type: 'Discussion::Comment')
     respond_to do |format|
       format.html
-      format.json { render json: @journal, serializer: Biblio::JournalSerializer }
+      format.json { render_with_serializer(@journal, serializer: Api::V1::Biblio::JournalSerializer) }
     end
   end
 

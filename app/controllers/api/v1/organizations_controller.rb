@@ -4,11 +4,11 @@ module Api::V1
 
     def index
       organizations = @organizations.where(private: false).order(id: :asc)
-      render json: organizations, each_serializer: OrganizationSerializer
+      render_with_serializer(organizations, each_serializer: OrganizationSerializer)
     end
 
     def show
-      @organization.private? ? (render json: {status: 'Not Found', code: 404}.to_json) : (render json: @organization, serializer: OrganizationSerializer)
+      @organization.private? ? (render json: {status: 'Not Found', code: 404}.to_json) : (render_with_serializer(@organization, serializer: OrganizationSerializer))
     end
 
   end

@@ -1,5 +1,6 @@
 module Api::V1
   class BaseController < ActionController::API
+  include JsonSerializerRendering
     # testing token:  nH3ydH1KRRDA6AWDs6yhtw5u
     # doorkeeper literature token:  6039d4aa3df371e4d586ec1df6068776a3051199690c98898af3b244c356aa61
 

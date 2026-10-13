@@ -4,11 +4,11 @@ module Api::V1
 
     def index
       applications = @applications.order(id: :asc)
-      render json: applications, each_serializer: ApplicationSerializer
+      render_with_serializer(applications, each_serializer: ApplicationSerializer)
     end
 
     def show
-      render json: @application, serializer: ApplicationSerializer
+      render_with_serializer(@application, serializer: ApplicationSerializer)
     end
 
   end

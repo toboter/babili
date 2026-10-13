@@ -80,7 +80,7 @@ module Zensus
           Zensus::AppellationPart \
             .where(parts[:appellation_id].eq(appellations[:id])) \
             .where(parts[:body].eq(term[:body]).and(parts[:type].eq(term[:type]))) \
-            .exists
+            .arel.exists
         )
       }
 

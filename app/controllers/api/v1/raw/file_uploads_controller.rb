@@ -6,7 +6,7 @@ module Api
         load_and_authorize_resource except: :create, find_by: :slug, class: 'Raw::FileUpload'
         
         def show
-          render json: @file_upload, serializer: FileUploadSerializer
+          render_with_serializer(@file_upload, serializer: FileUploadSerializer)
         end
 
         def view_file

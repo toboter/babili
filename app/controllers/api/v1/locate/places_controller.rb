@@ -5,11 +5,11 @@ module Api::V1::Locate
     def index
       sort_order = Locate::Place.sorted_by(params[:sort].presence || 'updated_at_desc')
       @places = @places.paginate(page: params[:page], per_page: params[:per_page] || 30).order(sort_order)
-      render json: @places, meta: pagination_dict(@places), each_serializer: PlaceSerializer, adapter: :json
+      render_with_serializer(@places, meta: pagination_dict(@places), each_serializer: PlaceSerializer)
     end
 
     def show
-      render json: @place, serializer: PlaceSerializer, adapter: :json
+      render_with_serializer(@place, serializer: PlaceSerializer)
     end
     
   end

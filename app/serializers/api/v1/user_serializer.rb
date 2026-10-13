@@ -15,7 +15,7 @@ module Api::V1
     end
 
     def is_current_user?
-      object.id == current_user.id
+      current_user && object.id == current_user.id
     end
 
     def username

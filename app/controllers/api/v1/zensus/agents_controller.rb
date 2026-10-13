@@ -8,11 +8,11 @@ module Api::V1::Zensus
       @agents = @agents.paginate(page: params[:page], per_page: params[:per_page] || 30).order(sort_order)
 
       @agents = @agents.where(type: params[:type]) if params[:type]
-      render json: @agents, meta: pagination_dict(@agents), each_serializer: AgentSerializer, adapter: :json
+      render_with_serializer(@agents, meta: pagination_dict(@agents), each_serializer: AgentSerializer)
     end
 
     def show
-      render json: @agent, serializer: AgentSerializer, adapter: :json
+      render_with_serializer(@agent, serializer: AgentSerializer)
     end
 
     def search
@@ -21,7 +21,7 @@ module Api::V1::Zensus
         page: params[:page], 
         per_page: params[:per_page] || 30)
 
-      render json: @agents, meta: pagination_dict(@agents), each_serializer: AgentSerializer, adapter: :json
+      render_with_serializer(@agents, meta: pagination_dict(@agents), each_serializer: AgentSerializer)
     end
   end
 end

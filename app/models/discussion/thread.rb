@@ -19,8 +19,6 @@ module Discussion
     acts_as_sequenced scope: [:discussable_id, :discussable_type]
     searchkick
 
-    alias_attribute :name, :title
-
     belongs_to :discussable, polymorphic: true
     belongs_to :author, class_name: 'Person'
     has_many :assignments, dependent: :destroy
@@ -56,6 +54,10 @@ module Discussion
     def title
       titles.last.try(:content)
     end
+
+    # Rails 8.1+ forbids alias_attribute unless the target is a DB column.
+    # title is a method over titles association, so alias the method instead.
+    alias_method :name, :title
 
     def locked?
       current_state.first == 'locked'

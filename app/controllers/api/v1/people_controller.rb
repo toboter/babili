@@ -4,26 +4,26 @@ module Api::V1
     
     def index
       people = @people.order(id: :asc)
-      render json: people, each_serializer: PersonSerializer
+      render_with_serializer(people, each_serializer: PersonSerializer)
     end
 
     def show
-      render json: @person, serializer: PersonSerializer
+      render_with_serializer(@person, serializer: PersonSerializer)
     end
 
     def organizations
       organizations = @person.organizations.where(private: false).order(id: :asc)
-      render json: organizations, each_serializer: OrganizationSerializer, adapter: :json
+      render_with_serializer(organizations, each_serializer: OrganizationSerializer)
     end
 
     def memberships
       memberships = @person.memberships
-      render json: memberships, each_serializer: MembershipSerializer
+      render_with_serializer(memberships, each_serializer: MembershipSerializer)
     end
 
     def repositories
       repositories = @person.user.oread_enrolled_applications.order(id: :asc)
-      render json: repositories, each_serializer: CollectionSerializer
+      render_with_serializer(repositories, each_serializer: CollectionSerializer)
     end
 
   end

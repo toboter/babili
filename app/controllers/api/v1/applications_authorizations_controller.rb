@@ -4,19 +4,19 @@ module Api::V1
 
     def index
       authorize! :read, Doorkeeper::Application
-      render json: @authorized_applications, each_serializer: ApplicationAuthorizationSerializer
+      render_with_serializer(@authorized_applications, each_serializer: ApplicationAuthorizationSerializer)
     end
 
     def show
       authorized_application = @authorized_applications.find(params[:id])
       authorize! :read, authorized_application
-      render json: authorized_application, serializer: ApplicationAuthorizationSerializer
+      render_with_serializer(authorized_application, serializer: ApplicationAuthorizationSerializer)
     end
 
     def client
       authorized_application = @authorized_applications.find_by_uid(params[:uid])
       authorize! :read, authorized_application
-      render json: authorized_application, serializer: ApplicationAuthorizationClientSerializer
+      render_with_serializer(authorized_application, serializer: ApplicationAuthorizationClientSerializer)
     end
 
     private

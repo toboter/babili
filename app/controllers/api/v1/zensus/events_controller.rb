@@ -7,11 +7,11 @@ module Api::V1::Zensus
       @events = @events.where("updated_at > ?", params[:since]) if params[:since]
       @events = @events.paginate(page: params[:page], per_page: params[:per_page] || 30).order(sort_order)
 
-      render json: @events, meta: pagination_dict(@events), each_serializer: EventSerializer, adapter: :json
+      render_with_serializer(@events, meta: pagination_dict(@events), each_serializer: EventSerializer)
     end
 
     def show
-      render json: @event, serializer: EventSerializer, adapter: :json
+      render_with_serializer(@event, serializer: EventSerializer)
     end
 
     def search
@@ -20,7 +20,7 @@ module Api::V1::Zensus
         page: params[:page], 
         per_page: params[:per_page] || 30)
 
-      render json: @events, meta: pagination_dict(@events), each_serializer: EventSerializer, adapter: :json
+      render_with_serializer(@events, meta: pagination_dict(@events), each_serializer: EventSerializer)
     end
 
     def properties

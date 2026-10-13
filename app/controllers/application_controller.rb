@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  include JsonSerializerRendering
   protect_from_forgery with: :exception
   before_action :configure_permitted_parameters, if: :devise_controller?
 
@@ -14,8 +15,10 @@ class ApplicationController < ActionController::Base
   end
   helper_method :current_person
 
-  def user_for_paper_trail
-    user_signed_in? ? current_user.person.id : 'Unknown user'
+  before_action :store_current_person_id
+
+  def store_current_person_id
+    RequestStore.store[:current_person_id] = current_person&.id
   end
 
   protected

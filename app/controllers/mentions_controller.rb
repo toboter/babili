@@ -4,7 +4,7 @@ class MentionsController < ApplicationController
   def mentionees
     query = params[:q]
     @mentionees = Namespace.search(query)
-    render json: @mentionees, each_serializer: MentioneeSerializer, adapter: :json
+    render_with_serializer(@mentionees, each_serializer: MentioneeSerializer)
   end
 
 end

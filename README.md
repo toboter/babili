@@ -1,85 +1,103 @@
 # Babili
 
-Babili is a platform for studying resources on ancient babylon. It expects that researchers have a specific vocabulary which they use on data. It is also expected that researchers have a specific question in mind when gathering data. This is done in repositories, in which is primary data and literature, discussions and documents written by the researcher or commented on by the community on that specific question. Researchers can also gather in organizations or teams to work on a bigger scientific question, therefore they can have common repositories and vocabularies in addition to their own. Organizations and their vocabularies and repositories may be hidden for other non members. Repositories may be private and thereby also be hidden unless being an owner or invited to collaborate. Apart from those scientific question and user centric tools, babili also provides some central services which each researcher contributes to and benefits from. These are Zensus for Agents (individuals or groups) throughout history, Locate for places together with their different locations and toponyms thoughout history and a central Bibliograhy.
+Babili is a platform for studying resources on ancient Babylon. Researchers work in repositories (primary data, literature, discussions, documents), gather in organizations, and contribute to shared services: **Zensus** (agents), **Locate** (places/toponyms), and a central **Bibliography**. The platform is closed unless material is published; users need approval.
 
-While being community driven at first, babili is a closed platform unless material is published. Users need to be approved. Some elements can only be edited by platform administrators.
-
+Sibling app: **ADGB** (`~/dev/adgb`) uses Babili as its OAuth2 provider and for file uploads / vocab / bibliography. See also `docs/CUTOVER.md`.
 
 ## Dependencies
 
-* ruby 2.7.3
-* rails 5.2.8
-* bundler 2.3.26
+* ruby 3.4.2
+* rails 8.1.4
+* bundler 2.5.x
 * node >= 16.15.1
-* yarn 1.22.19
-* postgres >= 15 or libpq-dev
-* postgis (https://github.com/rgeo/activerecord-postgis-adapter#upgrading-an-existing-database)
-* libgeos-dev
-* libproj-dev
+* yarn 1.22.x
+* postgresql >= 15
 * opensearch >= 2.4
-* redis-server >= 5.0.7
-* mutool >= 1.7a (uses `mutool draw` as `mudraw`) -> `mupdf-tools`
+* redis-server >= 5 (Sidekiq only — Action Cable is unused scaffold)
+* mutool >= 1.7a (`mupdf-tools`)
 * ffmpeg >= 4.2.7
-* ImageMagick >= 6.9.10-23
+* ImageMagick >= 6.9.10
 
+PostGIS / `libgeos` / `libproj` are **not** required (adapter dropped; Locate `loc` is plain text).
 
-## Installation
+## Local setup
 
-Make sure you have installed all dependencies first. Then download the application files from https://github.com/toboter/babili.
+```bash
+cp config/database.yml.example config/database.yml
+# Encrypted credentials (see config/credentials.yml.example):
+#   bin/rails credentials:edit
+# Needs config/master.key (gitignored). Set host, FROM/TO, recaptcha,
+# opensearch_url, …
+rbenv install 3.4.2   # if needed
+bundle install
+yarn install
+bin/rails db:setup    # or restore a production dump
+```
 
-### rbenv
-https://github.com/rbenv/rbenv#basic-git-checkout
-https://github.com/rbenv/ruby-build#clone-as-rbenv-plugin-using-git
-rbenv install 2.7.3
+Map hosts (WSL `/etc/hosts` and the Windows hosts file) so `api.dev.local` and `dev.local` resolve to `127.0.0.1`. Babili on port **3000** is the OAuth provider for ADGB (`provider_site: http://api.dev.local:3000`).
 
+Second process for jobs:
 
-### nvm
-https://github.com/nvm-sh/nvm#git-install
-nvm install --lts
-npm install --global yarn
+```bash
+bundle exec sidekiq -q default
+```
 
+(Sidekiq 7 no longer supports `-d` daemonize; use foreground, systemd, or a process manager.)
 
-To install the apps' gem dependencies
+Writer document PaperTrail drafts are unused and removed from the app; keep the `versions` table empty (or `TRUNCATE versions`) so no YAML remains for Psych 4.
+
+## OpenSearch / Searchkick
+
+Searchkick reads `OPENSEARCH_URL` (defaults to `http://localhost:9200`).
+
+With the security plugin enabled:
+
+```bash
+export OPENSEARCH_URL='https://admin:YOUR_PASSWORD@localhost:9200'
+```
+
+**Deploy:** set `OPENSEARCH_URL` in production (env / secrets) including credentials when security is on. Prefer real TLS with certificate verification in production; local Docker self-signed certs are allowed via `config/initializers/opensearch.rb` only for `https://` URLs.
+
+Reindex:
+
+```bash
+bundle exec rake searchkick:reindex CLASS=Namespace
+bundle exec rake searchkick:reindex CLASS=Biblio::Entry
+bundle exec rake searchkick:reindex CLASS=Discussion::Thread
+bundle exec rake searchkick:reindex CLASS=Writer::Document
+bundle exec rake searchkick:reindex CLASS=Vocab::Concept
+bundle exec rake searchkick:reindex CLASS=Zensus::Agent
+bundle exec rake searchkick:reindex CLASS=Zensus::Event
+bundle exec rake searchkick:reindex CLASS=Zensus::Appellation
+bundle exec rake searchkick:reindex CLASS=Locate::Place
+```
+
+## Production deploy (cutover)
+
+Go-live is **code + schema migrations** on the existing production DB — not a converted-dump restore. Full checklist: [`docs/CUTOVER.md`](docs/CUTOVER.md).
 
 ```bash
 bundle install --deployment --without development test
+bin/rails db:migrate RAILS_ENV=production
+bin/rails assets:precompile RAILS_ENV=production
+# TRUNCATE versions;  # if any PaperTrail rows remain
+# reindex Searchkick (classes above)
+bundle exec sidekiq -q default RAILS_ENV=production
 ```
 
-Migrate the Database (you can also load the schema if installing for the first time)
+Keep Shrine/file storage in place across the cutover. Point the Doorkeeper webhook at ADGB `/api/hooks/update_accessibilities`.
 
-```bash
-bundle exec rails db:migrate RAILS_ENV=production
-```
+### Production cutover checklist
 
-Compile the css and js assets used by the application, yarn dependencies will be installed automatically
+1. Maintenance window; backup Postgres, and Shrine/file storage.
+2. Deploy final Babili + ADGB (Ruby 3.4 / Rails 8.1).
+3. Set env / credentials, including `OPENSEARCH_URL` with credentials when security is on.
+4. `bin/rails db:migrate RAILS_ENV=production` (schema only).
+5. `TRUNCATE versions;` if any PaperTrail rows remain.
+6. Reindex Searchkick; restart Sidekiq.
+7. Smoke: Devise login, OAuth login from ADGB, file upload, vocab/biblio/search, webhooks into ADGB.
 
-```bash
-bundle exec rails assets:clobber RAILS_ENV=production
-bundle exec rails assets:precompile RAILS_ENV=production
-```
-
-Adding indices for elasticsearch
-
-```bash
-bundle exec rake searchkick:reindex CLASS=Namespace RAILS_ENV=production
-bundle exec rake searchkick:reindex CLASS=Biblio::Entry RAILS_ENV=production
-bundle exec rake searchkick:reindex CLASS=Discussion::Thread RAILS_ENV=production
-bundle exec rake searchkick:reindex CLASS=Writer::Document RAILS_ENV=production
-bundle exec rake searchkick:reindex CLASS=Vocab::Concept RAILS_ENV=production
-bundle exec rake searchkick:reindex CLASS=Zensus::Agent RAILS_ENV=production
-bundle exec rake searchkick:reindex CLASS=Zensus::Event RAILS_ENV=production
-bundle exec rake searchkick:reindex CLASS=Zensus::Appellation RAILS_ENV=production
-bundle exec rake searchkick:reindex CLASS=Locate::Place RAILS_ENV=production
-```
-
-After every server restart
-
-```bash
-bundle exec sidekiq -d -L log/sidekiq.log -q default RAILS_ENV=production
-```
-
-## Development
-For local development you will need to set api.dev.local on 127.0.0.1. This with your puma port will be the provider site for oauth applications.
+**Not required at cutover:** restoring a converted dump, PostGIS / `loc` geometry casts, or YAML→JSON PaperTrail rewrites.
 
 ## Maintainers
 
