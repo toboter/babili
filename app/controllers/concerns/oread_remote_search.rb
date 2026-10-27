@@ -40,16 +40,15 @@ module OreadRemoteSearch
             headers[:Authorization] = "#{type} #{token.token}"
           end
 
-          response = RestClient::Request.execute(
-            method: :get,
-            url: url,
+          response = HttpClient.get(
+            url,
             headers: headers,
             open_timeout: REMOTE_OPEN_TIMEOUT,
             timeout: REMOTE_READ_TIMEOUT
           )
           parsed = JSON.parse(response.body)
           results << parsed if parsed.present?
-        rescue RestClient::Exception, SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH,
+        rescue Faraday::Error, SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH,
                Errno::ENETUNREACH, Errno::ETIMEDOUT, Net::OpenTimeout, Net::ReadTimeout,
                Timeout::Error, JSON::ParserError, URI::InvalidURIError => e
           failures << "#{configured_url} (#{e.class})"

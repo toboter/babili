@@ -1,5 +1,4 @@
 class SearchController < ApplicationController
-  require "rest-client"
   require "json"
   include ERB::Util
   include OreadRemoteSearch

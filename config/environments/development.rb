@@ -57,7 +57,14 @@ Rails.application.configure do
   # Suppress logger output for asset requests.
   config.assets.quiet = true
 
-  config.logger = Logger.new(config.paths["log"].first, 5, 50.megabytes)
+  # Prefer STDOUT when the log file is locked/unwritable (common under WSL + long-running Puma).
+  log_file = config.paths["log"].first
+  config.logger =
+    begin
+      Logger.new(log_file, 5, 50.megabytes)
+    rescue Errno::EACCES, Errno::EPERM
+      Logger.new($stdout)
+    end
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true

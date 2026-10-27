@@ -32,3 +32,7 @@ environment ENV.fetch("RAILS_ENV") { "development" }
 
 # Allow puma to be restarted by `rails restart` command.
 plugin :tmp_restart
+
+# Run Solid Queue supervisors inside Puma so UpdateAppAccessorsJob works without a
+# separate worker process. Disable with SOLID_QUEUE_IN_PUMA=false if you use bin/jobs.
+plugin :solid_queue if ENV.fetch("SOLID_QUEUE_IN_PUMA", "true") == "true"

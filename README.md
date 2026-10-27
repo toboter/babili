@@ -13,7 +13,6 @@ Sibling app: **ADGB** (`~/dev/adgb`) uses Babili as its OAuth2 provider and for 
 * yarn 1.22.x
 * postgresql >= 15
 * opensearch >= 2.4
-* redis-server >= 5 (Sidekiq only — Action Cable is unused scaffold)
 * mutool >= 1.7a (`mupdf-tools`)
 * ffmpeg >= 4.2.7
 * ImageMagick >= 6.9.10
@@ -36,13 +35,11 @@ bin/rails db:setup    # or restore a production dump
 
 Map hosts (WSL `/etc/hosts` and the Windows hosts file) so `api.dev.local` and `dev.local` resolve to `127.0.0.1`. Babili on port **3000** is the OAuth provider for ADGB (`provider_site: http://api.dev.local:3000`).
 
-Second process for jobs:
+Jobs use **Solid Queue** (Postgres). Puma loads the Solid Queue plugin by default (`SOLID_QUEUE_IN_PUMA=true`), so no Redis and no separate Sidekiq process. For a standalone worker:
 
 ```bash
-bundle exec sidekiq -q default
+bin/jobs
 ```
-
-(Sidekiq 7 no longer supports `-d` daemonize; use foreground, systemd, or a process manager.)
 
 Writer document PaperTrail drafts are unused and removed from the app; keep the `versions` table empty (or `TRUNCATE versions`) so no YAML remains for Psych 4.
 
@@ -82,7 +79,7 @@ bin/rails db:migrate RAILS_ENV=production
 bin/rails assets:precompile RAILS_ENV=production
 # TRUNCATE versions;  # if any PaperTrail rows remain
 # reindex Searchkick (classes above)
-bundle exec sidekiq -q default RAILS_ENV=production
+# Solid Queue runs inside Puma (or: SOLID_QUEUE_IN_PUMA=false bin/jobs)
 ```
 
 Keep Shrine/file storage in place across the cutover. Point the Doorkeeper webhook at ADGB `/api/hooks/update_accessibilities`.
@@ -92,9 +89,9 @@ Keep Shrine/file storage in place across the cutover. Point the Doorkeeper webho
 1. Maintenance window; backup Postgres, and Shrine/file storage.
 2. Deploy final Babili + ADGB (Ruby 3.4 / Rails 8.1).
 3. Set env / credentials, including `OPENSEARCH_URL` with credentials when security is on.
-4. `bin/rails db:migrate RAILS_ENV=production` (schema only).
+4. `bin/rails db:migrate RAILS_ENV=production` (schema only; includes Solid Queue / Cable tables).
 5. `TRUNCATE versions;` if any PaperTrail rows remain.
-6. Reindex Searchkick; restart Sidekiq.
+6. Reindex Searchkick; restart Puma (Solid Queue plugin) or `bin/jobs`.
 7. Smoke: Devise login, OAuth login from ADGB, file upload, vocab/biblio/search, webhooks into ADGB.
 
 **Not required at cutover:** restoring a converted dump, PostGIS / `loc` geometry casts, or YAML→JSON PaperTrail rewrites.

@@ -1,6 +1,5 @@
 module Api::V1
   class SearchController < Api::V1::BaseController
-    require "rest-client"
     require "json"
     include ERB::Util
     include OreadRemoteSearch

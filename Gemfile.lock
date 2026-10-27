@@ -1,16 +1,4 @@
 GIT
-  remote: https://github.com/sinatra/sinatra.git
-  revision: 516ee3bc5a256c52e1452009168c2caf2751c5fb
-  specs:
-    rack-protection (3.0.6)
-      rack
-    sinatra (3.0.6)
-      mustermann (~> 3.0)
-      rack (~> 2.2, >= 2.2.4)
-      rack-protection (= 3.0.6)
-      tilt (~> 2.0)
-
-GIT
   remote: https://github.com/toboter/acts_as_dag.git
   revision: f87520b991b2b36554cb906e433a0797420ba994
   specs:
@@ -175,8 +163,6 @@ GEM
       railties (>= 7.0)
       responders
       warden (~> 1.2.3)
-    domain_name (0.5.20190701)
-      unf (>= 0.0.5, < 1.0.0)
     doorkeeper (5.6.6)
       railties (>= 5)
     down (5.4.0)
@@ -190,6 +176,8 @@ GEM
       unicode-types (~> 1.8)
     erb (6.0.7)
     erubi (1.13.1)
+    et-orbi (1.4.2)
+      tzinfo
     execjs (2.10.2)
       json (>= 2)
     exiftool (1.2.4)
@@ -208,6 +196,9 @@ GEM
       railties (>= 3.2, < 9.0)
     friendly_id (5.5.0)
       activerecord (>= 4.0.0)
+    fugit (1.14.0)
+      et-orbi (~> 1.4)
+      raabro (~> 1.4)
     geo_pattern (1.5.0)
       color (~> 1.5)
     github-markup (2.0.1)
@@ -226,9 +217,6 @@ GEM
       activesupport (>= 2)
       nokogiri (>= 1.4)
     htmlentities (4.3.4)
-    http-accept (1.7.0)
-    http-cookie (1.0.5)
-      domain_name (~> 0.5)
     i18n (1.15.2)
       concurrent-ruby (~> 1.0)
     image_processing (1.12.2)
@@ -313,9 +301,6 @@ GEM
     matrix (0.4.2)
     meta-tags (2.24.0)
       actionpack (>= 6.0.0)
-    mime-types (3.4.1)
-      mime-types-data (~> 3.2015)
-    mime-types-data (3.2023.0218.1)
     mini_magick (4.12.0)
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
@@ -324,8 +309,6 @@ GEM
       prism (~> 1.5)
     msgpack (1.8.5)
     multi_json (1.21.2)
-    mustermann (3.0.0)
-      ruby2_keywords (~> 0.0.1)
     namae (1.1.1)
     net-http (0.3.2)
       uri
@@ -340,7 +323,6 @@ GEM
       timeout
     net-smtp (0.5.2)
       net-protocol
-    netrc (0.11.0)
     nio4r (2.7.5)
     nokogiri (1.19.4)
       mini_portile2 (~> 2.8.2)
@@ -363,6 +345,7 @@ GEM
     public_suffix (5.0.1)
     puma (6.2.2)
       nio4r (~> 2.0)
+    raabro (1.5.0)
     racc (1.8.1)
     rack (2.2.24)
     rack-cors (2.0.1)
@@ -483,8 +466,6 @@ GEM
       tsort
     recaptcha (5.14.0)
     redcarpet (3.6.0)
-    redis-client (0.31.0)
-      connection_pool
     regexp_parser (2.8.0)
     reline (0.7.0)
       io-console (~> 0.5)
@@ -493,18 +474,12 @@ GEM
     responders (3.2.1)
       actionpack (>= 7.0)
       railties (>= 7.0)
-    rest-client (2.1.0)
-      http-accept (>= 1.7.0, < 2.0)
-      http-cookie (>= 1.0.2, < 2.0)
-      mime-types (>= 1.16, < 4.0)
-      netrc (~> 0.8)
     rexml (3.2.5)
     roo (2.10.0)
       nokogiri (~> 1)
       rubyzip (>= 1.3.0, < 3.0.0)
     ruby-vips (2.1.4)
       ffi (~> 1.12)
-    ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
     sanitize (6.0.1)
       crass (~> 1.0.2)
@@ -545,15 +520,21 @@ GEM
     shrine (3.4.0)
       content_disposition (~> 1.0)
       down (~> 5.1)
-    sidekiq (7.3.9)
-      base64
-      connection_pool (>= 2.3.0)
-      logger
-      rack (>= 2.2.4)
-      redis-client (>= 0.22.2)
     simple_form (5.2.0)
       actionpack (>= 5.2)
       activemodel (>= 5.2)
+    solid_cable (4.1.0)
+      actioncable (>= 7.2)
+      activejob (>= 7.2)
+      activerecord (>= 7.2)
+      railties (>= 7.2)
+    solid_queue (1.7.0)
+      activejob (>= 7.1)
+      activerecord (>= 7.1)
+      concurrent-ruby (>= 1.3.1)
+      fugit (~> 1.11)
+      railties (>= 7.1)
+      thor (>= 1.3.1)
     sparql (3.2.5)
       builder (~> 3.2)
       ebnf (~> 2.2, >= 2.3.1)
@@ -591,9 +572,6 @@ GEM
       concurrent-ruby (~> 1.0)
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
-    unf (0.1.4)
-      unf_ext
-    unf_ext (0.0.8.2)
     unicode-types (1.8.0)
     unicode_utils (1.4.0)
     uri (1.1.2)
@@ -658,6 +636,7 @@ DEPENDENCIES
   down
   execjs (>= 2.10)
   exiftool_vendored
+  faraday
   fastimage
   font-awesome-rails
   friendly_id
@@ -688,7 +667,6 @@ DEPENDENCIES
   rails-bootstrap-markdown
   recaptcha
   redcarpet
-  rest-client
   roo
   sanitize (>= 5.2.1)
   sassc-rails
@@ -696,9 +674,9 @@ DEPENDENCIES
   selenium-webdriver
   sequenced
   shrine
-  sidekiq (~> 7.0)
   simple_form
-  sinatra!
+  solid_cable
+  solid_queue
   sparql-client
   sprockets-rails
   streamio-ffmpeg

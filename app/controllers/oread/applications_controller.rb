@@ -1,5 +1,4 @@
 class Oread::ApplicationsController < ApplicationController
-  require 'rest-client'
   require 'json'
   include ERB::Util
 
@@ -25,12 +24,16 @@ class Oread::ApplicationsController < ApplicationController
     if params[:q].present?
       url = "#{@application.url}?q=#{url_encode(params[:q])}&limit=#{params[:limit]}"
       begin
-        response = RestClient.get(url, {:Authorization => "#{@token.try(:token_type)} #{@token.try(:token)}"})
-      rescue Errno::ECONNREFUSED
-        puts "Server at #{url} is refusing connection."
+        headers = {}
+        if @token
+          type = @token.token_type.presence || 'Token'
+          headers[:Authorization] = "#{type} #{@token.token}"
+        end
+        response = HttpClient.get(url, headers: headers)
+        @results = JSON.parse(response.body)
+      rescue Faraday::Error
         flash.now[:warning] = "Results from #{@application.name} missing. Can't connect to server."
       end
-      @results = JSON.parse(response) if response
     end
   end
 

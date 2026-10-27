@@ -20,7 +20,7 @@ module Babili
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
 
-    config.active_job.queue_adapter = :sidekiq
+    config.active_job.queue_adapter = :solid_queue
     config.active_storage.variant_processor = :mini_magick
 
     config.to_prepare do

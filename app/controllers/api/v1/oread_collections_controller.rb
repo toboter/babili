@@ -1,7 +1,6 @@
 # deprecated
 module Api::V1
   class OreadCollectionsController < Api::V1::BaseController
-    require 'rest-client'
     require 'json'
     include ERB::Util
 

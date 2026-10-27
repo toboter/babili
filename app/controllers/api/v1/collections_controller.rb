@@ -3,7 +3,6 @@ module Api::V1
     load_and_authorize_resource class: 'Oread::Application', except: :resource_host
 
     # included from deprecated oread_collections_controller
-    # require 'rest-client'
     # require 'json'
     # include ERB::Util
 

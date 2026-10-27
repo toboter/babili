@@ -185,7 +185,6 @@ Rails.application.routes.draw do
     
   constraints lambda { |r| r.subdomain != 'raw' && r.subdomain != 'api' } do
     get 'google2a2517cd9855149e.html', to: 'home#google_confirmation'
-    require 'sidekiq/web'
 
     get '/discussions', to: 'home#discussions'
     concern :discussable do
@@ -372,12 +371,6 @@ Rails.application.routes.draw do
       end
       resources :novelities, path: :news, except: :show
     end
-
-    authenticate :user, lambda { |u| u.is_admin } do
-      mount Sidekiq::Web => '/sidekiq'
-    end
-
-
 
     get '/contact', to: 'contact_messages#new'
     post '/contacts', to: 'contact_messages#create'
