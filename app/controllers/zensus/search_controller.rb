@@ -12,7 +12,7 @@ class Zensus::SearchController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render json: @results }
+      format.json { render json: Array(@results) }
     end
   end
 

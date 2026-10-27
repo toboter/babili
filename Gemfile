@@ -22,8 +22,7 @@ gem 'execjs', '>= 2.10'
 gem 'sprockets-rails'
 # Ruby 3.4: tilt <2.2 freezes/force_encoding breaks font-awesome .css.erb via sassc-rails
 gem 'tilt', '>= 2.2'
-# Use system Node for ExecJS; coffee-script keeps Sprockets happy with stray .coffee in node_modules.
-gem 'coffee-script'
+# JS runtime for ExecJS/uglifier: use system Node (nvm).
 gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.13'
 

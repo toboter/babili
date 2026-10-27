@@ -18,7 +18,8 @@
 //= require trix/dist/trix
 //= require uppy/dist/uppy.min
 //= require cocoon
-//= require selectize/dist/js/standalone/selectize.min
+//= require @selectize/selectize/dist/js/selectize.min
+//= require selectize_helpers
 //= require bootstrap-markdown-bundle
 //= require turbolinks
 //= require trix/config

@@ -1,7 +1,9 @@
-$(document).on('turbolinks:load', function(){
+/*global $, BabiliSelectize*/
 
-  $('.repositories_selectize').selectize({
-    placeholder: 'Add to repository...'
+function initRepositoriesSelectize($root) {
+  var $scope = $root && $root.length ? $root : $(document);
+
+  BabiliSelectize.init(BabiliSelectize.visibleIn($scope, ".repositories_selectize"), {
+    placeholder: "Add to repository…"
   });
-
-});
+}

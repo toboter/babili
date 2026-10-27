@@ -96,6 +96,10 @@ Keep Shrine/file storage in place across the cutover. Point the Doorkeeper webho
 
 **Not required at cutover:** restoring a converted dump, PostGIS / `loc` geometry casts, or YAML→JSON PaperTrail rewrites.
 
+## Future TODOs
+
+* **Getty AAT SPARQL (vocab tag / concept search):** Tag and concept selectize fields call `Vocab::AATConcept.search` against `http://vocab.getty.edu/sparql`. The endpoint still exists (Getty LOD for AAT/TGN/ULAN), but live Lucene queries are often slow or hang from our network, so `/vocabularies/search/terms` currently returns **local** `Vocab::Concept` hits first and treats AAT as optional (short timeout). Follow up later: switch to the newer Linked.Art / `https://data.getty.edu/vocab/sparql` endpoint (and updated query shape), or drop live AAT from the tag box and keep local vocab only. Note Getty’s Fall 2026 vocab platform refresh when revisiting.
+
 ## Maintainers
 
 [Tobias Schmidt](https://github.com/toboter): [http://toboter.de](http://toboter.de/)

@@ -5,7 +5,8 @@
         as: :select, 
         collection: [],
         input_html: {
-          id: 'concept_matches_associatable' }, 
+          id: 'concept_matches_associatable',
+          class: 'concept_matches_associatable' }, 
         label: false if f.object.new_record? %>
       <%= f.input :property, label: false, collection: Vocab::AssociativeRelation.properties  %>
       <%= link_to_remove_association fa_icon('trash'), f, class: 'btn btn-default btn-sm' %>

@@ -1,212 +1,135 @@
-$(document).on("turbolinks:load", function()  {
-  var selectizeCallback = null;
+/*global $, BabiliSelectize*/
 
-  $(".journal-modal").on("hide.bs.modal", function(e) {
-    if (selectizeCallback != null) {
-      selectizeCallback();
-      selecitzeCallback = null;
-    }
+window.BiblioSelectizeCallback = null;
 
-    $("#new_biblio_journal").trigger("reset");
-    $.rails.enableFormElements($("#new_biblio_journal"));
-  });
-
-  $("#new_biblio_journal").on("submit", function(e) {
-    e.preventDefault();
-    $.ajax({
-      method: "POST",
-      url: $(this).attr("action") + '.json',
-      data: $(this).serialize(),
-      success: function(response) {
-        selectizeCallback({value: response.id, text: response.name_abbr});
-        selectizeCallback = null;
-
-        $(".journal-modal").modal('toggle');
-      }
-    });
-  });
-
-  $(".biblio_journal_selectize").selectize({
-    create: function(input, callback) {
-      selectizeCallback = callback;
-
-      $(".journal-modal").modal();
-      $("#biblio_journal_name").val(input);
+function biblioCreateSelectize($els, modalSelector, inputSelector) {
+  BabiliSelectize.init($els, {
+    placeholder: "Select or create…",
+    create: function (input, callback) {
+      window.BiblioSelectizeCallback = callback;
+      $(modalSelector).modal();
+      $(inputSelector).val(input);
     }
   });
+}
 
+function initBiblioSelectize($root) {
+  var $scope = $root && $root.length ? $root : $(document);
+  var visible = function (sel) {
+    return BabiliSelectize.visibleIn($scope, sel);
+  };
 
-  $(".serie-modal").on("hide.bs.modal", function(e) {
-    if (selectizeCallback != null) {
-      selectizeCallback();
-      selecitzeCallback = null;
-    }
+  biblioCreateSelectize(
+    visible(".biblio_journal_selectize"),
+    ".journal-modal",
+    "#biblio_journal_name"
+  );
+  biblioCreateSelectize(
+    visible(".biblio_series_selectize"),
+    ".serie-modal",
+    "#biblio_serie_title"
+  );
+  biblioCreateSelectize(
+    visible(".biblio_book_selectize"),
+    ".book-modal",
+    "#biblio_book_title"
+  );
+  biblioCreateSelectize(
+    visible(".biblio_collection_selectize"),
+    ".collection-modal",
+    "#biblio_collection_title"
+  );
+  biblioCreateSelectize(
+    visible(".biblio_proceeding_selectize"),
+    ".proceeding-modal",
+    "#biblio_proceeding_title"
+  );
 
-    $("#new_biblio_serie").trigger("reset");
-    $.rails.enableFormElements($("#new_biblio_serie"));
-  });
-
-  $("#new_biblio_serie").on("submit", function(e) {
-    e.preventDefault();
-    $.ajax({
-      method: "POST",
-      url: $(this).attr("action") + '.json',
-      data: $(this).serialize(),
-      success: function(response) {
-        selectizeCallback({value: response.id, text: response.title});
-        selectizeCallback = null;
-
-        $(".serie-modal").modal('toggle');
-      }
-    });
-  });
-
-  $(".biblio_series_selectize").selectize({
-    create: function(input, callback) {
-      selectizeCallback = callback;
-
-      $(".serie-modal").modal();
-      $("#biblio_serie_title").val(input);
-    }
-  });
-
-
-  $(".book-modal").on("hide.bs.modal", function(e) {
-    if (selectizeCallback != null) {
-      selectizeCallback();
-      selecitzeCallback = null;
-    }
-
-    $("#new_biblio_book").trigger("reset");
-    $.rails.enableFormElements($("#new_biblio_book"));
-  });
-
-  $("#new_biblio_book").on("submit", function(e) {
-    e.preventDefault();
-    $.ajax({
-      method: "POST",
-      url: $(this).attr("action") + '.json',
-      data: $(this).serialize(),
-      success: function(response) {
-        console.log(response);
-        selectizeCallback({value: response.id, text: response.citation});
-        selectizeCallback = null;
-
-        $(".book-modal").modal('toggle');
-      }
-    });
-  });
-
-  $(".biblio_book_selectize").selectize({
-    create: function(input, callback) {
-      selectizeCallback = callback;
-
-      $(".book-modal").modal();
-      $("#biblio_book_title").val(input);
-    }
-  });
-
-
-  $(".collection-modal").on("hide.bs.modal", function(e) {
-    if (selectizeCallback != null) {
-      selectizeCallback();
-      selecitzeCallback = null;
-    }
-
-    $("#new_biblio_collection").trigger("reset");
-    $.rails.enableFormElements($("#new_biblio_collection"));
-  });
-
-  $("#new_biblio_collection").on("submit", function(e) {
-    e.preventDefault();
-    $.ajax({
-      method: "POST",
-      url: $(this).attr("action") + '.json',
-      data: $(this).serialize(),
-      success: function(response) {
-        console.log(response);
-        selectizeCallback({value: response.id, text: response.citation});
-        selectizeCallback = null;
-
-        $(".collection-modal").modal('toggle');
-      }
-    });
-  });
-
-  $(".biblio_collection_selectize").selectize({
-    create: function(input, callback) {
-      selectizeCallback = callback;
-
-      $(".collection-modal").modal();
-      $("#biblio_collection_title").val(input);
-    }
-  });
-
-
-  $(".proceeding-modal").on("hide.bs.modal", function(e) {
-    if (selectizeCallback != null) {
-      selectizeCallback();
-      selecitzeCallback = null;
-    }
-
-    $("#new_biblio_proceeding").trigger("reset");
-    $.rails.enableFormElements($("#new_biblio_proceeding"));
-  });
-
-  $("#new_biblio_proceeding").on("submit", function(e) {
-    e.preventDefault();
-    $.ajax({
-      method: "POST",
-      url: $(this).attr("action") + '.json',
-      data: $(this).serialize(),
-      success: function(response) {
-        console.log(response);
-        selectizeCallback({value: response.id, text: response.citation});
-        selectizeCallback = null;
-
-        $(".proceeding-modal").modal('toggle');
-      }
-    });
-  });
-
-  $(".biblio_proceeding_selectize").selectize({
-    create: function(input, callback) {
-      selectizeCallback = callback;
-
-      $(".proceeding-modal").modal();
-      $("#biblio_proceeding_title").val(input);
-    }
-  });
-
-  
-
-  $('.biblio_entries_selectize').selectize({
-    placeholder: 'Add reference...',
-    valueField: 'id',
-    labelField: 'citation',
-    searchField: 'citation',
-    load: function(query, callback) {
+  BabiliSelectize.init(visible(".biblio_entries_selectize"), {
+    placeholder: "Add reference…",
+    valueField: "id",
+    labelField: "citation",
+    searchField: "citation",
+    loadThrottle: 300,
+    score: BabiliSelectize.keepRemoteScore,
+    load: function (query, callback) {
       if (!query.length) return callback();
       $.ajax({
         url: "/bibliography/entries.json",
         data: { q: query },
         dataType: "json",
-        type: 'GET',
-        error: function(res){
+        type: "GET",
+        error: function () {
           callback();
         },
-        success: function(res) {
-          callback(res.slice(0,10));
+        success: function (res) {
+          callback(BabiliSelectize.asList(res, "entries").slice(0, 10));
         }
-      })
+      });
     },
     render: {
-      option: function(item, escape) {
-        return '<div>' + '<strong>' + escape(item.citation) + '</strong>' +
-                  '<p class="text-small">' + item.cite + '</p>' +
-               '</div>'
+      option: function (item, escape) {
+        var meta = item.cite
+          ? '<span class="option-meta text-muted text-small">' + escape(item.cite) + "</span>"
+          : "";
+        return (
+          '<div class="option-label"><span class="option-title">' +
+          escape(item.citation || "") +
+          "</span>" +
+          meta +
+          "</div>"
+        );
       }
     }
-  });  
+  });
+}
 
+function wireBiblioCreateModal(modalSelector, formSelector, textFromResponse) {
+  $(document).on("hide.bs.modal", modalSelector, function () {
+    if (window.BiblioSelectizeCallback != null) {
+      window.BiblioSelectizeCallback();
+      window.BiblioSelectizeCallback = null;
+    }
+    $(formSelector).trigger("reset");
+    $.rails.enableFormElements($(formSelector));
+  });
+
+  // Only AJAX-intercept when the form lives in the create modal.
+  // Full-page #new_biblio_book (etc.) must submit normally so Rails can redirect.
+  $(document).on("submit", formSelector, function (e) {
+    if (!$(this).closest(".modal").length) return;
+
+    e.preventDefault();
+    $.ajax({
+      method: "POST",
+      url: $(this).attr("action") + ".json",
+      data: $(this).serialize(),
+      success: function (response) {
+        if (window.BiblioSelectizeCallback) {
+          window.BiblioSelectizeCallback({
+            value: response.id,
+            text: textFromResponse(response)
+          });
+          window.BiblioSelectizeCallback = null;
+        }
+        $(modalSelector).modal("toggle");
+      }
+    });
+  });
+}
+
+wireBiblioCreateModal(".journal-modal", "#new_biblio_journal", function (r) {
+  return r.name_abbr;
+});
+wireBiblioCreateModal(".serie-modal", "#new_biblio_serie", function (r) {
+  return r.title;
+});
+wireBiblioCreateModal(".book-modal", "#new_biblio_book", function (r) {
+  return r.citation;
+});
+wireBiblioCreateModal(".collection-modal", "#new_biblio_collection", function (r) {
+  return r.citation;
+});
+wireBiblioCreateModal(".proceeding-modal", "#new_biblio_proceeding", function (r) {
+  return r.citation;
 });
