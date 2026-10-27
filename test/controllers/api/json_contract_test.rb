@@ -192,11 +192,9 @@ class Api::JsonContractTest < ActionDispatch::IntegrationTest
     )
 
     results = [book]
-    def results.current_page; 1; end
-    def results.next_page; nil; end
-    def results.previous_page; nil; end
-    def results.total_pages; 1; end
-    def results.total_entries; size; end
+    # Searchkick-style stub for Pagy passive mode (pagy(:searchkick, results))
+    def results.options; { page: 1, per_page: 50 }; end
+    def results.total_count; size; end
 
     singleton = Biblio::Entry.singleton_class
     singleton.alias_method :__contract_search_orig, :search

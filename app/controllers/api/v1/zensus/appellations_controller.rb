@@ -5,9 +5,9 @@ module Api::V1::Zensus
     def index
       sort_order = Zensus::Appellation.sorted_by(params[:sort].presence || 'updated_at_desc')
       @appellations = @appellations.where("updated_at > ?", params[:since]) if params[:since]
-      @appellations = @appellations.paginate(page: params[:page], per_page: params[:per_page] || 30).order(sort_order)
+      @pagy, @appellations = pagy(:offset, @appellations.order(sort_order), limit: (params[:per_page] || 30).to_i)
 
-      @meta = pagination_dict(@appellations)
+      @meta = pagination_dict(@pagy)
       render template: "api/v1/zensus/appellations/index"
     end
 
@@ -29,7 +29,8 @@ module Api::V1::Zensus
         page: params[:page], 
         per_page: params[:per_page] || 30)
 
-      @meta = pagination_dict(@appellations)
+      @pagy = pagy(:searchkick, @appellations)
+      @meta = pagination_dict(@pagy)
       render template: "api/v1/zensus/appellations/search"
     end
 

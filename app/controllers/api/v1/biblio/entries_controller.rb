@@ -29,7 +29,8 @@ module Api::V1::Biblio
         page: params[:page], 
         per_page: per_page)
       
-        @meta = pagination_dict(@results)
+        @pagy = pagy(:searchkick, @results)
+        @meta = pagination_dict(@pagy)
         render template: "api/v1/biblio/entries/index"
     
     end

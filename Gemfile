@@ -59,7 +59,8 @@ gem 'cancancan'
 gem 'bootstrap-sass', '= 3.4.1'
 gem "font-awesome-rails"
 gem 'simple_form'
-gem 'will_paginate-bootstrap'
+# pagination: pagy (was will_paginate-bootstrap)
+gem 'pagy', '~> 43.0'
 gem 'cocoon'
 gem 'html-pipeline', '~> 2.8', '>= 2.8.4'
 gem 'commonmarker' #, '~> 0.17.11'

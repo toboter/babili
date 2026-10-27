@@ -5,10 +5,10 @@ module Api::V1::Zensus
     def index
       sort_order = Zensus::Agent.sorted_by(params[:sort].presence || 'updated_at_desc')
       @agents = @agents.where("updated_at > ?", params[:since]) if params[:since]
-      @agents = @agents.paginate(page: params[:page], per_page: params[:per_page] || 30).order(sort_order)
-
       @agents = @agents.where(type: params[:type]) if params[:type]
-      @meta = pagination_dict(@agents)
+      @pagy, @agents = pagy(:offset, @agents.order(sort_order), limit: (params[:per_page] || 30).to_i)
+
+      @meta = pagination_dict(@pagy)
       render template: "api/v1/zensus/agents/index"
     end
 
@@ -22,7 +22,8 @@ module Api::V1::Zensus
         page: params[:page], 
         per_page: params[:per_page] || 30)
 
-      @meta = pagination_dict(@agents)
+      @pagy = pagy(:searchkick, @agents)
+      @meta = pagination_dict(@pagy)
       render template: "api/v1/zensus/agents/search"
     end
   end

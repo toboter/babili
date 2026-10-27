@@ -16,6 +16,7 @@ class Zensus::AppellationsController < ApplicationController
       order: {order_name: :asc}, 
       page: params[:page], 
       per_page: per_page)
+    @pagy = pagy(:searchkick, @appellations)
 
     respond_to do |format|
       format.html

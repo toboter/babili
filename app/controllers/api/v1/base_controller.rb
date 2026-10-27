@@ -1,6 +1,7 @@
 module Api::V1
   class BaseController < ActionController::API
     include ActionController::Helpers
+    include Pagy::Method
     helper JsonSerializationHelper
       # testing token:  nH3ydH1KRRDA6AWDs6yhtw5u
     # doorkeeper literature token:  6039d4aa3df371e4d586ec1df6068776a3051199690c98898af3b244c356aa61
@@ -34,13 +35,14 @@ module Api::V1
     end
 
     
-    def pagination_dict(collection)
+    # Preserve the historical will_paginate API meta keys for clients.
+    def pagination_dict(pagy)
       {
-        current_page: collection.current_page,
-        next_page: collection.next_page,
-        prev_page: collection.previous_page,
-        total_pages: collection.total_pages,
-        total_count: collection.total_entries
+        current_page: pagy.page,
+        next_page: pagy.next,
+        prev_page: pagy.previous,
+        total_pages: pagy.pages,
+        total_count: pagy.count
       }
     end
     

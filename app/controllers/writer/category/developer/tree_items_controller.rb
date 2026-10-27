@@ -1,5 +1,3 @@
-require 'will_paginate/array'
-
 module Writer
   module Category
     class Developer::TreeItemsController < ApplicationController

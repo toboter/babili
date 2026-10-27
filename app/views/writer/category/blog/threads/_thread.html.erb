@@ -3,7 +3,7 @@
     <%= render 'writer/category/blog/postings/posting', posting: posting %>
   <% end %>
   <div id="pagination-results">
-    <%= will_paginate @postings, renderer: BootstrapPagination::Rails %>
+    <%= pagy_nav(@pagy) %>
   </div>
 <% else %>
   <%= content_tag :div, class: '--spacious' do %>

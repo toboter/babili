@@ -5,8 +5,8 @@ module Api::V1::Aggregation
     load_and_authorize_resource through: :repository, class: 'Aggregation::Event'
 
     def index
-      @events = @events.paginate(page: params[:page], per_page: params[:per_page] || 30)
-      @meta = pagination_dict(@events)
+      @pagy, @events = pagy(:offset, @events, limit: (params[:per_page] || 30).to_i)
+      @meta = pagination_dict(@pagy)
       render template: "api/v1/aggregation/events/index"
     end
 

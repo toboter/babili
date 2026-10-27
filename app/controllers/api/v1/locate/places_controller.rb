@@ -4,8 +4,8 @@ module Api::V1::Locate
 
     def index
       sort_order = Locate::Place.sorted_by(params[:sort].presence || 'updated_at_desc')
-      @places = @places.paginate(page: params[:page], per_page: params[:per_page] || 30).order(sort_order)
-      @meta = pagination_dict(@places)
+      @pagy, @places = pagy(:offset, @places.order(sort_order), limit: (params[:per_page] || 30).to_i)
+      @meta = pagination_dict(@pagy)
       render template: "api/v1/locate/places/index"
     end
 

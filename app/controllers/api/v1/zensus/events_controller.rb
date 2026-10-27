@@ -5,9 +5,9 @@ module Api::V1::Zensus
     def index
       sort_order = Zensus::Event.sorted_by(params[:sort].presence || 'updated_at_desc')
       @events = @events.where("updated_at > ?", params[:since]) if params[:since]
-      @events = @events.paginate(page: params[:page], per_page: params[:per_page] || 30).order(sort_order)
+      @pagy, @events = pagy(:offset, @events.order(sort_order), limit: (params[:per_page] || 30).to_i)
 
-      @meta = pagination_dict(@events)
+      @meta = pagination_dict(@pagy)
       render template: "api/v1/zensus/events/index"
     end
 
@@ -21,7 +21,8 @@ module Api::V1::Zensus
         page: params[:page], 
         per_page: params[:per_page] || 30)
 
-      @meta = pagination_dict(@events)
+      @pagy = pagy(:searchkick, @events)
+      @meta = pagination_dict(@pagy)
       render template: "api/v1/zensus/events/search"
     end
 

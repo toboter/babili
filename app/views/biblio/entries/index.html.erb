@@ -21,7 +21,7 @@
           <%= content_tag :div, class: 'links --spacious-10' do %>
             <%= content_tag :span, 'Total: '+ @entries.size.to_s, class: 'text-small' %> - 
             <%= link_to('View all', biblio_entries_path, class: 'text-small') %>
-            <%= content_tag :p, 'Results: '+@results.total_entries.to_s, class: 'text-small text-muted' if params[:q].present? %>
+            <%= content_tag :p, 'Results: '+@pagy.count.to_s, class: 'text-small text-muted' if params[:q].present? %>
           <% end %>
         </div>
         <%= content_tag :div, class: "list-group hidden-sm hidden-xs --spacious-20" do %>
@@ -61,7 +61,7 @@
           </table>
         </div>
         <div id="pagination-results">
-          <%= will_paginate @results, renderer: BootstrapPagination::Rails %>
+          <%= pagy_nav(@pagy) %>
         </div>
 
         <%= content_tag :div, link_to('Get an overview.', biblio_path, class: 'text-small'), class: 'links --spacious-10' %>

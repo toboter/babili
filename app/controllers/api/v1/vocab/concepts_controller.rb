@@ -7,13 +7,12 @@ module Api::V1::Vocab
         def index
           sort_order = Vocab::Concept.sorted_by(params[:sort].presence || 'updated_at_desc')
           @concepts = @concepts.where("updated_at > ?", params[:since]) if params[:since]
-          @concepts = @concepts.paginate(page: params[:page], per_page: params[:per_page] || 30).order(sort_order)
-
           @concepts = @concepts.where(type: params[:type]) if params[:type]
+          @pagy, @concepts = pagy(:offset, @concepts.order(sort_order), limit: (params[:per_page] || 30).to_i)
           if params[:synsets] == 'true'
             render json: @concepts.map{|c| c.labels.map(&:body)}
           else
-            @meta = pagination_dict(@concepts)
+            @meta = pagination_dict(@pagy)
             render template: "api/v1/vocab/concepts/index"
           end
         end
@@ -33,15 +32,14 @@ module Api::V1::Vocab
           sort_order = ::Vocab::Concept.sorted_by(params[:sort].presence || 'updated_at_desc')
           @concepts = @concepts.where(scheme_id: ::Vocab::Scheme.friendly.find(params[:in_scheme])) if params[:in_scheme]
           @concepts = @concepts.where("updated_at > ?", params[:since]) if params[:since]
-          @concepts = @concepts.paginate(page: params[:page], per_page: params[:per_page] || 30).order(sort_order)
-
           @concepts = @concepts.where(type: params[:type]) if params[:type]
+          @pagy, @concepts = pagy(:offset, @concepts.order(sort_order), limit: (params[:per_page] || 30).to_i)
 
           authorize! :read, ::Vocab::Concept
           if params[:synsets] == 'true'
             render json: @concepts.map{|c| c.labels.map(&:body)}
           else
-            @meta = pagination_dict(@concepts)
+            @meta = pagination_dict(@pagy)
             render template: "api/v1/vocab/concepts/full_index"
           end
         end
@@ -62,7 +60,8 @@ module Api::V1::Vocab
             @results = @results.take(params[:limit].to_i) if params[:limit]
             render json: @results.map{|c| c.labels.map(&:body)}
           else
-            @meta = pagination_dict(@results)
+            @pagy = pagy(:searchkick, @results)
+            @meta = pagination_dict(@pagy)
             render template: "api/v1/vocab/concepts/search"
           end
         end

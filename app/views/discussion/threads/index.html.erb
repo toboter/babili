@@ -52,7 +52,7 @@
       </table>
     </div>
     <div id="pagination-results">
-      <%= will_paginate @results, renderer: BootstrapPagination::Rails %>
+      <%= pagy_nav(@pagy) %>
     </div>
   </div>
 </div>

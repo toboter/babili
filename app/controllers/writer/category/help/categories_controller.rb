@@ -1,5 +1,3 @@
-require 'will_paginate/array'
-
 module Writer
   module Category
     class Help::CategoriesController < ApplicationController
@@ -13,7 +11,8 @@ module Writer
                       description: "Listing all help categories with articles",
                       noindex: true,
                       follow: true
-        @articles = @categories.accessible_by(current_ability).collect(&:articles).flatten.group_by(&:document).map{|d,c| c.first}.sort_by(&:created_at).reverse.paginate(page: params[:page], per_page: DEFAULT_PER_PAGE)
+        @articles = @categories.accessible_by(current_ability).collect(&:articles).flatten.group_by(&:document).map{|d,c| c.first}.sort_by(&:created_at).reverse
+        @pagy, @articles = pagy(:offset, @articles, limit: DEFAULT_PER_PAGE)
       end
 
       def show
@@ -21,7 +20,7 @@ module Writer
                       description: "Listing all help categories and articles below #{@category.name}",
                       noindex: true,
                       follow: true
-        @articles = @category.articles.order(created_at: :desc).paginate(page: params[:page], per_page: DEFAULT_PER_PAGE)
+        @pagy, @articles = pagy(:offset, @category.articles.order(created_at: :desc), limit: DEFAULT_PER_PAGE)
       end
 
       def new

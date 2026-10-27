@@ -6,8 +6,8 @@ module Api::V1::Aggregation
     load_and_authorize_resource through: :item, class: 'Aggregation::Commit'
     
     def index
-      @commits = @commits.paginate(page: params[:page], per_page: params[:per_page] || 30)
-      @meta = pagination_dict(@commits)
+      @pagy, @commits = pagy(:offset, @commits, limit: (params[:per_page] || 30).to_i)
+      @meta = pagination_dict(@pagy)
       render template: "api/v1/aggregation/commits/index"
     end
 

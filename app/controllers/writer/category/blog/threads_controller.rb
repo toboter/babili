@@ -1,5 +1,3 @@
-require 'will_paginate/array'
-
 module Writer
   module Category
     class Blog::ThreadsController < ApplicationController
@@ -13,7 +11,8 @@ module Writer
                       description: "Listing all blog postings",
                       noindex: true,
                       follow: true
-        @postings = @threads.accessible_by(current_ability).collect(&:postings).flatten.group_by(&:document).map{|d,c| c.first}.sort_by(&:created_at).reverse.paginate(page: params[:page], per_page: DEFAULT_PER_PAGE)
+        @postings = @threads.accessible_by(current_ability).collect(&:postings).flatten.group_by(&:document).map{|d,c| c.first}.sort_by(&:created_at).reverse
+        @pagy, @postings = pagy(:offset, @postings, limit: DEFAULT_PER_PAGE)
       end
 
       def show
@@ -21,7 +20,7 @@ module Writer
                       description: "Listing all blog postings in #{@thread.name}",
                       noindex: true,
                       follow: true
-        @postings = @thread.postings.order(created_at: :desc).paginate(page: params[:page], per_page: DEFAULT_PER_PAGE)
+        @pagy, @postings = pagy(:offset, @thread.postings.order(created_at: :desc), limit: DEFAULT_PER_PAGE)
       end
 
       def new

@@ -30,6 +30,7 @@ class Biblio::ReferencationsController < ApplicationController
       ) do |body|
         body[:query][:bool][:must] = { query_string: { query: query, default_operator: "and" } }
       end
+    @pagy = pagy(:searchkick, @results) unless per_page.nil?
 
     respond_to do |format|
       format.html

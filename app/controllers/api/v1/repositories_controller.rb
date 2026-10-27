@@ -4,8 +4,8 @@ module Api::V1
     load_and_authorize_resource through: :namespace
     
     def index
-      @repositories = @repositories.paginate(page: params[:page], per_page: params[:per_page] || 30)
-      @meta = pagination_dict(@repositories)
+      @pagy, @repositories = pagy(:offset, @repositories, limit: (params[:per_page] || 30).to_i)
+      @meta = pagination_dict(@pagy)
       render template: "api/v1/repositories/index"
     end
 

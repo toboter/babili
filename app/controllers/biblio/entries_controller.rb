@@ -34,6 +34,7 @@ class Biblio::EntriesController < ApplicationController
       ) do |body|
         body[:query][:bool][:must] = { query_string: { query: query, default_operator: "and" } }
       end
+    @pagy = pagy(:searchkick, @results)
 
     respond_to do |format|
       format.html

@@ -329,6 +329,10 @@ GEM
       multi_json (>= 1.0)
     orm_adapter (0.5.0)
     ostruct (0.6.3)
+    pagy (43.8.1)
+      json
+      uri
+      yaml
     paper_trail (17.0.0)
       activerecord (>= 7.1)
       request_store (~> 1.4)
@@ -586,15 +590,13 @@ GEM
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
     whatlanguage (1.0.6)
-    will_paginate (3.3.1)
-    will_paginate-bootstrap (1.0.2)
-      will_paginate (>= 3.0.3)
     with_advisory_lock (4.6.0)
       activerecord (>= 4.2)
     xml-to-hash (1.0.3)
       nokogiri (~> 1, >= 1.6)
     xpath (3.2.0)
       nokogiri (~> 1.8)
+    yaml (0.4.0)
     yaml-ld (0.0.2)
       json-ld (~> 3.2, >= 3.2.3)
       psych (>= 3.3)
@@ -654,6 +656,7 @@ DEPENDENCIES
   observer
   opensearch-ruby (~> 3.0)
   ostruct
+  pagy (~> 43.0)
   paper_trail (~> 17.0)
   pg (>= 0.18, < 2.0)
   puma (>= 5.3.1)
@@ -681,7 +684,6 @@ DEPENDENCIES
   unicode_utils
   web-console (>= 3.3.0)
   whatlanguage
-  will_paginate-bootstrap
   xml-to-json!
 
 RUBY VERSION

@@ -19,6 +19,41 @@ Sibling app: **ADGB** (`~/dev/adgb`) uses Babili as its OAuth2 provider and for 
 
 PostGIS / `libgeos` / `libproj` are **not** required (adapter dropped; Locate `loc` is plain text).
 
+### `acts_as_dag` (vocab hierarchies)
+
+`Vocab::Concept` uses `acts_as_dag` from the git dependency
+`https://github.com/toboter/acts_as_dag.git` (not the rubygems gem).
+**That fork is the source of truth** for this app’s DAG behaviour and schema
+expectations (`vocab_links` / `vocab_descendants`). Keep the repository
+alive (accessible, tagged/released as needed); do not silently switch to
+another upstream without checking concept hierarchy behaviour. Optional
+later work: vendor the gem into this org, or migrate hierarchies to
+`closure_tree` (already used elsewhere in Babili).
+
+### html-pipeline / commonmarker / linkeddata
+
+Pinned for cutover; **not** a go-live blocker. Do not bump major versions
+casually — APIs changed.
+
+* **`html-pipeline` 2.14** — used only for HTML sanitization
+  (`ApplicationHelper#commentify` / `#documentify` →
+  `HTML::Pipeline::SanitizationFilter`). The Markdown filter is commented
+  out; user-facing Markdown goes through **Redcarpet**, not this pipeline.
+  **3.x** renames the namespace to `HTMLPipeline`, drops
+  `SanitizationFilter` (Selma-based config instead), and needs an adapter
+  pass. Safer near-term exit: replace the two helpers with `sanitize` /
+  Loofah (already available) and drop `html-pipeline` entirely.
+* **`commonmarker` 0.23** — present for the old pipeline/markup stack;
+  app code does not call it directly. **2.x** is a rewrite
+  (`CommonMarker` → `Commonmarker`). Keep or drop together with the
+  html-pipeline decision; do not bump alone.
+* **`linkeddata` + `sparql-client`** — RDF/SPARQL stack for
+  `Vocab::AATConcept` (Getty AAT). `linkeddata` is a meta-gem that pulls
+  many `rdf-*` extras; runtime needs are mainly `sparql-client`. Treat
+  bumps as one follow-up with the Getty AAT TODO (endpoint / query shape).
+  Optional later: depend on `sparql-client` (and minimal RDF gems) only
+  and drop the `linkeddata` umbrella.
+
 ## Local setup
 
 ```bash
@@ -98,7 +133,9 @@ Keep Shrine/file storage in place across the cutover. Point the Doorkeeper webho
 
 ## Future TODOs
 
-* **Getty AAT SPARQL (vocab tag / concept search):** Tag and concept selectize fields call `Vocab::AATConcept.search` against `http://vocab.getty.edu/sparql`. The endpoint still exists (Getty LOD for AAT/TGN/ULAN), but live Lucene queries are often slow or hang from our network, so `/vocabularies/search/terms` currently returns **local** `Vocab::Concept` hits first and treats AAT as optional (short timeout). Follow up later: switch to the newer Linked.Art / `https://data.getty.edu/vocab/sparql` endpoint (and updated query shape), or drop live AAT from the tag box and keep local vocab only. Note Getty’s Fall 2026 vocab platform refresh when revisiting.
+* **Getty AAT SPARQL (vocab tag / concept search):** Tag and concept selectize fields call `Vocab::AATConcept.search` against `http://vocab.getty.edu/sparql`. The endpoint still exists (Getty LOD for AAT/TGN/ULAN), but live Lucene queries are often slow or hang from our network, so `/vocabularies/search/terms` currently returns **local** `Vocab::Concept` hits first and treats AAT as optional (short timeout). Follow up later: switch to the newer Linked.Art / `https://data.getty.edu/vocab/sparql` endpoint (and updated query shape), or drop live AAT from the tag box and keep local vocab only. Note Getty’s Fall 2026 vocab platform refresh when revisiting. Pair any AAT work with a `linkeddata` / `sparql-client` dependency tidy (see Dependencies).
+* **`acts_as_dag` fork ownership:** See Dependencies — keep `toboter/acts_as_dag` available as the source of truth, or plan a deliberate move (vendor / `closure_tree`).
+* **html-pipeline / commonmarker:** See Dependencies — stay on 2.x / 0.23 for now, or replace sanitization with `sanitize`/Loofah and drop both gems. Do not upgrade to html-pipeline 3 / commonmarker 2 without that adapter (or removal) pass.
 
 ## Maintainers
 

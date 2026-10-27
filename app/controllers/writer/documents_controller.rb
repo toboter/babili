@@ -28,6 +28,7 @@ module Writer
         ) do |body|
         body[:query][:bool][:must] = { query_string: { query: query, default_operator: "and" } }
       end
+      @pagy = pagy(:searchkick, @results)
     end
 
     def show
