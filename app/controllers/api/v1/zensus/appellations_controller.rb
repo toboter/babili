@@ -7,16 +7,17 @@ module Api::V1::Zensus
       @appellations = @appellations.where("updated_at > ?", params[:since]) if params[:since]
       @appellations = @appellations.paginate(page: params[:page], per_page: params[:per_page] || 30).order(sort_order)
 
-      render_with_serializer(@appellations, meta: pagination_dict(@appellations), each_serializer: AppellationSerializer)
+      @meta = pagination_dict(@appellations)
+      render template: "api/v1/zensus/appellations/index"
     end
 
     def show
-      render_with_serializer(@appellation, serializer: AppellationSerializer)
+      render template: "api/v1/zensus/appellations/show"
     end
 
     def create
       if @appellation.save
-        render_with_serializer(@appellation, serializer: AppellationSerializer, status: :created)
+        render template: "api/v1/zensus/appellations/create", status: :created
       else
         render json: @appellation.errors, status: :unprocessable_entity
       end
@@ -28,7 +29,8 @@ module Api::V1::Zensus
         page: params[:page], 
         per_page: params[:per_page] || 30)
 
-      render_with_serializer(@appellations, meta: pagination_dict(@appellations), each_serializer: AppellationSerializer)
+      @meta = pagination_dict(@appellations)
+      render template: "api/v1/zensus/appellations/search"
     end
 
     private

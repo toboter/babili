@@ -5,21 +5,66 @@
         <div class="page-header text-center borderless">
           <h2>Identify ::data</h2>
           <p class="text-muted lead">
-            Is a general index of primary identifiers which aggregate data from various aspects of scientific
-            interest (commits in repositories). It drives the general visualization of heterogenus facets on objects.
+            BOI (Babylon Object Identifier) is a shared index of primary object ids.
+            Each entry points at dataset records across repositories, so the same object
+            can carry commits from different imports and projects.
           </p>
         </div>
-        <%= link_to 'View all entries', aggregation_identifiers_path, class: 'text-small' %>
 
-        <div class="row">
-          <div class="col-md-12 --spacious-20">
-            <div class="repo-bibs">
+        <%= render "aggregation/identifiers/search_box" %>
 
-
-            </div>
-            <%= content_tag :p, 'Supported formats: Lido, ...', class: 'text-muted text-small'%>
+        <div class="row text-center --spacious-20" style="margin-top: 20px;">
+          <div class="col-xs-6">
+            <%= content_tag :div, number_with_delimiter(@identifier_count), class: "h3 h-condensed" %>
+            <p class="text-muted text-small">Identifiers</p>
+          </div>
+          <div class="col-xs-6">
+            <%= content_tag :div, number_with_delimiter(@item_count), class: "h3 h-condensed" %>
+            <p class="text-muted text-small">Datasets</p>
           </div>
         </div>
+
+        <div class="list-group" style="margin-top: 10px;">
+          <%= link_to fa_icon("angle-double-right", text: "Browse all identifiers"),
+                aggregation_identifiers_path,
+                class: "list-group-item text-strong" %>
+        </div>
+
+        <div class="--spacious-20" style="margin-top: 30px;">
+          <h4 class="h-condensed">
+            Recent identifiers
+            <%= content_tag :span, @recent_identifiers.size, class: "badge" if @recent_identifiers.any? %>
+          </h4>
+
+          <% if @recent_identifiers.any? %>
+            <table class="table table-simple">
+              <thead>
+                <tr>
+                  <th>Identifier</th>
+                  <th>Type</th>
+                  <th>Originator</th>
+                  <th class="text-right">Datasets</th>
+                </tr>
+              </thead>
+              <tbody>
+                <%= render partial: "aggregation/identifiers/identifier",
+                      collection: @recent_identifiers %>
+              </tbody>
+            </table>
+          <% else %>
+            <div class="well">
+              <p class="text-strong">No identifiers yet.</p>
+              <p class="text-muted" style="margin-bottom: 0;">
+                Import data into a repository (CSV / XLSX / ODS / LIDO), commit the event,
+                and primary keys will appear here as BOI entries.
+              </p>
+            </div>
+          <% end %>
+        </div>
+
+        <p class="text-muted text-small" style="margin-top: 20px;">
+          Supported import formats: CSV, XLSX, ODS, LIDO XML.
+        </p>
       </div>
     </div>
   </div>

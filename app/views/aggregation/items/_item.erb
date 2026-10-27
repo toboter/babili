@@ -1,14 +1,31 @@
 <tr>
-  <%= content_tag :td, width: '30%' do %>
-    <%= link_to(item.identifier.origin_id, namespace_repository_aggregation_item_path(item.repository.owner, item.repository, item), class: 'text-strong') %><br>
-    <%= content_tag :span, "[#{item.identifier.origin_type}]", class: 'text-small text-gray' %>
-  <% end %>
-  <%= content_tag :td, link_to(item.commits.last.event.note, namespace_repository_aggregation_event_path(item.commits.last.event.repository.owner, item.commits.last.event.repository, item.commits.last.event)), class: 'text-small' if item.commits.any? %>
-  <%= content_tag :td, content_tag(:span, "#{time_ago_in_words(item.commits.last.created_at)} ago", title: item.commits.last.created_at, data: {toggle: "tooltip", placement: "bottom"}, class: 'pull-right text-small') if item.commits.any? %>
+  <td width="35%">
+    <%= link_to item.name, namespace_repository_aggregation_item_path(item.repository.owner, item.repository, item), class: "text-strong" %><br>
+    <%= content_tag :span, item.identifier.origin_id, class: "text-small text-muted" %>
+    <%= content_tag :span, "[#{item.identifier.origin_type}]", class: "text-small text-gray" %>
+  </td>
+  <td class="text-small">
+    <% if item.commits.any? %>
+      <%= link_to (item.commits.last.event.note.presence || item.commits.last.event.slug),
+            namespace_repository_aggregation_event_path(item.commits.last.event.repository.owner, item.commits.last.event.repository, item.commits.last.event) %>
+    <% end %>
+  </td>
+  <td class="text-small text-right">
+    <% if item.commits.any? %>
+      <%= content_tag :span, "#{time_ago_in_words(item.commits.last.created_at)} ago",
+            title: item.commits.last.created_at,
+            data: { toggle: "tooltip", placement: "bottom" } %>
+      <br>
+      <%= content_tag :span, pluralize(item.commits.size, "version"), class: "text-muted" %>
+    <% end %>
+  </td>
 </tr>
-</tr>
-  <%= content_tag :td, class: 'text-small', colspan: 3 do %>
-    <%= render partial: 'aggregation/items/item_hash', locals: {values: item.commits.last.try(:payload), depth: 0} if item.commits.any? %>
-    <p class="text-strong"><%= pluralize(item.commits.size, 'version') %></p>
-  <% end %>
+<tr>
+  <td colspan="3" class="text-small" style="border-top: none; padding-top: 0;">
+    <% if item.commits.any? && item.commits.order(:id).last.payload.present? %>
+      <%= render partial: "aggregation/items/payload_table", locals: { commit: item.commits.order(:id).last } %>
+    <% else %>
+      <span class="text-muted">No payload yet.</span>
+    <% end %>
+  </td>
 </tr>

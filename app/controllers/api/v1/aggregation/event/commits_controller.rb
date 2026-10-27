@@ -7,11 +7,12 @@ module Api::V1::Aggregation
     
     def index
       @commits = @commits.paginate(page: params[:page], per_page: params[:per_page] || 30)
-      render_with_serializer(@commits, meta: pagination_dict(@commits), each_serializer: CommitSerializer)
+      @meta = pagination_dict(@commits)
+      render template: "api/v1/aggregation/commits/index"
     end
 
     def show
-      render_with_serializer(@commit, serializer: CommitSerializer)
+      render template: "api/v1/aggregation/commits/show"
     end
 
   end

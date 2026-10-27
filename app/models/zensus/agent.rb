@@ -18,7 +18,7 @@ module Zensus
     has_many :places, through: :events
     has_many :notes, as: :issueable
     belongs_to :creator, class_name: "::Person"
-    has_many :bibliographic_creations, -> { order("(data ->> 'year') DESC") }, through: :appellations
+    has_many :bibliographic_creations, -> { order(Arel.sql("(data ->> 'year') DESC")) }, through: :appellations
 
     accepts_nested_attributes_for :activities, reject_if: :all_blank, allow_destroy: true
     accepts_nested_attributes_for :links, reject_if: :all_blank, allow_destroy: true

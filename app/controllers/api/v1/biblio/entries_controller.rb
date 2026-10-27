@@ -29,12 +29,13 @@ module Api::V1::Biblio
         page: params[:page], 
         per_page: per_page)
       
-        render_with_serializer(@results, meta: pagination_dict(@results), each_serializer: EntrySerializer)
+        @meta = pagination_dict(@results)
+        render template: "api/v1/biblio/entries/index"
     
     end
 
     def show
-      render_with_serializer(@entry, serializer: EntrySerializer)
+      render template: "api/v1/biblio/entries/show"
     end
 
 

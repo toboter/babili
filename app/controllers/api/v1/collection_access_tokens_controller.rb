@@ -1,6 +1,10 @@
 module Api::V1
   class CollectionAccessTokensController < Api::V1::BaseController
-    load_and_authorize_resource :collection, class: 'Oread::Application'
+    # Parent collection must only require :read. Authorizing the current action
+    # (e.g. :create/:destroy) against Oread::Application incorrectly 403s ADGB
+    # token sync for enrolled users who are not collection owners.
+    load_resource :collection, class: 'Oread::Application'
+    before_action -> { authorize! :read, @collection }
     load_and_authorize_resource :access_token, through: :collection, class: 'Oread::AccessToken', parent: false, param_method: :collection_access_token_params
 
     def index

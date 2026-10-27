@@ -33,7 +33,7 @@ class Biblio::ReferencationsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render_with_serializer(@results, each_serializer: Api::V1::Biblio::EntrySerializer) }
+      format.json { render template: "biblio/referencations/index" }
       format.bibtex { render plain: (BibTeX::Bibliography.new << @results.map(&:to_bib))  }
     end
 

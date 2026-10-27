@@ -5,11 +5,12 @@ module Api::V1
     
     def index
       @repositories = @repositories.paginate(page: params[:page], per_page: params[:per_page] || 30)
-      render_with_serializer(@repositories, meta: pagination_dict(@repositories), each_serializer: RepositorySerializer)
+      @meta = pagination_dict(@repositories)
+      render template: "api/v1/repositories/index"
     end
 
     def show
-      render_with_serializer(@repository, serializer: RepositorySerializer)
+      render template: "api/v1/repositories/show"
     end
   end
 end

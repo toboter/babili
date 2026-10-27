@@ -4,6 +4,9 @@ class Ability
   def initialize(user)
     user ||= User.new
 
+    # Aggregation::EventsController#commit is not :update; map it so repo editors can process uploads.
+    alias_action :commit, to: :update
+
     cannot :manage, :all
     can :read, Person
     can :read, Organization, private: false
@@ -245,7 +248,11 @@ class Ability
           app.owner == user
         end
         can [:read], Oread::Application
-        # can create oread_access_token?
+        # Resource hosts (ADGB, etc.) register the user's application token on collections.
+        can :manage, Oread::AccessToken do |token|
+          token.resource_owner == user
+        end
+        can [:new, :create], Oread::AccessToken
     
         # Oauth Apps
         can [:new, :create], Doorkeeper::Application

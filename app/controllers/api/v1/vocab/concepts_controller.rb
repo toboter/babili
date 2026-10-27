@@ -13,7 +13,8 @@ module Api::V1::Vocab
           if params[:synsets] == 'true'
             render json: @concepts.map{|c| c.labels.map(&:body)}
           else
-            render_with_serializer(@concepts, meta: pagination_dict(@concepts), each_serializer: ConceptSerializer)
+            @meta = pagination_dict(@concepts)
+            render template: "api/v1/vocab/concepts/index"
           end
         end
 
@@ -22,7 +23,7 @@ module Api::V1::Vocab
           if params[:synsets] == 'true'
             render json: @concept.labels.map(&:body)
           else
-            render_with_serializer(@concept, serializer: ConceptSerializer)
+            render template: "api/v1/vocab/concepts/show"
           end
         end
 
@@ -40,7 +41,8 @@ module Api::V1::Vocab
           if params[:synsets] == 'true'
             render json: @concepts.map{|c| c.labels.map(&:body)}
           else
-            render_with_serializer(@concepts, meta: pagination_dict(@concepts), each_serializer: ConceptSerializer)
+            @meta = pagination_dict(@concepts)
+            render template: "api/v1/vocab/concepts/full_index"
           end
         end
 
@@ -60,7 +62,8 @@ module Api::V1::Vocab
             @results = @results.take(params[:limit].to_i) if params[:limit]
             render json: @results.map{|c| c.labels.map(&:body)}
           else
-            render_with_serializer(@results, meta: pagination_dict(@results), each_serializer: ConceptSerializer)
+            @meta = pagination_dict(@results)
+            render template: "api/v1/vocab/concepts/search"
           end
         end
 

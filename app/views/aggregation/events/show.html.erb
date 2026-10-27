@@ -1,27 +1,130 @@
+<% replaceable = @event.is_a?(Aggregation::Event::UploadEvent) && (!@event.locked? || @event.processed_without_commits?) %>
+
 <div class="row">
   <div class="col-md-12">
-    <%= content_tag :h4, "Data event: #{@event.slug}" %>
-    <div class="row">
-      <div class="col-sm-3">
-        <%= link_to(background_image_div(@event.creator, :small_thumb, {class: 'site-user-avatar'}), @event.creator.namespace) %>
-        <%= content_tag :p, link_to(@event.creator.name, @event.creator.namespace, class: 'text-strong') %>
-      </div>
-      <div class="col-sm-9">
-        <p>
-          <%= @event.note %>
-          <%= content_tag :span, @event.description, class: 'text-small text-muted' if @event.type == 'Aggregation::Event::UploadEvent' && @event.description %>
-        </p>
+    <p class="text-muted">
+      <%= link_to "Data", namespace_repository_aggregation_items_path(@namespace, @repository) %>
+      /
+      <%= link_to "Events", namespace_repository_aggregation_events_path(@namespace, @repository) %>
+      /
+      <%= @event.slug %>
+    </p>
 
-        <% if @event.locked? %>
-          <h4>Commits</h4>
-          <%= render partial: 'aggregation/commits/commit', collection: @event.commits, locals: {view: 'event'} %>
+    <%= content_tag :h3, class: "h-condensed" do %>
+      <%= @event.note.presence || "Data event" %>
+      <% if @event.locked? && @event.commits.any? %>
+        <%= content_tag :span, "Committed", class: "label label-success" %>
+      <% elsif @event.processed_without_commits? %>
+        <%= content_tag :span, "Empty commit", class: "label label-warning" %>
+      <% else %>
+        <%= content_tag :span, "Pending", class: "label label-default" %>
+      <% end %>
+    <% end %>
+
+    <div class="row --spacious">
+      <div class="col-sm-2">
+        <%= link_to background_image_div(@event.creator, :small_thumb, { class: "site-user-avatar" }), @event.creator.namespace %>
+        <%= content_tag :p, link_to(@event.creator.name, @event.creator.namespace, class: "text-strong") %>
+        <%= content_tag :p, l(@event.created_at, format: :short), class: "text-muted text-small" %>
+      </div>
+      <div class="col-sm-10">
+        <% if @event.is_a?(Aggregation::Event::UploadEvent) %>
+          <% if @event.description.present? %>
+            <p class="text-muted"><%= @event.description %></p>
+          <% end %>
+          <% if @event.primary_id_label.present? %>
+            <p><span class="text-strong">Primary key:</span> <%= @event.primary_id_label %></p>
+          <% end %>
+
+          <h4>Uploaded files</h4>
+          <% if @event.uploads.any? %>
+            <ul class="list-group">
+              <% @event.uploads.each do |upload| %>
+                <% meta = upload.file&.data&.dig("metadata") || {} %>
+                <li class="list-group-item">
+                  <%= content_tag :span, meta["filename"].presence || "file", class: "text-strong" %>
+                  <%= content_tag :span, number_to_human_size(meta["size"].to_i), class: "text-muted text-small pull-right" if meta["size"] %>
+                  <br>
+                  <%= content_tag :span, meta["mime_type"], class: "text-muted text-small" %>
+                </li>
+              <% end %>
+            </ul>
+          <% else %>
+            <p class="text-muted">No files attached.</p>
+          <% end %>
+
+          <% if replaceable %>
+            <div class="panel panel-default" style="margin-top: 15px;">
+              <div class="panel-heading">
+                <strong>Replace files</strong>
+                <span class="text-muted text-small"> — use this after fixing the spreadsheet</span>
+              </div>
+              <div class="panel-body">
+                <%= simple_form_for @event,
+                      as: :aggregation_event,
+                      url: files_namespace_repository_aggregation_event_path(@namespace, @repository, @event),
+                      method: :put,
+                      html: { multipart: true } do |f| %>
+                  <div class="well" style="margin-bottom: 15px;">
+                    <%= f.file_field :files, multiple: true, required: true %>
+                    <p class="help-block text-muted" style="margin-top: 8px; margin-bottom: 0;">
+                      CSV / XLSX / ODS need a header row plus data rows. LIDO XML also works.
+                    </p>
+                  </div>
+                  <%= f.input :primary_id_label,
+                        as: :string,
+                        label: "Primary key column",
+                        placeholder: "e.g. id (defaults to first header if blank)",
+                        input_html: { value: @event.primary_id_label } %>
+                  <%= f.input :note, as: :string, label: "Note", input_html: { value: @event.note } %>
+                  <%= f.submit "Replace files", class: "btn btn-primary text-strong" %>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+
+        <h4>
+          Records
+          <%= content_tag :span, @event.commits.size, class: "badge" %>
+        </h4>
+
+        <% if @event.commits.any? %>
+          <div class="list-group">
+            <%= render partial: "aggregation/commits/commit", collection: @event.commits.includes(:item, :creator), locals: { view: "event" } %>
+          </div>
+        <% elsif @event.locked? %>
+          <div class="alert alert-warning">
+            This event was marked committed but produced no records.
+            Replace the file below (or above), set Primary key, then click <strong>Commit data</strong>.
+          </div>
         <% else %>
-          <%= @event.uploads.inspect if @event.type == 'Aggregation::Event::UploadEvent' %>
+          <p class="text-muted">
+            Not processed yet. Click <strong>Commit data</strong> to parse uploads into repository items.
+          </p>
+          <p class="text-muted text-small">
+            Supported: CSV / XLSX / ODS (header + data rows, Primary key = a column name) or LIDO XML.
+          </p>
         <% end %>
       </div>
     </div>
+
+    <div class="--spacious">
+      <% if replaceable %>
+        <%= link_to (@event.processed_without_commits? ? "Retry commit" : "Commit data"),
+                    commit_namespace_repository_aggregation_event_path(@namespace, @repository, @event),
+                    method: :put,
+                    class: "btn btn-success text-strong" %>
+      <% end %>
+      <%= link_to "New import",
+            new_namespace_repository_aggregation_event_upload_path(@namespace, @repository),
+            class: "btn btn-default text-strong" %>
+      <%= link_to "Back to datasets", namespace_repository_aggregation_items_path(@namespace, @repository), class: "btn btn-default text-strong" %>
+      <%= link_to "Remove event",
+                  namespace_repository_aggregation_event_path(@namespace, @repository, @event),
+                  method: :delete,
+                  data: { confirm: "Remove this data event?" },
+                  class: "btn btn-default text-danger text-strong" unless @event.locked? && @event.commits.any? %>
+    </div>
   </div>
 </div>
-
-<%= link_to 'Commit data', commit_namespace_repository_aggregation_event_path(@namespace, @repository, @event), method: :put, class: 'btn btn-success text-strong' unless @event.locked? %>
-<%= link_to 'remove', namespace_repository_aggregation_event_path(@namespace, @repository, @event), method: :delete unless @event.locked? %>

@@ -1,19 +1,19 @@
-module Aggregation::Event::SheetExtraction 
+module Aggregation::Event::SheetExtraction
   extend ActiveSupport::Concern
 
-  included do
-  end
-
-  def extract_row(data, primary_id_label)
-    data = { 
+  def extract_row(data, primary_id_label, columns: nil)
+    key = primary_id_label.to_s.downcase
+    payload = data.is_a?(Hash) ? data : {}
+    {
       identifier: {
-        value: data[primary_id_label.downcase],
+        value: payload[key].presence || payload[primary_id_label],
         type: primary_id_label,
-        source: self.creator.name,
-        label: primary_id_label.camelize
+        source: creator.name,
+        label: primary_id_label.to_s.camelize
       },
-      payload: data
+      payload: payload,
+      # jsonb does not keep hash key order — persist spreadsheet column order explicitly.
+      columns: Array(columns.presence || payload.keys).map(&:to_s)
     }
-    return data
   end
 end

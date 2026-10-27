@@ -34,7 +34,7 @@ module ApplicationHelper
       superscript: true,
       footnotes: true
     }
-    Redcarpet::Markdown.new(renderer, options).render(text).html_safe
+    Redcarpet::Markdown.new(renderer, options).render(text.to_s).html_safe
   end
 
   def teaser(text)
@@ -46,7 +46,7 @@ module ApplicationHelper
       strikethrough: true,
       superscript: true
     }
-    Redcarpet::Markdown.new(renderer, options).render(text).html_safe
+    Redcarpet::Markdown.new(renderer, options).render(text.to_s).html_safe
   end
 
   def toc(text)
@@ -55,7 +55,7 @@ module ApplicationHelper
     options = {
       escape_html: true
     }
-    Redcarpet::Markdown.new(renderer, options).render(text).html_safe
+    Redcarpet::Markdown.new(renderer, options).render(text.to_s).html_safe
   end
 
 

@@ -16,19 +16,19 @@ module Api::V1
     
 
     def index
-      collections = @collections.order(id: :asc)
-      render_with_serializer(collections, each_serializer: CollectionSerializer)
+      @collections = @collections.order(id: :asc)
+      render template: "api/v1/collections/index"
     end
 
     def show
-      render_with_serializer(@collection, serializer: CollectionSerializer)
+      render template: "api/v1/collections/show"
     end
 
     def resource_host
-      collections = Oread::Application.where(uid: params[:uid])
+      @collections = Oread::Application.where(uid: params[:uid])
       # CanCan cannot authorize an AR relation; authorize the class (public :read) then filter.
       authorize! :read, Oread::Application
-      render_with_serializer(collections, each_serializer: CollectionSerializer)
+      render template: "api/v1/collections/resource_host"
     end
 
   end

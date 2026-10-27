@@ -22,7 +22,7 @@ module Api::V1::Biblio
         page: params[:page], 
         per_page: per_page)
 
-      render_with_serializer(@results, each_serializer: EntrySerializer)
+      render template: "api/v1/biblio/referencations/index"
     end
 
   end

@@ -1,1 +1,9 @@
-<%= @commits.inspect %>
+<p class="text-muted">
+  <%= link_to @item.name, namespace_repository_aggregation_item_path(@namespace, @repository, @item) %>
+  / commits
+</p>
+
+<h3 class="h-condensed"><%= pluralize(@commits.size, "commit") %></h3>
+<div class="list-group">
+  <%= render partial: "aggregation/commits/commit", collection: @commits.order(created_at: :desc), locals: { view: "item" } %>
+</div>

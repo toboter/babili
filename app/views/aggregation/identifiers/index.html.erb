@@ -1,24 +1,72 @@
 <% content_for :breadcrumbs do %>
-  <%= content_tag :li, link_to('Identify ::data', aggregation_path) %>
-  <%= content_tag :li, "Data identifiers", class: 'active' %>
+  <%= content_tag :li, link_to("Identify ::data", aggregation_path) %>
+  <%= content_tag :li, "BOI", class: "active" %>
 <% end %>
 
 <% content_for :container do %>
-  <div class="zensus">
+  <div class="aggregation">
     <div class="row --spacious">
       <div class="col-sm-12 col-md-8 main">
-        <table class="table table-simple">
-          <tbody>
-            <%= render @identifiers %>
-          </tbody>
-        </table>
-      </div>
-      <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
-        <div class="list-group">
-          render 'zensus/search/box' %>
-
+        <div class="clearfix" style="margin-bottom: 15px;">
+          <h3 class="h-condensed pull-left" style="margin-top: 0;">
+            Babylon Object Identifiers
+            <%= content_tag :span, @identifiers.size, class: "badge" %>
+          </h3>
         </div>
-      <% end %>
+
+        <% if @q.present? %>
+          <p class="text-muted text-small">
+            Results for <strong><%= @q %></strong>
+            · <%= link_to "Clear", aggregation_identifiers_path %>
+          </p>
+        <% end %>
+
+        <% if @identifiers.any? %>
+          <table class="table table-simple">
+            <thead>
+              <tr>
+                <th>Identifier</th>
+                <th>Type</th>
+                <th>Originator</th>
+                <th class="text-right">Datasets</th>
+              </tr>
+            </thead>
+            <tbody>
+              <%= render @identifiers %>
+            </tbody>
+          </table>
+        <% else %>
+          <div class="well">
+            <% if @q.present? %>
+              <p class="text-strong">No identifiers match “<%= @q %>”.</p>
+              <p class="text-muted" style="margin-bottom: 0;">
+                Try another id, type, or originator, or
+                <%= link_to "browse all identifiers", aggregation_identifiers_path %>.
+              </p>
+            <% else %>
+              <p class="text-strong">No identifiers yet.</p>
+              <p class="text-muted" style="margin-bottom: 0;">
+                Commit an import in a repository to create BOI entries from primary keys.
+              </p>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="col-md-3 col-md-offset-1 sidebar">
+        <div class="list-group">
+          <div class="list-group-item">
+            <%= render "aggregation/identifiers/search_box", q: @q, autofocus: true %>
+          </div>
+          <%= link_to fa_icon("angle-double-right", text: "Identify ::data"),
+                aggregation_path,
+                class: "list-group-item" %>
+        </div>
+        <p class="text-muted text-small">
+          BOI entries are created automatically when data events are committed.
+          Open an identifier to see linked datasets across repositories.
+        </p>
+      </div>
     </div>
   </div>
 <% end %>

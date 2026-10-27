@@ -1,5 +1,11 @@
 <%= link_to namespace_repository_aggregation_event_path(@namespace, @repository, event), class: "list-group-item" do %>
-  <%= content_tag :span, fa_icon('check'), class: 'pull-right' if event.locked? %>
-  <%= content_tag :strong, event.slug %><br>
-  <%= content_tag :span, event.note, class: 'text-muted' %>
+  <% if event.locked? && event.commits.any? %>
+    <%= content_tag :span, fa_icon("check", text: pluralize(event.commits.size, "record")), class: "pull-right text-success" %>
+  <% elsif event.processed_without_commits? %>
+    <%= content_tag :span, "empty", class: "pull-right label label-warning" %>
+  <% else %>
+    <%= content_tag :span, "pending", class: "pull-right label label-default" %>
+  <% end %>
+  <%= content_tag :strong, (event.note.presence || event.slug) %><br>
+  <%= content_tag :span, "#{event.slug} · #{time_ago_in_words(event.created_at)} ago", class: "text-muted text-small" %>
 <% end %>

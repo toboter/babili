@@ -7,11 +7,12 @@ module Api::V1::Vocab
       @schemes = @schemes.where("updated_at > ?", params[:since]) if params[:since]
       @schemes = @schemes.paginate(page: params[:page], per_page: params[:per_page] || 30).order(sort_order)
 
-      render_with_serializer(@schemes, meta: pagination_dict(@schemes), each_serializer: SchemeSerializer)
+      @meta = pagination_dict(@schemes)
+      render template: "api/v1/vocab/schemes/index"
     end
 
     def show
-      render_with_serializer(@scheme, serializer: SchemeSerializer)
+      render template: "api/v1/vocab/schemes/show"
     end
   end
 end

@@ -1,9 +1,16 @@
 <tr id="data-identifier-<%= identifier.id %>">
-  <td width="5%">
-    <%= content_tag :span, fa_icon('data'), title: 'Object' %>
+  <td>
+    <%= link_to identifier.origin_id,
+          aggregation_identifier_path(identifier),
+          class: "text-strong" %>
   </td>
-  <td width="95%">
-    <%= content_tag :span, link_to(identifier.name, identifier), class: 'text-strong' %><br>
-    <%= content_tag :span, identifier.others.map(&:name).join(', '), class: 'text-muted text-small' %>
+  <td>
+    <%= content_tag :span, identifier.origin_type, class: "text-muted" %>
+  </td>
+  <td class="text-small">
+    <%= identifier.origin_agent_id.presence || content_tag(:span, "—", class: "text-muted") %>
+  </td>
+  <td class="text-right text-small">
+    <%= content_tag :span, identifier.items.size, class: "badge" %>
   </td>
 </tr>

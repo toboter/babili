@@ -1,0 +1,16 @@
+<%# locals: commit %>
+<% if commit.payload.blank? %>
+  <p class="text-muted">No payload stored.</p>
+<% elsif commit.tabular_payload? %>
+  <%= render partial: "aggregation/items/payload_table", locals: { commit: commit } %>
+<% else %>
+  <table class="table table-striped">
+    <tbody>
+      <tr>
+        <td>
+          <%= render partial: "aggregation/items/item_hash", locals: { values: commit.payload, depth: 0 } %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+<% end %>

@@ -1,7 +1,116 @@
-<%= @identifier.inspect %>
-<br>
-<%= @identifier.items.map{|i| link_to(i.name, [i.repository.owner, i.repository, i] )}.join(', ').html_safe %>
-<hr>
-<%= @identifier.others.inspect %>
-<br>
-<%= @identifier.others_items.map{|i| link_to(i.name, [i.repository.owner, i.repository, i] )}.join(', ').html_safe %>
+<% content_for :breadcrumbs do %>
+  <%= content_tag :li, link_to("Identify ::data", aggregation_path) %>
+  <%= content_tag :li, link_to("BOI", aggregation_identifiers_path) %>
+  <%= content_tag :li, @identifier.name, class: "active" %>
+<% end %>
+
+<% content_for :container do %>
+  <div class="aggregation">
+    <div class="row --spacious">
+      <div class="col-sm-12 col-md-8 main">
+        <%= content_tag :h3, class: "h-condensed" do %>
+          <%= @identifier.origin_id %>
+          <%= content_tag :span, @identifier.origin_type, class: "label label-default" %>
+        <% end %>
+
+        <ul class="list-unstyled text-small" style="margin-bottom: 20px;">
+          <li>
+            <span class="text-strong">Primary id:</span>
+            <%= @identifier.origin_id %>
+          </li>
+          <li>
+            <span class="text-strong">Type / column:</span>
+            <%= @identifier.origin_type %>
+          </li>
+          <li>
+            <span class="text-strong">Originator:</span>
+            <%= @identifier.origin_agent_id.presence || content_tag(:span, "—", class: "text-muted") %>
+          </li>
+          <li>
+            <span class="text-strong">Datasets:</span>
+            <%= @items.size %>
+          </li>
+        </ul>
+
+        <h4>
+          Linked datasets
+          <%= content_tag :span, @items.size, class: "badge" %>
+        </h4>
+
+        <% if @items.any? %>
+          <table class="table table-simple">
+            <thead>
+              <tr>
+                <th>Dataset</th>
+                <th>Repository</th>
+                <th class="text-right">Versions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @items.each do |item| %>
+                <tr>
+                  <td>
+                    <%= link_to item.name,
+                          namespace_repository_aggregation_item_path(item.repository.owner, item.repository, item),
+                          class: "text-strong" %>
+                  </td>
+                  <td class="text-small">
+                    <%= link_to item.repository.name_tree.join(" / "),
+                          [item.repository.owner, item.repository] %>
+                  </td>
+                  <td class="text-right text-small">
+                    <%= content_tag :span, item.commits.size, class: "badge" %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% else %>
+          <div class="well">
+            <p class="text-muted" style="margin-bottom: 0;">
+              This identifier is not linked to any dataset yet.
+            </p>
+          </div>
+        <% end %>
+
+        <% if @related_identifiers.any? %>
+          <h4 style="margin-top: 30px;">
+            Related identifiers
+            <%= content_tag :span, @related_identifiers.size, class: "badge" %>
+          </h4>
+          <p class="text-muted text-small">
+            Other identifiers attached to the same datasets.
+          </p>
+          <table class="table table-simple">
+            <thead>
+              <tr>
+                <th>Identifier</th>
+                <th>Type</th>
+                <th>Originator</th>
+                <th class="text-right">Datasets</th>
+              </tr>
+            </thead>
+            <tbody>
+              <%= render partial: "aggregation/identifiers/identifier",
+                    collection: @related_identifiers %>
+            </tbody>
+          </table>
+        <% end %>
+      </div>
+
+      <div class="col-md-3 col-md-offset-1 sidebar">
+        <div class="list-group">
+          <div class="list-group-item">
+            <%= render "aggregation/identifiers/search_box" %>
+          </div>
+          <%= link_to fa_icon("angle-double-right", text: "All identifiers"),
+                aggregation_identifiers_path,
+                class: "list-group-item" %>
+          <%= link_to fa_icon("angle-double-right", text: "Identify ::data"),
+                aggregation_path,
+                class: "list-group-item" %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

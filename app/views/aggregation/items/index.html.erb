@@ -2,35 +2,75 @@
   <nav class="navbar navbar-default">
     <div class="container-fluid">
       <ul class="nav navbar-nav navbar-left">
-        <%= content_tag :li, link_to(fa_icon('object-ungroup', text: pluralize(@items.size, 'dataset')), '') %>
+        <%= content_tag :li, link_to(fa_icon("object-ungroup", text: pluralize(@items.size, "dataset")), "") %>
       </ul>
       <div class="nav navbar-nav navbar-right">
-        <%= link_to fa_icon('upload', text: 'Import data'), new_namespace_repository_aggregation_event_upload_path(@namespace, @repository), title: "Import datasets from a file.", class: 'btn btn-default btn-sm text-strong navbar-btn', style: 'margin-right: 15px;margin-left: 15px;' %>
+        <%= link_to fa_icon("list", text: "Events"),
+              namespace_repository_aggregation_events_path(@namespace, @repository),
+              class: "btn btn-default btn-sm text-strong navbar-btn" %>
+        <%= link_to fa_icon("upload", text: "Import data"),
+              new_namespace_repository_aggregation_event_upload_path(@namespace, @repository),
+              title: "Import datasets from a file.",
+              class: "btn btn-default btn-sm text-strong navbar-btn",
+              style: "margin-right: 15px;margin-left: 15px;" %>
       </div>
     </div>
   </nav>
 
-  <%= content_tag :div, class: '--spacious --spacing' do %>
-    <h4>Pending commits</h4>
-    <%= render partial: 'aggregation/events/event', collection: @repository.events.pending %>
-  <% end if @repository.events.pending.any? %>
+  <% pending = @repository.events.pending.order(created_at: :desc) %>
+  <% if pending.any? %>
+    <div class="--spacious --spacing">
+      <h4>Pending events</h4>
+      <div class="list-group">
+        <%= render partial: "aggregation/events/event", collection: pending %>
+      </div>
+    </div>
+  <% end %>
+
+  <% empty_locked = @repository.events.commited.select(&:processed_without_commits?) %>
+  <% if empty_locked.any? %>
+    <div class="alert alert-warning">
+      <%= pluralize(empty_locked.size, "event") %> finished without creating records.
+      <%= link_to "Review events", namespace_repository_aggregation_events_path(@namespace, @repository) %>
+    </div>
+  <% end %>
 
   <div class="text-small" style="border: 1px solid #ddd;padding:10px;background-color: #f8f8f8;border-bottom:none;">
-    <div style="display:inline;">
-      <%= link_to (background_image_div(@repository.events.commited.last.creator, :small_thumb, {class: 'site-user-avatar'})), @repository.events.commited.last.creator.namespace if @repository.events.commited.any? %>
-      <%= link_to @repository.events.commited.last.creator.name, @repository.events.commited.last.creator.namespace, class: 'text-strong' if @repository.events.commited.any? %>
-      <%= content_tag :span, "#{link_to @repository.events.commited.last.note, namespace_repository_aggregation_event_path(@namespace, @repository, @repository.events.commited.last)}".html_safe if @repository.events.commited.any? %>
-    </div>
-    <% if @repository.events.any? %>
-      <%= content_tag :span, "Last data event #{link_to @repository.events.last.created_at, [@namespace, @repository, :aggregation, :events]}".html_safe, class: 'pull-right' %>
+    <% last_committed = @repository.events.commited.order(commited_at: :desc).detect { |e| e.commits.any? } %>
+    <% if last_committed %>
+      <div style="display:inline;">
+        <%= link_to background_image_div(last_committed.creator, :small_thumb, { class: "site-user-avatar" }), last_committed.creator.namespace %>
+        <%= link_to last_committed.creator.name, last_committed.creator.namespace, class: "text-strong" %>
+        committed
+        <%= link_to (last_committed.note.presence || last_committed.slug), namespace_repository_aggregation_event_path(@namespace, @repository, last_committed) %>
+        (<%= pluralize(last_committed.commits.size, "record") %>)
+      </div>
+      <%= content_tag :span, "#{time_ago_in_words(last_committed.commited_at)} ago", class: "pull-right text-muted" %>
     <% else %>
-      <%= content_tag :span, link_to('Pending commits', [@namespace, @repository, :aggregation, :events]), class: 'pull-right' %>
+      <span class="text-muted">No committed datasets yet.</span>
+      <%= link_to "Import data", new_namespace_repository_aggregation_event_upload_path(@namespace, @repository), class: "pull-right" %>
     <% end %>
   </div>
-  <table class="table table-simple">
-    <tbody>
-      <%= render @items %>
-    </tbody>
-  </table>
-  
+
+  <% if @items.any? %>
+    <table class="table table-simple">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Last event</th>
+          <th class="text-right">Updated</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render @items %>
+      </tbody>
+    </table>
+  <% else %>
+    <div class="well" style="border-radius: 0; margin-top: 0;">
+      <p class="text-strong">No datasets in this repository yet.</p>
+      <p class="text-muted">
+        Import a CSV/XLSX/ODS (header + rows, Primary key = id column) or a LIDO XML file, then click <strong>Commit data</strong> on the event.
+      </p>
+    </div>
+  <% end %>
 </div>

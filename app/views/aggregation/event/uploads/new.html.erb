@@ -1,27 +1,34 @@
 <div class="row">
   <div class="col-md-12">
-    <%= content_tag :h4, link_to(@repository.name, [@namespace, @repository]) + ' / '%>
-    <%= simple_form_for [@namespace, @repository, @event], 
+    <%= content_tag :h4, link_to(@repository.name, [@namespace, @repository]) + " / Import data" %>
+    <%= simple_form_for [@namespace, @repository, @event],
       multipart: true, as: :aggregation_event,
       url: namespace_repository_aggregation_event_uploads_path(@namespace, @repository) do |f| %>
       <div class="well">
         <%= f.file_field :files, multiple: true %>
+        <p class="help-block text-muted" style="margin-top: 10px;">
+          Supported: <strong>CSV, XLSX, ODS</strong> (first row = headers, following rows = records) or <strong>LIDO XML</strong>.
+        </p>
       </div>
       <div class="row --spacious-20">
         <div class="col-sm-1">
-          <%= link_to(background_image_div(current_person, :small_thumb, {class: 'site-user-avatar', style: 'width:60px;height:60px;'}), current_person.namespace) %>
+          <%= link_to(background_image_div(current_person, :small_thumb, { class: "site-user-avatar", style: "width:60px;height:60px;" }), current_person.namespace) %>
         </div>
         <div class="col-sm-11">
           <div class="panel panel-default">
             <div class="panel-body">
-              <%= content_tag :h4, 'Upload changes and pre-process'%>
-              <%= f.input :primary_id_label, placeholder: 'Primary key', as: :string, label: false %>
-              <%= f.input :note, placeholder: 'Add files via uploader', as: :string, label: false %>
-              <%= f.input :description, placeholder: 'Add an optional description', label: false %>
+              <%= content_tag :h4, "Upload and prepare commit" %>
+              <%= f.input :primary_id_label,
+                    placeholder: "Primary key column (e.g. id) — defaults to first header if blank",
+                    as: :string,
+                    label: false,
+                    hint: "Must match a spreadsheet header. Required for reliable imports." %>
+              <%= f.input :note, placeholder: "Short note about this import", as: :string, label: false %>
+              <%= f.input :description, placeholder: "Optional longer description", label: false %>
             </div>
           </div>
-          <%= f.submit "Upload files", class: 'btn btn-success text-strong' %>
-          <%= link_to 'Cancel', namespace_repository_aggregation_items_path(@namespace, @repository), class: 'btn btn-default text-strong' %>
+          <%= f.submit "Upload files", class: "btn btn-success text-strong" %>
+          <%= link_to "Cancel", namespace_repository_aggregation_items_path(@namespace, @repository), class: "btn btn-default text-strong" %>
         </div>
       </div>
     <% end %>

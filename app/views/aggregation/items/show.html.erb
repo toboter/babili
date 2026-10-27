@@ -1,28 +1,75 @@
+<% can_add_version = can?(:create, Aggregation::Event::UploadEvent.new(repository: @repository)) %>
+
 <div class="row">
   <div class="col-md-12">
-    <%= content_tag :h4, class: 'h-condensed --spacing-20 --spacious-20' do %>
-      <%= link_to @repository.name, [@namespace, @repository], class: '' %> 
-      <%= content_tag :span, '/ ', class: 'text-gray' %>
-      <%= content_tag :span, @item.name, class: '' %>
-    <% end %>
-    <ul class="list-unstyled">
-      <li>Id: <%= link_to @item.identifier.origin_id, @item.identifier %></li>
-      <li>Label/Type: <%= @item.identifier.origin_type %></li>
-      <li>Originator: <%= @item.identifier.origin_agent_id %></li>
+    <p class="text-muted">
+      <%= link_to @repository.name, [@namespace, @repository] %>
+      /
+      <%= link_to "Data", namespace_repository_aggregation_items_path(@namespace, @repository) %>
+      /
+      <%= @item.name %>
+    </p>
+
+    <%= content_tag :h3, @item.name, class: "h-condensed --spacing-20" %>
+    <ul class="list-unstyled text-small">
+      <li><span class="text-strong">Id:</span> <%= link_to @item.identifier.origin_id, aggregation_identifier_path(@item.identifier) %></li>
+      <li><span class="text-strong">Type:</span> <%= @item.identifier.origin_type %></li>
+      <li><span class="text-strong">Originator:</span> <%= @item.identifier.origin_agent_id %></li>
+      <li><span class="text-strong">Versions:</span> <%= @item.commits.size %></li>
     </ul>
   </div>
 </div>
 
 <div class="row">
   <div class="col-md-6">
-  <table class="table table-striped">
-    <tbody>
-      <%= render partial: 'aggregation/items/item_hash', locals: {values: @item.commits.last.data['payload'], depth: 0} %>
-    </tbody>
-  </table>
+    <h4>Current payload</h4>
+    <% if @item.commits.any? %>
+      <%= render partial: "aggregation/items/payload", locals: { commit: @item.commits.order(:id).last } %>
+    <% else %>
+      <p class="text-muted">No payload stored on this item.</p>
+    <% end %>
+
+    <% if can_add_version %>
+      <div class="panel panel-default" style="margin-top: 20px;">
+        <div class="panel-heading">
+          <strong>Add version</strong>
+          <span class="text-muted text-small"> — upload a file row for this item and commit</span>
+        </div>
+        <div class="panel-body">
+          <%= simple_form_for :aggregation_event,
+                url: namespace_repository_aggregation_item_version_path(@namespace, @repository, @item),
+                method: :post,
+                html: { multipart: true } do |f| %>
+            <div class="well" style="margin-bottom: 15px;">
+              <%= f.file_field :files, multiple: true, required: true %>
+              <p class="help-block text-muted" style="margin-top: 8px; margin-bottom: 0;">
+                CSV / XLSX / ODS with a header row. Only the row whose
+                <strong><%= @item.identifier.origin_type %></strong>
+                is
+                <strong><%= @item.identifier.origin_id %></strong>
+                is applied; other rows are ignored.
+              </p>
+            </div>
+            <%= f.input :primary_id_label,
+                  as: :string,
+                  label: "Primary key column",
+                  input_html: { value: @item.identifier.origin_type } %>
+            <%= f.input :note,
+                  as: :string,
+                  label: "Note",
+                  input_html: { value: "Version for #{@item.name}" } %>
+            <%= f.submit "Upload and commit version", class: "btn btn-success text-strong" %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
   </div>
   <div class="col-md-5 col-md-offset-1">
-    <div class="row">
-      <%= render partial: 'aggregation/commits/commit', collection: @item.commits.order(created_at: :desc), locals: {view: 'item'} %>
+    <h4>History</h4>
+    <div class="list-group">
+      <%= render partial: "aggregation/commits/commit",
+            collection: @item.commits.order(created_at: :desc),
+            locals: { view: "item" } %>
+    </div>
   </div>
 </div>

@@ -6,11 +6,12 @@ module Api::V1::Aggregation
 
     def index
       @events = @events.paginate(page: params[:page], per_page: params[:per_page] || 30)
-      render_with_serializer(@events, meta: pagination_dict(@events), each_serializer: EventSerializer)
+      @meta = pagination_dict(@events)
+      render template: "api/v1/aggregation/events/index"
     end
 
     def show
-      render_with_serializer(@event, serializer: EventSerializer)
+      render template: "api/v1/aggregation/events/show"
     end
 
     def create
@@ -20,7 +21,7 @@ module Api::V1::Aggregation
         pref_identifier = Aggregation::Identifier.where(origin_id: commit.identifier[:id], origin_type: commit.identifier[:type], origin_agent_id: commit.identifier[:agent]).first_or_create  
         commit.item = Aggregation::Item.where(pref_identifier_id: pref_identifier.id, repository_id: @event.repository_id).first_or_create
         commit.item.identifiers << pref_identifier unless commit.item.identifiers.include?(pref_identifier)
-        commit.data[:changeset] = commit.item.commits.any? ? HashDiff.diff(commit.payload, JSON.parse(commit.item.commits.last.try(:data).try(:[], 'payload').to_json, {:symbolize_names => true} )) : []
+        commit.data[:changeset] = commit.item.commits.any? ? ::Hashdiff.diff(commit.payload, JSON.parse(commit.item.commits.last.try(:data).try(:[], 'payload').to_json, {:symbolize_names => true} )) : []
         commit.creator = current_user.person
       end
       if @event.save && @event.update(commited_at: Time.now)

@@ -256,7 +256,7 @@ Rails.application.routes.draw do
 
     namespace :aggregation, path: 'data' do
       get '/', to: 'home#index'
-      get '/search', to: 'search#index'
+      get '/search', to: 'identifiers#index'
       resources :identifiers, only: [:index, :show], path: 'boi'
     end
     
@@ -423,10 +423,14 @@ Rails.application.routes.draw do
             # resources :list_transforms, only: [:new, :create] # gehört an lists/:id/transform
           end
           resources :events, only: [:index, :show, :destroy] do
-            put 'commit', on: :member, to: 'events#commit'
+            member do
+              put 'commit', to: 'events#commit'
+              put 'files', to: 'event/uploads#replace'
+            end
           end
-          resources :items, only: [:index, :show] do 
+          resources :items, only: [:index, :show] do
             resources :commits, only: [:index, :show]
+            resource :version, only: [:create], module: "item"
           end
         end
       end

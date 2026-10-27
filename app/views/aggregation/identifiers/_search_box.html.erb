@@ -1,0 +1,11 @@
+<%= form_tag aggregation_identifiers_path, method: :get, class: "form" do %>
+  <div class="input-group">
+    <%= search_field_tag :q, local_assigns.fetch(:q, params[:q]),
+          placeholder: "Search id, type, or originator…",
+          class: "form-control",
+          autofocus: local_assigns[:autofocus] %>
+    <span class="input-group-btn">
+      <%= submit_tag "Search", class: "btn btn-default text-strong", name: nil %>
+    </span>
+  </div>
+<% end %>

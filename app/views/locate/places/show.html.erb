@@ -22,8 +22,10 @@
           <% end %>
 
           <br>
-          <% @place.locations.each do |location| %>
-            <%= location.inspect %>
+          <% if Locate::Location.table_exists? %>
+            <% @place.locations.each do |location| %>
+              <%= location.inspect %>
+            <% end %>
           <% end %>
 
           <br>
@@ -45,9 +47,12 @@
       <%= content_tag :div, class: 'col-md-3 col-md-offset-1 sidebar' do %>
         <div class="list-group">
           <%= link_to fa_icon('angle-double-up', text: 'All places'), locate_places_path, class: 'list-group-item' %>
-          <%= link_to fa_icon('angle-double-right', text: 'Locations'), locate_place_locations_path(@place), class: 'list-group-item' %>
+          <% if Locate::Location.table_exists? %>
+            <%= link_to fa_icon('angle-double-right', text: 'Locations'), locate_place_locations_path(@place), class: 'list-group-item' %>
+          <% end %>
         </div>
       <% end %>
+
     </div>
   </div>
 <% end %>

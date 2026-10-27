@@ -6,7 +6,7 @@ module Api
         load_and_authorize_resource except: :create, find_by: :slug, class: 'Raw::FileUpload'
         
         def show
-          render_with_serializer(@file_upload, serializer: FileUploadSerializer)
+          render template: "api/v1/raw/file_uploads/show"
         end
 
         def view_file
@@ -36,7 +36,7 @@ module Api
           @existing = ::Raw::FileUpload.find_by_file_signature(@file_upload.file_signature)
 
           if @existing.present? ? (@file_upload = @existing) : @file_upload.save
-            render status: :created, json: @file_upload, serializer: FileUploadSerializer
+            render template: "api/v1/raw/file_uploads/create", status: :created
           else
             render json: @file_upload.errors, status: :unprocessable_entity
           end

@@ -2,67 +2,100 @@
   <div class="col-md-12" style="margin:10px 0;">
     <%= render "shared/search" %>
   </div>
-  <div class="col-md-12">
-
-  </div>
 </div>
-    <table class="table table-simple table-responsive --spacious-10">
-      <tbody style="font-size:120%;">
-        <%= render @local_results if @local_results %>
-      </tbody>
-    </table>
-    <table class="table table-simple table-responsive">
-      <tbody>
-        <% @results.each do |result| %>
-          <% result.each do |r| %>
-            <% if r.is_a?(Array) %>
-              <% r.last.each do |o| %>
-                <% if r.first == 'ExcavatedObjects' %>
-                  <tr style="margin-top:12px;margin-bottom:10px;">
-                    <td>
-                      <span class="text-strong text-gray" style="font-size:120%;"><%= o.try(:[], "identification").try(:[], "excavationNumber").try(:[], "literal") %></span>
-                      <span class="text-gray" style="font-size:120%;"> (<%= o.try(:[], "description").try(:first).try(:[], "de") %>)</span><br>
-                      <span class="text-gray"><%= o.try(:[], "identification").try(:[], "collectionNumber").try(:[], "collectionData").try(:[], "holder") %></span><br>
-                      <%= link_to o.try(:[], "links").try(:[], "html"), o.try(:[], "links").try(:[], "html"), class: 'text-small' %>
-                    </td>
-                  </tr>
-                <% elsif r.first == 'ArchivalResources' %>
-                  <tr style="margin-top:12px;margin-bottom:10px;">
-                    <td>
-                      <span class="text-strong text-gray" style="font-size:120%;"><%= o.try(:[], "callNumber").try(:[], "value") %></span><br>
-                      <span class="text-gray"><%= o.try(:[], "containedIn").try(:[], "name") %></span><br>
-                      <%= link_to o.try(:[], "links").try(:[], "html"), o.try(:[], "links").try(:[], "html"), class: 'text-small' %>
-                    </td>
-                  </tr>
-                <% end %>
-              <% end %>
-            <% else %>
-              <tr style="margin-top:12px;margin-bottom:10px;">
-                <td>
-                  <span class="text-strong text-gray" style="font-size:120%;"><%= r.try(:[], "full_entry") %></span><br>
-                  <%= link_to r.try(:[], "links").try(:[], "html"), r.try(:[], "links").try(:[], "html"), class: 'text-small' %>
-                </td>
-              </tr>
-            <% end %>
-          <% end %>
-        <% end if @results %>
-      </tbody>
-    </table>
 
+<table class="table table-simple table-responsive --spacious-10">
+  <tbody style="font-size:120%;">
+    <%= render @local_results if @local_results %>
+  </tbody>
+</table>
+
+<table class="table table-simple table-responsive">
+  <tbody>
+    <% Array(@results).each do |payload| %>
+      <% next unless payload.is_a?(Hash) %>
+
+      <% Array(payload["artefacts"] || payload[:artefacts]).each do |o| %>
+        <tr>
+          <td>
+            <span class="text-strong text-gray" style="font-size:120%;">
+              <%= o.dig("identification", "excavationNumber", "literal").presence || o["full_entry"] %>
+            </span>
+            <% description = Array(o["description"]).first %>
+            <% if description.is_a?(Hash) && description["de"].present? %>
+              <span class="text-gray" style="font-size:120%;"> (<%= description["de"] %>)</span>
+            <% end %>
+            <br>
+            <span class="text-gray">
+              <%= o.dig("identification", "collectionNumber", "collectionData", "holder") %>
+            </span>
+            <br>
+            <% html = o.dig("links", "html") %>
+            <%= link_to html, html, class: "text-small" if html.present? %>
+          </td>
+        </tr>
+      <% end %>
+
+      <% Array(payload["sources"] || payload[:sources]).each do |o| %>
+        <tr>
+          <td>
+            <span class="text-strong text-gray" style="font-size:120%;">
+              <%= o.dig("callNumber", "value").presence || o["full_entry"] %>
+            </span>
+            <br>
+            <span class="text-gray">
+              <%= o.dig("containedIn", "name") %>
+            </span>
+            <br>
+            <% html = o.dig("links", "html") %>
+            <%= link_to html, html, class: "text-small" if html.present? %>
+          </td>
+        </tr>
+      <% end %>
+
+      <%# Legacy AMS-style payloads (ExcavatedObjects / ArchivalResources). %>
+      <% payload.each do |key, value| %>
+        <% next unless value.is_a?(Array) %>
+        <% next if %w[artefacts sources].include?(key.to_s) %>
+        <% value.each do |o| %>
+          <% next unless o.is_a?(Hash) %>
+          <% if key.to_s == "ExcavatedObjects" %>
+            <tr>
+              <td>
+                <span class="text-strong text-gray" style="font-size:120%;"><%= o.dig("identification", "excavationNumber", "literal") %></span>
+                <span class="text-gray" style="font-size:120%;"> (<%= Array(o["description"]).first&.dig("de") %>)</span><br>
+                <span class="text-gray"><%= o.dig("identification", "collectionNumber", "collectionData", "holder") %></span><br>
+                <%= link_to o.dig("links", "html"), o.dig("links", "html"), class: "text-small" if o.dig("links", "html") %>
+              </td>
+            </tr>
+          <% elsif key.to_s == "ArchivalResources" %>
+            <tr>
+              <td>
+                <span class="text-strong text-gray" style="font-size:120%;"><%= o.dig("callNumber", "value") %></span><br>
+                <span class="text-gray"><%= o.dig("containedIn", "name") %></span><br>
+                <%= link_to o.dig("links", "html"), o.dig("links", "html"), class: "text-small" if o.dig("links", "html") %>
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
 
 <% content_for :sidebar do %>
-	<h4>Filter</h4>
-	<p>
+  <h4>Filter</h4>
+  <p>
     List of active filters<br>
     <strong><%= params[:q] %></strong>
   </p>
 
   <br>
-  <%= content_tag :p, 'Searching all registered, searchable apps.', class: "text-muted" if !user_signed_in? %>
+  <%= content_tag :p, "Searching all registered, searchable apps.", class: "text-muted" unless user_signed_in? %>
 
-  <%= content_tag :h4, "Looking for authorized content in:", class: 'text-muted' if user_signed_in? %>
+  <%= content_tag :h4, "Looking for authorized content in:", class: "text-muted" if user_signed_in? %>
   <%= render current_user.oread_enrolled_applications.order(name: :asc) if user_signed_in? %>
 
-  <%= content_tag :h4, "Looking for unpublished content in:", class: 'text-muted' if user_signed_in? %>
+  <%= content_tag :h4, "Looking for unpublished content in:", class: "text-muted" if user_signed_in? %>
   <%= render current_user.oread_token_applications.where(id: current_user.oread_enrolled_application_ids).order(name: :asc).uniq if user_signed_in? %>
 <% end %>

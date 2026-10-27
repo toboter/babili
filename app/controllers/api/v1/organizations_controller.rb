@@ -3,12 +3,16 @@ module Api::V1
     load_and_authorize_resource
 
     def index
-      organizations = @organizations.where(private: false).order(id: :asc)
-      render_with_serializer(organizations, each_serializer: OrganizationSerializer)
+      @organizations = @organizations.where(private: false).order(id: :asc)
+      render template: "api/v1/organizations/index"
     end
 
     def show
-      @organization.private? ? (render json: {status: 'Not Found', code: 404}.to_json) : (render_with_serializer(@organization, serializer: OrganizationSerializer))
+      if @organization.private?
+        render json: {status: 'Not Found', code: 404}.to_json
+      else
+        render template: "api/v1/organizations/show"
+      end
     end
 
   end

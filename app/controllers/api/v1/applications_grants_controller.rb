@@ -5,11 +5,12 @@ module Api::V1
 
     def index
       grants = @applications_grants.where(resource_owner_id: current_user).order(id: :asc).uniq
-      render_with_serializer(grants, each_serializer: ApplicationsGrantSerializer)
+      @grants = grants
+      render template: "api/v1/applications_grants/index"
     end
 
     def show
-      render_with_serializer(@applications_grant, serializer: ApplicationsGrantSerializer)
+      render template: "api/v1/applications_grants/show"
     end
 
     private

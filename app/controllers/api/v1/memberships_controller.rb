@@ -6,7 +6,7 @@ module Api::V1
     def show
       # @membership = @organization.memberships.joins(:user).where(users: {username: params[:id]}).first
       @membership = @organization.memberships.find_by_person_id(@member.id)
-      render_with_serializer(@membership, serializer: MembershipSerializer)
+      render template: "api/v1/memberships/show"
     end
 
 

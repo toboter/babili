@@ -49,7 +49,7 @@ class Raw::FileUploadsController < ApplicationController
     respond_to do |format|
       if @existing.present? ? (@file_upload = @existing) : @file_upload.save
         format.html { redirect_to raw_file_upload_path(@file_upload), notice: 'File was successfully created.' }
-        format.json { render_with_serializer(@file_upload, serializer: Raw::FileUploadSerializer, status: :created) }
+        format.json { render template: "raw/file_uploads/create", status: :created }
       else
         format.html { render :new }
         format.json { render json: @file_upload.errors, status: :unprocessable_entity }
@@ -61,7 +61,7 @@ class Raw::FileUploadsController < ApplicationController
     respond_to do |format|
       if params[:button] == 'depublish' ? @file_upload.depublish : @file_upload.publish(current_person)
         format.html { redirect_to raw_file_upload_path(@file_upload), notice: "File was successfully #{params[:button]}ed." }
-        format.json { render_with_serializer(@file_upload, serializer: Raw::FileUploadSerializer, status: 200) }
+        format.json { render template: "raw/file_uploads/publish", status: 200 }
       else
         format.html { redirect_to raw_file_upload_path(@file_upload), alert: "#{@file_upload.errors.messages}." }
         format.json { render json: @file_upload.errors, status: :unprocessable_entity }

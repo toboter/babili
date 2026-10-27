@@ -1,1 +1,26 @@
-<%= @commit.inspect %>
+<p class="text-muted">
+  <%= link_to @item.name, namespace_repository_aggregation_item_path(@namespace, @repository, @item) %>
+  / commit #<%= @commit.id %>
+</p>
+
+<h3 class="h-condensed"><%= @commit.identifier_label %></h3>
+<p class="text-muted text-small">
+  From event
+  <%= link_to (@commit.event.note.presence || @commit.event.slug), namespace_repository_aggregation_event_path(@namespace, @repository, @commit.event) %>
+  · <%= l(@commit.created_at, format: :long) %>
+</p>
+
+<div class="row">
+  <div class="col-md-6">
+    <h4>Payload</h4>
+    <%= render partial: "aggregation/items/payload", locals: { commit: @commit } %>
+  </div>
+  <div class="col-md-5 col-md-offset-1">
+    <h4>Changeset</h4>
+    <% if @commit.changeset.present? %>
+      <pre class="text-small" style="white-space: pre-wrap;"><%= JSON.pretty_generate(@commit.changeset) %></pre>
+    <% else %>
+      <p class="text-muted">Initial version (no diff).</p>
+    <% end %>
+  </div>
+</div>

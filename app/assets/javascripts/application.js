@@ -21,6 +21,13 @@
 //= require selectize/dist/js/standalone/selectize.min
 //= require bootstrap-markdown-bundle
 //= require turbolinks
+//= require trix/config
+//= require trix/autocomplete_picker
+//= require trix/mentions
+//= require trix/references
+//= require trix/toolbar
+//= require trix/uploads
+//= require trix/auto_linker
 //= require_tree .
 
 $(function () {

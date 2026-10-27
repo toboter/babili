@@ -1,16 +1,56 @@
-        <div class="col-sm-1">
-          <%= link_to(background_image_div(commit.creator, :small_thumb, {class: 'site-user-avatar'}), commit.creator.namespace) %>
-        </div>
-        <div class="col-sm-11">
-          <p class="clearfix">
-            <%= link_to commit.creator.name, commit.creator.namespace, class: 'text-small pull-left' %>
-            <%= content_tag(:span, "#{time_ago_in_words(commit.created_at)} ago", title: commit.created_at, data: {toggle: "tooltip", placement: "left"}, class: 'pull-right text-small') %>
-          </p>
-          <% if view == 'event' %>
-            <%= link_to commit.item.name, namespace_repository_aggregation_item_path(@namespace, @repository, commit.item), class: 'text-small' %>
-          <% elsif view == 'item' %>  
-            <%= link_to commit.event.note, namespace_repository_aggregation_event_path(@namespace, @repository, commit.event), class: 'text-small' %>
-          <% end %><br>
-          <%= link_to commit.data['changeset'], namespace_repository_aggregation_item_commit_path(commit.item.repository.owner, commit.item.repository, commit.item, commit) %>
-          <hr>
-        </div>
+<div class="list-group-item clearfix">
+  <div class="media">
+    <div class="media-left">
+      <%= link_to background_image_div(commit.creator, :small_thumb, { class: "site-user-avatar" }), commit.creator.namespace if commit.creator %>
+    </div>
+    <div class="media-body">
+      <p class="clearfix text-small" style="margin-bottom: 6px;">
+        <%= link_to commit.creator.name, commit.creator.namespace, class: "pull-left" if commit.creator %>
+        <%= content_tag :span, "#{time_ago_in_words(commit.created_at)} ago",
+              title: commit.created_at,
+              data: { toggle: "tooltip", placement: "left" },
+              class: "pull-right text-muted" %>
+      </p>
+
+      <% if view == "event" %>
+        <%= link_to commit.identifier_label,
+              namespace_repository_aggregation_item_path(@namespace, @repository, commit.item),
+              class: "text-strong" %>
+      <% else %>
+        <%= link_to (commit.event.note.presence || commit.event.slug),
+              namespace_repository_aggregation_event_path(@namespace, @repository, commit.event),
+              class: "text-strong" %>
+      <% end %>
+
+      <% preview = commit.payload_preview %>
+      <% if preview.any? %>
+        <ul class="list-unstyled text-small text-muted" style="margin: 8px 0 0;">
+          <% preview.each do |line| %>
+            <li><%= line %></li>
+          <% end %>
+          <% if commit.payload.size > preview.size %>
+            <li>… <%= commit.payload.size - preview.size %> more fields</li>
+          <% end %>
+        </ul>
+      <% end %>
+
+      <% if commit.changeset.present? %>
+        <p class="text-small" style="margin-top: 6px;">
+          <%= content_tag :span, "#{commit.changeset.size} change(s)", class: "label label-info" %>
+        </p>
+      <% elsif view == "item" %>
+        <p class="text-small text-muted" style="margin-top: 6px;">Initial version</p>
+      <% end %>
+
+      <p class="text-small" style="margin-top: 6px;">
+        <%= link_to "Open commit",
+              namespace_repository_aggregation_item_commit_path(
+                commit.item.repository.owner,
+                commit.item.repository,
+                commit.item,
+                commit
+              ) %>
+      </p>
+    </div>
+  </div>
+</div>

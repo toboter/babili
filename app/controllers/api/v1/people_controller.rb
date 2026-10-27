@@ -3,27 +3,27 @@ module Api::V1
     load_and_authorize_resource
     
     def index
-      people = @people.order(id: :asc)
-      render_with_serializer(people, each_serializer: PersonSerializer)
+      @people = @people.order(id: :asc)
+      render template: "api/v1/people/index"
     end
 
     def show
-      render_with_serializer(@person, serializer: PersonSerializer)
+      render template: "api/v1/people/show"
     end
 
     def organizations
-      organizations = @person.organizations.where(private: false).order(id: :asc)
-      render_with_serializer(organizations, each_serializer: OrganizationSerializer)
+      @organizations = @person.organizations.where(private: false).order(id: :asc)
+      render template: "api/v1/people/organizations"
     end
 
     def memberships
-      memberships = @person.memberships
-      render_with_serializer(memberships, each_serializer: MembershipSerializer)
+      @memberships = @person.memberships
+      render template: "api/v1/people/memberships"
     end
 
     def repositories
-      repositories = @person.user.oread_enrolled_applications.order(id: :asc)
-      render_with_serializer(repositories, each_serializer: CollectionSerializer)
+      @repositories = @person.user.oread_enrolled_applications.order(id: :asc)
+      render template: "api/v1/people/repositories"
     end
 
   end

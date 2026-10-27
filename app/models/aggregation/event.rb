@@ -30,35 +30,91 @@ class Aggregation::Event < ApplicationRecord
 
   accepts_nested_attributes_for :commits, allow_destroy: false
 
+  # Returns number of commits created/kept for this event.
   def commit_items(data)
-    if !data.is_a?(Array)
-      identifier = Aggregation::Identifier.where(origin_id: data[:identifier][:value], origin_type: data[:identifier][:type], origin_agent_id: data[:identifier][:source]).first_or_create
-      item = Aggregation::Item.where(pref_identifier_id: identifier.id, repository_id: self.repository_id).first_or_create
+    rows = Array.wrap(data)
+    created = 0
+
+    rows.each do |element|
+      element = element.deep_symbolize_keys
+      identifier_value = element.dig(:identifier, :value).presence
+      next if identifier_value.blank?
+
+      identifier = Aggregation::Identifier.where(
+        origin_id: identifier_value.to_s,
+        origin_type: element.dig(:identifier, :type).presence || "id",
+        origin_agent_id: element.dig(:identifier, :source).presence || creator.name
+      ).first_or_create!
+
+      item = Aggregation::Item.where(
+        pref_identifier_id: identifier.id,
+        repository_id: repository_id
+      ).first_or_create!
       item.identifiers << identifier unless item.identifiers.include?(identifier)
-      data[:changeset] = item.commits.any? ? HashDiff.diff(data[:payload], JSON.parse( item.commits.last.try(:data).try(:[], 'payload').to_json, {:symbolize_names => true} )) : []
-      commit = (data[:changeset].present? || item.commits.empty?) ? Aggregation::Commit.create(type: 'Aggregation::Commit::Legacy', item_id: item.id, event_id: self.id, creator_id: self.creator_id, data: data) : item.commits.last
-      return commit
-    elsif data.is_a?(Array)
-      # data is a array. import through ActiveRecord.import
-      commits = []
-      data.each do |element|
-        identifier = Aggregation::Identifier.where(origin_id: element[:identifier][:value], origin_type: element[:identifier][:type], origin_agent_id: element[:identifier][:source]).first_or_create
-        item = Aggregation::Item.where(pref_identifier_id: identifier.id, repository_id: self.repository_id).first_or_create
-        item.identifiers << identifier unless item.identifiers.include?(identifier)
-        element[:changeset] = item.commits.any? ? HashDiff.diff(element[:payload], item.commits.last.try(:data).try(:[], 'payload')) : []      
-        commit = Aggregation::Commit.new(type: 'Aggregation::Commit::Legacy', item_id: item.id, event_id: self.id, creator_id: self.creator_id, data: element)
-        commits << commit if element[:changeset].present? || item.commits.empty?
-      end
-      Aggregation::Commit.import commits
+
+      created += 1 if create_commit_for_item!(item, element)
     end
+
+    created
+  end
+
+  # Attach version commits to an existing item only (no new items created).
+  def commit_version_for!(item, data)
+    target = item.identifier.origin_id.to_s
+    created = 0
+
+    Array.wrap(data).each do |element|
+      element = element.deep_symbolize_keys
+      value = element.dig(:identifier, :value).to_s
+      next if value.blank? || value != target
+
+      element[:identifier] = {
+        value: item.identifier.origin_id,
+        type: item.identifier.origin_type,
+        source: item.identifier.origin_agent_id,
+        label: item.identifier.origin_type.to_s.camelize
+      }
+
+      created += 1 if create_commit_for_item!(item, element)
+    end
+
+    created
   end
 
   def locked?
     commited_at.present?
   end
 
-  def slug_name
-    Time.now.to_formatted_s(:iso8601) 
+  def processed_without_commits?
+    locked? && commits.none?
   end
 
+  def slug_name
+    Time.now.to_fs(:iso8601)
+  end
+
+  private
+
+  def create_commit_for_item!(item, element)
+    previous_payload = item.commits.order(:id).last&.payload
+    new_payload = element[:payload] || {}
+    changeset =
+      if previous_payload.present?
+        ::Hashdiff.diff(new_payload, previous_payload)
+      else
+        []
+      end
+    element[:changeset] = changeset
+
+    return false if changeset.blank? && item.commits.any?
+
+    Aggregation::Commit.create!(
+      type: "Aggregation::Commit::Legacy",
+      item_id: item.id,
+      event_id: id,
+      creator_id: creator_id,
+      data: element
+    )
+    true
+  end
 end
