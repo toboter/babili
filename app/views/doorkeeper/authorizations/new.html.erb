@@ -10,7 +10,7 @@
           <h4><%= raw t('.prompt', client_name: "<strong class=\"text-info\">#{ @pre_auth.client.name }</strong>") %></h4>
           <% if @pre_auth.scopes.count > 0 %>
             <div id="oauth-permissions">
-              <p><%= t('.able_to') %>:</p>
+              <p><%= t('.able_to') %></p>
 
               <ul class="text-info">
                 <% @pre_auth.scopes.each do |scope| %>

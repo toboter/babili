@@ -1,0 +1,10 @@
+<% labels = oauth_permission_labels_for(accessibility) %>
+<% if labels.any? %>
+  <span class="oauth-perm-badges">
+    <% labels.each do |label| %>
+      <span class="label label-default oauth-perm-badge"><%= label %></span>
+    <% end %>
+  </span>
+<% else %>
+  <span class="text-muted text-small">No permissions granted</span>
+<% end %>

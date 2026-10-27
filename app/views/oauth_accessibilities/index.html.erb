@@ -1,25 +1,93 @@
-<%= content_tag :div do %>
-  <%= link_to fa_icon('plus', text: 'Accessibility'), new_oauth_application_accessibility_path(@oauth_application), class: 'btn btn-default text-strong pull-right' %>
-<% end if can?(:create_accessibility, @oauth_application) %>
-
-<%= content_tag :ul, class: 'nav nav-pills' do %>
-  <%= content_tag :li, link_to(@oauth_application.name, edit_oauth_application_path(@oauth_application)), class: "#{' active text-strong' if current_page?(edit_oauth_application_path(@oauth_application))}" %>
-  <%= content_tag :li, link_to('Scopes', oauth_application_accessibilities_path(@oauth_application)), class: "#{' active text-strong' if current_page?(oauth_applications_path)}" %>
-  <%= content_tag :li, link_to('Accessors', oauth_application_accessibilities_path(@oauth_application)), class: "#{' active text-strong' if current_page?(oauth_application_accessibilities_path(@oauth_application))}" %>
+<% content_for :buttons do %>
+  <% if can?(:update, @oauth_application) %>
+    <%= link_to fa_icon('refresh', text: 'Sync to client'),
+          oauth_application_send_accessibilities_to_clients_path(@oauth_application),
+          remote: true,
+          class: 'btn btn-default btn-sm text-strong',
+          title: 'Push the grants below to the client application so user permissions update there.' %>
+  <% end %>
+  <% if can?(:create_accessibility, @oauth_application) %>
+    <%= link_to fa_icon('plus', text: 'Add access'),
+          new_oauth_application_accessibility_path(@oauth_application),
+          class: 'btn btn-primary btn-sm text-strong' %>
+  <% end %>
 <% end %>
 
-
-<div class="row">
-  <div class="col-md-12">
-
-    <% @accessibilities.each do |accessibility| %>
-      <%= render partial: accessibility.accessor.to_partial_path, object: accessibility.accessor if accessibility.accessor %>
-      <%= render partial: 'oauth_accessibilities/grant_panel', locals: {grant: @oauth_application.grants(accessibility.accessor)} if accessibility.accessor %>
-      
-      <%= link_to fa_icon('pencil', text: 'Edit'), edit_oauth_application_accessibility_path(@oauth_application, accessibility), class: 'btn btn-default btn-xs' if can?(:update_accessibility, @oauth_application) %>
-      <%= link_to fa_icon('remove', text: 'Delete'), oauth_application_accessibility_path(@oauth_application, accessibility), method: :delete, class: 'btn btn-default btn-xs' if can?(:destroy_accessibility, @oauth_application) %>
-      <hr>
-    <% end %>
-    <%= link_to 'Update Client', oauth_application_send_accessibilities_to_clients_path(@oauth_application), remote: true, class: 'btn btn-default btn-sm', style: 'margin-top:10px;' if can?(:update, @oauth_application) %>
-  </div>
+<div class="page-header" style="margin-top:0px;">
+  <h3 style="margin-top:0px;">Who can use <%= @oauth_application.name %>?</h3>
+  <p class="text-muted" style="margin-bottom:0;">
+    Grant people or teams specific abilities in this OAuth client.
+    Changes are stored here; use <strong>Sync to client</strong> to push them to the application.
+  </p>
 </div>
+
+<ul class="nav nav-pills" style="margin-bottom: 20px;">
+  <li>
+    <%= link_to 'Application details', edit_oauth_application_path(@oauth_application) %>
+  </li>
+  <li class="active text-strong">
+    <%= link_to 'Access', oauth_application_accessibilities_path(@oauth_application) %>
+  </li>
+</ul>
+
+<% if @accessibilities.blank? %>
+  <div class="alert alert-info">
+    Nobody has been granted access yet.
+    <%= link_to 'Add a person or team', new_oauth_application_accessibility_path(@oauth_application) if can?(:create_accessibility, @oauth_application) %>
+  </div>
+<% else %>
+  <%
+    by_type = @accessibilities.group_by { |a| a.accessor_type }
+    sections = [
+      ["Teams", by_type["Organization"] || []],
+      ["People", by_type["Person"] || []]
+    ]
+  %>
+
+  <% sections.each do |heading, rows| %>
+    <% next if rows.blank? %>
+    <h4 class="subhead --spacious"><%= heading %> <span class="badge"><%= rows.size %></span></h4>
+    <table class="table table-hover oauth-access-table">
+      <thead>
+        <tr>
+          <th style="width: 28%;">Who</th>
+          <th>Permissions</th>
+          <th style="width: 160px;" class="text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% rows.each do |accessibility| %>
+          <% accessor = accessibility.accessor %>
+          <tr>
+            <td>
+              <% if accessor %>
+                <span class="text-strong"><%= accessor.name %></span>
+                <div class="text-muted text-small">
+                  <%= oauth_accessor_kind(accessor) %>
+                  <% if accessor.is_a?(Organization) %>
+                    · <%= pluralize(accessor.members.count, 'member') %>
+                  <% end %>
+                </div>
+              <% else %>
+                <span class="text-muted">Missing accessor</span>
+              <% end %>
+            </td>
+            <td>
+              <%= render 'permission_badges', accessibility: accessibility %>
+            </td>
+            <td class="text-right text-nowrap">
+              <%= link_to 'Edit',
+                    edit_oauth_application_accessibility_path(@oauth_application, accessibility),
+                    class: 'btn btn-default btn-sm text-strong' if can?(:update_accessibility, @oauth_application) %>
+              <%= link_to 'Remove',
+                    oauth_application_accessibility_path(@oauth_application, accessibility),
+                    method: :delete,
+                    data: { confirm: "Remove access for #{accessor.try(:name)}?" },
+                    class: 'btn btn-default btn-sm' if can?(:destroy_accessibility, @oauth_application) %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+<% end %>

@@ -1,23 +1,27 @@
-<%= simple_form_for([@oauth_application, @oauth_accessibility], url: oauth_application_accessibility_path, method: :put) do |f| %>
+<% accessor = @oauth_accessibility.accessor %>
+
+<div class="page-header" style="margin-top:0px;">
+  <h3 style="margin-top:0px;">
+    Edit access for <%= accessor.try(:name) || 'unknown' %>
+  </h3>
+  <p class="text-muted">
+    <%= oauth_accessor_kind(accessor) if accessor %>
+    on
+    <strong><%= @oauth_application.name %></strong>.
+    Change the abilities below, then sync to the client if needed.
+  </p>
+</div>
+
+<%= simple_form_for([@oauth_application, @oauth_accessibility], url: oauth_application_accessibility_path(@oauth_application, @oauth_accessibility), method: :put) do |f| %>
   <%= f.error_notification %>
-  <%= f.hidden_field :oauth_application_id %>
-  <h4>Abilities for <%= content_tag :strong, @oauth_accessibility.accessor.name %> on <%= content_tag :em, @oauth_application.name %>.</h4>
 
   <div class="form-inputs">
-    
-    <%= f.input :can_manage %>
-    <%= f.input :can_create %>
-    <%= f.input :can_read %>
-    <%= f.input :can_update %>
-    <%= f.input :can_destroy %>
-    <%= f.input :can_comment %>
-    <%= f.input :can_publish %>
-   
+    <h5 class="text-strong">Permissions</h5>
+    <%= render 'permissions_fields', f: f %>
   </div>
-  
 
   <div class="form-actions">
-    <%= f.button :submit, class: "btn btn-primary" %>
-    <%= link_to 'Cancel', edit_oauth_application_path(@oauth_application), class: "btn btn-default" %>
+    <%= f.button :submit, 'Save permissions', class: 'btn btn-primary text-strong' %>
+    <%= link_to 'Cancel', oauth_application_accessibilities_path(@oauth_application), class: 'btn btn-default text-strong' %>
   </div>
 <% end %>

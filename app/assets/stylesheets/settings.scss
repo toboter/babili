@@ -43,3 +43,36 @@
 .d-block {
     display: block !important;
 }
+
+.oauth-access-table {
+  > thead > tr > th {
+    border-bottom-width: 1px;
+  }
+
+  .oauth-perm-badges {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .oauth-perm-badge {
+    font-weight: normal;
+    background-color: #eee;
+    color: #333;
+  }
+}
+
+.oauth-permissions-table {
+  max-width: 640px;
+
+  td.oauth-perm-toggle,
+  th.oauth-perm-toggle {
+    width: 72px;
+    vertical-align: middle;
+  }
+
+  .checkbox,
+  .boolean {
+    margin: 0;
+  }
+}

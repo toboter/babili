@@ -1,0 +1,21 @@
+<table class="table table-simple oauth-permissions-table">
+  <thead>
+    <tr>
+      <th class="oauth-perm-toggle">Allow</th>
+      <th>Permission</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% oauth_permission_definitions.each do |attr, label, description| %>
+      <tr>
+        <td class="oauth-perm-toggle">
+          <%= f.input attr, as: :boolean, label: false, wrapper: false %>
+        </td>
+        <td>
+          <span class="text-strong"><%= label %></span>
+          <p class="text-muted text-small" style="margin: 2px 0 0;"><%= description %></p>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

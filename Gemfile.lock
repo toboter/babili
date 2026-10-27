@@ -163,7 +163,7 @@ GEM
       railties (>= 7.0)
       responders
       warden (~> 1.2.3)
-    doorkeeper (5.6.6)
+    doorkeeper (5.9.9)
       railties (>= 5)
     down (5.4.0)
       addressable (~> 2.8)
@@ -632,7 +632,7 @@ DEPENDENCIES
   csl-styles
   csv
   devise
-  doorkeeper
+  doorkeeper (~> 5.9.9)
   down
   execjs (>= 2.10)
   exiftool_vendored

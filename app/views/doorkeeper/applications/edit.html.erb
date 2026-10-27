@@ -4,19 +4,26 @@
   </h3>
 </div>
 
-<h4><%= t('.application_id') %>:</h4>
+<h4><%= t('.application_id') %></h4>
 <p><code id="application_id"><%= @application.uid %></code></p>
 
 <% if can?(:manage, @application) %>
-  <h4><%= t('.secret') %>:</h4>
+  <h4><%= t('.secret') %></h4>
   <p><code id="secret"><%= @application.secret %></code></p>
 <% end %>
 
 <%= render 'form', application: @application %>
 
-<%= link_to('Accessibilities', oauth_application_accessibilities_path(@application)) %>
-    
-<h4><%= t('.callback_urls') %>:</h4>
+<div class="well" style="margin-top: 20px;">
+  <h4 class="text-strong" style="margin-top: 0;">Who can use this app?</h4>
+  <p class="text-muted">
+    Decide which people and teams may use this OAuth client, and which abilities they get
+    (read, create, publish, …). Those grants can be synced to the client application.
+  </p>
+  <%= link_to 'Manage access', oauth_application_accessibilities_path(@application), class: 'btn btn-default text-strong' %>
+</div>
+
+<h4><%= t('.callback_urls') %></h4>
 <table>
   <% @application.redirect_uri.split.each do |uri| %>
     <tr>

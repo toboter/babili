@@ -35,6 +35,9 @@ en:
         scopes: 'Separate scopes with spaces. Leave blank to use the default scopes'
       edit:
         title: 'Edit OAuth application'
+        application_id: 'Application Id:'
+        secret: 'Secret:'
+        callback_urls: 'Callback urls:'
       index:
         title: 'OAuth applications'
         new: 'Register a new application'
@@ -46,11 +49,11 @@ en:
         title: 'Register a new OAuth application'
       show:
         title: 'OAuth application: %{name}'
-        application_id: 'Application Id'
-        secret: 'Secret'
-        scopes: 'Scopes'
-        callback_urls: 'Callback urls'
-        actions: 'Actions'
+        application_id: 'Application Id:'
+        secret: 'Secret:'
+        scopes: 'Scopes:'
+        callback_urls: 'Callback urls:'
+        actions: 'Actions:'
 
     authorizations:
       buttons:
@@ -61,9 +64,9 @@ en:
       new:
         title: 'Authorization required'
         prompt: 'Authorize %{client_name} to use your account?'
-        able_to: 'This application will be able to'
+        able_to: 'This application will be able to:'
       show:
-        title: 'Authorization code'
+        title: 'Authorization code:'
 
     authorized_applications:
       confirmations:

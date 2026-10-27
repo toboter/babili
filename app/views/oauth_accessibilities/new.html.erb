@@ -1,26 +1,36 @@
+<div class="page-header" style="margin-top:0px;">
+  <h3 style="margin-top:0px;">Add access to <%= @oauth_application.name %></h3>
+  <p class="text-muted">
+    Choose a team or person, then tick the abilities they should have in this client application.
+  </p>
+</div>
+
 <%= simple_form_for([@oauth_application, @oauth_accessibility], url: oauth_application_accessibilities_path) do |f| %>
   <%= f.error_notification %>
-  <%= f.hidden_field :oauth_application_id %>
 
   <div class="form-inputs">
-    <%= f.input :accessor_gid, 
-      collection: @accessors, 
-      label_method: :name, 
-      value_method: :to_global_id, 
-      include_blank: false %>
-    <%= f.input :can_manage %>
-    <%= f.input :can_create %>
-    <%= f.input :can_read %>
-    <%= f.input :can_update %>
-    <%= f.input :can_destroy %>
-    <%= f.input :can_comment %>
-    <%= f.input :can_publish %>
-   
+    <div class="row">
+      <div class="col-md-8">
+        <%= f.input :accessor_gid,
+              collection: [
+                ['Teams', @organizations.map { |o| [o.name, o.to_global_id.to_s] }],
+                ['People', @people.map { |p| [p.name, p.to_global_id.to_s] }]
+              ],
+              as: :grouped_select,
+              group_method: :last,
+              label: 'Who gets access?',
+              include_blank: 'Select a team or person…',
+              hint: 'Only teams and people not already listed for this app are shown.' %>
+      </div>
+    </div>
+
+    <h5 class="text-strong" style="margin-top: 20px;">Permissions</h5>
+    <p class="text-muted text-small">These flags are what the client application receives when you sync access.</p>
+    <%= render 'permissions_fields', f: f %>
   </div>
-  
 
   <div class="form-actions">
-    <%= f.button :submit, class: "btn btn-primary" %>
-    <%= link_to 'Cancel', edit_oauth_application_path(@oauth_application), class: "btn btn-default" %>
+    <%= f.button :submit, 'Add access', class: 'btn btn-primary text-strong' %>
+    <%= link_to 'Cancel', oauth_application_accessibilities_path(@oauth_application), class: 'btn btn-default text-strong' %>
   </div>
 <% end %>
