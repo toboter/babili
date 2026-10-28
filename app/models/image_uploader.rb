@@ -1,4 +1,4 @@
-require "image_processing/mini_magick"
+require_relative "../../lib/babili/image_processing"
 
 class ImageUploader < Shrine
   plugin :processing
@@ -15,7 +15,7 @@ class ImageUploader < Shrine
     versions = { original: io } # retain original
   
     io.download do |original|
-      pipeline = ImageProcessing::MiniMagick.source(original)
+      pipeline = Babili::ImageProcessing.backend.source(original)
   
       versions[:large]        = pipeline.resize_to_limit!(800, 800)
       versions[:medium]       = pipeline.resize_to_limit!(500, 500)

@@ -4,7 +4,8 @@
       <%= f.error_notification %>
 
       <%= f.input :title, label: false, placeholder: 'Title' %>
-      <%= f.input :content, label: false, placeholder: 'Your text ...', input_html: {class: 'froala-edit'} %>
+      <%= f.input :content, as: :hidden, input_html: { id: 'document_content' } %>
+      <trix-editor input="document_content" placeholder="Your text …" id="trix_document_content" class="trix-content"></trix-editor>
 
       <%= button_tag(value: 'submit', class: "btn btn-default text-strong", data: { disable_with: "Please wait..." }) do %>
         <span class="glyphicon glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
@@ -15,5 +16,3 @@
     <% end %>
   </div>
 </div>
-
-<script src="https://cdn.embedly.com/widgets/platform.js" charset="UTF-8"></script>

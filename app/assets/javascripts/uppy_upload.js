@@ -1,6 +1,7 @@
 $(document).on('turbolinks:load', function(){
   if ( $( "#dashboard-container" ).length ) {
-  var uppy = Uppy.Core({ 
+  var UppyCtor = Uppy.Uppy || Uppy.Core;
+  var uppy = new UppyCtor({
     autoProceed: false,
     debug: true,
     restrictions: {
@@ -10,11 +11,11 @@ $(document).on('turbolinks:load', function(){
       allowedFileTypes: $('#dashboard-container').data('file-types')
     }
   })
-  uppy.use(Uppy.Dashboard, { 
+  uppy.use(Uppy.Dashboard, {
     inline: true,
     trigger: '#openDashboardModal',
     height: 300,
-    target: '#dashboard-container' 
+    target: '#dashboard-container'
   })
   uppy.use(Uppy.XHRUpload, {
     endpoint: '/raw/files.json',
@@ -22,6 +23,12 @@ $(document).on('turbolinks:load', function(){
     fieldName: 'upload[file]',
     headers: {
       'X-CSRF-Token': Rails.csrfToken()
+    },
+    getResponseData: function (xhr) {
+      // create.json.jbuilder nests under `file`; Uppy expects a top-level `url`.
+      var response = JSON.parse(xhr.responseText);
+      var file = response.file || response;
+      return Object.assign({}, file, { url: file.file_url || file.url });
     }
   })
   uppy.use(Uppy.Form, {
@@ -31,17 +38,5 @@ $(document).on('turbolinks:load', function(){
     resultName: 'referenceables',
     submitOnSuccess: false
   })
-  // uppy.on('upload-success', (file, body) => {
-  //   referenceable = {
-  //     referenceable_gid: body.gid,
-  //     referencor_id: $('#dashboard-container').data('updater-id')
-  //   };
-  //   $('<input />').attr('type', 'hidden')
-  //     .attr('name', 'file_uploads[]')
-  //     .attr('value', JSON.stringify(referenceable))
-  //     .appendTo('form.with_referenceables');
-  //   // $('#').push(JSON.stringify(referenceable));
-  //   console.log(referenceable);
-  // });
   }
 });

@@ -103,8 +103,7 @@ class Biblio::EntriesController < ApplicationController
     @repository = @entry.referencations.last.repository
     authorize! :add_reference, @entry.referencations.last
     if params[:referenceables]
-      gids = JSON.parse(params[:referenceables])['successful'].extend(Hashie::Extensions::DeepFind).deep_find_all('gid')
-      @entry.referenceables << gids.map{|gid| Reference.new(referenceable_gid: gid, referencor: current_user.person) unless gid.in?(@entry.referenceables.map(&:referenceable_gid)) }.compact
+      @entry.referenceables << uppy_referenceables_from(params[:referenceables])
     end
     respond_to do |format|
       if @entry.save
@@ -119,8 +118,7 @@ class Biblio::EntriesController < ApplicationController
 
   def update
     if params[:referenceables]
-      gids = JSON.parse(params[:referenceables])['successful'].extend(Hashie::Extensions::DeepFind).deep_find_all('gid')
-      @entry.referenceables << gids.map{|gid| Reference.new(referenceable_gid: gid, referencor: current_user.person) unless gid.in?(@entry.referenceables.map(&:referenceable_gid)) }.compact
+      @entry.referenceables << uppy_referenceables_from(params[:referenceables])
     end
     respond_to do |format|
       if @entry.update(resource_params)
@@ -194,6 +192,18 @@ class Biblio::EntriesController < ApplicationController
       referenceables_attributes: [:id, :referenceable_gid, :referencor_id, :_destroy]
     )
 
+  end
+
+  # Uppy Form (≥3) stores an array of { successful, failed, uploadID } batches.
+  def uppy_referenceables_from(raw)
+    batches = JSON.parse(raw)
+    batches = [batches] unless batches.is_a?(Array)
+    successful = batches.flat_map { |batch| Array(batch['successful']) }
+    gids = Array(successful.extend(Hashie::Extensions::DeepFind).deep_find_all('gid'))
+    gids.map { |gid|
+      next if gid.in?(@entry.referenceables.map(&:referenceable_gid))
+      Reference.new(referenceable_gid: gid, referencor: current_user.person)
+    }.compact
   end
 
 end

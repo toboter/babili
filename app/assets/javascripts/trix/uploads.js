@@ -17,13 +17,18 @@
     };
 
     xhr.onload = function () {
-      if (xhr.status !== 201) return;
+      if (xhr.status !== 201) {
+        console.error('Trix upload failed', xhr.status, xhr.responseText);
+        return;
+      }
       var response = JSON.parse(xhr.responseText);
+      // create.json.jbuilder nests under `file`; accept top-level too.
+      var file = response.file || response;
       attachment.setAttributes({
-        url: response.file_url,
-        gid: response.gid,
+        url: file.file_url,
+        gid: file.gid,
         type: 'File',
-        href: response.html_url
+        href: file.html_url
       });
     };
 

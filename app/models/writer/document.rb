@@ -86,11 +86,13 @@ module Writer
     def extract_attachments
       doc = Nokogiri::HTML(content)
       references = []
-      doc.css("[data-attachment]").each do |attachment_node|
-        attachment = JSON.parse(attachment_node.attribute('data-attachment'))
-        if attachment['type'] == 'File'
-          references << attachment
-        end
+      # Trix uses data-trix-attachment; legacy Froala HTML used data-attachment.
+      doc.css("[data-trix-attachment], [data-attachment]").each do |attachment_node|
+        raw = attachment_node["data-trix-attachment"] || attachment_node["data-attachment"]
+        next if raw.blank?
+
+        attachment = JSON.parse(raw)
+        references << attachment if attachment["type"] == "File"
       end
       set_references(references) if content_changed?
       files.each{|f| f.publish(publisher)} if published_at_changed? && published_at != nil

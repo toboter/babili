@@ -10,11 +10,10 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require rails-ujs
+//= require @rails/ujs/app/assets/javascripts/rails-ujs
 //= require jquery/dist/jquery.min
 //= require bootstrap
 //= require toastr/build/toastr.min
-//= require froala-editor/js/froala_editor.min
 //= require trix/dist/trix
 //= require uppy/dist/uppy.min
 //= require cocoon

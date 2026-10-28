@@ -51,6 +51,7 @@ class Raw::FileUploadsController < ApplicationController
         format.html { redirect_to raw_file_upload_path(@file_upload), notice: 'File was successfully created.' }
         format.json { render template: "raw/file_uploads/create", status: :created }
       else
+        Rails.logger.warn("[Raw::FileUploads#create] #{@file_upload.errors.full_messages.join(', ')}")
         format.html { render :new }
         format.json { render json: @file_upload.errors, status: :unprocessable_entity }
       end

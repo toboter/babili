@@ -10,9 +10,14 @@ module JsonSerializationHelper
 
   def absolute_host_prefix
     opts = Rails.application.routes.default_url_options
-    host = opts[:host].to_s
-    port = opts[:port] ? ":#{opts[:port]}" : ""
-    "#{host}#{port}"
+    host = opts[:host].to_s.sub(%r{\Ahttps?://}i, "")
+    return "" if host.blank?
+
+    # credentials.host may already include a port (e.g. "api.example.com:443")
+    port = opts[:port] && !host.include?(":") ? ":#{opts[:port]}" : ""
+    protocol = (opts[:protocol].presence || (Rails.application.config.force_ssl ? "https" : "http")).to_s
+    protocol = protocol.sub(%r{://\z}, "")
+    "#{protocol}://#{host}#{port}"
   end
 
   # --- User ---

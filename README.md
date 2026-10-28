@@ -30,6 +30,21 @@ another upstream without checking concept hierarchy behaviour. Optional
 later work: vendor the gem into this org, or migrate hierarchies to
 `closure_tree` (already used elsewhere in Babili).
 
+### Frontend (Yarn / Sprockets)
+
+Still **Bootstrap 3 + jQuery + Turbolinks + Sprockets**. Recent updates:
+
+* **Froala removed** — Writer documents use the same **Trix** stack as
+  discussions (`trix-editor` + `/raw/files.json`). Legacy Froala HTML still
+  displays; re-editing may drop tables/colors/Embedly. Attachment extraction
+  accepts both `data-trix-attachment` and legacy `data-attachment`.
+* **Uppy 4.18** (was 0.27) — Dashboard/XHR/Form via `uppy/dist/uppy.min.js`.
+* **`@rails/ujs` 7.1** (was npm `rails-ujs` 5.2).
+
+Deferred (larger UI sprints): Bootstrap 3→5, Turbolinks→Turbo/Stimulus,
+Trix 0.12→2.x (adapt `app/assets/javascripts/trix/*`), Propshaft/jsbundling,
+`rails-bootstrap-markdown` removal (keep Redcarpet).
+
 ### html-pipeline / commonmarker / linkeddata
 
 Pinned for cutover; **not** a go-live blocker. Do not bump major versions
@@ -136,6 +151,7 @@ Keep Shrine/file storage in place across the cutover. Point the Doorkeeper webho
 * **Getty AAT SPARQL (vocab tag / concept search):** Tag and concept selectize fields call `Vocab::AATConcept.search` against `http://vocab.getty.edu/sparql`. The endpoint still exists (Getty LOD for AAT/TGN/ULAN), but live Lucene queries are often slow or hang from our network, so `/vocabularies/search/terms` currently returns **local** `Vocab::Concept` hits first and treats AAT as optional (short timeout). Follow up later: switch to the newer Linked.Art / `https://data.getty.edu/vocab/sparql` endpoint (and updated query shape), or drop live AAT from the tag box and keep local vocab only. Note Getty’s Fall 2026 vocab platform refresh when revisiting. Pair any AAT work with a `linkeddata` / `sparql-client` dependency tidy (see Dependencies).
 * **`acts_as_dag` fork ownership:** See Dependencies — keep `toboter/acts_as_dag` available as the source of truth, or plan a deliberate move (vendor / `closure_tree`).
 * **html-pipeline / commonmarker:** See Dependencies — stay on 2.x / 0.23 for now, or replace sanitization with `sanitize`/Loofah and drop both gems. Do not upgrade to html-pipeline 3 / commonmarker 2 without that adapter (or removal) pass.
+* **Frontend modernization:** See Dependencies — Bootstrap 5, Turbo/Stimulus, Trix 2.x, Propshaft/jsbundling, and dropping `rails-bootstrap-markdown` are deliberate later sprints (not cutover blockers).
 
 ## Maintainers
 

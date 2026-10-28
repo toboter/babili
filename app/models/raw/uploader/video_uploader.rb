@@ -1,4 +1,5 @@
 require "streamio-ffmpeg"
+require_relative "../../../../lib/babili/image_processing"
 
 module Raw::Uploader
   class VideoUploader < BaseUploader
@@ -17,11 +18,11 @@ module Raw::Uploader
       movie.screenshot(screenshot.path)
       original.delete
 
-      magick = ImageProcessing::MiniMagick.source(screenshot)
+      preview = Babili::ImageProcessing.backend.source(screenshot)
 
       {
         original: video,
-        preview:  magick
+        preview:  preview
       }
     end
 

@@ -1,4 +1,4 @@
-require "image_processing/mini_magick"
+require_relative "../../../../lib/babili/image_processing"
 
 module Raw::Uploader
   class ImageUploader < BaseUploader
@@ -8,7 +8,7 @@ module Raw::Uploader
       # validate dimensions only if the attached file is an image
       if validate_mime_type_inclusion Raw::Image::TYPES
         get.download do |tempfile|
-          errors << "is corrupted or invalid" unless ImageProcessing::MiniMagick.valid_image?(tempfile)
+          errors << "is corrupted or invalid" unless Babili::ImageProcessing.backend.valid_image?(tempfile)
         end
       end
     end
@@ -19,17 +19,16 @@ module Raw::Uploader
 
 
     Attacher.derivatives do |original|
-      magick = ImageProcessing::MiniMagick.source(original).convert("jpg")
+      pipeline = Babili::ImageProcessing.backend.source(original).convert("jpg")
 
       {
-        original: original,
-        small:  magick.resize_to_limit!(384, 384),
-        medium: magick.resize_to_limit!(768, 768),
-        large: magick.resize_to_limit!(1280, 1280),
-        xlarge: magick.resize_to_limit!(1536, 1536),
-        thumb_large: magick.resize_to_fill!(400, 400),
-        thumb_medium: magick.resize_to_fill!(200, 200),
-        thumb_small: magick.resize_to_fill!(50, 50)
+        small:  pipeline.resize_to_limit!(384, 384),
+        medium: pipeline.resize_to_limit!(768, 768),
+        large: pipeline.resize_to_limit!(1280, 1280),
+        xlarge: pipeline.resize_to_limit!(1536, 1536),
+        thumb_large: pipeline.resize_to_fill!(400, 400),
+        thumb_medium: pipeline.resize_to_fill!(200, 200),
+        thumb_small: pipeline.resize_to_fill!(50, 50)
       }
     end
 

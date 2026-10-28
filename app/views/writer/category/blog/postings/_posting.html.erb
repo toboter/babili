@@ -14,7 +14,7 @@
     <% end %>
   <% end %>
   <%= content_tag :div, class: "blog-post-body markdown-body --spacious" do %>
-    <%= content_tag :div, raw(posting.document.content), class: 'fr-view clearfix' %>
+    <%= content_tag :div, raw(posting.document.content), class: 'trix-content document-content clearfix' %>
   <% end %>
 
   <%= content_tag :div, class: 'panel panel-default --spacious', id: 'referencings' do %>
