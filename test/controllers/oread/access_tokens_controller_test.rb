@@ -1,7 +1,8 @@
-require 'test_helper'
+require "test_helper"
 
+# Legacy scaffold from Rails generators; routes/namespaces changed during modernization.
 class Oread::AccessTokensControllerTest < ActionDispatch::IntegrationTest
-  # test "the truth" do
-  #   assert true
-  # end
+  test "legacy scaffold skipped" do
+    skip "Legacy scaffold; not maintained for Rails 8 cutover (see test/controllers/api/)"
+  end
 end

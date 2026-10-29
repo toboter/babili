@@ -24,7 +24,9 @@ class Settings::NamespacesController < ApplicationController
 
   private
     def set_namespace
-      klass = params[:type].classify.constantize
+      type = params[:type].to_s.classify
+      raise ActiveRecord::RecordNotFound, "unsupported type" unless %w[Organization Person].include?(type)
+      klass = type.constantize
       @namespace = params[:organization_id] ? klass.find(params[:organization_id]).namespace : current_person.namespace
     end
 

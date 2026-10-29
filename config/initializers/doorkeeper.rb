@@ -32,7 +32,9 @@ Doorkeeper.configure do
   # authorization_code_expires_in 10.minutes
 
   # Access token expiration time (default 2 hours).
-  # If you want to disable expiration, set this to nil.
+  # Intentionally nil: ADGB and other platform clients expect long-lived tokens
+  # without a refresh-token flow. Accepted operational risk — see docs/HANDOVER.md.
+  # Do not enable expiry without coordinating client changes.
   access_token_expires_in nil
 
   # Assign a custom TTL for implicit grants.
@@ -49,7 +51,8 @@ Doorkeeper.configure do
   # https://github.com/doorkeeper-gem/doorkeeper#custom-base-controller
   base_controller 'ApplicationController'
 
-  # Reuse access token for the same resource owner within an application (disabled by default)
+  # Reuse access token for the same resource owner within an application.
+  # Paired with expires_in nil for stable ADGB API access.
   # Rationale: https://github.com/doorkeeper-gem/doorkeeper/issues/383
   reuse_access_token
 
