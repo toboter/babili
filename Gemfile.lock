@@ -97,8 +97,8 @@ GEM
       zeitwerk (>= 2.4, < 3.0)
     acts_as_list (1.1.0)
       activerecord (>= 4.2)
-    addressable (2.8.4)
-      public_suffix (>= 2.0.2, < 6.0)
+    addressable (2.9.2)
+      public_suffix (>= 2.0.2, < 8.0)
     attr_json (2.6.0)
       activerecord (>= 6.0.0, < 8.2)
     autoprefixer-rails (10.4.13.0)
@@ -141,7 +141,7 @@ GEM
       with_advisory_lock (>= 4.0.0)
     cocoon (1.2.15)
     color (1.8)
-    commonmarker (0.23.9)
+    commonmarker (0.23.12)
     concurrent-ruby (1.3.8)
     connection_pool (2.5.5)
     content_disposition (1.0.0)
@@ -342,21 +342,22 @@ GEM
     prettyprint (0.2.1)
     prism (1.9.0)
     psych (3.3.4)
-    public_suffix (5.0.1)
-    puma (6.2.2)
+    public_suffix (7.0.5)
+    puma (8.1.1)
       nio4r (~> 2.0)
     raabro (1.5.0)
     racc (1.8.1)
-    rack (2.2.24)
-    rack-cors (2.0.1)
-      rack (>= 2.0.0)
-    rack-session (1.0.2)
-      rack (< 3)
+    rack (3.2.8)
+    rack-cors (3.0.0)
+      logger
+      rack (>= 3.0.14)
+    rack-session (2.1.2)
+      base64 (>= 0.1.0)
+      rack (>= 3.0.0)
     rack-test (2.2.0)
       rack (>= 1.3)
-    rackup (1.0.1)
-      rack (< 3)
-      webrick
+    rackup (2.3.1)
+      rack (>= 3)
     rails (8.1.4)
       actioncable (= 8.1.4)
       actionmailbox (= 8.1.4)
@@ -583,7 +584,6 @@ GEM
       activemodel (>= 5.0)
       bindex (>= 0.4.0)
       railties (>= 5.0)
-    webrick (1.9.2)
     websocket (1.2.9)
     websocket-driver (0.8.2)
       base64
@@ -625,7 +625,7 @@ DEPENDENCIES
   citeproc-ruby
   closure_tree
   cocoon
-  commonmarker
+  commonmarker (~> 0.23.10)
   csl-styles
   csv
   devise
@@ -659,8 +659,8 @@ DEPENDENCIES
   pagy (~> 43.0)
   paper_trail (~> 17.0)
   pg (>= 0.18, < 2.0)
-  puma (>= 5.3.1)
-  rack-cors
+  puma (>= 7.2.1)
+  rack-cors (>= 2.0.2)
   rails (~> 8.1.0)
   rails-bootstrap-markdown
   recaptcha

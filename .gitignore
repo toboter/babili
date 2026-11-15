@@ -25,3 +25,8 @@
 
 yarn-error.log
 /config/master.key
+
+# Local tooling / local bundler installs — never commit
+/.tools/
+/.bundle-user/
+/vendor/bundle/

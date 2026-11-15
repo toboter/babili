@@ -14,7 +14,7 @@ gem 'rails', '~> 8.1.0'
 gem 'pg', '>= 0.18', '< 2.0'
 # PostGIS not used (Locate loc is plain text; no adapter).
 # gem 'activerecord-postgis-adapter'
-gem "puma", ">= 5.3.1"
+gem "puma", ">= 7.2.1"
 gem 'sassc-rails'
 gem 'uglifier', '>= 1.3.0'
 # ExecJS 2.8.x passes create_additions to JSON.parse; incompatible with json 3.x
@@ -35,7 +35,7 @@ gem 'marcel'
 gem 'fastimage'
 gem 'exiftool_vendored'
 gem 'bootsnap', '>= 1.18.0', require: false
-gem 'rack-cors', require: 'rack/cors'
+gem 'rack-cors', '>= 2.0.2', require: 'rack/cors'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
@@ -63,7 +63,8 @@ gem 'simple_form'
 gem 'pagy', '~> 43.0'
 gem 'cocoon'
 gem 'html-pipeline', '~> 2.8', '>= 2.8.4'
-gem 'commonmarker' #, '~> 0.17.11'
+# Stay on 0.23.x: CVE-2023-37463 fixed in >= 0.23.10; 2.x needs Rust/cargo and breaks html-pipeline API
+gem 'commonmarker', '~> 0.23.10'
 gem 'github-markup', '~> 2.0', '>= 2.0.1'
 gem 'sanitize', '>= 7.0.1'
 gem 'rexml', '>= 3.3.9'
