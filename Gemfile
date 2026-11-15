@@ -9,7 +9,7 @@ gem "ostruct"
 gem "observer"
 gem "benchmark"
 
-gem 'rails', '~> 8.1.0'
+gem 'rails', '~> 8.1.0', '>= 8.1.4.1'
 
 gem 'pg', '>= 0.18', '< 2.0'
 # PostGIS not used (Locate loc is plain text; no adapter).
