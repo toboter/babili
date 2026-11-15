@@ -26,7 +26,8 @@ gem 'tilt', '>= 2.2'
 gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.13'
 
-gem 'mini_magick', '~> 4.9'
+# Active Storage 8.1.4.1+ requires mini_magick >= 5.1 for the ImageMagick security policy
+gem 'mini_magick', '~> 5.1'
 gem 'image_processing', '~> 1.2'
 gem "streamio-ffmpeg"
 gem 'down'
