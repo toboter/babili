@@ -35,7 +35,9 @@ gem 'marcel'
 gem 'fastimage'
 gem 'exiftool_vendored'
 gem 'bootsnap', '>= 1.18.0', require: false
+gem 'msgpack', '>= 1.8.7' # bootsnap; advisory floor
 gem 'rack-cors', '>= 2.0.2', require: 'rack/cors'
+gem 'rubyzip', '>= 3.4.0' # requires roo >= 3 and newer selenium-webdriver
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
@@ -48,7 +50,8 @@ end
 
 group :test do
   gem 'capybara', '>= 2.15', '< 4.0'
-  gem 'selenium-webdriver'
+  # 4.9.x pins rubyzip < 3; need a build that allows rubyzip 3.x
+  gem 'selenium-webdriver', '>= 4.38.0'
 end
 
 # gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
@@ -92,7 +95,7 @@ gem 'inline_svg'   # https://github.com/jamesmartin/inline_svg
 gem 'chronic'
 # gem "rgeo"
 # gem "rgeo-proj4"
-gem 'roo'
+gem 'roo', '>= 4.0.0' # rubyzip 3.x
 gem 'activerecord-import'
 gem 'xml-to-json', git: 'https://github.com/toboter/ruby-xml-to-json.git'
 gem 'hashdiff'
