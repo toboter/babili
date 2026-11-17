@@ -16,6 +16,8 @@ aktualisiert. Gemeinsame Checkliste und Reihenfolge: auch
       `http://localhost:9200` (OpenSearch lokal, HTTP, ohne SSL)
 - [ ] Puma mit Solid-Queue-Plugin (Standard) oder `bin/jobs` — Redis/Sidekiq
       nicht erforderlich; ggf. alte Sidekiq-Prozesse beenden
+- [ ] ImageMagick + Bundle mit `mini_magick` **5.x**, Rails **8.1.4.1**,
+      Puma 8.x, rubyzip 3 / Roo 4, commonmarker 0.23.x
 - [ ] Smoke: Devise-Login, OAuth für ADGB, Uploads, Vocab/Biblio/Suche,
       Webhook nach ADGB (`/api/hooks/update_accessibilities`)
 

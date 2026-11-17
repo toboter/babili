@@ -10,19 +10,20 @@ Schwesteranwendung **ADGB** nutzt Babili als OAuth2-Provider sowie für
 Datei-Uploads, Vokabular und Bibliographie. Betriebshandbuch:
 [docs/HANDOVER.md](docs/HANDOVER.md), Aktualisierung: [docs/CUTOVER.md](docs/CUTOVER.md).
 
-## Abhängigkeiten (Stand Modernisierung 2026)
+## Abhängigkeiten (Stand Modernisierung 2026, Bundle-Stand Nov. 2026)
 
 | Komponente | Version / Hinweis |
 |---|---|
 | Ruby | **3.4.2** |
-| Rails | **8.1.4** |
+| Rails | **8.1.4.1** |
+| Puma | **8.1.x** (≥ 7.2.1) |
 | Bundler | 2.5.x |
 | Node / Yarn | ≥ 16.15 / 1.22.x |
 | PostgreSQL | ≥ 15 (**ohne** PostGIS) |
 | OpenSearch | ≥ 2.4, **lokal, HTTP ohne SSL** (`http://localhost:9200`) |
 | mutool | ≥ 1.7a (`mupdf-tools`) — PDF-Vorschauen |
 | ffmpeg | ≥ 4.2 — Video |
-| ImageMagick **oder** libvips | Bildverarbeitung (Shrine); auf dem Dev-Host oft libvips |
+| ImageMagick | Active Storage / `mini_magick` **5.4.x**; Shrine kann zusätzlich libvips nutzen |
 
 ### Wichtige Gems
 
@@ -30,16 +31,19 @@ Datei-Uploads, Vokabular und Bibliographie. Betriebshandbuch:
 |---|---|
 | Jobs | **Solid Queue** (in Puma; Redis/Sidekiq entfallen) |
 | Action Cable | **Solid Cable** |
-| OAuth-Provider | Doorkeeper 5.9 |
+| OAuth-Provider | Doorkeeper **5.9.9** |
 | Uploads | Shrine 3.4 |
 | Suche | Searchkick 6 + opensearch-ruby 3 |
 | Pagination | Pagy 43 |
-| Editor | **Trix** (Froala entfernt) |
+| Editor | **Trix** npm 0.12 (Froala entfernt; Sprung auf Trix 2.x zurückgestellt) |
 | Auth | Devise + reCAPTCHA |
+| Markdown | commonmarker **0.23.12** (kein 2.x/Rust) |
+| Excel | Roo **4** + rubyzip **3.7** |
+| Bilder (AS) | `mini_magick` **~> 5.1** |
 
 ### JavaScript (Yarn)
 
-- Uppy **4.18**, `@rails/ujs` **7.1**, Trix 0.12  
+- Uppy **4.18**, `@rails/ujs` **7.1**, Trix **0.12**  
 - jQuery, Selectize, Toastr  
 
 ### Frontend (bewusst unverändert)
@@ -51,8 +55,8 @@ nicht Teil dieser Modernisierung.
 
 - **`acts_as_dag`:** Git-Fork `toboter/acts_as_dag` für Vocab-Hierarchien —
   nicht stillschweigend durch Rubygems-Gem ersetzen.  
-- **html-pipeline / commonmarker / linkeddata:** für den Cutover gepinnt;
-  siehe Abschnitt „Zukünftige TODOs“.  
+- **html-pipeline / commonmarker / linkeddata:** für den Cutover gepinnt
+  (`commonmarker ~> 0.23.10`); siehe „Zukünftige TODOs“.  
 - **CORS (Production):** nur Origins unter `*.babylon-online.org`.
 
 ## Lokale Einrichtung

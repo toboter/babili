@@ -1,7 +1,8 @@
 # Übergabedokumentation Babili
 
 **Zielgruppe:** Verwaltung und Betrieb.  
-**Stand:** Oktober 2026 — Modernisierung Ruby 3.4 / Rails 8.1.  
+**Stand:** November 2026 — Modernisierung Ruby 3.4 / Rails **8.1.4.1**
+(inkl. nachgezogener Security-Bundle-Updates).  
 **Schwestersystem:** ADGB (nutzt Babili als Anmelde- und Datei-/API-Dienst).
 
 ---
@@ -37,7 +38,8 @@ visuelles Design (Bootstrap 3 bleibt).
 
 | Thema | Nach der Modernisierung |
 |---|---|
-| Ruby / Rails | **3.4.2** / **8.1.4** |
+| Ruby / Rails | **3.4.2** / **8.1.4.1** |
+| App-Server | **Puma 8.1.x** |
 | Hintergrundjobs | **Solid Queue** (in Puma; **kein Redis/Sidekiq** mehr nötig) |
 | Echtzeit/Cable | **Solid Cable** (Postgres) |
 | Dateien | Shrine; Uploads u. a. von ADGB und dem Trix-Editor |
@@ -180,20 +182,22 @@ Fachdaten bleiben; `db:migrate` legt nur die neuen Solid-Tabellen an.
 
 ### Erledigt / konfiguriert
 
-- CORS Production nur `*.babylon-online.org`
+- CORS Production nur `*.babylon-online.org`; `rack-cors` 3.x
 - Log-Filter für Passwörter und Tokens
-- `sanitize` / `rexml` aktualisiert
+- `sanitize` / `rexml` / `commonmarker` 0.23.12 aktualisiert
+- Rails **8.1.4.1**, Puma 8.x, `mini_magick` 5.x, rubyzip 3 / Roo 4
 - Namespace-Einstellungen: Typ-Allowlist (`Organization` / `Person`)
 - Statische Analyse (Brakeman) und Dependency-Audit auf dem aktuellen Stack
 
 ### Offene / bewusst akzeptierte Risiken
 
 Vollständige Einschätzung und Behandlung: [SECURITY.md](SECURITY.md)
-(kein Changelog der Fixes — nur Restpunkte).
+(Restpunkte, kein vollständiges Changelog).
 
 Kurz: langlebige Doorkeeper-Tokens und OpenSearch ohne TLS auf localhost
 sind bewusst akzeptiert; redaktionelles Trix-HTML und einzelne Biblio-
-`constantize`-Stellen sind dokumentierte Restpunkte.
+`constantize`-Stellen sind dokumentierte Restpunkte. Trix-npm bleibt
+vorerst 0.12 (kein automatischer Sprung auf 2.x).
 
 ### Empfehlungen
 

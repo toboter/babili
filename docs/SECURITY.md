@@ -3,21 +3,31 @@
 Kein Penetrationstest. Dieses Dokument hält fest, **was seit dem
 Ruby-/Rails-Upgrade (Mitte Oktober 2026) sicherheitsrelevant gehärtet
 wurde**, und welche **Rest- bzw. akzeptierten Risiken** danach noch
-bestehen. Abschlussprüfung mit `brakeman` und `bundler-audit` auf dem
-aktuellen Stand (Rails 8.1 / Ruby 3.4).
+bestehen. Nachgezogene Bundle-Updates bis **November 2026**
+(Rails **8.1.4.1**, Puma 8.x, rubyzip 3.x, commonmarker 0.23.12, …).
+Audits mit `brakeman` / `bundler-audit` auf dem aktuellen Stand (Ruby 3.4).
 
 ## Behoben / gehärtet seit Mitte Oktober 2026
 
 | Thema | Was geändert wurde |
 |---|---|
-| Runtime-Stack | Ruby **3.4.2**, Rails **~> 8.1** — Framework-Security-Patches und unterstützte Laufzeit |
+| Runtime-Stack | Ruby **3.4.2**, Rails **8.1.4.1** (inkl. Active-Storage-Security-Patches) |
+| App-Server | **Puma ≥ 7.2.1** (Lock: 8.1.1) |
 | CORS (Production) | Wildcard `*` entfernt; nur Origins `https://…babylon-online.org` / Subdomains |
-| HTML-Sanitizer / XML | `sanitize` ≥ 7.0.1, `rexml` ≥ 3.3.9 (bekannte CVEs geschlossen) |
-| Doorkeeper | Upgrade auf aktuelle 5.x; Token-Policy unverändert bewusst (siehe B2) |
-| Jobs / Angriffsfläche | Sidekiq/Redis zugunsten von **Solid Queue** (Postgres) abgelöst — kein Redis-Job-Stack mehr nötig |
-| Dynamisches `constantize` (Namespaces) | Typ-Parameter auf `Organization` / `Person` beschränkt |
-| Log-Filter | Erweitert u. a. um `access_token`, `refresh_token`, `client_secret`, `authenticity_token`, `recaptcha_secret_key` |
-| Audit | `brakeman` und `bundle-audit` nach den Upgrades ausgeführt; Findings priorisiert (siehe unten) |
+| CORS-Gem | `rack-cors` ≥ 2.0.2 (Lock: 3.0.0) |
+| HTML-Sanitizer / XML | `sanitize` ≥ 7.0.1, `rexml` ≥ 3.3.9 |
+| Markdown (GFM) | `commonmarker` **~> 0.23.10** (Lock: 0.23.12) — CVE-Fix ohne Sprung auf 2.x/Rust |
+| ZIP / Excel | `rubyzip` ≥ 3.4 (Lock: 3.7.0), `roo` ≥ 4.0 |
+| msgpack | ≥ 1.8.7 |
+| Active Storage / Bilder | `mini_magick` **~> 5.1** (Lock: 5.4.0); Variant-Processor weiter MiniMagick |
+| Doorkeeper | 5.9.x; Token-Policy unverändert bewusst (siehe B2) |
+| Jobs / Angriffsfläche | Sidekiq/Redis → **Solid Queue** (Postgres) |
+| Dynamisches `constantize` (Namespaces) | Typ-Parameter auf `Organization` / `Person` |
+| Log-Filter | Tokens/Secrets inkl. `recaptcha_secret_key` |
+| Test-Stack | `selenium-webdriver` ≥ 4.38 (Lock: 4.52.0) |
+| Audit | `brakeman` / `bundle-audit` nach den Upgrades |
+
+**Hinweis Trix (npm):** weiter **0.12.x** — Sprung auf 2.1.x bewusst zurückgestellt (Asset-Pfad + Custom Mentions/Toolbar); kein aktueller Blocker für den Cutover.
 
 ## Offen / akzeptiert
 
@@ -27,7 +37,6 @@ aktuellen Stand (Rails 8.1 / Ruby 3.4).
 | B2 | Doorkeeper: kein Access-Token-Expiry + Wiederverwendung | Mittel bei Diebstahl: gültig bis manueller Widerruf. Clients (ADGB) erwarten stabile Tokens. | Akzeptiert. Widerruf über Doorkeeper; Änderung nur mit allen Clients. |
 | B3 | OpenSearch ohne TLS (`http://localhost:9200`) | Niedrig auf Loopback; hoch bei öffentlicher Exposition. | Akzeptiert. Betrieb: nur `127.0.0.1` binden. |
 | B4 | Weitere `constantize` in Biblio-Controllern | Niedrig bis mittel; Namespaces bereits allowlisted. | Bei Gelegenheit gleiche Allowlist; Priorität mittel. |
-| B5 | CVEs in Test-Gems (`selenium-webdriver` / transitives `rubyzip`) | Produktionsrisiko vernachlässigbar. | Dev/Test-Bundle beim nächsten Update; vor Prod-Deploy erneut auditieren. |
 
 ## Betrieb
 
