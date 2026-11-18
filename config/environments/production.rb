@@ -97,6 +97,9 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     address: "localhost",
-    port: 25
+    port: 25,
+    ca_file: "/etc/letsencrypt/live/babylon-online.org_webserver/fullchain.pem",
+    enable_starttls_auto: false,
+    openssl_verify_mode: 'none'
   }
 end

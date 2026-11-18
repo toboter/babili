@@ -19,6 +19,8 @@
 /config/database.yml
 /config/secrets.yml
 
+/public/assets/
+/public/uploads
 /public/uploads/*
 
 /node_modules
