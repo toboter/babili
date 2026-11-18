@@ -16,13 +16,14 @@ gem 'pg', '>= 0.18', '< 2.0'
 # gem 'activerecord-postgis-adapter'
 gem "puma", ">= 7.2.1"
 gem 'sassc-rails'
-gem 'uglifier', '>= 1.3.0'
+# Terser replaces uglifier — Uppy 4 / modern JS uses ?. and ?? that Uglifier cannot parse
+gem 'terser'
 # ExecJS 2.8.x passes create_additions to JSON.parse; incompatible with json 3.x
 gem 'execjs', '>= 2.10'
 gem 'sprockets-rails'
 # Ruby 3.4: tilt <2.2 freezes/force_encoding breaks font-awesome .css.erb via sassc-rails
 gem 'tilt', '>= 2.2'
-# JS runtime for ExecJS/uglifier: use system Node (nvm).
+# JS runtime for ExecJS/terser: use system Node (nvm).
 gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.13'
 
