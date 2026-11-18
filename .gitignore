@@ -30,3 +30,6 @@ yarn-error.log
 /.tools/
 /.bundle-user/
 /vendor/bundle/
+# Ignore key files for decrypting credentials and more.
+/config/credentials/*.key
+
